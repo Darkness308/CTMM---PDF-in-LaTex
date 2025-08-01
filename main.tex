@@ -3,17 +3,23 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tabularx}
 
 % Eigene Pakete
-\usepackage{style/ctmm-design}
-\usepackage{style/form-elements}
+\usepackage{Stil/ctmm-design}
+\usepackage{Stil/form-elements}
+\usepackage{Stil/ctmm-diagrams}
 
 \begin{document}
 
 \section*{CTMM-System Test}
 \textcolor{ctmmBlue}{Dieser Test prüft, ob die Style-Dateien korrekt eingebunden sind.}
 
+% Diagramm testen
+\ctmmTriggerLoop
+
 % Module einbinden
-% \input{modules/depression}
+\input{Module/depression}
 
 \end{document}
