@@ -1,0 +1,25 @@
+\ProvidesPackage{ctmm-diagrams}[2025/07/01 CTMM Diagram Library]
+
+\RequirePackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+
+% Trigger-Loop-Diagramm
+\newcommand{\ctmmTriggerLoop}{%
+\begin{center}
+\begin{tikzpicture}[
+    node distance=2.5cm and 2.5cm,
+    box/.style={circle, draw, fill=#1!20, text width=2cm, align=center},
+    arrow/.style={-Stealth, thick, color=black}
+]
+    \node[box=ctmmBlue, text=ctmmBlue] (erkennen) {ERKENNEN};
+    \node[box=ctmmGreen, text=ctmmGreen, right=of erkennen] (vorbeugen) {VORBEUGEN};
+    \node[box=ctmmOrange, text=ctmmOrange, below=of vorbeugen] (reagieren) {REAGIEREN};
+    \node[box=ctmmPurple, text=ctmmPurple, left=of reagieren] (lernen) {LERNEN};
+
+    \draw[arrow] (erkennen) -- (vorbeugen);
+    \draw[arrow] (vorbeugen) -- (reagieren);
+    \draw[arrow] (reagieren) -- (lernen);
+    \draw[arrow] (lernen) -- (erkennen);
+\end{tikzpicture}
+\end{center}
+}
