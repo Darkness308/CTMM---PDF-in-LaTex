@@ -2,6 +2,7 @@
 \newpage
 \section*{\textcolor{ctmmOrange}{\faCheckSquare~Interaktive Checklisten \& Bewertungen}}
 \addcontentsline{toc}{section}{Interaktive Tools}
+\label{sec:interactive}
 
 \begin{quote}
 \textit{\textcolor{ctmmOrange}{Selbstreflexion durch strukturierte Bewertung und Planung.}}\\
@@ -29,50 +30,55 @@ Diese Tools helfen dabei, den eigenen Fortschritt zu messen und konkrete nächst
 
 \subsection*{\textcolor{ctmmOrange}{2. Wöchentlicher Reflexions-Check}}
 
-\begin{ctmmBlueBox}{Woche vom: \ctmmTextField{6cm}}
+\begin{ctmmBlueBox}{Woche vom: \ctmmTextField[6cm]{}{woche_vom}}
     \textbf{Was lief gut diese Woche?}\\
-\ctmmTextField{12cm}\\
+\ctmmTextArea[12cm]{2}{woche_gut}{}\\
 
     \textbf{Welche Herausforderungen gab es?}\\
-\ctmmTextField{12cm}\\
+\ctmmTextArea[12cm]{2}{woche_herausforderungen}{}\\
 
     \textbf{Welche CTMM-Tools habe ich verwendet?}\\
-$\square$~Safe Words \quad $\blacksquare$~Notfallplan \quad $\square$~Triggermanagement \quad $\square$~Bindungsarbeit\\
+\ctmmCheckBox[tools_safewords]{Safe Words} \quad \ctmmCheckBox[tools_notfallplan]{Notfallplan} \quad \ctmmCheckBox[tools_trigger]{Triggermanagement} \quad \ctmmCheckBox[tools_bindung]{Bindungsarbeit}\\
 
     \textbf{Nächste Woche möchte ich...}\\
-\ctmmTextField{12cm}
+\ctmmTextArea[12cm]{2}{woche_naechste}{}\\
 \end{ctmmBlueBox}
 
 \subsection*{\textcolor{ctmmOrange}{3. Beziehungs-Dashboard}}
 
 \begin{ctmmGreenBox}{Für Paare: Gemeinsame Bewertung}
-\begin{tabular}{|p{4cm}|p{2cm}|p{2cm}|p{4cm}|}
+\begin{tabularx}{\textwidth}{|X|c|c|X|}
 \hline
 \textbf{Bereich} & \textbf{Partner A} & \textbf{Partner B} & \textbf{Gemeinsame Ziele} \\
 \hline
-Kommunikation & \ctmmTextField{2cm} & \ctmmTextField{2cm} & \ctmmTextField{4cm} \\
+Kommunikation & \ctmmTextField[2cm]{}{bd_comm_a} & \ctmmTextField[2cm]{}{bd_comm_b} & \ctmmTextField[4cm]{}{bd_comm_ziele} \\
 \hline
-Konfliktlösung & \ctmmTextField{2cm} & \ctmmTextField{2cm} & \ctmmTextField{4cm} \\
+Konfliktlösung & \ctmmTextField[2cm]{}{bd_konflikt_a} & \ctmmTextField[2cm]{}{bd_konflikt_b} & \ctmmTextField[4cm]{}{bd_konflikt_ziele} \\
 \hline
-Intimität & \ctmmTextField{2cm} & \ctmmTextField{2cm} & \ctmmTextField{4cm} \\
+Intimität & \ctmmTextField[2cm]{}{bd_intim_a} & \ctmmTextField[2cm]{}{bd_intim_b} & \ctmmTextField[4cm]{}{bd_intim_ziele} \\
 \hline
-Alltagsorganisation & \ctmmTextField{2cm} & \ctmmTextField{2cm} & \ctmmTextField{4cm} \\
+Alltagsorganisation & \ctmmTextField[2cm]{}{bd_alltag_a} & \ctmmTextField[2cm]{}{bd_alltag_b} & \ctmmTextField[4cm]{}{bd_alltag_ziele} \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{ctmmGreenBox}
 
 \subsection*{\textcolor{ctmmOrange}{4. Ziele \& Aktionsplan}}
 
 \textbf{Mein Hauptziel für die nächsten 30 Tage:}\\
-\ctmmTextField{12cm}
+\ctmmTextArea[12cm]{2}{ziele_30tage}{}\\
 
 \textbf{Konkrete Schritte:}\\
-Schritt 1: \ctmmTextField{10cm}\\
-Schritt 2: \ctmmTextField{10cm}\\
-Schritt 3: \ctmmTextField{10cm}\\
+Schritt 1: \ctmmTextField[10cm]{}{ziele_schritt1}\\
+Schritt 2: \ctmmTextField[10cm]{}{ziele_schritt2}\\
+Schritt 3: \ctmmTextField[10cm]{}{ziele_schritt3}\\
 
 \textbf{Unterstützung benötigt von:}\\
-\ctmmTextField{4cm}
+\ctmmTextField[4cm]{}{ziele_support}
 
 \textbf{Erfolgsmessung:}\\
-\ctmmTextField{4cm}
+\ctmmTextField[10cm]{}{ziele_messung}
+
+\vspace{1cm}
+\begin{center}
+\textit{\textcolor{ctmmGreen}{\faChevronRight~Weiter zu} \ctmmRef{sec:qrcode}{QR-Code Zugang} | \textcolor{ctmmRed}{\faChevronLeft~Zurück zu} \ctmmRef{sec:safewords}{Safe-Words}}
+\end{center}

@@ -28,17 +28,19 @@
 \hypersetup{
   colorlinks=false,
   pdfborder={0 0 0},
-  pdftitle={CTMM-System},
+  pdftitle={CTMM-System - Interaktives Therapie-Workbook},
   pdfauthor={CTMM-Team},
-  pdfsubject={Therapiematerialien}
+  pdfsubject={Therapiematerialien mit ausfüllbaren Formularen},
+  pdfkeywords={CTMM, Therapie, Trigger, Borderline, ADHS, ASS, KPTBS, interaktiv},
+  pdfcreator={LaTeX mit hyperref},
+  pdfproducer={pdfLaTeX},
+  % Formular-spezifische Einstellungen
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  % Für bessere Formularkompatibilität
+  pdfencoding=auto,
+  unicode=true
 }
-
-
-% Alternative mit Rahmen:
-\newcommand{\ctmmTextBox}[2][3cm]{%
-    \framebox[#1]{\rule{0pt}{#2}}%
-}
-\newcommand{\ctmmTextField}[1]{\underline{\hspace{#1}}}
 
 \begin{document}
 
@@ -71,6 +73,7 @@
 \end{ctmmBlueBox}
 
 % Module einbinden
+\input{modules/navigation-system}
 \input{modules/depression}
 \input{modules/bindungsleitfaden}
 \input{modules/triggermanagement}
@@ -78,5 +81,15 @@
 \input{modules/safewords}
 \input{modules/interactive}
 \input{modules/qrcode}
+\input{modules/selbstreflexion}
+
+\newpage
+\part*{KAPITEL 5: ARBEITSBLÄTTER}
+\addcontentsline{toc}{part}{KAPITEL 5: ARBEITSBLÄTTER}
+
+\input{modules/arbeitsblatt-checkin}
+\input{modules/arbeitsblatt-trigger}
+\input{modules/arbeitsblatt-depression-monitoring}
+\input{modules/demo-interactive}
 
 \end{document}

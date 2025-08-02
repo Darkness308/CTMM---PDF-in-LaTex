@@ -1,61 +1,101 @@
-\ProvidesPackage{form-elements}[2025/07/01 CTMM Form Elements v1.0.0]
+\ProvidesPackage{style/form-elements}[2025/08/02 CTMM Form Elements v1.2.0]
 
 % Required packages
 \RequirePackage{tikz}
 \RequirePackage{xcolor}
 \RequirePackage{ifthen}
 \RequirePackage{calc}
+\RequirePackage{forloop}
+\RequirePackage{pifont}  % Für Checkbox-Symbole
 
 % Wichtig für \@ifpackageloaded
 \makeatletter
 % Check if hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
+    \RequirePackage{hyperref}%
     \newcommand{\@ctmmInteractive}{true}%
 }{%
-    \newcommand{\@ctmmInteractive}{false}%
+    \RequirePackage{hyperref}%
+    \newcommand{\@ctmmInteractive}{true}%
 }
 \makeatother
 
-% Text Field
+% Text Field mit verbessertem Design
+% Usage: \ctmmTextField[width]{default text}{field name}
 \newcommand{\ctmmTextField}[3][4cm]{%
     \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
-        \TextField[name=#3,width=#1,bordercolor=ctmmBlue,backgroundcolor=white]{#2}%
+        \TextField[%
+            name=#3,%
+            width=#1,%
+            height=14pt,%
+            bordercolor=ctmmBlue,%
+            backgroundcolor=ctmmBlue!2!white,%
+            borderwidth=1pt,%
+            borderstyle=S,%
+            charsize=10pt,%
+            maxlen=100,%
+            default={#2}%
+        ]{}%
     }{%
-        #2 \underline{\hspace{#1}}%
+        \underline{\hspace{#1}}%
     }%
 }
 
-% Text area - vereinfacht
-\newcommand{\ctmmTextArea}[4][8cm]{%
+% Text area
+% Usage: \ctmmTextArea[width]{lines}{field name}{default text}
+\newcounter{ctmmTextAreaLine}
+\newcommand{\ctmmTextArea}[4][12cm]{%
     \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
-        \TextField[name=#4,width=#1,height=#3,multiline=true,bordercolor=ctmmBlue]{#2}%
+        \TextField[%
+            name=#3,%
+            width=#1,%
+            height=\the\numexpr #2*15\relax pt,%
+            multiline=true,%
+            bordercolor=ctmmBlue,%
+            backgroundcolor=white,%
+            borderwidth=1pt,%
+            borderstyle=S,%
+            charsize=10pt,%
+            default={#4}%
+        ]{}%
     }{%
-        #2\\%
-        \underline{\hspace{#1}}\\%
-        \underline{\hspace{#1}}\\%
-        \ifnum#3>2\underline{\hspace{#1}}\\\fi
+        \parbox[t]{#1}{%
+            \vspace{0.2cm}%
+            \forloop{ctmmTextAreaLine}{1}{\value{ctmmTextAreaLine} < \numexpr#2+1\relax}{%
+                \underline{\hspace{\linewidth}}\\[1.5ex]%
+            }%
+        }%
     }%
 }
 
-% Checkbox
+% Checkbox mit verbessertem Design
+% Usage: \ctmmCheckBox[field name]{label}
 \newcommand{\ctmmCheckBox}[2][]{%
     \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
-        \CheckBox[name=#1,bordercolor=ctmmGreen]{#2}%
+        \CheckBox[%
+            name=#1,%
+            width=14pt,%
+            height=14pt,%
+            bordercolor=ctmmGreen,%
+            backgroundcolor=white,%
+            borderwidth=1.5pt,%
+            borderstyle=S,%
+            checkboxsymbol={\textcolor{ctmmGreen}{\ding{51}}}%
+        ]{\raisebox{0.1ex}{\small\,#2}}%
     }{%
-        \raisebox{-0.15ex}{\tikz{\draw[color=ctmmGreen] (0,0) rectangle (0.3,0.3);}} #2%
+        \raisebox{-0.1ex}{\tikz[baseline=-0.1ex]{\draw[color=ctmmGreen, line width=1pt] (0,0) rectangle (0.35,0.35);}} \small\,#2%
     }%
 }
 
-% Radio Button - korrigiert
+% Radio Button
+% Usage: \ctmmRadioButton{group name}{field value}{label}
 \newcommand{\ctmmRadioButton}[3]{%
     \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
-        \CheckBox[name=#1,value=#2,radio=true,bordercolor=ctmmOrange]{#3}%
+        \ChoiceMenu[radio,name=#1]{}{#2=#3}%
     }{%
-        \raisebox{-0.05ex}{\tikz{\draw[color=ctmmOrange] (0,0) circle (0.15);}} #3%
+        \raisebox{-0.1ex}{\tikz{\draw[color=ctmmGreen, rounded corners] (0,0) rectangle (0.3,0.3);}} #3%
     }%
 }
 
-% Yes/No Checkbox pair
-\newcommand{\ctmmYesNo}[1]{%
-    \ctmmCheckBox[#1yes]{Ja} \quad \ctmmCheckBox[#1no]{Nein}%
-}
+% Daily Input for tables
+\newcommand{\dailyInput}{\underline{\hspace{0.7cm}}}

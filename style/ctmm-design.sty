@@ -1,4 +1,4 @@
-\ProvidesPackage{ctmm-design}[2025/07/01 CTMM Design System]
+\ProvidesPackage{style/ctmm-design}[2025/07/01 CTMM Design System]
 
 % Farbschema
 \definecolor{ctmmBlue}{HTML}{003087}
@@ -7,6 +7,7 @@
 \definecolor{ctmmRed}{HTML}{D32F2F}
 \definecolor{ctmmPurple}{HTML}{7B1FA2}
 \definecolor{ctmmGray}{HTML}{757575}
+\definecolor{ctmmYellow}{HTML}{FFC107}
 
 % tcolorbox für CTMM-Boxen
 \RequirePackage{tcolorbox}
@@ -45,6 +46,75 @@
   colframe=ctmmPurple,
   title=#2,
   #1
+}
+
+\newtcolorbox{ctmmYellowBox}[2][]{
+  colback=ctmmYellow!10!white,
+  colframe=ctmmYellow,
+  coltext=ctmmGray,
+  coltitle=black,
+  fonttitle=\bfseries,
+  title=#2,
+  #1
+}
+
+% Kapitel-spezifische Boxen für das Navigationssystem
+\newtcolorbox{ctmmGreenChapterBox}[2][]{
+  colback=ctmmGreen!8!white,
+  colframe=ctmmGreen,
+  coltext=black,
+  coltitle=white,
+  fonttitle=\Large\bfseries,
+  title=🟢 #2,
+  enhanced,
+  boxrule=2pt,
+  #1
+}
+
+\newtcolorbox{ctmmRedChapterBox}[2][]{
+  colback=ctmmRed!8!white,
+  colframe=ctmmRed,
+  coltext=black,
+  coltitle=white,
+  fonttitle=\Large\bfseries,
+  title=🔴 #2,
+  enhanced,
+  boxrule=2pt,
+  #1
+}
+
+\newtcolorbox{ctmmYellowChapterBox}[2][]{
+  colback=ctmmYellow!8!white,
+  colframe=ctmmYellow,
+  coltext=black,
+  coltitle=black,
+  fonttitle=\Large\bfseries,
+  title=🟡 #2,
+  enhanced,
+  boxrule=2pt,
+  #1
+}
+
+\newtcolorbox{ctmmPurpleChapterBox}[2][]{
+  colback=ctmmPurple!8!white,
+  colframe=ctmmPurple,
+  coltext=black,
+  coltitle=white,
+  fonttitle=\Large\bfseries,
+  title=📝 #2,
+  enhanced,
+  boxrule=2pt,
+  #1
+}
+
+% Quick Navigation Makro
+\newcommand{\quickNav}[2]{%
+  \textcolor{#1}{\faArrowRight~#2}%
+}
+
+% Kapitel-Referenz Makro
+\newcommand{\ctmmRef}[2]{%
+  \hyperref[#1]{\textcolor{ctmmBlue}{\faLink~#2}}%
 }
 
 % Header-Stilisierung

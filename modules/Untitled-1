@@ -1,0 +1,28 @@
+% modules/arbeitsblatt-trigger.tex
+
+\newpage
+\section*{\faBolt~5.2 TRIGGER-TAGEBUCH}
+\addcontentsline{toc}{section}{Trigger-Tagebuch}
+
+\begin{ctmmYellowBox}{\faLightbulb~Tooltip}
+Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehen.
+\end{ctmmYellowBox}
+
+\textbf{Datum/Zeit:} \ctmmTextField{8cm}
+
+\subsection*{TRIGGER-SITUATION}
+\textit{Einfach ankreuzen was passt - kombinieren ist ok!}
+
+\textbf{Ich war zusammen mit:} \\
+\checkbox~Partner \quad \checkbox~Freunden \quad \checkbox~Familie \quad \checkbox~Anderen: \ctmmTextField{3cm}
+
+\textbf{Triggermoment war:} \\
+\checkbox~Geräusch (laut/plötzlich) \quad \checkbox~Bestimmte Wörter/Sätze \\
+\checkbox~Tonfall/Betonung \quad \checkbox~Körpersprache \quad \checkbox~Andere: \ctmmTextField{3cm}
+
+\textbf{Beschreibe die Situation:} \\
+\textit{Schüler-Tipp: "Es war wie..." oder "Es fühlte sich an wie..."} \\
+\ctmmTextField{12cm} \\
+\ctmmTextField{12cm}
+
+% ... und so weiter für den Rest des Arbeitsblattes.
