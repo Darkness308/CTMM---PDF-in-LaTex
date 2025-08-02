@@ -5,21 +5,32 @@
 \usepackage{xcolor}
 \usepackage{fontawesome5}
 \usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
 
 % Eigene Pakete
-\usepackage{Stil/ctmm-design}
-\usepackage{Stil/form-elements}
-\usepackage{Stil/ctmm-diagrams}
+\usepackage{style/ctmm-design}
+\usepackage{style/form-elements}
+\usepackage{style/ctmm-diagrams}
+
+\title{\textcolor{ctmmBlue}{\Huge CTMM-System}\\[0.5cm]
+\Large Catch-Track-Map-Match Therapiematerialien}
+\author{CTMM-Team}
+\date{\today}
 
 \begin{document}
 
-\section*{CTMM-System Test}
-\textcolor{ctmmBlue}{Dieser Test prüft, ob die Style-Dateien korrekt eingebunden sind.}
-
-% Diagramm testen
-\ctmmTriggerLoop
+\maketitle
+\tableofcontents
+\clearpage
 
 % Module einbinden
-\input{Module/depression}
+\input{modules/depression}
+\clearpage
+\input{modules/bindungsleitfaden}
+\clearpage
+\input{modules/triggermanagement}
+\clearpage
+\input{modules/test}
 
 \end{document}
