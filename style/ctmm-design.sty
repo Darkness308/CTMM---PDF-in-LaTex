@@ -1,39 +1,53 @@
 \ProvidesPackage{ctmm-design}[2025/07/01 CTMM Design System]
-% CTMM Design System: Farben, Boxen, Header und Section-Style
-\RequirePackage{xcolor}
-\RequirePackage{tcolorbox}
-\RequirePackage{titlesec}
-\RequirePackage{hyperref}
 
-% Farbschema aus CTMM-Dokumenten
+% Farbschema
 \definecolor{ctmmBlue}{HTML}{003087}
 \definecolor{ctmmGreen}{HTML}{4CAF50}
 \definecolor{ctmmOrange}{HTML}{FF6200}
 \definecolor{ctmmRed}{HTML}{D32F2F}
 \definecolor{ctmmPurple}{HTML}{7B1FA2}
+\definecolor{ctmmGray}{HTML}{757575}
 
-% Hyperref Link-Farben
-\hypersetup{
-  colorlinks=true,
-  linkcolor=ctmmBlue,
-  citecolor=ctmmGreen,
-  urlcolor=ctmmOrange
+% tcolorbox für CTMM-Boxen
+\RequirePackage{tcolorbox}
+
+% Box-Stile definieren
+\newtcolorbox{ctmmBlueBox}[2][]{
+  colback=ctmmBlue!5!white,
+  colframe=ctmmBlue,
+  title=#2,
+  #1
 }
 
-% Abschnittsformatierung
-\titleformat{\section}{\normalfont\Large\bfseries\color{ctmmBlue}}{\thesection}{1em}{}
-
-% CTMM Header-Box und Befehl
-\newtcolorbox{ctmmHeaderBox}{%
-  colback=ctmmBlue!10!white, colframe=ctmmBlue, fontupper=\large\bfseries, coltitle=white, center title
-}
-\newcommand{\ctmmHeader}[1]{%
-  \begin{ctmmHeaderBox}[title={#1}]\end{ctmmHeaderBox}\vspace{1em}
+\newtcolorbox{ctmmGreenBox}[2][]{
+  colback=ctmmGreen!5!white,
+  colframe=ctmmGreen,
+  title=#2,
+  #1
 }
 
-% Vorgefertigte tcolorbox-Stile
-\newtcolorbox{ctmmBlueBox}[1][]{colback=ctmmBlue!5!white, colframe=ctmmBlue, fonttitle=\bfseries, title=#1}
-\newtcolorbox{ctmmGreenBox}[1][]{colback=ctmmGreen!5!white, colframe=ctmmGreen, fonttitle=\bfseries, title=#1}
-\newtcolorbox{ctmmOrangeBox}[1][]{colback=ctmmOrange!5!white, colframe=ctmmOrange, fonttitle=\bfseries, title=#1}
-\newtcolorbox{ctmmRedBox}[1][]{colback=ctmmRed!5!white, colframe=ctmmRed, fonttitle=\bfseries, title=#1}
-\newtcolorbox{ctmmPurpleBox}[1][]{colback=ctmmPurple!5!white, colframe=ctmmPurple, fonttitle=\bfseries, title=#1}
+\newtcolorbox{ctmmOrangeBox}[2][]{
+  colback=ctmmOrange!5!white,
+  colframe=ctmmOrange,
+  title=#2,
+  #1
+}
+
+\newtcolorbox{ctmmRedBox}[2][]{
+  colback=ctmmRed!5!white,
+  colframe=ctmmRed,
+  title=#2,
+  #1
+}
+
+\newtcolorbox{ctmmPurpleBox}[2][]{
+  colback=ctmmPurple!5!white,
+  colframe=ctmmPurple,
+  title=#2,
+  #1
+}
+
+% Header-Stilisierung
+\newcommand{\ctmmHeader}[1]{
+  {\Large\bfseries\textcolor{ctmmBlue}{#1}}
+}

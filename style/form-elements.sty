@@ -1,44 +1,61 @@
-\ProvidesPackage{form-elements}[2025/07/02 CTMM Form Elements]
-% CTMM-Formularfelder für interaktiv & druckbar
-\RequirePackage{xcolor}
-\RequirePackage{etoolbox}
-\RequirePackage{hyperref}
-\RequirePackage{tikz}
+\ProvidesPackage{form-elements}[2025/07/01 CTMM Form Elements v1.0.0]
 
-% Bedingte Definition: interaktiv vs. druckbar
+% Required packages
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+
+% Wichtig für \@ifpackageloaded
 \makeatletter
+% Check if hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
-  % Interaktive Felder
-  \newcommand{\ctmmTextField}[3][]{\TextField[name=#3,width=#1,bordercolor=ctmmBlue]{#2}}
-  \newcommand{\ctmmTextArea}[4][]{\TextField[name=#4,width=#1,height=#2,multiline=true,bordercolor=ctmmBlue]{#3}}
-  \newcommand{\ctmmCheckBox}[2]{\CheckBox[name=#2,bordercolor=ctmmGreen]{#1}}
-  \newcommand{\ctmmRadioButton}[3]{\RadioButton[name=#1,value=#2,bordercolor=ctmmOrange]{#3}}
+    \newcommand{\@ctmmInteractive}{true}%
 }{%
-  % Druckbare Fallbacks
-  \newcommand{\ctmmTextField}[3][]{#2 \underline{\hspace{#1}}}
-  \newcommand{\ctmmTextArea}[4][]{#3 \underline{\hspace{#1}}}
-  \newcommand{\ctmmCheckBox}[2]{#1 [\ ]}
-  \newcommand{\ctmmRadioButton}[3]{#3 ( )}
+    \newcommand{\@ctmmInteractive}{false}%
 }
 \makeatother
 
-% CTMM-spezifische Elemente
-\newcommand{\ctmmMoodScale}[1]{%
-  \textbf{Stimmung #1: }\foreach \x in {1,...,10}{\ctmmRadioButton{mood-#1}{\x}{\x}\,}
-}
-\newcommand{\ctmmStressLevel}[1]{% text field
-  \textbf{Stress #1: }\ctmmTextField[3cm]{ }{stress-#1}
-}
-\newcommand{\ctmmYesNo}[1]{% Ja/Nein
-  \textbf{#1: }Ja \ctmmCheckBox{Ja}{#1-yes}\quad Nein \ctmmCheckBox{Nein}{#1-no}
-}
-\newcommand{\ctmmSafeWordOptions}[1]{% Safe Words
-  \textbf{Safe Word: }Stop \ctmmCheckBox{Stop}{#1-stop}\quad Pause \ctmmCheckBox{Pause}{#1-pause}\quad Help \ctmmCheckBox{Help}{#1-help}
+% Text Field
+\newcommand{\ctmmTextField}[3][4cm]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \TextField[name=#3,width=#1,bordercolor=ctmmBlue,backgroundcolor=white]{#2}%
+    }{%
+        #2 \underline{\hspace{#1}}%
+    }%
 }
 
-% CTMM Farbpalette
-\definecolor{ctmmBlue}{HTML}{003087}
-\definecolor{ctmmGreen}{HTML}{4CAF50}
-\definecolor{ctmmOrange}{HTML}{FF6200}
-\definecolor{ctmmRed}{HTML}{D32F2F}
-\definecolor{ctmmPurple}{HTML}{7B1FA2}
+% Text area - vereinfacht
+\newcommand{\ctmmTextArea}[4][8cm]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \TextField[name=#4,width=#1,height=#3,multiline=true,bordercolor=ctmmBlue]{#2}%
+    }{%
+        #2\\%
+        \underline{\hspace{#1}}\\%
+        \underline{\hspace{#1}}\\%
+        \ifnum#3>2\underline{\hspace{#1}}\\\fi
+    }%
+}
+
+% Checkbox
+\newcommand{\ctmmCheckBox}[2][]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \CheckBox[name=#1,bordercolor=ctmmGreen]{#2}%
+    }{%
+        \raisebox{-0.15ex}{\tikz{\draw[color=ctmmGreen] (0,0) rectangle (0.3,0.3);}} #2%
+    }%
+}
+
+% Radio Button - korrigiert
+\newcommand{\ctmmRadioButton}[3]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \CheckBox[name=#1,value=#2,radio=true,bordercolor=ctmmOrange]{#3}%
+    }{%
+        \raisebox{-0.05ex}{\tikz{\draw[color=ctmmOrange] (0,0) circle (0.15);}} #3%
+    }%
+}
+
+% Yes/No Checkbox pair
+\newcommand{\ctmmYesNo}[1]{%
+    \ctmmCheckBox[#1yes]{Ja} \quad \ctmmCheckBox[#1no]{Nein}%
+}
