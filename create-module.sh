@@ -44,8 +44,8 @@ if [ $? -eq 0 ]; then
     echo "1. Öffnen Sie main.tex"
     echo "2. Fügen Sie an der gewünschten Stelle ein:"
     
-    # Dateiname generieren (vereinfacht)
-    filename=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-\|-$//g')
+    # Dateiname generieren (aus dem Modulnamen, ohne Leerzeichen und in Kleinbuchstaben)
+    filename=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
     
     case $type in
         "arbeitsblatt") prefix="arbeitsblatt-";;
