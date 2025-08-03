@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CTMM: Kompilieren",
+            "label": "CTMM: Build Complete System",
             "type": "shell",
             "command": "pdflatex",
             "args": [
@@ -16,6 +16,12 @@
                 "kind": "build",
                 "isDefault": true
             },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
             "problemMatcher": {
                 "owner": "latex",
                 "fileLocation": ["relative", "${workspaceRoot}"],
@@ -25,6 +31,103 @@
                     "line": 2,
                     "message": 3
                 }
+            },
+            "dependsOn": "CTMM: Create Missing Directories"
+        },
+        {
+            "label": "CTMM: Build Single Module",
+            "type": "shell",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1", 
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-output-directory=build",
+                "${file}"
+            ],
+            "group": "build",
+            "presentation": {
+                "panel": "new"
+            },
+            "problemMatcher": {
+                "owner": "latex",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):\\s+(.*)",
+                    "file": 1,
+                    "line": 2,
+                    "message": 3
+                }
+            },
+            "dependsOn": "CTMM: Create Missing Directories"
+        },
+        {
+            "label": "CTMM: Clean Build Directory",
+            "type": "shell",
+            "command": "rm",
+            "args": ["-rf", "build/*"],
+            "linux": {
+                "command": "rm",
+                "args": ["-rf", "build/*"]
+            },
+            "osx": {
+                "command": "rm", 
+                "args": ["-rf", "build/*"]
+            },
+            "windows": {
+                "command": "cmd",
+                "args": ["/C", "if exist build (del /Q build\\*.* 2>nul) & if exist build (for /d %i in (build\\*) do rmdir /s /q \"%i\" 2>nul)"]
+            },
+            "group": "build"
+        },
+        {
+            "label": "CTMM: Create Missing Directories", 
+            "type": "shell",
+            "command": "mkdir",
+            "args": ["-p", "build", "modules", "style", "assets"],
+            "linux": {
+                "command": "mkdir",
+                "args": ["-p", "build", "modules", "style", "assets"]
+            },
+            "osx": {
+                "command": "mkdir",
+                "args": ["-p", "build", "modules", "style", "assets"] 
+            },
+            "windows": {
+                "command": "cmd",
+                "args": ["/C", "if not exist build mkdir build & if not exist modules mkdir modules & if not exist style mkdir style & if not exist assets mkdir assets"]
+            },
+            "group": "build"
+        },
+        {
+            "label": "CTMM: Clean and Build",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CTMM: Clean Build Directory",
+                "CTMM: Build Complete System"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "CTMM: Generate Module",
+            "type": "shell", 
+            "command": "./create-module.sh",
+            "linux": {
+                "command": "./create-module.sh"
+            },
+            "osx": {
+                "command": "./create-module.sh"
+            },
+            "windows": {
+                "command": "cmd",
+                "args": ["/C", "echo Please use: node module-generator.js ^<type^> ^<name^> && echo Available types: arbeitsblatt, tool, notfallkarte"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
             }
         }
     ]
