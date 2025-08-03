@@ -52,3 +52,18 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 **Tipp:**
 Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+
+## GitHub-Integration Probleme
+
+Bei Fehlern wie **"Resource not accessible by integration"** siehe: [`GITHUB-PERMISSIONS.md`](GITHUB-PERMISSIONS.md)
+
+Diese Datei erklärt:
+- Wo diese Fehler zu finden sind
+- Wie GitHub CLI-Berechtigungen zu konfigurieren sind
+- Wie Workflow-Probleme zu beheben sind
+- Wie Repository-Einstellungen zu prüfen sind
+
+**Häufige Ursachen:**
+- GitHub CLI nicht angemeldet oder unzureichende Berechtigungen
+- Workflow-Dateien verweisen auf nicht existierende Dateien
+- Repository-Einstellungen blockieren Actions-Zugriff

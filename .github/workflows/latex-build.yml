@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,10 +20,22 @@ jobs:
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
         with:
-          root_file: main_final.tex
+          root_file: main.tex
+          args: "-pdf -file-line-error -halt-on-error -interaction=nonstopmode"
+
+      - name: Check if PDF was created
+        run: |
+          if [ ! -f main.pdf ]; then
+            echo "❌ main.pdf was not created"
+            exit 1
+          else
+            echo "✅ main.pdf successfully created"
+            ls -la main.pdf
+          fi
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CTMM_final_PDF
-          path: main_final.pdf
+          name: CTMM_PDF
+          path: main.pdf
+          retention-days: 30
