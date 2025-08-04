@@ -1,6 +1,6 @@
 % Feedback und Selbstreflexions-System
 \newpage
-\section*{\textcolor{ctmmPurple}{\faChartLine~Selbstreflexions-System}}
+\section*{\tex\textbf{Datum:} \ctmmTextField[4cm]{}{event_date} \quad \textbf{Kategorie:} \ctmmCheckBox{cat_micro}{Mikro} \ctmmCheckBox{cat_breakthrough}{Durchbruch} \ctmmCheckBox{cat_surprise}{Überraschung}\\[0.3cm]color{ctmmPurple}{\faChartLine~Selbstreflexions-System}}
 \addcontentsline{toc}{section}{Selbstreflexions-System}
 \label{sec:feedback}
 
@@ -45,7 +45,7 @@
 \hline
 \textbf{Metrik} & \textbf{Letzter Monat} & \textbf{Dieser Monat} & \textbf{Trend} \\
 \hline
-Safe-Word Nutzung/Woche & \ctmmTextField[2cm]{}{metric_safeword_last} & \ctmmTextField[2cm]{}{metric_safeword_now} & \ctmmCheckBox[trend_safeword_up]{↑} \ctmmCheckBox[trend_safeword_down]{↓} \\
+Safe-Word Nutzung/Woche & \ctmmTextField[2cm]{}{metric_safeword_last} & \ctmmTextField[2cm]{}{metric_safeword_now} & \ctmmCheckBox{trend_safeword_up}{↑} \ctmmCheckBox{trend_safeword_down}{↓} \\
 \hline
 Krisenzeit (Minuten) & \ctmmTextField[2cm]{}{metric_crisis_last} & \ctmmTextField[2cm]{}{metric_crisis_now} & \ctmmCheckBox{trend_crisis_up}{↑} \ctmmCheckBox{trend_crisis_down}{↓} \\
 \hline
@@ -60,7 +60,7 @@ Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & 
 \label{sec:erfolge}
 
 \begin{ctmmGreenBox}{\faBullseye~Beweise sammeln}
-\textbf{Datum:} \ctmmTextField[3cm]{}{success_date} \quad \textbf{Kategorie:} \ctmmCheckBox[cat_micro]{Mikro} \ctmmCheckBox[cat_breakthrough]{Durchbruch} \ctmmCheckBox[cat_surprise]{Überraschung}\\[0.3cm]
+\textbf{Datum:} \ctmmTextField[3cm]{}{success_date} \quad \textbf{Kategorie:} \ctmmCheckBox{cat_micro}{Mikro} \ctmmCheckBox{cat_breakthrough}{Durchbruch} \ctmmCheckBox{cat_surprise}{Überraschung}\\[0.3cm]
 
 \textbf{Was ist passiert? (Konkrete Details)}\\
 \ctmmTextArea[12cm]{3}{success_description}{}\\[0.3cm]
