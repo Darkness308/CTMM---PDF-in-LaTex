@@ -88,11 +88,22 @@
 % =====================================================
 
 % Checkbox
-\newcommand{\ctmmCheckBox}[2][]{%
+\newcommand{\ctmmCheckBoxEnhanced}[2]{%
     \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
         \CheckBox[%
             name=#1,%
             width=14pt,%
+            height=14pt,%
+            bordercolor=ctmmGreen,%
+            backgroundcolor=white,%
+            borderwidth=1.5pt,%
+            borderstyle=S,%
+            checkboxsymbol={\textcolor{ctmmGreen}{\ding{51}}}%
+        ]{\raisebox{0.1ex}{\small\,#2}}%
+    }{%
+        \raisebox{-0.15ex}{\tikz{\draw[color=ctmmGreen] (0,0) rectangle (0.3,0.3);}} #2%
+    }%
+}
             height=14pt,%
             bordercolor=ctmmGreen,%
             backgroundcolor=white,%
