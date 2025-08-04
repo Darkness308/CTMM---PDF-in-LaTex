@@ -26,7 +26,7 @@
 
 \begin{ctmmYellowBox}{Wochenreflexion}
 \textbf{Genutzte Tools diese Woche:}\\
-\ctmmCheckBox[week_safewords]{Safe-Words} \quad \ctmmCheckBox[week_skills]{Skills-Box} \quad \ctmmCheckBox[week_rituals]{Rituale}\\[0.3cm]
+\ctmmCheckBox{weekly_safewords}{Safe-Words} \quad 	extbf{Skills:} \ctmmCheckBox{weekly_skills}{Neue Skills} \quad 	extbf{Rituale:} \ctmmCheckBox{weekly_rituals}{Gemeinsame Zeit}\\[0.3cm]
 
 \textbf{Was hat gut funktioniert?}\\
 \ctmmTextArea[12cm]{2}{week_success}{}\\[0.3cm]
@@ -47,11 +47,11 @@
 \hline
 Safe-Word Nutzung/Woche & \ctmmTextField[2cm]{}{metric_safeword_last} & \ctmmTextField[2cm]{}{metric_safeword_now} & \ctmmCheckBox[trend_safeword_up]{↑} \ctmmCheckBox[trend_safeword_down]{↓} \\
 \hline
-Krisenzeit (Minuten) & \ctmmTextField[2cm]{}{metric_crisis_last} & \ctmmTextField[2cm]{}{metric_crisis_now} & \ctmmCheckBox[trend_crisis_up]{↑} \ctmmCheckBox[trend_crisis_down]{↓} \\
+Krisenzeit (Minuten) & \ctmmTextField[2cm]{}{metric_crisis_last} & \ctmmTextField[2cm]{}{metric_crisis_now} & \ctmmCheckBox{trend_crisis_up}{↑} \ctmmCheckBox{trend_crisis_down}{↓} \\
 \hline
-Schlafqualität (1-10) & \ctmmTextField[2cm]{}{metric_sleep_last} & \ctmmTextField[2cm]{}{metric_sleep_now} & \ctmmCheckBox[trend_sleep_up]{↑} \ctmmCheckBox[trend_sleep_down]{↓} \\
+Schlafqualität (1-10) & \ctmmTextField[2cm]{}{metric_sleep_last} & \ctmmTextField[2cm]{}{metric_sleep_now} & \ctmmCheckBox{trend_sleep_up}{↑} \ctmmCheckBox{trend_sleep_down}{↓} \\
 \hline
-Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & \ctmmTextField[2cm]{}{metric_activities_now} & \ctmmCheckBox[trend_activities_up]{↑} \ctmmCheckBox[trend_activities_down]{↓} \\
+Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & \ctmmTextField[2cm]{}{metric_activities_now} & \ctmmCheckBox{trend_activities_up}{↑} \ctmmCheckBox{trend_activities_down}{↓} \\
 \hline
 \end{tabularx}
 \end{center}
