@@ -41,7 +41,7 @@ class CTMMLaTeXHelper:
             sections = re.findall(r'\\(?:section|subsection|subsubsection)\*?\{([^}]+)\}', content)
             
             # Find form elements
-            form_elements = len(re.findall(r'\\ctmm(?:TextField|CheckBox|RadioButton)', content))
+            form_elements = len(re.findall(r'\\ctmm(?:TextField|CheckBox|RadioButton|TextArea|YesNo)', content))
             
             # Find CTMM color usage
             colors = re.findall(r'\\textcolor\{(ctmm\w+)\}', content)
@@ -49,6 +49,9 @@ class CTMMLaTeXHelper:
             
             # Find tcolorbox usage
             tcolorboxes = len(re.findall(r'\\begin\{tcolorbox\}', content))
+            
+            # Syntax validation
+            syntax_issues = self.validate_latex_syntax(content)
             
             return {
                 'filepath': str(filepath),
@@ -58,11 +61,66 @@ class CTMMLaTeXHelper:
                 'form_elements': form_elements,
                 'colors': dict(color_counts),
                 'tcolorboxes': tcolorboxes,
-                'lines': len(content.split('\n'))
+                'lines': len(content.split('\n')),
+                'syntax_issues': syntax_issues
             }
             
         except Exception as e:
             return {'error': str(e), 'filepath': str(filepath)}
+    
+    def validate_latex_syntax(self, content):
+        """Validate LaTeX syntax for common issues"""
+        issues = []
+        lines = content.split('\n')
+        
+        # Check for unmatched braces
+        brace_count = 0
+        for i, line in enumerate(lines, 1):
+            brace_count += line.count('{') - line.count('}')
+            
+            # Check for unmatched environment tags
+            begin_matches = re.findall(r'\\begin\{([^}]+)\}', line)
+            end_matches = re.findall(r'\\end\{([^}]+)\}', line)
+            
+            # Check for missing \end{tcolorbox}
+            if '\\begin{tcolorbox}' in line and '\\end{tcolorbox}' not in content[content.find(line):]:
+                # Look ahead for matching end
+                remaining_content = '\n'.join(lines[i:])
+                if '\\end{tcolorbox}' not in remaining_content:
+                    issues.append(f"Line {i}: Missing \\end{{tcolorbox}} for \\begin{{tcolorbox}}")
+            
+            # Check for unclosed environments
+            for env in begin_matches:
+                if f'\\end{{{env}}}' not in content:
+                    issues.append(f"Line {i}: Missing \\end{{{env}}} for \\begin{{{env}}}")
+            
+            # Check for malformed CTMM commands
+            if re.search(r'\\ctmm\w+\[.*?\]\{.*?\}\{.*?\}(?!\{)', line):
+                # Check if it looks like missing closing brace
+                if line.count('{') > line.count('}'):
+                    issues.append(f"Line {i}: Possible missing closing brace in CTMM command")
+            
+            # Check for stray angle brackets
+            if '>' in line and '\\end{' not in line and 'textgreater' not in line:
+                if not any(x in line for x in ['\\textcolor', '\\href', '\\url']):
+                    issues.append(f"Line {i}: Unexpected '>' character (might be misplaced)")
+        
+        # Overall brace balance
+        if brace_count != 0:
+            issues.append(f"Unbalanced braces: {abs(brace_count)} {'opening' if brace_count > 0 else 'closing'} brace(s) missing")
+        
+        # Check for CTMM-specific issues
+        if '\\ctmmTextArea' in content:
+            # Check for proper TextArea syntax
+            textarea_matches = re.findall(r'\\ctmmTextArea\[([^\]]*)\]\{([^}]*)\}\{([^}]*)\}', content)
+            for match in textarea_matches:
+                width, height, name = match
+                if not width or not height:
+                    issues.append("CTMM TextArea missing width or height parameter")
+                if not name:
+                    issues.append("CTMM TextArea missing name parameter")
+        
+        return issues
     
     def analyze_log_file(self, log_path):
         """Analyze LaTeX log file for errors and warnings"""
@@ -202,7 +260,7 @@ class CTMMLaTeXHelper:
 
 def main():
     parser = argparse.ArgumentParser(description='CTMM LaTeX Helper Tool')
-    parser.add_argument('command', choices=['analyze', 'check-errors', 'stats', 'module-detail'], 
+    parser.add_argument('command', choices=['analyze', 'check-errors', 'stats', 'module-detail', 'validate'], 
                        help='What to do')
     parser.add_argument('--modules-dir', default='modules/', 
                        help='Path to modules directory')
@@ -319,6 +377,82 @@ def main():
             print(f"  ✅ Good section length (avg {words_per_section:.0f} words/section)")
         else:
             print(f"  ✅ Concise sections (avg {words_per_section:.0f} words/section)")
+    
+    elif args.command == 'validate':
+        if args.module:
+            # Validate specific module
+            helper.scan_modules_directory(args.modules_dir)
+            
+            found_module = None
+            for category, modules in helper.stats['modules'].items():
+                for module in modules:
+                    if args.module.lower() in Path(module['filepath']).stem.lower():
+                        found_module = module
+                        break
+                if found_module:
+                    break
+            
+            if not found_module:
+                print(f"❌ Module '{args.module}' not found")
+                return
+            
+            print(f"\n🔍 LaTeX Syntax Validation: {Path(found_module['filepath']).stem}")
+            print("=" * 60)
+            
+            if not found_module.get('syntax_issues'):
+                print("✅ No syntax issues found! Clean LaTeX code.")
+            else:
+                print(f"⚠️  Found {len(found_module['syntax_issues'])} potential issues:")
+                for issue in found_module['syntax_issues']:
+                    print(f"  • {issue}")
+            
+            # Additional validation checks
+            print(f"\n📋 CTMM Compliance Check:")
+            if found_module['form_elements'] > 0:
+                print(f"  ✅ Interactive elements: {found_module['form_elements']} form fields")
+            else:
+                print(f"  ⚠️  No interactive elements found")
+            
+            if found_module['colors']:
+                print(f"  ✅ CTMM colors used: {len(found_module['colors'])} different colors")
+            else:
+                print(f"  ⚠️  No CTMM colors found")
+            
+            if found_module['tcolorboxes'] > 0:
+                print(f"  ✅ Structured content: {found_module['tcolorboxes']} colored boxes")
+            else:
+                print(f"  ⚠️  No structured colored boxes found")
+        
+        else:
+            # Validate all modules
+            print("🔍 Validating all modules...")
+            helper.scan_modules_directory(args.modules_dir)
+            
+            total_issues = 0
+            modules_with_issues = []
+            
+            for category, modules in helper.stats['modules'].items():
+                for module in modules:
+                    if module.get('syntax_issues'):
+                        total_issues += len(module['syntax_issues'])
+                        modules_with_issues.append({
+                            'name': Path(module['filepath']).stem,
+                            'issues': module['syntax_issues']
+                        })
+            
+            print(f"\n📊 Validation Summary:")
+            print(f"Total modules checked: {sum(len(modules) for modules in helper.stats['modules'].values())}")
+            print(f"Modules with issues: {len(modules_with_issues)}")
+            print(f"Total issues found: {total_issues}")
+            
+            if modules_with_issues:
+                print(f"\n⚠️  Modules with syntax issues:")
+                for module_info in modules_with_issues:
+                    print(f"\n📄 {module_info['name']}:")
+                    for issue in module_info['issues']:
+                        print(f"  • {issue}")
+            else:
+                print(f"\n✅ All modules passed validation! Clean codebase.")
 
 if __name__ == '__main__':
     main()
