@@ -1,0 +1,262 @@
+{
+  "summary": {
+    "total_modules": 21,
+    "total_words": 6510,
+    "total_packages": 0,
+    "categories": [
+      "root"
+    ]
+  },
+  "modules_by_category": {
+    "root": {
+      "count": 21,
+      "total_words": 6510,
+      "total_form_elements": 251,
+      "modules": [
+        {
+          "name": "matching-matrix-trigger-reaktion",
+          "words": 656,
+          "sections": 9,
+          "form_elements": 30,
+          "colors": {
+            "ctmmPurple": 4,
+            "ctmmBlue": 3,
+            "ctmmOrange": 3,
+            "ctmmRed": 2,
+            "ctmmGreen": 1
+          }
+        },
+        {
+          "name": "interactive",
+          "words": 391,
+          "sections": 5,
+          "form_elements": 26,
+          "colors": {
+            "ctmmOrange": 7,
+            "ctmmGreen": 1,
+            "ctmmRed": 1
+          }
+        },
+        {
+          "name": "notfallkarten",
+          "words": 73,
+          "sections": 1,
+          "form_elements": 4,
+          "colors": {
+            "ctmmBlue": 2,
+            "ctmmGreen": 1
+          }
+        },
+        {
+          "name": "arbeitsblatt-checkin",
+          "words": 254,
+          "sections": 5,
+          "form_elements": 25,
+          "colors": {
+            "ctmmGreen": 2,
+            "ctmmPurple": 1
+          }
+        },
+        {
+          "name": "arbeitsblatt-taeglicher-stimmungscheck",
+          "words": 150,
+          "sections": 4,
+          "form_elements": 5,
+          "colors": {
+            "ctmmGreen": 3,
+            "ctmmPurple": 1,
+            "ctmmBlue": 1
+          }
+        },
+        {
+          "name": "diagrams-demo",
+          "words": 596,
+          "sections": 8,
+          "form_elements": 0,
+          "colors": {
+            "ctmmPurple": 3,
+            "ctmmBlue": 3,
+            "ctmmOrange": 1,
+            "ctmmRed": 1,
+            "ctmmGreen": 1
+          }
+        },
+        {
+          "name": "depression",
+          "words": 294,
+          "sections": 4,
+          "form_elements": 0,
+          "colors": {
+            "ctmmBlue": 7,
+            "ctmmGreen": 2,
+            "ctmmRed": 2,
+            "ctmmOrange": 1,
+            "ctmmPurple": 1
+          }
+        },
+        {
+          "name": "tool-5-4-3-2-1-grounding",
+          "words": 173,
+          "sections": 4,
+          "form_elements": 0,
+          "colors": {
+            "ctmmOrange": 3,
+            "ctmmPurple": 1,
+            "ctmmBlue": 1
+          }
+        },
+        {
+          "name": "therapiekoordination",
+          "words": 389,
+          "sections": 6,
+          "form_elements": 37,
+          "colors": {
+            "ctmmPurple": 9,
+            "ctmmGreen": 1
+          }
+        },
+        {
+          "name": "arbeitsblatt-trigger",
+          "words": 380,
+          "sections": 5,
+          "form_elements": 48,
+          "colors": {
+            "ctmmPurple": 2
+          }
+        },
+        {
+          "name": "arbeitsblatt-depression-monitoring",
+          "words": 353,
+          "sections": 2,
+          "form_elements": 0,
+          "colors": {
+            "ctmmPurple": 1,
+            "ctmmBlue": 1
+          }
+        },
+        {
+          "name": "form-demo",
+          "words": 235,
+          "sections": 7,
+          "form_elements": 12,
+          "colors": {
+            "ctmmOrange": 3,
+            "ctmmBlue": 2,
+            "ctmmGreen": 1,
+            "ctmmPurple": 1,
+            "ctmmRed": 1
+          }
+        },
+        {
+          "name": "qrcode",
+          "words": 414,
+          "sections": 5,
+          "form_elements": 0,
+          "colors": {
+            "ctmmPurple": 8,
+            "ctmmOrange": 2,
+            "ctmmBlue": 6,
+            "ctmmGreen": 2
+          }
+        },
+        {
+          "name": "triggermanagement",
+          "words": 354,
+          "sections": 5,
+          "form_elements": 7,
+          "colors": {
+            "ctmmOrange": 7,
+            "ctmmGreen": 1,
+            "ctmmRed": 1
+          }
+        },
+        {
+          "name": "demo-interactive",
+          "words": 257,
+          "sections": 4,
+          "form_elements": 11,
+          "colors": {
+            "ctmmBlue": 1
+          }
+        },
+        {
+          "name": "bindungsleitfaden",
+          "words": 204,
+          "sections": 4,
+          "form_elements": 0,
+          "colors": {
+            "ctmmOrange": 1,
+            "ctmmBlue": 5,
+            "ctmmGreen": 1
+          }
+        },
+        {
+          "name": "safewords",
+          "words": 281,
+          "sections": 3,
+          "form_elements": 6,
+          "colors": {
+            "ctmmRed": 4,
+            "ctmmOrange": 1,
+            "ctmmGreen": 1
+          }
+        },
+        {
+          "name": "navigation-system",
+          "words": 418,
+          "sections": 4,
+          "form_elements": 0,
+          "colors": {
+            "ctmmBlue": 2,
+            "ctmmGreen": 1,
+            "ctmmRed": 1,
+            "ctmmYellow": 1,
+            "ctmmPurple": 1,
+            "ctmmGray": 1
+          }
+        },
+        {
+          "name": "notfall-panikattacken",
+          "words": 193,
+          "sections": 4,
+          "form_elements": 0,
+          "colors": {
+            "ctmmRed": 1,
+            "ctmmOrange": 1,
+            "ctmmGreen": 1,
+            "ctmmBlue": 1
+          }
+        },
+        {
+          "name": "selbstreflexion",
+          "words": 445,
+          "sections": 6,
+          "form_elements": 40,
+          "colors": {
+            "ctmmPurple": 1,
+            "ctmmGreen": 1,
+            "ctmmBlue": 1
+          }
+        },
+        {
+          "name": "test",
+          "words": 0,
+          "sections": 0,
+          "form_elements": 0,
+          "colors": {}
+        }
+      ]
+    }
+  },
+  "package_usage": [],
+  "ctmm_color_usage": {
+    "ctmmPurple": 34,
+    "ctmmBlue": 36,
+    "ctmmOrange": 30,
+    "ctmmRed": 14,
+    "ctmmGreen": 21,
+    "ctmmYellow": 1,
+    "ctmmGray": 1
+  },
+  "form_elements_total": 251
+}

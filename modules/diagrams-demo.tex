@@ -1,0 +1,132 @@
+% =====================================================
+% CTMM Diagrams Demo
+% Purpose: Showcase all available CTMM diagrams
+% Author: CTMM-Team
+% Integration: \input{modules/diagrams-demo}
+% =====================================================
+
+\section*{\textcolor{ctmmPurple}{\faChartArea~CTMM Visualisierungen}}
+
+\begin{quote}
+\textbf{\textcolor{ctmmPurple}{Worum geht's hier?}}\\
+Diese Seite zeigt alle verfügbaren Diagramme zur Veranschaulichung von CTMM-Konzepten.
+\end{quote}
+
+\subsection*{\textcolor{ctmmBlue}{Der CTMM-Trigger-Zyklus}}
+
+Der Kern des CTMM-Systems als visueller Kreislauf:
+
+\ctmmTriggerLoop
+
+\textit{Dieser Zyklus zeigt die vier Hauptphasen des Trigger-Managements: Erkennen → Vorbeugen → Reagieren → Lernen}
+
+\subsection*{\textcolor{ctmmOrange}{Eskalationsstufen}}
+
+Die vier Ebenen der Krisenintervention:
+
+\ctmmEskalationsStufen
+
+\textit{Jede Stufe hat spezifische Strategien und Interventionen. Der Kreislauf zeigt sowohl Eskalation als auch den Weg zurück zur Stabilität.}
+
+\newpage
+
+\subsection*{\textcolor{ctmmRed}{Partner-Dynamiken}}
+
+Systemische Sicht auf die Paarbeziehung:
+
+\ctmmPartnerDynamics
+
+\textit{Das Diagramm zeigt typische Trigger-Reaktions-Muster und wie CTMM-Tools zur Ko-Regulation beitragen.}
+
+\subsection*{\textcolor{ctmmGreen}{Therapieverlauf Timeline}}
+
+\textbf{Beispiel einer 4-Wochen-Behandlung:}
+
+\begin{center}
+\begin{tikzpicture}[
+    node distance=2cm,
+    every node/.style={font=\footnotesize}
+]
+    % Timeline base
+    \draw[thick, ctmmGray] (0,0) -- (10,0);
+    
+    % Time markers
+    \foreach \x/\label in {0/Start,2.5/Woche 1,5/Woche 2,7.5/Woche 3,10/Monat} {
+        \draw (\x,-0.1) -- (\x,0.1);
+        \node[below] at (\x,-0.1) {\label};
+    }
+    
+    % Events
+    \node[circle, fill=ctmmBlue!50, draw=ctmmBlue, minimum size=0.5cm] at (1,0.5) {};
+    \node[above, text width=2cm, align=center] at (1,1) {\tiny Erstkontakt\\Anamnese};
+    \draw[ctmmBlue, thick] (1,0) -- (1,0.5);
+    
+    \node[circle, fill=ctmmGreen!50, draw=ctmmGreen, minimum size=0.5cm] at (3,0.5) {};
+    \node[above, text width=2cm, align=center] at (3,1) {\tiny Safe-Words\\etabliert};
+    \draw[ctmmGreen, thick] (3,0) -- (3,0.5);
+    
+    \node[circle, fill=ctmmOrange!50, draw=ctmmOrange, minimum size=0.5cm] at (6,0.5) {};
+    \node[above, text width=2cm, align=center] at (6,1) {\tiny Erste Krise\\bewältigt};
+    \draw[ctmmOrange, thick] (6,0) -- (6,0.5);
+    
+    \node[circle, fill=ctmmPurple!50, draw=ctmmPurple, minimum size=0.5cm] at (8.5,0.5) {};
+    \node[above, text width=2cm, align=center] at (8.5,1) {\tiny Reflexion\\Integration};
+    \draw[ctmmPurple, thick] (8.5,0) -- (8.5,0.5);
+\end{tikzpicture}
+\end{center}
+
+\subsection*{\textcolor{ctmmPurple}{Stimmungsverlauf}}
+
+\textbf{Beispiel-Graph für Mood-Tracking:}
+
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.8,
+    every node/.style={font=\tiny}
+]
+    % Axes
+    \draw[->] (0,0) -- (8,0) node[right] {Zeit};
+    \draw[->] (0,0) -- (0,6) node[above] {Stimmung};
+    
+    % Grid
+    \foreach \x in {1,2,...,7} {
+        \draw[gray!30] (\x,0) -- (\x,5);
+    }
+    \foreach \y in {1,2,3,4,5} {
+        \draw[gray!30] (0,\y) -- (7,\y);
+        \node[left] at (0,\y) {\y};
+    }
+    
+    % Data line
+    \draw[ctmmBlue, thick] 
+        (0,3) -- (1,2.5) -- (2,1.5) -- (3,2) -- (4,3.5) -- (5,4) -- (6,4.2) -- (7,4.5);
+    \node[ctmmBlue, above] at (3.5,3) {\tiny Therapiestart};
+    
+    % Zones
+    \fill[ctmmRed!10] (0,0) rectangle (7,2);
+    \fill[ctmmOrange!10] (0,2) rectangle (7,3.5);
+    \fill[ctmmGreen!10] (0,3.5) rectangle (7,5);
+    
+    \node[right, font=\tiny] at (7.1,1) {Krise};
+    \node[right, font=\tiny] at (7.1,2.75) {Achtung};
+    \node[right, font=\tiny] at (7.1,4.25) {Stabil};
+\end{tikzpicture}
+\end{center}
+
+\subsection*{\textcolor{ctmmBlue}{Verwendung in eigenen Modulen}}
+
+\begin{ctmmBlueBox}[title=So nutzen Sie die Diagramme]
+\begin{itemize}
+    \item \texttt{\textbackslash ctmmTriggerLoop} - Grundlagen-Psychoedukation
+    \item \texttt{\textbackslash ctmmEskalationsStufen} - Krisenplan erklären  
+    \item \texttt{\textbackslash ctmmPartnerDynamics} - Paartherapie-Sessions
+    \item \texttt{\textbackslash ctmmTimeline\{...\}} - Therapieverlauf dokumentieren
+    \item \texttt{\textbackslash ctmmMoodGraph\{...\}} - Stimmungsdaten visualisieren
+\end{itemize}
+\end{ctmmBlueBox}
+
+\subsection*{\textcolor{ctmmBlue}{CTMM-Navigation}}
+\begin{itemize}
+  \item \texttt{triggermanagement} ← Praktische Anwendung der Zyklen
+  \item \texttt{bindungsleitfaden} ← Systemische Grundlagen
+\end{itemize}
