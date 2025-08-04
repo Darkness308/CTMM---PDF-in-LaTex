@@ -25,7 +25,15 @@
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "CTMM: pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "name": "CTMM: Complete Build (mit Links)",
+            "tools": [
+                "pdflatex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "CTMM: Mit Bibliografie",
             "tools": [
                 "pdflatex",
                 "bibtex", 
@@ -34,13 +42,13 @@
             ]
         },
         {
-            "name": "CTMM: pdflatex × 2 (Standard)",
+            "name": "CTMM: Schnell (ohne Links)",
             "tools": [
-                "pdflatex",
                 "pdflatex"
             ]
         }
     ],
+    "latex-workshop.latex.recipe.default": "CTMM: Complete Build (mit Links)",
     "latex-workshop.latex.rootFile.useSubFile": false,
     "latex-workshop.latex.rootFile.doNotPrompt": true,
     "latex-workshop.latex.search.rootFiles.include": ["main.tex"],

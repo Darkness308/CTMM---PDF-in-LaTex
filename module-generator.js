@@ -192,6 +192,23 @@ function generateModule(type, name) {
     
     const filename = `${config.prefix}${baseFilename}`;
     
+    // Bestimme nächste Tool-Nummer für tool-Module
+    let nextToolNumber = 1;
+    if (type === 'tool') {
+        const files = fs.readdirSync(config.folder);
+        const numbers = [];
+        files.forEach(file => {
+            if (file.startsWith(config.prefix) && file.endsWith('.tex')) {
+                const data = fs.readFileSync(path.join(config.folder, file), 'utf8');
+                const m = data.match(/Tool\s+(\d+):/);
+                if (m) numbers.push(parseInt(m[1], 10));
+            }
+        });
+        if (numbers.length) {
+            nextToolNumber = Math.max(...numbers) + 1;
+        }
+    }
+
     // Placeholder-Objekt erstellen
     const placeholders = {
         MODULE_NAME: name,

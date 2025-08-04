@@ -1,0 +1,76 @@
+% =====================================================
+% CTMM Form Elements Demo
+% Purpose: Demonstrate interactive form capabilities
+% Author: CTMM-Team
+% Integration: \input{modules/form-demo}
+% =====================================================
+
+\section*{\textcolor{ctmmOrange}{\faCog~Form Elements Demo}}
+
+\begin{quote}
+\textbf{\textcolor{ctmmOrange}{Worum geht's hier?}}\\
+Diese Demo zeigt alle verfügbaren interaktiven Formularelemente für CTMM-Arbeitsblätter.
+\end{quote}
+
+\subsection*{\textcolor{ctmmBlue}{Basis-Eingabefelder}}
+
+\begin{ctmmBlueBox}[title=Standard-Eingaben]
+\ctmmDate{demo} \quad \ctmmTime{demo}\\[0.3cm]
+
+\textbf{Name:} \ctmmTextField[6cm]{}{demo-name}\\[0.3cm]
+
+\textbf{Notizen:}\\
+\ctmmTextArea[14cm]{3}{demo-notes}{}
+\end{ctmmBlueBox}
+
+\subsection*{\textcolor{ctmmGreen}{Stimmungs-Tracking}}
+
+\begin{ctmmGreenBox}[title=Emotionale Bewertung]
+\ctmmEmotionScale{Aktuelle Stimmung}{demo-mood}\\[0.5cm]
+
+\ctmmStressLevel{demo}\\[0.3cm]
+
+\textbf{Energie heute:}\\
+\ctmmYesNo{demo-energy} Hoch \quad \ctmmYesNo{demo-energy} Normal \quad \ctmmYesNo{demo-energy} Niedrig
+\end{ctmmGreenBox}
+
+\subsection*{\textcolor{ctmmOrange}{Trigger-Management}}
+
+\begin{ctmmOrangeBox}[title=Trigger-Bewertung]
+\ctmmTriggerScale{demo}\\[0.5cm]
+
+\ctmmSafeWordOptions{demo}\\[0.3cm]
+
+\textbf{Bewältigungsstrategien verwendet:}\\
+\ctmmCheckBox[demo-breathing]{Atemtechnik} \quad 
+\ctmmCheckBox[demo-grounding]{Grounding} \quad 
+\ctmmCheckBox[demo-pause]{Pause}\\
+\ctmmCheckBox[demo-movement]{Bewegung} \quad 
+\ctmmCheckBox[demo-talk]{Gespräch} \quad 
+\ctmmCheckBox[demo-music]{Musik}
+\end{ctmmOrangeBox}
+
+\subsection*{\textcolor{ctmmPurple}{Wochenübersicht}}
+
+\begin{ctmmPurpleBox}[title=7-Tage-Muster]
+\ctmmWeeklyPattern{demo}\\[0.3cm]
+
+\textbf{Auffällige Muster diese Woche:}\\
+\ctmmTextArea[14cm]{2}{demo-pattern}{}
+\end{ctmmPurpleBox}
+
+\subsection*{\textcolor{ctmmRed}{Quick-Check Komponenten}}
+
+% Kompletter Tagescheck
+\ctmmDailyTracker{demo}
+
+\vspace{0.5cm}
+
+% Krisen-Protokoll
+\ctmmCrisisForm{demo}
+
+\subsection*{\textcolor{ctmmBlue}{CTMM-Navigation}}
+\begin{itemize}
+  \item \texttt{arbeitsblatt-taeglicher-stimmungscheck} ← Praktische Anwendung
+  \item \texttt{interactive} ← Weitere interaktive Beispiele
+\end{itemize}
