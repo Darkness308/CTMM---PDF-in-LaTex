@@ -1,8 +1,8 @@
-name: Build LaTeX PDF
+name: CTMM LaTeX Build & Test
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
 
@@ -11,20 +11,30 @@ permissions:
   actions: write
 
 jobs:
-  build:
+  lint-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up LaTeX
+      - name: Install LaTeX dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full texlive-fonts-extra
+          sudo apt-get install -y chktex lacheck  # LaTeX Linting Tools
+
+      - name: LaTeX Syntax Check (chktex)
+        run: |
+          find . -name "*.tex" -exec chktex -q {} \; || echo "LaTeX warnings found"
+
+      - name: Compile LaTeX (3-pass for hyperlinks)
         uses: dante-ev/latex-action@2025-A
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
           extra_system_packages: "py-pygments"
 
-      - name: Check if PDF was created
+      - name: Check PDF output
         run: |
           if [ ! -f main.pdf ]; then
             echo "❌ main.pdf was not created"
@@ -32,11 +42,32 @@ jobs:
           else
             echo "✅ main.pdf successfully created"
             ls -la main.pdf
+            # Basic PDF validation
+            pdfinfo main.pdf
+          fi
+
+      - name: Link validation
+        run: |
+          echo "Checking for undefined references..."
+          if grep -i "undefined" main.log; then
+            echo "⚠️  Undefined references found"
+          else
+            echo "✅ No undefined references"
           fi
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CTMM_PDF
+          name: CTMM_PDF_Build_${{ github.sha }}
           path: main.pdf
           retention-days: 30
+
+      - name: Upload build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Build_Logs_${{ github.sha }}
+          path: |
+            main.log
+            main.aux
+          retention-days: 7

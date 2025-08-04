@@ -1,4 +1,4 @@
-\ProvidesPackage{style/form-elements}[2025/08/02 CTMM Form Elements v1.2.0]
+\ProvidesPackage{style/form-elements}[2025/08/04 CTMM Interactive Forms v2.0.0]
 
 % Required packages
 \RequirePackage{tikz}
@@ -7,17 +7,22 @@
 \RequirePackage{calc}
 \RequirePackage{forloop}
 \RequirePackage{pifont}  % Für Checkbox-Symbole
+\RequirePackage{hyperref} % Für echte PDF-Formularfelder
+
+% Formular-Konfiguration für echte AcroForms
+\hypersetup{
+    pdftex,
+    colorlinks=false,
+    pdfborder={0 0 0},
+    % Formular-spezifische Einstellungen
+    pdfpagemode=UseNone,
+    pdfstartview=FitH
+}
 
 % Wichtig für \@ifpackageloaded
 \makeatletter
-% Check if hyperref is loaded for interactive forms
-\@ifpackageloaded{hyperref}{%
-    \RequirePackage{hyperref}%
-    \newcommand{\@ctmmInteractive}{true}%
-}{%
-    \RequirePackage{hyperref}%
-    \newcommand{\@ctmmInteractive}{true}%
-}
+% Interactive Form Detection
+\newcommand{\@ctmmInteractive}{true}
 \makeatother
 
 % Text Field mit verbessertem Design

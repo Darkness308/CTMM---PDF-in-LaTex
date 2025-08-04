@@ -59,7 +59,16 @@
         "*.fls", "*.log", "*.fdb_latexmk", "*.synctex.gz"
     ],
     "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
-    "latex-workshop.latex.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
+    "latex-workshop.latex.autoBuild.interval": 1000,
+    "latex-workshop.message.error.show": true,
+    "latex-workshop.message.warning.show": true,
+    "latex-workshop.message.information.show": true,
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.intellisense.unimathsymbols.enabled": true,
+    "latex-workshop.hover.citation.enabled": true,
+    "latex-workshop.hover.command.enabled": true,
     "files.associations": {
         "*.tex": "latex",
         "*.sty": "latex"
