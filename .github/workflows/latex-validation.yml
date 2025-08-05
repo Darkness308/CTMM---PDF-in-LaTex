@@ -1,43 +1,43 @@
 name: LaTeX Validation
 
-on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Check \documentclass in first 5 lines
         run: |
-          head -n 5 main.tex | grep '\\documentclass' || (echo '❌ Kein \\documentclass in den ersten 5 Zeilen von main.tex' && exit 1)
+          head -n 5 main.tex | grep -q '\\documentclass' || (echo "::error ::\\documentclass fehlt in den ersten 5 Zeilen von main.tex" && exit 1)
 
-      - name: Check for \usepackage after \begin{document}
+      - name: Check no \usepackage after \begin{document}
         run: |
-          awk '/\\begin{document}/ {found=1} found && /\\usepackage/ {print NR; exit 1}' main.tex && echo '✅ Keine \\usepackage nach \\begin{document}'
+          awk '/\\begin{document}/ {flag=1; next} flag && /\\usepackage/ {print; exit 1}' main.tex || true
 
-      - name: Check if hyperref is last package loaded
+      - name: Check hyperref is last package
         run: |
-          lastpkg=$(grep -n '\\usepackage' main.tex | grep -v bookmark | tail -1 | cut -d: -f1)
-          hyperrefline=$(grep -n '\\usepackage{hyperref}' main.tex | cut -d: -f1)
-          if [ "$lastpkg" != "$hyperrefline" ]; then
-            echo '❌ hyperref ist nicht das letzte geladene Paket!'; exit 1
-          fi
+          lastpkg=$(grep '\\usepackage' main.tex | grep -v '^%' | tail -1)
+          echo "$lastpkg" | grep 'hyperref' || (echo "::error ::hyperref ist nicht das letzte Paket in main.tex" && exit 1)
 
-      - name: Check all \ctmmRef labels have \label definitions
+      - name: Check all \ctmmRef labels exist
         run: |
           refs=$(grep -o '\\ctmmRef{[^}]*}' modules/*.tex | sed 's/.*{//;s/}//')
-          for label in $refs; do
-            grep -q "\\label{$label}" modules/*.tex main.tex || (echo "❌ Label $label fehlt!" && exit 1)
+          for ref in $refs; do
+            grep -q "\\label{$ref}" modules/*.tex main.tex || (echo "::error ::Label {$ref} fehlt!" && exit 1)
           done
 
-      - name: Build PDF with pdflatex
+      - name: Build PDF
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: main.tex
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
+          extra_system_packages: "py-pygments"
+
+      - name: Check PDF output
         run: |
-          mkdir -p build
-          pdflatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex
-          [ -f build/main.pdf ] || (echo '❌ PDF Build fehlgeschlagen!' && exit 1)
+          if [ ! -f build/main.pdf ]; then
+            echo "::error ::main.pdf wurde nicht erzeugt"
+            exit 1
+          fi

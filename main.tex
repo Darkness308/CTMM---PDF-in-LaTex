@@ -1,7 +1,7 @@
-
+\documentclass[a4paper,12pt]{article} % <-- HINZUGEFÜGT
 
 % Pakete
-\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc} % Nicht mehr nötig mit aktuellem pdfLaTeX
 \usepackage{lmodern} % Schriftartenproblem beheben
 \usepackage{microtype} % Verbesserte Schriftbildqualität und weniger Font-Warnungen
 \usepackage{textcomp} % Zusätzliche Symbole und Font-Kompatibilität
@@ -17,10 +17,8 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{style/ctmm-design}
-\usepackage{style/form-elements}
-\usepackage{style/ctmm-diagrams}
 \usepackage{style/ctmm-navigation}
-% hyperref MUSS als letztes geladen werden
+% hyperref MUSS als letztes geladen werden (vor bookmark!)
 \usepackage{hyperref}
 \usepackage{bookmark} % Optional: bessere Lesezeichen
 
@@ -33,20 +31,15 @@
 }
 
 \hypersetup{
-  colorlinks=false,
-  pdfborder={0 0 0},
+  % pdfborder={0 0 0}, % Optional: kann entfernt werden, falls Fehler
   pdftitle={CTMM-System - Interaktives Therapie-Workbook},
   pdfauthor={CTMM-Team},
   pdfsubject={Therapiematerialien mit ausfüllbaren Formularen},
   pdfkeywords={CTMM, Therapie, Trigger, Borderline, ADHS, ASS, KPTBS, interaktiv},
   pdfcreator={LaTeX mit hyperref},
   pdfproducer={pdfLaTeX},
-  % Formular-spezifische Einstellungen
   bookmarksopen=true,
-  bookmarksopenlevel=1,
-  % Für bessere Formularkompatibilität
-  pdfencoding=auto,
-  unicode=true
+  bookmarksopenlevel=1
 }
 
 \hbadness=10000
