@@ -1,67 +1,70 @@
 % =====================================================
 % CTMM Interactive Diagram Module
-% Purpose: Kombiniert statisc\vspace{1cm}
-\begin{center}
-\textit{\textcolor{ctmmBlue}{\faChevronRight~Zurück zu} \ctmmRef{sec:navigation}{Navigation} | \textcolor{ctmmGreen}{\faChevronRight~Weiter zu} \ctmmRef{sec:feedback}{Selbstreflexion}}
-\end{center}iagramme mit interaktiven PDF-Elementen
+% Purpose: Kombiniert statische Diagramme mit interaktiven PDF-Elementen
 % Author: CTMM-Team Enhancement
 % =====================================================
+\begin{center}
+\textit{\textcolor{ctmmBlue}{\faChevronRight~Zurück zu} \ctmmNavTo{navigation}{Navigation} | \textcolor{ctmmGreen}{\faChevronRight~Weiter zu} \ctmmNavTo{feedback}{Selbstreflexion}}
+\end{center}
 
 \section*{\textcolor{ctmmBlue}{\faChartBar~Interaktive Diagramm-Elemente}}
 \addcontentsline{toc}{section}{Interaktive Diagramm-Elemente}
 \label{sec:interactive-diagrams}
 
-\begin{ctmmBlueBox}{\faLightbulb~Konzept}
+\begin{ctmmBlueBox}{Konzept}
 Diese Diagramme sind \textbf{statisch visualisiert}, aber \textbf{interaktiv nutzbar} durch PDF-Formularfelder. Sie zeigen therapeutische Konzepte und ermöglichen gleichzeitig direkte Eingaben.
 \end{ctmmBlueBox}
 
 \subsection*{\faSync~Trigger-Zyklus mit Tracking}
 
-\begin{center}
+
 \begin{tcolorbox}[colback=white,colframe=ctmmBlue,width=14cm]
 \centering
 \textbf{CTMM-Trigger-Management-Zyklus}\\[0.5cm]
 
 % Statisches Diagramm
 \textcolor{ctmmBlue}{\Large\faEye} \textbf{ERKENNEN} 
-$\xrightarrow{\text{führt zu}}$ 
-\textcolor{ctmmGreen}{\Large\faShield} \textbf{VORBEUGEN} 
-$\xrightarrow{\text{führt zu}}$ 
+$\rightarrow$ 
+\textcolor{ctmmGreen}{\Large\faLock} \textbf{VORBEUGEN} 
+$\rightarrow$ 
 \textcolor{ctmmOrange}{\Large\faExclamationTriangle} \textbf{REAGIEREN} 
-$\xrightarrow{\text{führt zu}}$ 
+$\rightarrow$ 
 \textcolor{ctmmPurple}{\Large\faBrain} \textbf{LERNEN}\\[0.3cm]
 
 \begin{small}
 $\downarrow$ \textbf{Interaktive Eingaben zu jeder Phase} $\downarrow$
 \end{small}
 \end{tcolorbox}
-\end{center}
 
-\begin{ctmmGreenBox}[title=\faEye~Phase 1: ERKENNEN - Interaktive Eingabe]
-\textbf{Heute erkannter Trigger:} \ctmmTextField[8cm]{}{cycle_trigger_today}\\[0.2cm]
-\textbf{Frühwarnzeichen bemerkt:} \ctmmCheckBox{cycle_warning_body}{Körperlich} \ctmmCheckBox{cycle_warning_emotion}{Emotional} \ctmmCheckBox{cycle_warning_thought}{Gedanken}\\[0.2cm]
-\textbf{Intensität (1-10):} \ctmmTextField[2cm]{}{cycle_intensity}
+\begin{ctmmGreenBox}{}
+\textbf{Phase 1 ERKENNEN}\\
+Heute erkannter Trigger: \ctmmTextField[8cm]{}{cycle_trigger_today}\\[0.2cm]
+Frühwarnzeichen bemerkt: \ctmmCheckBox{cycle_warning_body}{Körperlich} \ctmmCheckBox{cycle_warning_emotion}{Emotional} \ctmmCheckBox{cycle_warning_thought}{Gedanken}\\[0.2cm]
+Intensität (1-10): \ctmmTextField[2cm]{}{cycle_intensity}
 \end{ctmmGreenBox}
 
-\begin{ctmmOrangeBox}[title=\faShield~Phase 2: VORBEUGEN - Was wurde eingesetzt?]
-\textbf{Verwendete Strategien:}\\
+\begin{ctmmOrangeBox}{}
+\textbf{Phase 2 VORBEUGEN}\\
+Verwendete Strategien:\\
 \ctmmCheckBox{cycle_prev_breathing}{Atemtechnik} \quad \ctmmCheckBox{cycle_prev_safeword}{Safe-Word} \quad \ctmmCheckBox{cycle_prev_pause}{Pause} \quad \ctmmCheckBox{cycle_prev_space}{Raum schaffen}\\[0.2cm]
-\textbf{Wirksamkeit (1-10):} \ctmmTextField[2cm]{}{cycle_prevention_effect}
+Wirksamkeit (1-10): \ctmmTextField[2cm]{}{cycle_prevention_effect}
 \end{ctmmOrangeBox}
 
-\begin{ctmmRedBox}[title=\faExclamationTriangle~Phase 3: REAGIEREN - Krisenmanagement]
-\textcolor{white}{\textbf{Eskalation eingetreten:}} \textcolor{white}{\ctmmCheckBox{cycle_escalation}{Ja}}\\[0.2cm]
-\textcolor{white}{\textbf{Angewendete Notfall-Tools:}}\\
-\textcolor{white}{\ctmmCheckBox{cycle_emergency_grounding}{5-4-3-2-1 Grounding} \quad \ctmmCheckBox{cycle_emergency_separation}{Räumliche Trennung} \quad \ctmmCheckBox{cycle_emergency_help}{Externe Hilfe}}\\[0.2cm]
-\textcolor{white}{\textbf{Dauer der Krise (Minuten):}} \textcolor{white}{\ctmmTextField[3cm]{}{cycle_crisis_duration}}
+\begin{ctmmRedBox}{}
+\textcolor{white}{\textbf{Phase 3 REAGIEREN}}\\
+\textcolor{white}{Eskalation eingetreten:} \ctmmCheckBox{cycle_escalation}{Ja}\\[0.2cm]
+\textcolor{white}{Angewendete Notfall-Tools:}\\
+\ctmmCheckBox{cycle_emergency_grounding}{5-4-3-2-1 Grounding} \quad \ctmmCheckBox{cycle_emergency_separation}{Räumliche Trennung} \quad \ctmmCheckBox{cycle_emergency_help}{Externe Hilfe}\\[0.2cm]
+\textcolor{white}{Dauer der Krise (Minuten):} \ctmmTextField[3cm]{}{cycle_crisis_duration}
 \end{ctmmRedBox}
 
-\begin{ctmmPurpleBox}[title=\faBrain~Phase 4: LERNEN - Reflexion & Integration]
-\textbf{Was haben wir gelernt?}\\
+\begin{ctmmPurpleBox}{}
+\textbf{Phase 4 LERNEN}\\
+Was haben wir gelernt?\\
 \ctmmTextArea[12cm]{2}{cycle_learning}{}\\[0.3cm]
-\textbf{Verbesserung für nächstes Mal:}\\
+Verbesserung für nächstes Mal:\\
 \ctmmTextField[10cm]{}{cycle_improvement}\\[0.3cm]
-\textbf{Erfolg bewerten (1-10):} \ctmmTextField[2cm]{}{cycle_success_rating}
+Erfolg bewerten (1-10): \ctmmTextField[2cm]{}{cycle_success_rating}
 \end{ctmmPurpleBox}
 
 \subsection*{\faChartLine~Stimmungs-Ampel mit Eingabe}
@@ -71,10 +74,10 @@ $\downarrow$ \textbf{Interaktive Eingaben zu jeder Phase} $\downarrow$
 \centering
 \textbf{Aktuelle Stimmungszone}\\[0.5cm]
 
-% Statische Ampel-Visualisierung
+% Statische Ampel-Visualisierung (ohne cellcolor)
 \begin{tabular}{|c|c|c|}
 \hline
-\cellcolor{ctmmGreen!30}\textcolor{ctmmGreen}{\Large\faSmile} & \cellcolor{ctmmOrange!30}\textcolor{ctmmOrange}{\Large\faMeh} & \cellcolor{ctmmRed!30}\textcolor{ctmmRed}{\Large\faFrown} \\
+\textcolor{ctmmGreen}{\Large\faSmile} & \textcolor{ctmmOrange}{\Large\faMinusCircle} & \textcolor{ctmmRed}{\Large\faFrown} \\
 \textbf{STABIL} & \textbf{ACHTUNG} & \textbf{KRISE} \\
 7-10 Punkte & 4-6 Punkte & 1-3 Punkte \\
 \hline
@@ -89,38 +92,30 @@ $\downarrow$ \textbf{Interaktive Eingaben zu jeder Phase} $\downarrow$
 \subsection*{\faUsers~Partner-Dynamik-Tracker}
 
 \begin{center}
-\begin{tcolorbox}[colback=ctmmPurple!10,colframe=ctmmPurple,width=14cm]
-\centering
-\textbf{Ko-Regulations-System}\\[0.5cm]
-
-% Statisches Beziehungsdiagramm
-\textcolor{ctmmBlue}{\Large\faUser} \textbf{Partner A} 
-$\xrightleftharpoons[\text{Ko-Regulation}]{\text{Trigger-Antwort}}$ 
-\textcolor{ctmmGreen}{\Large\faUser} \textbf{Partner B}\\[0.5cm]
+\begin{ctmmBlueBox}{\textcolor{ctmmBlue}{Interaktive Partner-Dynamik}}
+\textcolor{ctmmBlue}{\Large\faUser} \textbf{Partner A}
+$\leftrightarrow$ \textcolor{ctmmGreen}{\Large\faUser} \textbf{Partner B}\\[0.5cm]
 
 $\downarrow$ \textbf{Interaktive Bewertung der heutigen Dynamik} $\downarrow$
-\end{tcolorbox}
+\end{ctmmBlueBox}
 \end{center}
 
-\begin{ctmmYellowBox}[title=Heutige Partner-Interaktion bewerten]
-\textbf{Meine Trigger-Reaktion:} \ctmmCheckBox{partner_my_calm}{Ruhig geblieben} \ctmmCheckBox{partner_my_escalated}{Eskaliert} \ctmmCheckBox{partner_my_withdrawal}{Rückzug}\\[0.2cm]
-\textbf{Partner-Reaktion:} \ctmmCheckBox{partner_their_supportive}{Unterstützend} \ctmmCheckBox{partner_their_triggered}{Mit-getriggert} \ctmmCheckBox{partner_their_neutral}{Neutral}\\[0.2cm]
-\textbf{Ko-Regulation gelungen:} \ctmmCheckBox{coregulation_yes}{Ja} \ctmmCheckBox{coregulation_no}{Nein} \ctmmCheckBox{coregulation_partial}{Teilweise}\\[0.2cm]
-\textbf{Verwendete Safe-Words:} \ctmmTextField[8cm]{}{partner_safewords_used}\\[0.2cm]
-\textbf{Verbesserungspotential:} \ctmmTextField[10cm]{}{partner_improvement}
+\begin{ctmmYellowBox}{}
+\textbf{Partner-Interaktion}\\
+Meine Trigger-Reaktion: \ctmmCheckBox{partner_my_calm}{Ruhig geblieben} \ctmmCheckBox{partner_my_escalated}{Eskaliert} \ctmmCheckBox{partner_my_withdrawal}{Rückzug}\\[0.2cm]
+Partner-Reaktion: \ctmmCheckBox{partner_their_supportive}{Unterstützend} \ctmmCheckBox{partner_their_triggered}{Mit-getriggert} \ctmmCheckBox{partner_their_neutral}{Neutral}\\[0.2cm]
+Ko-Regulation gelungen: \ctmmCheckBox{coregulation_yes}{Ja} \ctmmCheckBox{coregulation_no}{Nein} \ctmmCheckBox{coregulation_partial}{Teilweise}\\[0.2cm]
+Verwendete Safe-Words: \ctmmTextField[8cm]{}{partner_safewords_used}\\[0.2cm]
+Verbesserungspotential: \ctmmTextField[10cm]{}{partner_improvement}
 \end{ctmmYellowBox}
 
 \subsection*{\faCalendarCheck~Wöchentliche Diagram-Analyse}
 
-\begin{ctmmBlueBox}[title=Muster in den Diagrammen erkennen]
-\textbf{Diese Woche aufgefallene Muster:}\\
+\begin{ctmmBlueBox}{}
+\textbf{Muster in Diagrammen}\\
+Diese Woche aufgefallene Muster:\\
 \ctmmTextArea[12cm]{3}{weekly_pattern_analysis}{}\\[0.3cm]
-\textbf{Häufigste Trigger-Phase:} \ctmmCheckBox{pattern_recognize}{Erkennen} \ctmmCheckBox{pattern_prevent}{Vorbeugen} \ctmmCheckBox{pattern_react}{Reagieren} \ctmmCheckBox{pattern_learn}{Lernen}\\[0.2cm]
-\textbf{Erfolgreichste Intervention:} \ctmmTextField[8cm]{}{most_effective_intervention}\\[0.2cm]
-\textbf{Nächste Woche fokussieren auf:} \ctmmTextField[8cm]{}{next_week_focus}
+Häufigste Trigger-Phase: \ctmmCheckBox{pattern_recognize}{Erkennen} \ctmmCheckBox{pattern_prevent}{Vorbeugen} \ctmmCheckBox{pattern_react}{Reagieren} \ctmmCheckBox{pattern_learn}{Lernen}\\[0.2cm]
+Erfolgreichste Intervention: \ctmmTextField[8cm]{}{most_effective_intervention}\\[0.2cm]
+Nächste Woche fokussieren auf: \ctmmTextField[8cm]{}{next_week_focus}
 \end{ctmmBlueBox}
-
-\vspace{1cm}
-\begin{center}
-\textit{\textcolor{ctmmBlue}{\faChevronRight~Zurück zu} \ctmmRef{sec:navigation}{Navigation} | \textcolor{ctmmGreen}{\faChevronRight~Weiter zu} \ctmmRef{sec:feedback}{Selbstreflexion}}
-\end{center}

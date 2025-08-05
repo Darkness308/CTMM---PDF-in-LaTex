@@ -12,31 +12,14 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=build",
-                "%DOC%"
-            ]
-        },
-        {
-            "name": "bibtex",
-            "command": "bibtex",
-            "args": [
-                "build/%DOCFILE%"
+                "main.tex"
             ]
         }
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "CTMM: 3x pdflatex (Links & Navigation)",
-            "tools": [
-                "pdflatex",
-                "pdflatex", 
-                "pdflatex"
-            ]
-        },
-        {
-            "name": "CTMM: 1x pdflatex (Schnell)",
-            "tools": [
-                "pdflatex"
-            ]
+            "name": "pdflatex",
+            "tools": ["pdflatex"]
         }
     ],
     "latex-workshop.latex.recipe.default": "CTMM: 3x pdflatex (Links & Navigation)",

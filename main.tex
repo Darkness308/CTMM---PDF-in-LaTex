@@ -1,21 +1,28 @@
-\documentclass[a4paper,12pt]{article}
+
 
 % Pakete
 \usepackage[utf8]{inputenc}
+\usepackage{lmodern} % Schriftartenproblem beheben
+\usepackage{microtype} % Verbesserte Schriftbildqualität und weniger Font-Warnungen
+\usepackage{textcomp} % Zusätzliche Symbole und Font-Kompatibilität
 \usepackage[ngerman]{babel}
 \usepackage{geometry}
-\usepackage{hyperref}
+
+% CTMM Pakete
+\usepackage{style/ctmm-config}
 \usepackage{xcolor}
 \usepackage{fontawesome5}
 \usepackage{tcolorbox}
 \usepackage{tabularx}
 \usepackage{amssymb}
 \usepackage{amsmath}
-
-% CTMM Pakete
 \usepackage{style/ctmm-design}
 \usepackage{style/form-elements}
 \usepackage{style/ctmm-diagrams}
+\usepackage{style/ctmm-navigation}
+% hyperref MUSS als letztes geladen werden
+\usepackage{hyperref}
+\usepackage{bookmark} % Optional: bessere Lesezeichen
 
 % Dokumentenkonfiguration
 \geometry{
@@ -42,6 +49,8 @@
   unicode=true
 }
 
+\hbadness=10000
+\vbadness=10000
 \begin{document}
 
 \title{%
@@ -61,7 +70,7 @@
 \section*{\texorpdfstring{\textcolor{ctmmBlue}{\faCompass~CTMM-System Übersicht}}{CTMM-System Übersicht}}
 \addcontentsline{toc}{section}{CTMM-System Übersicht}
 
-\begin{ctmmBlueBox}[title=Was ist CTMM?]
+\begin{ctmmBlueBox}{Was ist CTMM?}
 \textbf{CTMM} steht für \textbf{Catch-Track-Map-Match} -- ein System zur Bewältigung von Triggern und Beziehungsherausforderungen:
 
 \begin{itemize}

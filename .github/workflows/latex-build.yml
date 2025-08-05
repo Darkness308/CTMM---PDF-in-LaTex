@@ -1,4 +1,4 @@
-name: CTMM LaTeX Build & Test
+name: CI Build PDF
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
   actions: write
 
 jobs:
-  lint-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -28,7 +28,7 @@ jobs:
           find . -name "*.tex" -exec chktex -q {} \; || echo "LaTeX warnings found"
 
       - name: Compile LaTeX (3-pass for hyperlinks)
-        uses: dante-ev/latex-action@2025-A
+        uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
@@ -36,14 +36,14 @@ jobs:
 
       - name: Check PDF output
         run: |
-          if [ ! -f main.pdf ]; then
+          if [ ! -f build/main.pdf ]; then
             echo "❌ main.pdf was not created"
             exit 1
           else
             echo "✅ main.pdf successfully created"
-            ls -la main.pdf
+            ls -la build/main.pdf
             # Basic PDF validation
-            pdfinfo main.pdf
+            pdfinfo build/main.pdf
           fi
 
       - name: Link validation
@@ -59,7 +59,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CTMM_PDF_Build_${{ github.sha }}
-          path: main.pdf
+          path: build/main.pdf
           retention-days: 30
 
       - name: Upload build logs
