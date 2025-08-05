@@ -1,0 +1,43 @@
+name: LaTeX Validation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check \documentclass in first 5 lines
+        run: |
+          head -n 5 main.tex | grep '\\documentclass' || (echo '❌ Kein \\documentclass in den ersten 5 Zeilen von main.tex' && exit 1)
+
+      - name: Check for \usepackage after \begin{document}
+        run: |
+          awk '/\\begin{document}/ {found=1} found && /\\usepackage/ {print NR; exit 1}' main.tex && echo '✅ Keine \\usepackage nach \\begin{document}'
+
+      - name: Check if hyperref is last package loaded
+        run: |
+          lastpkg=$(grep -n '\\usepackage' main.tex | grep -v bookmark | tail -1 | cut -d: -f1)
+          hyperrefline=$(grep -n '\\usepackage{hyperref}' main.tex | cut -d: -f1)
+          if [ "$lastpkg" != "$hyperrefline" ]; then
+            echo '❌ hyperref ist nicht das letzte geladene Paket!'; exit 1
+          fi
+
+      - name: Check all \ctmmRef labels have \label definitions
+        run: |
+          refs=$(grep -o '\\ctmmRef{[^}]*}' modules/*.tex | sed 's/.*{//;s/}//')
+          for label in $refs; do
+            grep -q "\\label{$label}" modules/*.tex main.tex || (echo "❌ Label $label fehlt!" && exit 1)
+          done
+
+      - name: Build PDF with pdflatex
+        run: |
+          mkdir -p build
+          pdflatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex
+          [ -f build/main.pdf ] || (echo '❌ PDF Build fehlgeschlagen!' && exit 1)
