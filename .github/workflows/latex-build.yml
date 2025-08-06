@@ -1,10 +1,11 @@
-name: Build LaTeX PDF
+name: Enhanced LaTeX Build and Analysis
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -13,13 +14,81 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up LaTeX
-        uses: dante-ev/latex-action@v2.x
-        with:
-          root_file: main_final.tex
+      - name: Install LaTeX and dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-bibtex-extra \
+            pandoc \
+            poppler-utils
 
-      - name: Upload PDF artifact
+      - name: Make scripts executable
+        run: |
+          chmod +x scripts/*.sh
+
+      - name: Run complete CTMM workflow
+        run: |
+          cd ${{ github.workspace }}
+          ./scripts/master-workflow.sh --all
+
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: CTMM_final_PDF
-          path: main_final.pdf
+          name: CTMM_build_artifacts
+          path: |
+            main.pdf
+            build/
+            converted/
+          retention-days: 30
+
+      - name: Upload main PDF
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: CTMM_main_PDF
+          path: main.pdf
+          retention-days: 90
+
+      - name: Create build summary
+        if: always()
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "main.pdf" ]; then
+            echo "✅ **PDF Generated Successfully**" >> $GITHUB_STEP_SUMMARY
+            echo "- Main PDF: \`main.pdf\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **PDF Generation Failed**" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Workflow Status" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "build/conversion-log.txt" ]; then
+            echo "✅ Document conversion completed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "build/build-log.txt" ]; then
+            if grep -q "Build completed successfully" build/build-log.txt; then
+              echo "✅ LaTeX build successful" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ LaTeX build completed with issues" >> $GITHUB_STEP_SUMMARY
+            fi
+          fi
+          
+          if [ -f "build/error-analysis/error-analysis-report.txt" ]; then
+            echo "✅ Error analysis completed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "build/optimization/optimization-report.txt" ]; then
+            echo "✅ Optimization analysis completed" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated Reports" >> $GITHUB_STEP_SUMMARY
+          echo "All detailed reports are available in the build artifacts." >> $GITHUB_STEP_SUMMARY

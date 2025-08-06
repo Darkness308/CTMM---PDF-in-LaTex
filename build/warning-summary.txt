@@ -1,0 +1,4 @@
+LaTeX Warning Summary - Wed Aug  6 03:32:40 UTC 2025
+===============================
+Warnings found: 0
+
