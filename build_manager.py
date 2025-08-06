@@ -339,11 +339,11 @@ Generated on: {datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')}
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report)
         
-        print(f"\n📊 Build report generated: {report_file}")
+        print(f"\n[REPORT] Build report generated: {report_file}")
     
     def run_complete_analysis(self) -> None:
         """Run the complete build analysis process"""
-        print("🔍 CTMM LaTeX Build Manager")
+        print("[INFO] CTMM LaTeX Build Manager")
         print("=" * 50)
         
         # Step 1: Scan references
