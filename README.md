@@ -11,8 +11,40 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## Verwendung
 1. Klone das Repository
-2. Kompiliere main.tex mit einem LaTeX-Editor
-3. Oder öffne das Projekt in einem GitHub Codespace
+2. Führe das Setup-Script aus: `./ctmm-workflow.sh checkup`
+3. Kompiliere das Dokument: `./ctmm-workflow.sh build`
+4. Oder öffne das Projekt in einem GitHub Codespace
+
+## Git-Workflow
+
+Dieses Projekt verwendet einen strukturierten Git-Workflow, der in der Datei `GIT-WORKFLOW.md` detailliert beschrieben ist.
+
+### Schnellstart für Entwickler
+
+```bash
+# Umgebung prüfen
+./ctmm-workflow.sh checkup
+
+# Neues Feature beginnen
+./ctmm-workflow.sh feature mein-neues-feature
+
+# Änderungen committen
+git add .
+./ctmm-workflow.sh commit add "Meine Beschreibung"
+
+# Änderungen pushen
+./ctmm-workflow.sh push
+
+# PDF generieren
+./ctmm-workflow.sh build
+```
+
+### LaTeX-Besonderheiten
+
+Bei der Arbeit mit dem CTMM-System sollten folgende LaTeX-Besonderheiten beachtet werden:
+
+- Formularfeld-IDs müssen Underscores mit Backslash escapen: `{form\_id}` statt `{form_id}`
+- Verwenden Sie `./ctmm-workflow.sh fix-latex` um häufige Probleme automatisch zu beheben
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten

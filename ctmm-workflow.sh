@@ -15,6 +15,7 @@ show_help() {
     echo -e "${BLUE}CTMM Git-Workflow-Helper${NC}"
     echo ""
     echo "Befehle:"
+    echo -e "  ${GREEN}checkup${NC}         - Prüft Umgebungseinstellungen und Git-Konfiguration"
     echo -e "  ${GREEN}feature${NC} <name>   - Erstellt einen neuen Feature-Branch von develop"
     echo -e "  ${GREEN}fix${NC} <name>       - Erstellt einen neuen Bugfix-Branch von develop"
     echo -e "  ${GREEN}commit${NC} <typ> <nachricht> - Erzeugt einen formatieren Commit"
@@ -23,6 +24,7 @@ show_help() {
     echo -e "  ${GREEN}finish${NC}          - Wechselt zurück zu develop und aktualisiert"
     echo -e "  ${GREEN}build${NC}           - Baut das komplette PDF und zeigt das Ergebnis"
     echo -e "  ${GREEN}release${NC} <version> - Erstellt einen Release-Branch und erzeugt ein Tag"
+    echo -e "  ${GREEN}fix-latex${NC}       - Korrigiert bekannte LaTeX-Formularfeld-Probleme"
     echo ""
     echo "Beispiele:"
     echo "  ./ctmm-workflow.sh feature neues-modul"
@@ -168,8 +170,96 @@ create_release() {
     echo "5. Merge zurück in develop: git checkout develop && git merge $branch_name"
 }
 
+# Funktion zur Überprüfung der Umgebungseinstellungen
+check_environment() {
+    echo -e "${YELLOW}Überprüfe Git-Konfiguration...${NC}"
+    
+    # Git-Konfiguration überprüfen
+    git_user=$(git config --get user.name)
+    git_email=$(git config --get user.email)
+    
+    if [ -z "$git_user" ] || [ -z "$git_email" ]; then
+        echo -e "${RED}Git-Benutzer nicht vollständig konfiguriert!${NC}"
+        echo "Bitte konfigurieren Sie Git mit folgenden Befehlen:"
+        echo "  git config --global user.name \"Dein Name\""
+        echo "  git config --global user.email \"deine.email@beispiel.de\""
+    else
+        echo -e "${GREEN}Git-Benutzer konfiguriert als: $git_user <$git_email>${NC}"
+    fi
+    
+    # Branch-Struktur überprüfen
+    echo -e "${YELLOW}Überprüfe Branch-Struktur...${NC}"
+    if ! git rev-parse --verify develop &>/dev/null; then
+        echo -e "${RED}Develop-Branch existiert nicht!${NC}"
+        echo -e "Möchten Sie einen develop-Branch erstellen? [j/n] "
+        read -r answer
+        if [[ "$answer" =~ ^[Jj] ]]; then
+            git checkout -b develop
+            echo -e "${GREEN}Develop-Branch erstellt.${NC}"
+        fi
+    else
+        echo -e "${GREEN}Develop-Branch existiert.${NC}"
+    fi
+    
+    # LaTeX-Umgebung überprüfen
+    echo -e "${YELLOW}Überprüfe LaTeX-Umgebung...${NC}"
+    if command -v pdflatex &>/dev/null; then
+        echo -e "${GREEN}pdflatex ist installiert.${NC}"
+        
+        # Verzeichnisstruktur prüfen
+        for dir in "build" "modules" "style"; do
+            if [ ! -d "$dir" ]; then
+                echo -e "${RED}Verzeichnis $dir fehlt.${NC}"
+                mkdir -p "$dir"
+                echo -e "${GREEN}Verzeichnis $dir erstellt.${NC}"
+            else
+                echo -e "${GREEN}Verzeichnis $dir existiert.${NC}"
+            fi
+        done
+    else
+        echo -e "${RED}pdflatex ist nicht installiert!${NC}"
+        echo "Bitte installieren Sie TeX Live oder eine vergleichbare LaTeX-Distribution."
+    fi
+}
+
+# Funktion zum Korrigieren von LaTeX-Formularfeldern
+fix_latex_fields() {
+    echo -e "${YELLOW}Korrigiere LaTeX-Formularfelder...${NC}"
+    
+    # Zähler für gefundene und korrigierte Fehler
+    found=0
+    fixed=0
+    
+    # Suche nach Formularfeldern mit Underscores ohne Escape
+    echo -e "${YELLOW}Suche nach nicht-escapten Underscores in Formularfeldern...${NC}"
+    files=$(find modules -name "*.tex" -type f)
+    
+    for file in $files; do
+        # Suche nach Mustern wie {name_id} und ersetze sie mit {name\_id}
+        while IFS= read -r line; do
+            if [[ "$line" =~ ctmmTextField|ctmmTextArea|ctmmCheckBox ]]; then
+                if [[ "$line" =~ \{\}\{[^}]*_[^}]*\} ]]; then
+                    found=$((found+1))
+                    echo -e "${YELLOW}Gefunden in $file:${NC} $line"
+                    
+                    # Ersetzt Underscores innerhalb von {}
+                    fixed_line=$(echo "$line" | sed -E 's/(\{\}\{[^}]*)_([^}]*\})/\1\\_\2/g')
+                    sed -i "s/$line/$fixed_line/" "$file" && fixed=$((fixed+1))
+                fi
+            fi
+        done < "$file"
+    done
+    
+    echo -e "${GREEN}Formularfeld-Überprüfung abgeschlossen:${NC}"
+    echo "Gefundene Probleme: $found"
+    echo "Korrigierte Probleme: $fixed"
+}
+
 # Hauptlogik
 case "$1" in
+    checkup)
+        check_environment
+        ;;
     feature)
         create_feature "$2"
         ;;
@@ -190,6 +280,9 @@ case "$1" in
         ;;
     release)
         create_release "$2"
+        ;;
+    fix-latex)
+        fix_latex_fields
         ;;
     *)
         show_help
