@@ -206,6 +206,7 @@ check_latex_guidelines() {
     
     log_message "${BLUE}Formatting guideline issues found: $issues${NC}"
     
+    # Return 0 regardless of issues count for guidelines (these are recommendations)
     return 0
 }
 
@@ -258,6 +259,9 @@ main() {
     log_message "Build log: $LOG_FILE"
     log_message "Error summary: $ERROR_SUMMARY"
     log_message "Warning summary: $WARNING_SUMMARY"
+    
+    # Return success since PDF was generated
+    return 0
 }
 
 # Run main function

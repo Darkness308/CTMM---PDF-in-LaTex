@@ -61,7 +61,7 @@ analyze_package_usage() {
         echo "All packages found:"
     } >> "$OPTIMIZATION_REPORT"
     
-    for package in "${all_packages[@]}" | sort -u; do
+    for package in $(printf '%s\n' "${all_packages[@]}" | sort -u); do
         echo "  - $package" >> "$OPTIMIZATION_REPORT"
         
         # Check if package commands are used

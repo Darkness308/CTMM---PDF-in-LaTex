@@ -56,40 +56,50 @@ categorize_errors() {
     
     log_message "${BLUE}Categorizing errors...${NC}"
     
-    # Initialize error categories
-    declare -A error_categories
-    error_categories["syntax"]=()
-    error_categories["missing_packages"]=()
-    error_categories["references"]=()
-    error_categories["incompatible_packages"]=()
-    error_categories["encoding"]=()
-    error_categories["fonts"]=()
-    error_categories["other"]=()
+    # Initialize error category files
+    mkdir -p "$ANALYSIS_DIR/categories"
+    > "$ANALYSIS_DIR/categories/syntax_errors.txt"
+    > "$ANALYSIS_DIR/categories/missing_packages.txt"
+    > "$ANALYSIS_DIR/categories/references.txt"
+    > "$ANALYSIS_DIR/categories/incompatible_packages.txt"
+    > "$ANALYSIS_DIR/categories/encoding.txt"
+    > "$ANALYSIS_DIR/categories/fonts.txt"
+    > "$ANALYSIS_DIR/categories/other.txt"
     
     # Error patterns
-    declare -A error_patterns
-    error_patterns["syntax"]="Undefined control sequence|Missing|Extra|Paragraph ended before|File ended while scanning"
-    error_patterns["missing_packages"]="LaTeX Error.*package.*not found|Package.*not found|File.*not found"
-    error_patterns["references"]="Reference.*undefined|Citation.*undefined|Label.*undefined"
-    error_patterns["incompatible_packages"]="Package.*option clash|Package.*conflict|Option clash"
-    error_patterns["encoding"]="Package inputenc Error|Unicode char.*not set up|Invalid UTF-8"
-    error_patterns["fonts"]="Font.*not found|Font shape.*undefined|LaTeX Font Warning"
+    local syntax_pattern="Undefined control sequence|Missing|Extra|Paragraph ended before|File ended while scanning"
+    local missing_packages_pattern="LaTeX Error.*package.*not found|Package.*not found|File.*not found"
+    local references_pattern="Reference.*undefined|Citation.*undefined|Label.*undefined"
+    local incompatible_packages_pattern="Package.*option clash|Package.*conflict|Option clash"
+    local encoding_pattern="Package inputenc Error|Unicode char.*not set up|Invalid UTF-8"
+    local fonts_pattern="Font.*not found|Font shape.*undefined|LaTeX Font Warning"
     
     if [[ -f "$log_file" ]]; then
         # Process each error line
         while IFS= read -r line; do
             if [[ $line =~ ^! ]]; then
                 local error_found=false
-                for category in "${!error_patterns[@]}"; do
-                    if echo "$line" | grep -qE "${error_patterns[$category]}"; then
-                        error_categories[$category]+=("$line")
-                        error_found=true
-                        break
-                    fi
-                done
                 
-                if [[ $error_found == false ]]; then
-                    error_categories["other"]+=("$line")
+                if echo "$line" | grep -qE "$syntax_pattern"; then
+                    echo "$line" >> "$ANALYSIS_DIR/categories/syntax_errors.txt"
+                    error_found=true
+                elif echo "$line" | grep -qE "$missing_packages_pattern"; then
+                    echo "$line" >> "$ANALYSIS_DIR/categories/missing_packages.txt"
+                    error_found=true
+                elif echo "$line" | grep -qE "$references_pattern"; then
+                    echo "$line" >> "$ANALYSIS_DIR/categories/references.txt"
+                    error_found=true
+                elif echo "$line" | grep -qE "$incompatible_packages_pattern"; then
+                    echo "$line" >> "$ANALYSIS_DIR/categories/incompatible_packages.txt"
+                    error_found=true
+                elif echo "$line" | grep -qE "$encoding_pattern"; then
+                    echo "$line" >> "$ANALYSIS_DIR/categories/encoding.txt"
+                    error_found=true
+                elif echo "$line" | grep -qE "$fonts_pattern"; then
+                    echo "$line" >> "$ANALYSIS_DIR/categories/fonts.txt"
+                    error_found=true
+                else
+                    echo "$line" >> "$ANALYSIS_DIR/categories/other.txt"
                 fi
             fi
         done < "$log_file"
@@ -104,18 +114,27 @@ categorize_errors() {
         echo ""
     } >> "$ERROR_REPORT"
     
-    for category in "${!error_categories[@]}"; do
-        local count=${#error_categories[$category][@]}
+    # Count and report each category
+    local categories=("syntax_errors" "missing_packages" "references" "incompatible_packages" "encoding" "fonts" "other")
+    local category_names=("Syntax Errors" "Missing Packages" "Reference Problems" "Incompatible Packages" "Encoding Issues" "Font Problems" "Other Errors")
+    
+    for i in "${!categories[@]}"; do
+        local category="${categories[$i]}"
+        local category_name="${category_names[$i]}"
+        local count=0
+        
+        if [[ -f "$ANALYSIS_DIR/categories/${category}.txt" ]]; then
+            count=$(wc -l < "$ANALYSIS_DIR/categories/${category}.txt" 2>/dev/null || echo "0")
+        fi
+        
         if [[ $count -gt 0 ]]; then
             {
-                echo "$category errors: $count"
-                for error in "${error_categories[$category][@]}"; do
-                    echo "  - $error"
-                done
+                echo "$category_name: $count"
+                cat "$ANALYSIS_DIR/categories/${category}.txt"
                 echo ""
             } >> "$ERROR_REPORT"
             
-            log_message "${RED}$category: $count errors${NC}"
+            log_message "${RED}$category_name: $count errors${NC}"
         fi
     done
 }
