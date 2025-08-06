@@ -193,7 +193,7 @@ Please replace this content with the actual module materials.}}
                 capture_output=True,
                 text=True,
                 encoding='utf-8',
-                errors='replace',
+                errors='ignore',
                 timeout=60
             )
             
