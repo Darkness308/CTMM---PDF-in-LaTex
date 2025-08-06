@@ -205,8 +205,14 @@ Please replace this content with the actual module materials.}}
         except subprocess.TimeoutExpired:
             return False, "Build timed out"
         except FileNotFoundError:
-            return False, "pdflatex not found - please install LaTeX"
-    
+            return False, (
+                "pdflatex not found - LaTeX is not installed.\n"
+                "To install LaTeX, follow the instructions for your system:\n"
+                "  - Ubuntu/Debian: sudo apt install texlive-latex-base\n"
+                "  - macOS (with Homebrew): brew install mactex\n"
+                "  - Windows: Download and install MiKTeX from https://miktex.org/download\n"
+                "Ensure 'pdflatex' is in your PATH after installation."
+            )
     def test_basic_framework(self) -> bool:
         """Test build with all modules commented out"""
         references = self.scan_references()
