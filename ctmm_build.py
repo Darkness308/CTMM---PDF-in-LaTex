@@ -58,7 +58,7 @@ def create_template(file_path):
         content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 
-\\section{{TODO: {path.stem.replace('-', ' ').title()}}}
+\\section{{TODO: {filename_to_title(path.stem)}}}
 \\label{{sec:{path.stem}}}
 
 \\begin{{center}}
