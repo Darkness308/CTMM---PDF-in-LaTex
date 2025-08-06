@@ -284,7 +284,7 @@ Please replace this content with the actual module materials.}}
         
         report = f"""# CTMM LaTeX Build Report
 
-Generated on: {subprocess.run(['date'], capture_output=True, text=True).stdout.strip()}
+Generated on: {datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')}
 
 ## Summary
 - **Total modules tested**: {total_modules}
