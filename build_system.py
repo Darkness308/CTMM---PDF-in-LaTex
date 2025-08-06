@@ -274,7 +274,7 @@ This file was automatically created by the CTMM Build System because it was refe
                     ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                     capture_output=True,
                     text=True,
-                    cwd=self.main_tex_path.parent
+                    cwd=str(self.main_tex_path.parent)
                 )
                 
                 if result.returncode == 0:
