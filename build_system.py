@@ -179,7 +179,7 @@ This file was automatically created by the CTMM Build System because it was refe
 - [ ] Remove this TODO file when complete
 
 ## Created
-{path.stat().st_mtime if path.exists() else 'Just now'} by CTMM Build System
+{datetime.fromtimestamp(path.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S') if path.exists() else 'Just now'} by CTMM Build System
 """
             with open(todo_path, 'w', encoding='utf-8') as f:
                 f.write(todo_content)
