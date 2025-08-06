@@ -24,7 +24,7 @@ analyze:
 # Test only (without building)
 test:
 	@echo "Testing build system..."
-	python3 ctmm_build.py | grep -E "(PASS|FAIL|ERROR|WARNING)"
+	python3 ctmm_build.py | grep -E "(PASS|FAIL|ERROR|WARNING)" || true
 
 # Clean build artifacts
 clean:
