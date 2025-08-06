@@ -25,6 +25,47 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## LaTeX-Hinweise für Entwickler
 
+**CTMM Build System:**
+
+Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
+
+### Automatisierte Build-Prüfung
+```bash
+python3 ctmm_build.py
+```
+
+Das Build-System:
+1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
+2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
+3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
+4. **Testet vollständigen Build** - mit allen Modulen
+5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+
+### Modulare Test-Strategie
+
+**Für Entwickler:**
+- Jedes neue Modul wird automatisch erkannt und getestet
+- Fehlende Referenzen werden durch kommentierte Templates ersetzt (kein Dummy-Content)
+- Build bricht nicht mehr bei fehlenden Dateien ab
+- Templates enthalten sinnvolle Struktur mit `\section` und Platzhaltern
+
+**Erweiterte Analyse:**
+Für granulare Modultests steht `build_system.py` zur Verfügung:
+```bash
+python3 build_system.py --verbose
+```
+- Testet Module schrittweise einzeln
+- Identifiziert problematische Module
+- Erstellt detaillierte Build-Reports
+- Protokolliert alle Operationen in `build_system.log`
+
+### GitHub Workflow Integration
+
+Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigiert:
+- Referenziert nun korrekt `main.tex` (statt dem nicht existierenden `main_final.tex`)
+- Lädt `main.pdf` als Artefakt hoch
+- Kann durch das Build-System bei Fehlern erweitert werden
+
 **Typische Fehlerquellen und Best Practices:**
 
 - **Pakete immer in der Präambel laden:**
@@ -47,8 +88,27 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
   - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
   - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
   - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
-- **README regelmäßig pflegen:**
-  - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
+
+### Vorgehen bei neuen Modulen
+
+1. **Referenz in main.tex hinzufügen:**
+   ```tex
+   \input{modules/mein-neues-modul}
+   ```
+
+2. **Build-System ausführen:**
+   ```bash
+   python3 ctmm_build.py
+   ```
+
+3. **Template wird automatisch erstellt:**
+   - `modules/mein-neues-modul.tex` mit Grundstruktur
+   - `modules/TODO_mein-neues-modul.md` mit Aufgabenliste
+
+4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
+
+**README regelmäßig pflegen:**
+- Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
 
 **Tipp:**
 Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
