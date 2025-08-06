@@ -13,13 +13,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies  
+        run: |
+          pip install chardet
+
+      - name: Run CTMM Build System Check
+        run: |
+          python3 ctmm_build.py
+
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2.x
         with:
-          root_file: main_final.tex
+          root_file: main.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CTMM_final_PDF
-          path: main_final.pdf
+          name: CTMM_PDF
+          path: main.pdf
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_logs
+          path: |
+            *.log
+            build_error_*.log
+            build_system.log
