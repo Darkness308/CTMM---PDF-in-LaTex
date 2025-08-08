@@ -1,4 +1,6 @@
-# Copilot Instructions for CTMM-System
+# GitHub Copilot Instructions for CTMM-System
+
+**Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.**
 
 ## Project Overview
 
@@ -25,13 +27,102 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
 │   ├── trigger*.tex           # Trigger management modules
 │   ├── depression.tex         # Depression-related content
-│   └── ...                    # Other therapeutic modules
+│   └── ...                    # Other therapeutic modules (14 total)
 ├── therapie-material/          # Additional therapy resources
-├── ctmm_build.py              # Automated build system (primary)
-├── build_system.py            # Detailed module analysis
-├── Makefile                   # Build commands
+├── ctmm_build.py              # Automated build system (primary - ~2 seconds)
+├── build_system.py            # Detailed module analysis (~10 seconds)
+├── Makefile                   # Build commands (validated)
 └── .github/workflows/         # CI/CD for PDF generation
 ```
+
+## Working Effectively
+
+### **CRITICAL**: Dependencies Setup
+
+**Install LaTeX distribution first:**
+```bash
+sudo apt-get update
+sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-german texlive-fonts-extra
+```
+**Timing**: LaTeX installation takes 8-12 minutes. NEVER CANCEL - set timeout to 15+ minutes.
+
+**Install Python dependencies:**
+```bash
+pip install chardet
+```
+
+### Build Commands (All Validated)
+
+**Primary Build System - Run this first:**
+```bash
+python3 ctmm_build.py
+```
+**Timing**: ~2 seconds. Tests all dependencies and generates missing templates.
+
+**LaTeX PDF Generation:**
+```bash
+make build
+```
+**Timing**: ~4 seconds total (2 pdflatex passes). Creates 27-page PDF (~435KB).
+
+**Build System Validation:**
+```bash
+make check
+```
+**Timing**: ~2 seconds. Runs ctmm_build.py and validates dependencies.
+
+**Quick Test:**
+```bash
+make test
+```
+**Timing**: ~2 seconds. Tests build system without generating PDF.
+
+**Detailed Module Analysis:**
+```bash
+python3 build_system.py --verbose
+```
+**Timing**: ~10 seconds. Tests modules incrementally. May fail on encoding issues in safewords.tex module but still provides useful diagnostics.
+
+**Alternative via Make:**
+```bash
+make analyze
+```
+**Note**: Currently fails due to UTF-8 encoding issue in safewords.tex module, but analysis command works when run directly.
+
+**Clean Build Artifacts:**
+```bash
+make clean
+```
+**Timing**: <1 second. Removes *.aux, *.log, *.out, *.toc, *.pdf files.
+
+**Install Dependencies:**
+```bash
+make deps
+```
+**Timing**: ~2 seconds. Installs chardet Python package.
+
+### Manual Validation Scenarios
+
+**Always test these workflows after making changes:**
+
+1. **Basic Build Validation:**
+   ```bash
+   python3 ctmm_build.py && ls -la main.pdf
+   ```
+   Verify PDF is generated (~434KB, 27 pages).
+
+2. **New Module Creation:**
+   - Add `\input{modules/my-new-module}` to main.tex
+   - Run `python3 ctmm_build.py`
+   - Verify template created: `modules/my-new-module.tex`
+   - Verify TODO created: `modules/TODO_my-new-module.md`
+   - Build should succeed and include new template content
+
+3. **Full Build Test:**
+   ```bash
+   make clean && make build && pdfinfo main.pdf
+   ```
+   Verify clean build produces valid PDF with correct page count.
 
 ## LaTeX Architecture & Conventions
 
@@ -41,6 +132,7 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 ```bash
 python3 ctmm_build.py
 ```
+**Timing**: ~2 seconds. ALWAYS run this first to validate dependencies.
 
 **What the build system does:**
 1. Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
@@ -50,11 +142,17 @@ python3 ctmm_build.py
 
 **Alternative Commands:**
 ```bash
-make check          # Run build system check
-make build          # Build PDF with pdflatex
-make analyze        # Detailed module testing
-python3 build_system.py --verbose  # Granular analysis
+make check          # Run build system check (~2 seconds)
+make build          # Build PDF with pdflatex (~4 seconds, NEVER CANCEL)
+make analyze        # Detailed module testing (~10 seconds, may fail on encoding)
+python3 build_system.py --verbose  # Granular analysis (~10 seconds)
 ```
+
+**CRITICAL BUILD TIMINGS:**
+- `python3 ctmm_build.py`: ~2 seconds
+- `make build`: ~4 seconds (2 LaTeX passes)
+- `make analyze`: ~10 seconds
+- LaTeX dependency installation: 8-12 minutes (NEVER CANCEL)
 
 ### 📄 LaTeX Best Practices
 
@@ -157,18 +255,47 @@ python3 build_system.py --verbose  # Granular analysis
 - **PDF features**: Interactive forms, bookmarks, metadata
 
 ### Development Environment
-- **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
-- **GitHub Codespace**: Pre-configured environment available
-- **CI/CD**: Automated PDF building via GitHub Actions
+- **Local Setup**: 
+  1. Install LaTeX distribution (TeX Live recommended): 8-12 minutes installation time
+  2. Required packages: texlive-latex-base, texlive-latex-recommended, texlive-latex-extra, texlive-fonts-recommended, texlive-lang-german, texlive-fonts-extra
+  3. Install Python dependencies: `pip install chardet`
+- **GitHub Codespace**: Universal devcontainer pre-configured but requires LaTeX installation
+- **CI/CD**: GitHub Actions builds PDF automatically (contains syntax error on line 30 that needs fixing)
 
 ## Contributing Best Practices
 
 ### Code Reviews
-- Test builds before submitting PR
-- Verify PDF output renders correctly
-- Check for LaTeX compilation warnings
-- Ensure German text is properly encoded
+- **ALWAYS** test builds before submitting PR:
+  ```bash
+  python3 ctmm_build.py  # Validate dependencies (~2 seconds)
+  make build             # Generate PDF (~4 seconds, NEVER CANCEL)
+  ```
+- Verify PDF output renders correctly (should be ~434KB, 27 pages)
+- Check for LaTeX compilation warnings in build logs
+- Ensure German text is properly encoded (UTF-8)
 - Validate therapeutic content accuracy
+
+### Build Validation Checklist
+Run these commands in order before any PR:
+```bash
+# 1. Validate dependencies and templates
+python3 ctmm_build.py
+
+# 2. Clean build test  
+make clean
+
+# 3. Generate PDF
+make build
+
+# 4. Verify PDF output
+ls -la main.pdf  # Should be ~434KB
+pdfinfo main.pdf # Should show 27 pages
+
+# 5. Quick build system test
+make test
+```
+
+**Expected Timing**: Total validation takes ~10 seconds
 
 ### Documentation Updates
 - Update README.md for new features or conventions
@@ -186,11 +313,32 @@ python3 build_system.py --verbose  # Granular analysis
 
 ## Quick Reference
 
-**Build Commands:**
-- `python3 ctmm_build.py` - Main build system
-- `make check` - Quick dependency check
-- `make build` - Generate PDF
-- `make clean` - Remove artifacts
+**Build Commands (All Validated):**
+- `python3 ctmm_build.py` - Main build system (~2 seconds)
+- `make check` - Quick dependency check (~2 seconds)
+- `make build` - Generate PDF (~4 seconds, NEVER CANCEL)
+- `make clean` - Remove artifacts (<1 second)
+- `make test` - Quick validation (~2 seconds)
+- `make deps` - Install Python dependencies (~2 seconds)
+
+**CRITICAL Timings:**
+- LaTeX installation: 8-12 minutes (NEVER CANCEL, set 15+ minute timeout)
+- Full build validation: ~10 seconds total
+- PDF output: ~434KB, 27 pages
+
+**Setup Commands:**
+```bash
+# Install LaTeX (8-12 minutes, NEVER CANCEL)
+sudo apt-get update
+sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-lang-german texlive-fonts-extra
+
+# Install Python dependencies
+pip install chardet
+
+# Validate setup
+python3 ctmm_build.py
+make build
+```
 
 **Key Files:**
 - `main.tex` - Document entry point and preamble
@@ -201,5 +349,10 @@ python3 build_system.py --verbose  # Granular analysis
 - `\checkbox` / `\checkedbox` - Form checkboxes
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
+
+**Known Issues:**
+- `make analyze` fails due to UTF-8 encoding issue in safewords.tex
+- GitHub Actions workflow has syntax error on line 30 (extra dash)
+- Build system handles encoding gracefully but detailed analysis may fail
 
 Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
