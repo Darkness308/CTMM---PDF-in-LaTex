@@ -22,20 +22,20 @@ jobs:
         run: |
           pip install chardet
 
-      - name: Run CTMM Build System Check
+      - name: Run CTMM Build Manager Analysis
         run: |
-          python3 ctmm_build.py
+          python3 build_manager.py
 
       - name: Set up LaTeX
-        - uses: dante-ev/latex-action@v2.0.0
+        uses: dante-ev/latex-action@v2.0.0
         with:
-          root_file: main.tex
+          root_file: main_final.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: CTMM_PDF
-          path: main.pdf
+          path: main_final.pdf
 
       - name: Upload build logs (on failure)
         if: failure()
@@ -44,5 +44,5 @@ jobs:
           name: build_logs
           path: |
             *.log
-            build_error_*.log
-            build_system.log
+            build_report.md
+            build_log.txt

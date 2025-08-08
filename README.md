@@ -9,63 +9,95 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 - Bindungsdynamik
 - Formularelemente für therapeutische Dokumentation
 
+## Build-System und Testing-Strategie
+
+### Automatisierte Build-Verwaltung
+
+Das Repository verfügt über ein automatisiertes Build-Management-System, das folgende Funktionen bietet:
+
+1. **Vollständige Referenz-Analyse**: Scannt `main.tex` nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
+2. **Fehlende Dateien-Erkennung**: Prüft automatisch, ob alle referenzierten Dateien existieren
+3. **Template-Generierung**: Erstellt minimale, kommentierte Templates für fehlende Dateien
+4. **Inkrementelle Testing**: Testet Module schrittweise durch temporäres Auskommentieren
+5. **Detaillierte Berichte**: Generiert umfassende Build-Berichte mit Fehleranalyse
+
+### Verwendung des Build-Managers
+
+```bash
+# Vollständige Build-Analyse ausführen
+python3 build_manager.py
+
+# Oder mit Makefile
+make analyze
+
+# Spezifische Datei testen
+make test-file FILE=main.tex
+
+# Standard Build
+make build
+
+# CI Build (für GitHub Actions)
+make build-ci
+```
+
+### Build-Strategie
+
+Das Build-System implementiert eine **granulare Testing-Strategie**:
+
+1. **Grundgerüst-Test**: Alle Module werden temporär auskommentiert, nur das Grundgerüst wird getestet
+2. **Inkrementelle Aktivierung**: Module werden einzeln reaktiviert und getestet
+3. **Fehler-Isolation**: Jedes Modul, das Fehler verursacht, wird identifiziert und protokolliert
+4. **Automatische Wiederherstellung**: Die ursprüngliche `main.tex` wird immer wiederhergestellt
+
+### Template-System
+
+Für fehlende Dateien werden automatisch erstellt:
+
+**Style-Pakete (.sty)**:
+- Vollständige `\ProvidesPackage` Struktur
+- TODO-Kommentare für alle Bereiche
+- Platzhalter-Definitionen
+
+**Module (.tex)**:
+- Automatische `\section` mit korrektem Label
+- TODO-Kommentare für Inhalte
+- Konsistente Struktur
+
+### Fehlerbehandlung
+
+Das System erkennt und behandelt:
+- **Fehlende Dateien**: Automatische Template-Erstellung
+- **Build-Fehler**: Detaillierte Protokollierung mit Kontext
+- **Referenz-Probleme**: Identifizierung defekter Cross-References
+- **Encoding-Probleme**: Robuste UTF-8 Behandlung
+
 ## Verwendung
 1. Klone das Repository
 2. Kompiliere main.tex mit einem LaTeX-Editor
 3. Oder öffne das Projekt in einem GitHub Codespace
+4. Nutze das Build-Management-System für automatisierte Tests
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
 - `/modules/` - Individuelle CTMM-Module als separate .tex-Dateien
 - `/assets/` - Diagramme und visuelle Elemente
+- `build_manager.py` - Automatisiertes Build-Management-System
+- `Makefile` - Build-Automatisierung und Testing
+- `build_report.md` - Automatisch generierte Build-Berichte
 
 ## Anforderungen
 - LaTeX-Installation mit TikZ und hyperref
+- Python 3.x für Build-Management
 - Oder GitHub Codespace (vorkonfiguriert)
 
 ## LaTeX-Hinweise für Entwickler
 
-**CTMM Build System:**
+**Automatisierte Qualitätssicherung:**
 
-Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
-
-### Automatisierte Build-Prüfung
-```bash
-python3 ctmm_build.py
-```
-
-Das Build-System:
-1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
-2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
-3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
-4. **Testet vollständigen Build** - mit allen Modulen
-5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
-
-### Modulare Test-Strategie
-
-**Für Entwickler:**
-- Jedes neue Modul wird automatisch erkannt und getestet
-- Fehlende Referenzen werden durch kommentierte Templates ersetzt (kein Dummy-Content)
-- Build bricht nicht mehr bei fehlenden Dateien ab
-- Templates enthalten sinnvolle Struktur mit `\section` und Platzhaltern
-
-**Erweiterte Analyse:**
-Für granulare Modultests steht `build_system.py` zur Verfügung:
-```bash
-python3 build_system.py --verbose
-```
-- Testet Module schrittweise einzeln
-- Identifiziert problematische Module
-- Erstellt detaillierte Build-Reports
-- Protokolliert alle Operationen in `build_system.log`
-
-### GitHub Workflow Integration
-
-Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigiert:
-- Referenziert nun korrekt `main.tex` (statt dem nicht existierenden `main_final.tex`)
-- Lädt `main.pdf` als Artefakt hoch
-- Kann durch das Build-System bei Fehlern erweitert werden
-
+Das Build-Management-System hilft bei der Einhaltung dieser Best Practices:
+- Automatische Erkennung fehlender Referenzen
+- Granulare Testing verhindert großflächige Build-Fehler
+- Template-System sorgt für konsistente Struktur
 **Typische Fehlerquellen und Best Practices:**
 
 - **Pakete immer in der Präambel laden:**
@@ -96,19 +128,19 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
    \input{modules/mein-neues-modul}
    ```
 
-2. **Build-System ausführen:**
+2. **Build-Manager ausführen:**
    ```bash
-   python3 ctmm_build.py
+   python3 build_manager.py
    ```
 
 3. **Template wird automatisch erstellt:**
    - `modules/mein-neues-modul.tex` mit Grundstruktur
-   - `modules/TODO_mein-neues-modul.md` mit Aufgabenliste
+   - TODO-Kommentare im Template für nächste Schritte
 
-4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
+4. **Inhalt ergänzen** und Template-Platzhalter ersetzen
 
 **README regelmäßig pflegen:**
 - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
 
 **Tipp:**
-Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst. Nutze das Build-Management-System, um deine Änderungen automatisch zu testen.
