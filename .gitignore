@@ -19,6 +19,7 @@ build_error_*.log
 main_basic_test.*
 *.temp.*
 *.test_*.*
+test_sanitization.py
 
 ## Python cache files:
 __pycache__/

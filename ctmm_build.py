@@ -15,6 +15,58 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
+def sanitize_latex_command_name(name: str) -> str:
+    """
+    Sanitize a string to be used as a LaTeX command name.
+    
+    LaTeX command names must consist of letters only (for multi-character commands).
+    This function removes or replaces invalid characters to create a valid command name.
+    
+    Args:
+        name: The input string to sanitize
+        
+    Returns:
+        A sanitized string safe to use in LaTeX command names
+    """
+    if not name:
+        return "Empty"
+    
+    # Remove file extensions and path separators
+    name = re.sub(r'\.[^.]*$', '', name)  # Remove extension
+    name = re.sub(r'[/\\]', '', name)     # Remove path separators
+    
+    # Replace common special characters with words
+    name = name.replace('-', 'Dash')
+    name = name.replace('_', 'Underscore') 
+    name = name.replace('@', 'At')
+    name = name.replace('&', 'And')
+    name = name.replace('%', 'Percent')
+    name = name.replace('#', 'Hash')
+    name = name.replace('$', 'Dollar')
+    name = name.replace('+', 'Plus')
+    name = name.replace('=', 'Equals')
+    name = name.replace('!', 'Exclamation')
+    name = name.replace('?', 'Question')
+    name = name.replace(' ', '')  # Remove spaces
+    
+    # Remove any remaining non-letter characters
+    name = re.sub(r'[^a-zA-Z]', '', name)
+    
+    # Ensure it starts with a letter and is not empty
+    if not name or not name[0].isalpha():
+        name = 'Pkg' + name
+    
+    # Capitalize first letter to follow LaTeX command convention
+    if name:
+        name = name[0].upper() + name[1:]
+    
+    # Ensure minimum length
+    if len(name) < 2:
+        name = name + 'Cmd'
+        
+    return name
+
+
 def filename_to_title(filename):
     """Convert filename to a readable title."""
     # Replace underscores and hyphens with spaces, capitalize words
@@ -55,6 +107,7 @@ def create_template(file_path):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
+        safe_package_name = sanitize_latex_command_name(path.stem)
         content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
@@ -62,6 +115,9 @@ def create_template(file_path):
 \\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
 
 % TODO: Add package dependencies and commands here
+
+% Placeholder command for missing content (command name sanitized for LaTeX compatibility)
+\\newcommand{{\\{safe_package_name}Placeholder}}{{\\textcolor{{red}}{{[{path.stem.upper()} TEMPLATE - NEEDS CONTENT]}}}}
 
 % End of package
 """

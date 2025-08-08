@@ -35,6 +35,57 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+def sanitize_latex_command_name(name: str) -> str:
+    """
+    Sanitize a string to be used as a LaTeX command name.
+    
+    LaTeX command names must consist of letters only (for multi-character commands).
+    This function removes or replaces invalid characters to create a valid command name.
+    
+    Args:
+        name: The input string to sanitize
+        
+    Returns:
+        A sanitized string safe to use in LaTeX command names
+    """
+    if not name:
+        return "Empty"
+    
+    # Remove file extensions and path separators
+    name = re.sub(r'\.[^.]*$', '', name)  # Remove extension
+    name = re.sub(r'[/\\]', '', name)     # Remove path separators
+    
+    # Replace common special characters with words
+    name = name.replace('-', 'Dash')
+    name = name.replace('_', 'Underscore') 
+    name = name.replace('@', 'At')
+    name = name.replace('&', 'And')
+    name = name.replace('%', 'Percent')
+    name = name.replace('#', 'Hash')
+    name = name.replace('$', 'Dollar')
+    name = name.replace('+', 'Plus')
+    name = name.replace('=', 'Equals')
+    name = name.replace('!', 'Exclamation')
+    name = name.replace('?', 'Question')
+    name = name.replace(' ', '')  # Remove spaces
+    
+    # Remove any remaining non-letter characters
+    name = re.sub(r'[^a-zA-Z]', '', name)
+    
+    # Ensure it starts with a letter and is not empty
+    if not name or not name[0].isalpha():
+        name = 'Pkg' + name
+    
+    # Capitalize first letter to follow LaTeX command convention
+    if name:
+        name = name[0].upper() + name[1:]
+    
+    # Ensure minimum length
+    if len(name) < 2:
+        name = name + 'Cmd'
+        
+    return name
+
 class CTMMBuildSystem:
     def __init__(self, main_tex_path: str = "main.tex"):
         self.main_tex_path = Path(main_tex_path)
@@ -114,7 +165,8 @@ class CTMMBuildSystem:
             path.parent.mkdir(parents=True, exist_ok=True)
             
             if file_path.endswith('.sty'):
-                # Create style file template
+                # Create style file template with sanitized placeholder command
+                safe_package_name = sanitize_latex_command_name(path.stem)
                 template_content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 % Created automatically by CTMM Build System
@@ -131,6 +183,9 @@ class CTMMBuildSystem:
 
 % TODO: Add commands and environments here
 % \\newcommand{{\\exampleCommand}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
+
+% Placeholder command for missing content (command name sanitized for LaTeX compatibility)
+\\newcommand{{\\{safe_package_name}Placeholder}}{{\\textcolor{{red}}{{[{path.stem.upper()} TEMPLATE - NEEDS CONTENT]}}}}
 
 % End of package - TODO: Complete implementation
 """
