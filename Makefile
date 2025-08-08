@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help
+.PHONY: build check clean test help safe-check
 
 # Default target
 all: check build
@@ -9,6 +9,11 @@ all: check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Enhanced check with safe package name handling
+safe-check:
+	@echo "Running enhanced CTMM Build Manager with sanitization..."
+	python3 build_manager.py
 
 # Build PDF
 build:
@@ -20,6 +25,16 @@ build:
 analyze:
 	@echo "Running detailed build analysis..."
 	python3 build_system.py --verbose
+
+# Test package name sanitization
+test-sanitization:
+	@echo "Testing package name sanitization..."
+	python3 test_sanitization.py
+
+# Demonstrate the security fix
+demo-fix:
+	@echo "Demonstrating LaTeX command name security fix..."
+	python3 demonstrate_fix.py
 
 # Test only (without building)
 test:
@@ -45,11 +60,14 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all      - Run check and build (default)"
-	@echo "  check    - Check dependencies and run build system"
-	@echo "  build    - Build the PDF"
-	@echo "  analyze  - Run detailed module analysis"
-	@echo "  test     - Quick test of build system"
-	@echo "  clean    - Remove build artifacts"
-	@echo "  deps     - Install Python dependencies"
-	@echo "  help     - Show this help"
+	@echo "  all              - Run check and build (default)"
+	@echo "  check            - Check dependencies and run build system"
+	@echo "  safe-check       - Enhanced build manager with package name sanitization"
+	@echo "  build            - Build the PDF"
+	@echo "  analyze          - Run detailed module analysis"
+	@echo "  test-sanitization - Test package name sanitization functionality"
+	@echo "  demo-fix         - Demonstrate the LaTeX command name security fix"
+	@echo "  test             - Quick test of build system"
+	@echo "  clean            - Remove build artifacts"
+	@echo "  deps             - Install Python dependencies"
+	@echo "  help             - Show this help"

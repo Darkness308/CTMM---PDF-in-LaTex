@@ -15,6 +15,39 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
+def sanitize_package_name(package_name: str) -> str:
+    """
+    Sanitize package name for safe use in LaTeX command names.
+    
+    LaTeX command names can only contain letters (a-z, A-Z).
+    This function converts package names like 'ctmm-design' to 'ctmmDesign'.
+    """
+    # Remove file extensions
+    clean_name = package_name
+    if '.' in clean_name:
+        clean_name = clean_name.split('.')[0]
+    
+    # Split on hyphens and underscores, then camelCase
+    parts = re.split(r'[-_]+', clean_name)
+    if not parts:
+        return 'defaultPackage'
+    
+    # First part stays lowercase, rest are capitalized
+    sanitized = parts[0].lower()
+    for part in parts[1:]:
+        if part:  # Skip empty parts
+            sanitized += part.capitalize()
+    
+    # Ensure it starts with a letter and contains only letters
+    sanitized = re.sub(r'[^a-zA-Z]', '', sanitized)
+    
+    # Ensure it's not empty and starts with a letter
+    if not sanitized or not sanitized[0].isalpha():
+        sanitized = 'pkg' + sanitized
+    
+    return sanitized
+
+
 def filename_to_title(filename):
     """Convert filename to a readable title."""
     # Replace underscores and hyphens with spaces, capitalize words
@@ -50,27 +83,32 @@ def check_missing_files(files):
 
 
 def create_template(file_path):
-    """Create a minimal template for a missing file."""
+    """Create a minimal template for a missing file with safe command generation."""
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
+        safe_name = sanitize_package_name(path.stem)
         content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
 \\NeedsTeXFormat{{LaTeX2e}}
 \\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
 
+% Placeholder command (safe for LaTeX - uses sanitized name)
+\\newcommand{{\\{safe_name}Placeholder}}{{\\textcolor{{red}}{{[{path.stem.upper()} TEMPLATE - NEEDS CONTENT]}}}}
+
 % TODO: Add package dependencies and commands here
 
 % End of package
 """
     else:
+        safe_name = sanitize_package_name(path.stem)
         content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 
 \\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
+\\label{{sec:{safe_name}}}
 
 \\begin{{center}}
 \\textit{{This module is under development. Content will be added soon.}}
@@ -90,8 +128,11 @@ def create_template(file_path):
 
 ## Tasks
 - [ ] Add proper content
-- [ ] Review and test functionality
+- [ ] Review and test functionality  
 - [ ] Update documentation
+
+## Safe LaTeX Command Names
+Package name '{path.stem}' sanitized to '{safe_name}' for LaTeX commands.
 
 Created by CTMM Build System
 """

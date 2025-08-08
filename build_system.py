@@ -35,6 +35,45 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+def sanitize_package_name(package_name: str) -> str:
+    """
+    Sanitize package name for safe use in LaTeX command names.
+    
+    LaTeX command names can only contain letters (a-z, A-Z).
+    This function converts package names like 'ctmm-design' to 'ctmmDesign'.
+    
+    Args:
+        package_name: Original package name (may contain hyphens, underscores, etc.)
+        
+    Returns:
+        Sanitized package name safe for use in LaTeX commands
+    """
+    # Remove file extensions
+    clean_name = package_name
+    if '.' in clean_name:
+        clean_name = clean_name.split('.')[0]
+    
+    # Split on hyphens and underscores, then camelCase
+    parts = re.split(r'[-_]+', clean_name)
+    if not parts:
+        return 'defaultPackage'
+    
+    # First part stays lowercase, rest are capitalized
+    sanitized = parts[0].lower()
+    for part in parts[1:]:
+        if part:  # Skip empty parts
+            sanitized += part.capitalize()
+    
+    # Ensure it starts with a letter and contains only letters
+    sanitized = re.sub(r'[^a-zA-Z]', '', sanitized)
+    
+    # Ensure it's not empty and starts with a letter
+    if not sanitized or not sanitized[0].isalpha():
+        sanitized = 'pkg' + sanitized
+    
+    return sanitized
+
 class CTMMBuildSystem:
     def __init__(self, main_tex_path: str = "main.tex"):
         self.main_tex_path = Path(main_tex_path)
@@ -114,7 +153,8 @@ class CTMMBuildSystem:
             path.parent.mkdir(parents=True, exist_ok=True)
             
             if file_path.endswith('.sty'):
-                # Create style file template
+                # Create style file template with safe command generation
+                safe_name = sanitize_package_name(path.stem)
                 template_content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 % Created automatically by CTMM Build System
@@ -129,19 +169,23 @@ class CTMMBuildSystem:
 % TODO: Add color definitions here
 % \\definecolor{{ctmmBlue}}{{RGB}}{{52, 152, 219}}
 
+% Placeholder command (safe for LaTeX - uses sanitized name)
+\\newcommand{{\\{safe_name}Placeholder}}{{\\textcolor{{red}}{{[{path.stem.upper()} TEMPLATE - NEEDS CONTENT]}}}}
+
 % TODO: Add commands and environments here
-% \\newcommand{{\\exampleCommand}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
+% \\newcommand{{\\{safe_name}Command}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
 
 % End of package - TODO: Complete implementation
 """
             else:
                 # Create module file template  
+                safe_name = sanitize_package_name(path.stem)
                 template_content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
 \\section{{TODO: {path.stem.replace('-', ' ').title()}}}
-\\label{{sec:{path.stem}}}
+\\label{{sec:{safe_name}}}
 
 % TODO: Add module content here
 \\begin{{center}}
