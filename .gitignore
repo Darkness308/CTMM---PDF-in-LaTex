@@ -337,3 +337,15 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+# Build artifacts and temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.pdf
+main_basic_test.*
+*.temp.*
+build_error_*.log
+build_system.log
+*.backup
+*.test-backup
