@@ -377,7 +377,39 @@ Generated on: {datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')}
         test_results = self.test_modules_incrementally()
         
         # Step 5: Generate report
-        print("\n6. Generating build report...")
+        step = 1
+        print(f"\n{step}. Scanning file references...")
+        references = self.scan_references()
+        print(f"Found {len(references['style_packages'])} style packages")
+        print(f"Found {len(references['module_inputs'])} module inputs")
+        
+        step += 1
+        print(f"\n{step}. Checking file existence...")
+        missing_files = self.check_file_existence(references)
+        total_missing = len(missing_files['style_packages']) + len(missing_files['module_inputs'])
+        
+        if total_missing > 0:
+            print(f"Found {total_missing} missing files")
+            step += 1
+            print(f"\n{step}. Creating templates for missing files...")
+            self.create_missing_templates(missing_files)
+        else:
+            print("✓ All referenced files exist")
+        
+        step += 1
+        print(f"\n{step}. Testing basic framework...")
+        framework_success = self.test_basic_framework()
+        
+        if not framework_success:
+            print("⚠️  Basic framework has issues. Please fix before testing modules.")
+            return
+        
+        step += 1
+        print(f"\n{step}. Testing modules incrementally...")
+        test_results = self.test_modules_incrementally()
+        
+        step += 1
+        print(f"\n{step}. Generating build report...")
         self.generate_build_report(test_results)
         
         print("\n✅ Build analysis complete!")
