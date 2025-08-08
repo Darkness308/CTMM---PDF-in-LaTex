@@ -1,7 +1,18 @@
 #!/usr/bin/env python3
 """
 CTMM Build System - Simplified Version
-Handles missing files and basic build testing with robust error handling.
+
+This module handles missing files and basic build testing with robust error handling
+for the CTMM (Catch-Track-Map-Match) LaTeX document system.
+
+Key Features:
+- Scans main.tex for style and module references
+- Creates templates for missing files
+- Tests build process with fallback when pdflatex is unavailable
+- Provides detailed logging and error reporting
+
+Usage:
+    python3 ctmm_build.py
 """
 
 import re
