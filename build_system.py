@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
@@ -48,8 +49,11 @@ class CTMMBuildSystem:
         try:
             # Try UTF-8 first
             with open(file_path, 'r', encoding='utf-8') as f:
-                return f.read()
-        except UnicodeDecodeError:
+                content = f.read()
+                logger.debug(f"Successfully read {file_path} with UTF-8 ({len(content)} characters)")
+                return content
+        except UnicodeDecodeError as e:
+            logger.warning(f"UTF-8 decode error for {file_path}: {e}")
             # Detect encoding
             with open(file_path, 'rb') as f:
                 raw_data = f.read()
@@ -58,7 +62,9 @@ class CTMMBuildSystem:
                 
             logger.debug(f"Detected encoding for {file_path}: {encoding}")
             with open(file_path, 'r', encoding=encoding, errors='replace') as f:
-                return f.read()
+                content = f.read()
+                logger.debug(f"Successfully read {file_path} with {encoding} ({len(content)} characters)")
+                return content
     
     def scan_main_tex(self) -> None:
         """Scan main.tex for all usepackage{style/...} and input{modules/...} commands."""
@@ -210,6 +216,7 @@ This file was automatically created by the CTMM Build System because it was refe
                 ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                 capture_output=True,
                 text=True,
+                errors='replace',  # Handle encoding issues in LaTeX output
                 cwd=str(self.main_tex_path.parent)
             )
             
@@ -274,6 +281,7 @@ This file was automatically created by the CTMM Build System because it was refe
                     ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                     capture_output=True,
                     text=True,
+                    errors='replace',  # Handle encoding issues in LaTeX output
                     cwd=str(self.main_tex_path.parent)
                 )
                 

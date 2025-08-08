@@ -22,20 +22,36 @@ jobs:
         run: |
           pip install chardet
 
+      - name: Install LaTeX dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-german
+
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
 
-      - name: Set up LaTeX
-        - uses: dante-ev/latex-action@v2.0.0
-        with:
-          root_file: main.tex
+      - name: Run detailed build analysis
+        run: |
+          python3 build_system.py --verbose
+
+      - name: Build LaTeX PDF (Makefile)
+        run: |
+          make build
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: CTMM_PDF
           path: main.pdf
+
+      - name: Upload build reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: build_reports
+          path: |
+            build_report.md
+            build_system.log
 
       - name: Upload build logs (on failure)
         if: failure()
