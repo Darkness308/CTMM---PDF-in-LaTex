@@ -27,15 +27,15 @@ jobs:
           python3 ctmm_build.py
 
       - name: Set up LaTeX
-        - uses: dante-ev/latex-action@v2.0.0
+        uses: dante-ev/latex-action@v2.0.0
         with:
-          root_file: main.tex
+          root_file: main_final.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: CTMM_PDF
-          path: main.pdf
+          path: main_final.pdf
 
       - name: Upload build logs (on failure)
         if: failure()

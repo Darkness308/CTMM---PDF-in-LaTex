@@ -337,3 +337,12 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+
+# CTMM-specific build management files
+*.backup
+build_report.md
+build_log.txt
+__pycache__/
+*.pyc
+build_error_*.log
+build_system.log
