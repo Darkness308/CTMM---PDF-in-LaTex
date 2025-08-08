@@ -1,205 +1,211 @@
-# Copilot Instructions for CTMM-System
+# GitHub Copilot Instructions for CTMM LaTeX System
+
+Always follow these instructions first and only search for additional information if something in these instructions is incomplete or found to be in error.
 
 ## Project Overview
 
-This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
+This is a **LaTeX-based therapeutic materials system** for creating interactive therapy documents in German. The repository generates a 27-page PDF workbook for mental health therapy including trigger management, depression support, and relationship tools.
 
-- Depression and mood disorders
-- Trigger management 
-- Borderline Personality Disorder (BPD)
-- ADHD, Autism Spectrum Disorder (ASD)
-- Complex PTSD (CPTSD)
-- Relationship dynamics and binding patterns
+## Bootstrap, Build, and Test the Repository
 
-**Language**: Primary content is in German (Deutsch)
+### Required Dependencies
+Run these commands in order to set up your environment:
 
-## Repository Structure
-
-```
-├── main.tex                    # Main LaTeX document (entry point)
-├── style/                      # LaTeX style files (.sty)
-│   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── form-elements.sty      # Interactive form components  
-│   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
-├── modules/                    # Individual therapy modules (.tex)
-│   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
-│   ├── trigger*.tex           # Trigger management modules
-│   ├── depression.tex         # Depression-related content
-│   └── ...                    # Other therapeutic modules
-├── therapie-material/          # Additional therapy resources
-├── ctmm_build.py              # Automated build system (primary)
-├── build_system.py            # Detailed module analysis
-├── Makefile                   # Build commands
-└── .github/workflows/         # CI/CD for PDF generation
-```
-
-## LaTeX Architecture & Conventions
-
-### 🔧 Build System Usage
-
-**Primary Build Command:**
 ```bash
-python3 ctmm_build.py
+# Install LaTeX and German language support
+sudo apt-get update
+sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-german
+
+# Install Python dependencies
+pip install chardet
+
+# Install PDF utilities (optional, for validation)
+sudo apt-get install -y poppler-utils
 ```
 
-**What the build system does:**
-1. Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
-2. Auto-generates missing template files with proper structure
-3. Tests basic build (without modules) and full build
-4. Creates TODO files for new templates with completion guidelines
+**CRITICAL TIMING:** Dependency installation takes 5-10 minutes. NEVER CANCEL - set timeout to 15+ minutes.
 
-**Alternative Commands:**
-```bash
-make check          # Run build system check
-make build          # Build PDF with pdflatex
-make analyze        # Detailed module testing
-python3 build_system.py --verbose  # Granular analysis
+### Primary Build Commands
+
+**Essential workflow - run these commands in order:**
+
+1. **Check build system and dependencies:**
+   ```bash
+   python3 ctmm_build.py
+   ```
+   - Takes ~1.7 seconds
+   - Validates all files exist, auto-generates missing templates
+   - Tests both basic and full builds
+   - **ALWAYS run this first after any changes**
+
+2. **Build the PDF:**
+   ```bash
+   make build
+   ```
+   - Takes ~2.2 seconds (two LaTeX passes for references)
+   - Generates `main.pdf` with 27 pages (~435KB)
+   - **NEVER CANCEL - LaTeX compilation can appear to hang but is working**
+
+3. **Alternative build commands:**
+   ```bash
+   make check          # Same as python3 ctmm_build.py (~1.7 seconds)
+   make clean          # Remove build artifacts (<0.1 seconds)
+   pdflatex -interaction=nonstopmode main.tex  # Single pass (~1.1 seconds)
+   ```
+
+**CRITICAL:** All build times are under 3 seconds. If commands take longer than 30 seconds, something is wrong.
+
+## Validation Requirements
+
+### Manual Functionality Testing
+After making any changes, **ALWAYS:**
+
+1. **Run the complete build workflow:**
+   ```bash
+   make clean
+   python3 ctmm_build.py
+   make build
+   ```
+
+2. **Verify PDF output:**
+   ```bash
+   ls -la main.pdf                    # Should be ~435KB
+   pdfinfo main.pdf | head -5         # Should show 27+ pages
+   ```
+
+3. **Test new module workflow if adding content:**
+   ```bash
+   # Add \input{modules/your-new-module} to main.tex
+   python3 ctmm_build.py              # Auto-generates template
+   make build                         # Verify it compiles
+   ```
+
+### Build System Features
+- **Automatic template generation:** Missing files are created with proper LaTeX structure
+- **Incremental validation:** Tests basic build first, then full build with all modules
+- **TODO file creation:** Generates `TODO_*.md` files for new templates
+- **Error isolation:** Identifies problematic modules automatically
+
+## Repository Structure and Key Files
+
+```
+├── main.tex                    # ENTRY POINT - contains preamble and module imports
+├── style/                      # LaTeX style packages (.sty files)
+│   ├── ctmm-design.sty        # Colors and design elements
+│   ├── form-elements.sty      # Interactive form components
+│   └── ctmm-diagrams.sty      # Custom diagrams
+├── modules/                    # Individual therapy content (.tex files)
+│   ├── depression.tex         # Depression management content
+│   ├── triggermanagement.tex  # Trigger coping strategies
+│   └── arbeitsblatt-*.tex     # Interactive worksheets
+├── ctmm_build.py              # PRIMARY BUILD SYSTEM - always use this
+├── Makefile                   # Make commands for building
+└── .github/workflows/         # CI/CD automation
 ```
 
-### 📄 LaTeX Best Practices
+## Working with the Codebase
 
-#### Package Loading Rules
-- **CRITICAL**: All `\usepackage{...}` commands MUST be in the preamble of `main.tex`
-- **NEVER** load packages in modules or after `\begin{document}`
-- Error: `Can be used only in preamble` → Move package to preamble
+### LaTeX Architecture Rules
+**CRITICAL - Follow these rules exactly:**
 
-#### Custom Macros & Commands
-- Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
-  ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
-  ```
-- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+1. **Package Loading:**
+   - ALL `\usepackage{...}` commands MUST be in `main.tex` preamble
+   - NEVER load packages in modules or after `\begin{document}`
+   - Error "Can be used only in preamble" means package is in wrong location
 
-#### Module Development
-- Modules should contain ONLY content, not package definitions
-- Use existing macros and commands defined in preamble/style files
-- Keep modules focused on single therapeutic concepts
+2. **Checkbox Commands:**
+   - Use ONLY `\checkbox` and `\checkedbox` macros
+   - NEVER use `\Box` or `\blacksquare` directly (causes errors)
 
-### 🎨 CTMM Design System
+3. **Module Development:**
+   - Modules contain ONLY content, not package definitions
+   - Use existing macros defined in preamble/style files
+   - Test modules by temporarily commenting others in main.tex
 
-**Color Scheme:**
-- `ctmmBlue` - Primary blue for headers and structure
-- `ctmmOrange` - Accent orange for highlights  
-- `ctmmGreen` - Green for positive elements
-- `ctmmPurple` - Purple for special sections
+### Adding New Content
 
-**Custom Elements:**
-- `\begin{ctmmBlueBox}{Title}` - Styled info boxes
-- Form elements from `form-elements.sty`
-- Navigation system with `\faCompass` icons
-- Interactive PDF features with hyperref
+**Standard workflow for new modules:**
 
-## Development Workflow
-
-### Adding New Modules
-
-1. **Reference in main.tex:**
+1. **Add reference to main.tex:**
    ```latex
-   \input{modules/my-new-module}
+   \input{modules/your-module-name}
    ```
 
 2. **Run build system:**
    ```bash
    python3 ctmm_build.py
    ```
+   - Creates `modules/your-module-name.tex` template
+   - Creates `modules/TODO_your-module-name.md` task list
 
-3. **Auto-generated files:**
-   - `modules/my-new-module.tex` - Template with basic structure
-   - `modules/TODO_my-new-module.md` - Task list for completion
+3. **Complete module content and test:**
+   ```bash
+   make build          # Verify compilation
+   # Remove TODO file when complete
+   ```
 
-4. **Complete the module** and remove TODO file when finished
+### Common Commands Reference
 
-### Troubleshooting Common Issues
+```bash
+# Essential commands (use these regularly)
+python3 ctmm_build.py           # Check dependencies and build system
+make build                      # Build final PDF  
+make clean                      # Clean up artifacts
 
-**Build Errors:**
-- `Undefined control sequence` → Check if macro is defined in preamble
-- `Command already defined` → Remove duplicate macro definitions
-- Missing file errors → Run `ctmm_build.py` to auto-generate templates
+# Alternative commands
+make check                      # Same as ctmm_build.py
+pdflatex -interaction=nonstopmode main.tex  # Direct LaTeX compilation
 
-**Module Guidelines:**
-- Use semantic section structure: `\section{Title}`, `\subsection{}`
-- Include therapeutic instructions in German
-- Add form elements for interactive use
-- Test individual modules by temporarily commenting others
+# Troubleshooting
+python3 build_system.py --verbose    # Detailed analysis (may have encoding issues)
+```
+
+## Troubleshooting and Validation
+
+### Common Issues and Solutions
+
+1. **Build fails with "language 'nil'" error:**
+   - Install German language support: `sudo apt-get install texlive-lang-german`
+
+2. **"Undefined control sequence" errors:**
+   - Check if macro is defined in main.tex preamble
+   - Ensure you're using `\checkbox` not `\Box`
+
+3. **Missing file errors:**
+   - Run `python3 ctmm_build.py` to auto-generate templates
+
+4. **"Can be used only in preamble" error:**
+   - Move `\usepackage{...}` command to main.tex before `\begin{document}`
+
+### Validation Checklist
+Before completing any work:
+- [ ] Run `python3 ctmm_build.py` - must show "✓ PASS" for both builds
+- [ ] Run `make build` - must generate main.pdf successfully
+- [ ] Verify PDF has expected content and page count
+- [ ] Test new modules compile without errors
+- [ ] Check that no TODO files remain for completed work
+
+## GitHub Actions and CI
+
+The repository uses automated PDF building via `.github/workflows/latex-build.yml`:
+- Triggers on push/PR to main branch
+- Installs dependencies, runs build system, generates PDF
+- Uploads PDF and logs as artifacts
+- **Note:** Current workflow has minor syntax issue on line 30 (extra dash)
 
 ## Content Guidelines
 
-### 🧠 Therapeutic Content
+- **Language:** Primary content in German (formal therapeutic language)
+- **Sensitive content:** Mental health therapy materials - maintain professional tone
+- **File encoding:** UTF-8 for all files
+- **LaTeX conventions:** Use semantic structure (`\section`, `\subsection`)
 
-**Sensitive Material**: This repository contains mental health resources. When contributing:
+## Critical Reminders
 
-- **Respect privacy**: No personal information in examples
-- **Clinical accuracy**: Ensure therapeutic techniques are evidence-based
-- **Cultural sensitivity**: Content is designed for German-speaking therapy contexts
-- **Professional tone**: Maintain therapeutic, non-judgmental language
+- **NEVER CANCEL** build commands - they complete in under 3 seconds
+- **ALWAYS** run `python3 ctmm_build.py` before building after changes  
+- **VALIDATE** every change with complete build workflow
+- **TEST** new content by building and verifying PDF output
+- **USE** the build system rather than manual LaTeX commands for reliability
 
-**Content Types:**
-- **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
-- **Trigger Management**: Coping strategies and identification tools
-- **Psychoeducation**: Information about mental health conditions
-- **Relationship Tools**: Communication and binding pattern resources
-
-### 🇩🇪 German Language Context
-
-- Use formal therapeutic German (Sie-Form for clients)
-- Medical/psychological terminology should be accurate
-- Include pronunciation guides for technical terms when helpful
-- Maintain consistency in therapeutic vocabulary
-
-## Technical Requirements
-
-### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
-- **Font encoding**: T1 with UTF-8 input
-- **Language**: ngerman babel
-- **PDF features**: Interactive forms, bookmarks, metadata
-
-### Development Environment
-- **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
-- **GitHub Codespace**: Pre-configured environment available
-- **CI/CD**: Automated PDF building via GitHub Actions
-
-## Contributing Best Practices
-
-### Code Reviews
-- Test builds before submitting PR
-- Verify PDF output renders correctly
-- Check for LaTeX compilation warnings
-- Ensure German text is properly encoded
-- Validate therapeutic content accuracy
-
-### Documentation Updates
-- Update README.md for new features or conventions
-- Document new macros or style changes
-- Include usage examples for complex components
-- Maintain this Copilot instructions file
-
-### Git Workflow
-- Use descriptive commit messages in English
-- Reference issue numbers when applicable
-- Keep commits focused on single changes
-- Test thoroughly before pushing
-
----
-
-## Quick Reference
-
-**Build Commands:**
-- `python3 ctmm_build.py` - Main build system
-- `make check` - Quick dependency check
-- `make build` - Generate PDF
-- `make clean` - Remove artifacts
-
-**Key Files:**
-- `main.tex` - Document entry point and preamble
-- `style/*.sty` - Design and component definitions
-- `modules/*.tex` - Individual therapy content
-
-**Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
-- `\begin{ctmmBlueBox}{title}` - Styled info boxes
-- `\textcolor{ctmmBlue}{text}` - CTMM colors
-
-Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
+Remember: This system generates professional therapeutic materials requiring both LaTeX expertise and sensitivity to mental health contexts.
