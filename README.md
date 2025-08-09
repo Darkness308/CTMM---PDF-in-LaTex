@@ -120,6 +120,29 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 
 4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
 
+### Dokumentkonvertierung und Over-Escaping Fix
+
+**Problem:** Beim Konvertieren von Word-Dokumenten zu LaTeX können übermäßig escaped Befehle entstehen (z.B. `\textbackslash{}section` statt `\section`).
+
+**Lösung:**
+```bash
+# Word-Dokumente zu LaTeX konvertieren
+make convert
+
+# Over-escaped LaTeX-Dateien reparieren
+make convert-clean
+
+# Einzelne Datei konvertieren
+python3 document_converter.py --file "datei.docx"
+```
+
+**Was wird behoben:**
+- `\textbackslash{}section` → `\section`
+- `\textbackslash{}textbf\textbackslash{}{Text\textbackslash{}}` → `\textbf{Text}`
+- `\textbackslash{}begin\textbackslash{}{itemize\textbackslash{}}` → `\begin{itemize}`
+
+Siehe `CONVERSION_README.md` für Details.
+
 **README regelmäßig pflegen:**
 - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
 
