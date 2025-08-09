@@ -20,6 +20,9 @@ main_basic_test.*
 *.temp.*
 *.test_*.*
 
+## Generated/converted files:
+converted/
+
 ## Python cache files:
 __pycache__/
 *.py[cod]
