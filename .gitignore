@@ -14,11 +14,15 @@
 
 ## CTMM Build System files:
 build_system.log
+build_manager.log
 build_report.md
 build_error_*.log
 main_basic_test.*
+*.basic_test.*
 *.temp.*
 *.test_*.*
+latex_test.*
+test_packages.*
 
 ## Python cache files:
 __pycache__/
