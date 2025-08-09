@@ -8,48 +8,50 @@
 \definecolor{ctmmPurple}{HTML}{7B1FA2}
 \definecolor{ctmmGray}{HTML}{757575}
 \definecolor{ctmmYellow}{HTML}{FFC107}
+\definecolor{ctmmBlack}{HTML}{000000}
+\definecolor{ctmmWhite}{HTML}{FFFFFF}
 
 % tcolorbox für CTMM-Boxen
 \RequirePackage{tcolorbox}
 
 % Box-Stile definieren
 \newtcolorbox{ctmmBlueBox}[2][]{
-  colback=ctmmBlue!5!white,
+  colback=ctmmBlue!5!ctmmWhite,
   colframe=ctmmBlue,
   title=#2,
   #1
 }
 
 \newtcolorbox{ctmmGreenBox}[2][]{
-  colback=ctmmGreen!5!white,
+  colback=ctmmGreen!5!ctmmWhite,
   colframe=ctmmGreen,
   title=#2,
   #1
 }
 
 \newtcolorbox{ctmmOrangeBox}[2][]{
-  colback=ctmmOrange!5!white,
+  colback=ctmmOrange!5!ctmmWhite,
   colframe=ctmmOrange,
   title=#2,
   #1
 }
 
 \newtcolorbox{ctmmRedBox}[2][]{
-  colback=ctmmRed!5!white,
+  colback=ctmmRed!5!ctmmWhite,
   colframe=ctmmRed,
   title=#2,
   #1
 }
 
 \newtcolorbox{ctmmPurpleBox}[2][]{
-  colback=ctmmPurple!5!white,
+  colback=ctmmPurple!5!ctmmWhite,
   colframe=ctmmPurple,
   title=#2,
   #1
 }
 
 \newtcolorbox{ctmmYellowBox}[2][]{
-  colback=ctmmYellow!10!white,
+  colback=ctmmYellow!10!ctmmWhite,
   colframe=ctmmYellow,
   coltext=ctmmGray,
   coltitle=black,
@@ -60,10 +62,10 @@
 
 % Kapitel-spezifische Boxen für das Navigationssystem
 \newtcolorbox{ctmmGreenChapterBox}[2][]{
-  colback=ctmmGreen!8!white,
+  colback=ctmmGreen!8!ctmmWhite,
   colframe=ctmmGreen,
-  coltext=black,
-  coltitle=white,
+  coltext=ctmmBlack,
+  coltitle=ctmmWhite,
   fonttitle=\Large\bfseries,
   title=🟢 #2,
   enhanced,
@@ -72,10 +74,10 @@
 }
 
 \newtcolorbox{ctmmRedChapterBox}[2][]{
-  colback=ctmmRed!8!white,
+  colback=ctmmRed!8!ctmmWhite,
   colframe=ctmmRed,
-  coltext=black,
-  coltitle=white,
+  coltext=ctmmBlack,
+  coltitle=ctmmWhite,
   fonttitle=\Large\bfseries,
   title=🔴 #2,
   enhanced,
@@ -84,10 +86,10 @@
 }
 
 \newtcolorbox{ctmmYellowChapterBox}[2][]{
-  colback=ctmmYellow!8!white,
+  colback=ctmmYellow!8!ctmmWhite,
   colframe=ctmmYellow,
-  coltext=black,
-  coltitle=black,
+  coltext=ctmmBlack,
+  coltitle=ctmmBlack,
   fonttitle=\Large\bfseries,
   title=🟡 #2,
   enhanced,
@@ -96,10 +98,10 @@
 }
 
 \newtcolorbox{ctmmPurpleChapterBox}[2][]{
-  colback=ctmmPurple!8!white,
+  colback=ctmmPurple!8!ctmmWhite,
   colframe=ctmmPurple,
-  coltext=black,
-  coltitle=white,
+  coltext=ctmmBlack,
+  coltitle=ctmmWhite,
   fonttitle=\Large\bfseries,
   title=📝 #2,
   enhanced,

@@ -127,7 +127,7 @@ class CTMMBuildSystem:
 % \\RequirePackage{{tikz}}
 
 % TODO: Add color definitions here
-% \\definecolor{{ctmmBlue}}{{RGB}}{{52, 152, 219}}
+% \\definecolor{{ctmmNewColor}}{{HTML}}{{003087}}  % Example: Use existing ctmmBlue color
 
 % TODO: Add commands and environments here
 % \\newcommand{{\\exampleCommand}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
