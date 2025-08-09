@@ -67,10 +67,18 @@ python3 build_system.py --verbose  # Granular analysis
 - Define custom macros centrally in preamble or style files
 - **Checkbox Convention**: Use predefined macros only:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[fieldname]{label}    % Interactive checkbox from form-elements.sty
+  \ctmmTextField[width]{default}{name}  % Text input field
+  \ctmmRadioButton{group}{value}{label} % Radio button
   ```
 - **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- **Color Usage**: Use predefined CTMM colors from `ctmm-design.sty`:
+  ```latex
+  \textcolor{ctmmBlue}{text}    % Primary blue
+  \textcolor{ctmmOrange}{text}  % Accent orange  
+  \textcolor{ctmmGreen}{text}   % Success/positive green
+  \textcolor{ctmmPurple}{text}  % Special sections
+  ```
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -80,14 +88,21 @@ python3 build_system.py --verbose  # Granular analysis
 ### 🎨 CTMM Design System
 
 **Color Scheme:**
-- `ctmmBlue` - Primary blue for headers and structure
-- `ctmmOrange` - Accent orange for highlights  
-- `ctmmGreen` - Green for positive elements
-- `ctmmPurple` - Purple for special sections
+- `ctmmBlue` - Primary blue for headers and structure (`#003087`)
+- `ctmmOrange` - Accent orange for highlights (`#FF6200`)
+- `ctmmGreen` - Green for positive elements (`#4CAF50`)
+- `ctmmPurple` - Purple for special sections (`#7B1FA2`)
+- `ctmmRed` - Red for warnings/alerts (`#D32F2F`)
+- `ctmmGray` - Gray for secondary text (`#757575`)
+- `ctmmYellow` - Yellow for highlights (`#FFC107`)
 
 **Custom Elements:**
-- `\begin{ctmmBlueBox}{Title}` - Styled info boxes
-- Form elements from `form-elements.sty`
+- `\begin{ctmmBlueBox}{Title}` - Blue styled info boxes
+- `\begin{ctmmGreenBox}{Title}` - Green styled info boxes  
+- `\begin{ctmmOrangeBox}{Title}` - Orange styled info boxes
+- `\ctmmTextField[width]{default}{name}` - Interactive text fields
+- `\ctmmCheckBox[name]{label}` - Interactive checkboxes
+- `\ctmmRadioButton{group}{value}{label}` - Radio buttons
 - Navigation system with `\faCompass` icons
 - Interactive PDF features with hyperref
 
@@ -115,14 +130,22 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Build Errors:**
 - `Undefined control sequence` → Check if macro is defined in preamble
-- `Command already defined` → Remove duplicate macro definitions
+- `Command already defined` → Remove duplicate macro definitions  
 - Missing file errors → Run `ctmm_build.py` to auto-generate templates
+- `Can be used only in preamble` → Move `\usepackage` to main.tex preamble
+- `File not found` → Check file paths and ensure modules are referenced correctly
+
+**Form Element Issues:**
+- Interactive forms not working → Check hyperref package is loaded
+- Checkbox styling issues → Use `\ctmmCheckBox` instead of raw LaTeX symbols
+- Text field problems → Verify `\ctmmTextField` syntax: `[width]{default}{name}`
 
 **Module Guidelines:**
 - Use semantic section structure: `\section{Title}`, `\subsection{}`
 - Include therapeutic instructions in German
 - Add form elements for interactive use
 - Test individual modules by temporarily commenting others
+- **Never load packages in modules** - only in main.tex preamble
 
 ## Content Guidelines
 
@@ -137,9 +160,21 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Content Types:**
 - **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
+  - `arbeitsblatt-checkin.tex` - Daily check-in forms
+  - `arbeitsblatt-trigger.tex` - Trigger identification and management
+  - `arbeitsblatt-depression-monitoring.tex` - Depression tracking
 - **Trigger Management**: Coping strategies and identification tools
+  - `triggermanagement.tex` - Main trigger management content
+  - `safewords.tex` - Safe word systems for couples
 - **Psychoeducation**: Information about mental health conditions
+  - `depression.tex` - Depression-related content and strategies
+  - `bindungsleitfaden.tex` - Attachment and binding patterns
 - **Relationship Tools**: Communication and binding pattern resources
+  - `therapiekoordination.tex` - Therapy coordination between partners
+  - `notfallkarten.tex` - Emergency/crisis cards
+- **System Components**: Navigation and interactive elements
+  - `navigation-system.tex` - Document navigation structure
+  - `interactive.tex` - Interactive form demonstrations
 
 ### 🇩🇪 German Language Context
 
@@ -152,23 +187,38 @@ python3 build_system.py --verbose  # Granular analysis
 
 ### LaTeX Dependencies
 - **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
-- **Font encoding**: T1 with UTF-8 input
+- **Font encoding**: T1 with UTF-8 input  
 - **Language**: ngerman babel
 - **PDF features**: Interactive forms, bookmarks, metadata
+- **TikZ Usage**: Custom diagrams in `ctmm-diagrams.sty`, form element styling
+- **Form System**: Based on hyperref package for interactive PDF forms
 
 ### Development Environment
 - **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
+  - Essential packages: `texlive-latex-base`, `texlive-latex-extra`, `texlive-latex-recommended`
+  - Font packages: `texlive-fonts-extra` (includes FontAwesome5)
 - **GitHub Codespace**: Pre-configured environment available
 - **CI/CD**: Automated PDF building via GitHub Actions
+- **Package Requirements**: 
+  ```bash
+  # Ubuntu/Debian
+  sudo apt-get install texlive-latex-base texlive-latex-extra texlive-latex-recommended texlive-fonts-extra
+  
+  # Python dependencies
+  pip install chardet
+  ```
 
 ## Contributing Best Practices
 
 ### Code Reviews
 - Test builds before submitting PR
-- Verify PDF output renders correctly
+- Verify PDF output renders correctly  
 - Check for LaTeX compilation warnings
 - Ensure German text is properly encoded
 - Validate therapeutic content accuracy
+- **Test form functionality**: Verify interactive elements work in PDF viewers
+- **Module isolation**: Test individual modules by commenting others in main.tex
+- **Build system validation**: Run `python3 ctmm_build.py` before committing
 
 ### Documentation Updates
 - Update README.md for new features or conventions
@@ -198,8 +248,10 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckBox[name]{label}` - Interactive form checkboxes
+- `\ctmmTextField[width]{default}{name}` - Interactive text fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
+- `\faCompass`, `\faCalendar`, `\faUsers` - FontAwesome icons
 
 Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
