@@ -25,6 +25,9 @@ from typing import List, Tuple, Dict, Set
 import argparse
 import logging
 
+# Import filename_to_title from ctmm_build to avoid code duplication
+from ctmm_build import filename_to_title
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -35,13 +38,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
-
-def filename_to_title(filename):
-    """Convert filename to a readable title."""
-    # Replace underscores and hyphens with spaces, capitalize words
-    title = filename.replace('_', ' ').replace('-', ' ')
-    return ' '.join(word.capitalize() for word in title.split())
 
 
 class CTMMBuildSystem:
