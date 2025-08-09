@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """
-CTMM LaTeX Build System
+CTMM LaTeX Build System with Security Enhancements
 Scalable, modular and efficient build process with automatic error detection and handling.
+Now includes comprehensive package name sanitization to prevent invalid LaTeX command generation.
 
 This script:
 1. Scans main.tex for all usepackage{style/...} and input{modules/...} commands
-2. Checks if referenced files exist, creates minimal templates if missing
+2. Checks if referenced files exist, creates minimal templates if missing with secure command generation
 3. Tests build with temporarily commented input lines  
 4. Gradually reactivates input lines to identify problematic modules
-5. Creates TODO comments and issues for new files
+5. Creates TODO comments and issues for new files with security enhancements
 6. Logs all operations for debugging
+7. Validates all generated LaTeX commands for security compliance
 """
 
 import os
@@ -23,6 +25,14 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
 import logging
+from datetime import datetime
+
+# Import the sanitizer for secure command generation
+try:
+    from build_manager import PackageNameSanitizer
+    SANITIZER_AVAILABLE = True
+except ImportError:
+    SANITIZER_AVAILABLE = False
 
 # Configure logging
 logging.basicConfig(
@@ -42,6 +52,10 @@ class CTMMBuildSystem:
         self.module_files: Set[str] = set()
         self.missing_files: List[str] = []
         self.problematic_modules: List[str] = []
+        self.security_enabled = SANITIZER_AVAILABLE
+        if self.security_enabled:
+            self.sanitizer = PackageNameSanitizer()
+            self.package_mappings: Dict[str, str] = {}  # original -> sanitized
         
     def _read_file_safely(self, file_path: Path) -> str:
         """Read a file with automatic encoding detection."""
@@ -75,6 +89,14 @@ class CTMMBuildSystem:
         style_matches = re.findall(style_pattern, content)
         self.style_files = {f"style/{match}.sty" for match in style_matches}
         
+        # Create package mappings for security if available
+        if self.security_enabled:
+            for style_file in self.style_files:
+                package_name = Path(style_file).stem
+                sanitized_name = self.sanitizer.sanitize_package_name(package_name)
+                self.package_mappings[package_name] = sanitized_name
+                logger.debug(f"Security mapping: {package_name} → {sanitized_name}")
+        
         # Find all input{modules/...} commands  
         module_pattern = r'\\input\{modules/([^}]+)\}'
         module_matches = re.findall(module_pattern, content)
@@ -82,6 +104,8 @@ class CTMMBuildSystem:
         
         logger.info(f"Found {len(self.style_files)} style files: {', '.join(self.style_files)}")
         logger.info(f"Found {len(self.module_files)} module files: {', '.join(self.module_files)}")
+        if self.security_enabled:
+            logger.info(f"Created {len(self.package_mappings)} security mappings")
     
     def check_file_existence(self) -> None:
         """Check if all referenced files exist."""
@@ -101,11 +125,11 @@ class CTMMBuildSystem:
             logger.info("All referenced files exist")
     
     def create_minimal_templates(self) -> None:
-        """Create minimal, commented templates for missing files."""
+        """Create minimal, commented templates for missing files with security enhancements."""
         if not self.missing_files:
             return
             
-        logger.info("Creating minimal templates for missing files...")
+        logger.info("Creating minimal secure templates for missing files...")
         
         for file_path in self.missing_files:
             path = Path(file_path)
@@ -114,14 +138,41 @@ class CTMMBuildSystem:
             path.parent.mkdir(parents=True, exist_ok=True)
             
             if file_path.endswith('.sty'):
-                # Create style file template
+                # Create style file template with security enhancements
+                package_name = path.stem
+                
+                security_content = ""
+                if self.security_enabled:
+                    sanitized_name = self.sanitizer.sanitize_package_name(package_name)
+                    safe_command = self.sanitizer.generate_safe_command_name(package_name)
+                    
+                    # Validate the generated command
+                    if self.sanitizer.validate_latex_command_name(safe_command):
+                        security_content = f"""
+% SECURITY: Enhanced command generation with sanitization
+% Original package name: {package_name}
+% Sanitized name: {sanitized_name}
+% Generated safe command: \\{safe_command}
+\\newcommand{{\\{safe_command}}}{{\\textcolor{{red}}{{[{package_name.upper()} TEMPLATE - NEEDS CONTENT]}}}}
+"""
+                    else:
+                        security_content = f"""
+% WARNING: Could not generate safe command for package: {package_name}
+% Please manually create safe commands following LaTeX naming rules
+"""
+                else:
+                    security_content = f"""
+% TODO: Add secure command definitions here
+% Ensure all command names use only letters and numbers
+"""
+
                 template_content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
-% Created automatically by CTMM Build System
+% Created automatically by CTMM Build System with Security Enhancements
 
 \\NeedsTeXFormat{{LaTeX2e}}[1995/12/01]
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
-
+\\ProvidesPackage{{{package_name}}}[2024/01/01 CTMM {package_name} package - TODO: Add content]
+{security_content}
 % TODO: Add package dependencies here
 % \\RequirePackage{{xcolor}}
 % \\RequirePackage{{tikz}}
@@ -160,18 +211,33 @@ class CTMMBuildSystem:
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(template_content)
                 
-            logger.info(f"Created template: {file_path}")
+            logger.info(f"Created secure template: {file_path}")
             
-            # Create TODO file
+            # Create TODO file with security information
             todo_path = path.parent / f"TODO_{path.stem}.md"
+            
+            security_info = ""
+            if self.security_enabled and path.suffix == '.sty':
+                package_name = path.stem
+                sanitized_name = self.sanitizer.sanitize_package_name(package_name)
+                safe_command = self.sanitizer.generate_safe_command_name(package_name)
+                is_valid = self.sanitizer.validate_latex_command_name(safe_command)
+                
+                security_info = f"""
+## Security Features ✅
+- Package name sanitization: `{package_name}` → `{sanitized_name}`
+- Generated safe command: `\\{safe_command}` {'✅ VALID' if is_valid else '❌ INVALID'}
+- LaTeX command validation: {'PASSED' if is_valid else 'FAILED'}
+"""
+            
             todo_content = f"""# TODO: Complete {path.name}
 
 ## File: {file_path}
-**Status:** Template created, needs content
+**Status:** Secure template created with enhanced safety features, needs content
 
 ## Description
-This file was automatically created by the CTMM Build System because it was referenced in main.tex but missing.
-
+This file was automatically created by the CTMM Build System with Security Enhancements because it was referenced in main.tex but missing.
+{security_info}
 ## Tasks
 - [ ] Add proper content for this {'style package' if path.suffix == '.sty' else 'module'}
 - [ ] Review and test functionality  
@@ -179,7 +245,7 @@ This file was automatically created by the CTMM Build System because it was refe
 - [ ] Remove this TODO file when complete
 
 ## Created
-{datetime.fromtimestamp(path.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S') if path.exists() else 'Just now'} by CTMM Build System
+{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} by CTMM Build System with Security Enhancements
 """
             with open(todo_path, 'w', encoding='utf-8') as f:
                 f.write(todo_content)

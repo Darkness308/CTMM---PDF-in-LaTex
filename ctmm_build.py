@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-CTMM Build System - Simplified Version
+CTMM Build System - Simplified Version with Security Enhancements
 Handles missing files and basic build testing with robust error handling.
+Now includes package name sanitization to prevent invalid LaTeX command generation.
 """
 
 import re
@@ -9,6 +10,14 @@ import subprocess
 import sys
 from pathlib import Path
 import logging
+
+# Import the sanitizer for secure command generation
+try:
+    from build_manager import PackageNameSanitizer
+    SANITIZER_AVAILABLE = True
+except ImportError:
+    SANITIZER_AVAILABLE = False
+    print("Warning: Enhanced security sanitizer not available. Using basic templates.")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -50,17 +59,43 @@ def check_missing_files(files):
 
 
 def create_template(file_path):
-    """Create a minimal template for a missing file."""
+    """Create a minimal template for a missing file with secure command generation."""
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
+        package_name = path.stem
+        
+        # Use secure command generation if available
+        if SANITIZER_AVAILABLE:
+            sanitizer = PackageNameSanitizer()
+            sanitized_name = sanitizer.sanitize_package_name(package_name)
+            safe_command = sanitizer.generate_safe_command_name(package_name)
+            
+            # Validate the command
+            if not sanitizer.validate_latex_command_name(safe_command):
+                logger.warning(f"Generated command \\{safe_command} may be invalid, using fallback")
+                safe_command = "safePlaceholder"
+            
+            security_note = f"""
+% SECURITY: Package name sanitization applied
+% Original name: {package_name} → Sanitized: {sanitized_name}
+% Generated safe command: \\{safe_command}
+\\newcommand{{\\{safe_command}}}{{\\textcolor{{red}}{{[{package_name.upper()} TEMPLATE - NEEDS CONTENT]}}}}
+"""
+        else:
+            # Fallback to basic template without package-specific commands
+            security_note = f"""
+% TODO: Add package-specific commands here
+% Note: Use only valid LaTeX command names (letters and numbers only)
+"""
+
         content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
 \\NeedsTeXFormat{{LaTeX2e}}
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
-
+\\ProvidesPackage{{{package_name}}}[2024/01/01 CTMM {package_name} package]
+{security_note}
 % TODO: Add package dependencies and commands here
 
 % End of package
@@ -82,18 +117,30 @@ def create_template(file_path):
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    # Create TODO file
+    # Create TODO file with security information
     todo_path = path.parent / f"TODO_{path.stem}.md"
+    
+    security_info = ""
+    if SANITIZER_AVAILABLE and file_path.endswith('.sty'):
+        sanitizer = PackageNameSanitizer()
+        sanitized_name = sanitizer.sanitize_package_name(path.stem)
+        security_info = f"""
+## Security Features
+- ✅ Package name sanitization applied: `{path.stem}` → `{sanitized_name}`
+- ✅ Safe LaTeX command generation used
+- ✅ Command name validation performed
+"""
+    
     todo_content = f"""# TODO: Complete {path.name}
 
-**Status:** Template created, needs content
-
+**Status:** Template created with security enhancements, needs content
+{security_info}
 ## Tasks
 - [ ] Add proper content
 - [ ] Review and test functionality
 - [ ] Update documentation
 
-Created by CTMM Build System
+Created by CTMM Build System with Security Enhancements
 """
     with open(todo_path, 'w', encoding='utf-8') as f:
         f.write(todo_content)
@@ -182,8 +229,13 @@ def test_full_build(main_tex_path="main.tex"):
 
 
 def main():
-    """Run the CTMM build system check."""
-    logger.info("CTMM Build System - Starting check...")
+    """Run the CTMM build system check with security enhancements."""
+    logger.info("CTMM Build System with Security Enhancements - Starting check...")
+    
+    if SANITIZER_AVAILABLE:
+        logger.info("✅ Enhanced security sanitization is ACTIVE")
+    else:
+        logger.warning("⚠️ Enhanced security sanitization is NOT available")
 
     # Scan for references
     style_files, module_files = scan_references()
@@ -197,7 +249,7 @@ def main():
     if missing_files:
         logger.warning("Found %d missing files", len(missing_files))
         for file_path in missing_files:
-            logger.info("Creating template: %s", file_path)
+            logger.info("Creating secure template: %s", file_path)
             create_template(file_path)
     else:
         logger.info("All referenced files exist")
@@ -206,20 +258,40 @@ def main():
     basic_ok = test_basic_build()
     full_ok = test_full_build()
 
+    # Security validation if available
+    security_status = "N/A"
+    if SANITIZER_AVAILABLE:
+        try:
+            sanitizer = PackageNameSanitizer()
+            # Check existing style files for security
+            security_issues = 0
+            for style_file in style_files:
+                package_name = Path(style_file).stem
+                safe_command = sanitizer.generate_safe_command_name(package_name)
+                if not sanitizer.validate_latex_command_name(safe_command):
+                    security_issues += 1
+            
+            security_status = f"✅ SECURE ({security_issues} issues)" if security_issues == 0 else f"⚠️ {security_issues} ISSUES"
+        except Exception as e:
+            security_status = f"❌ ERROR: {e}"
+
     # Summary
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
     print(f"Style files: {len(style_files)}")
     print(f"Module files: {len(module_files)}")
-    print(f"Missing files: {len(missing_files)} (templates created)")
+    print(f"Missing files: {len(missing_files)} (secure templates created)")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
+    print(f"Security status: {security_status}")
 
     if missing_files:
         print("\nNEXT STEPS:")
-        print("- Review and complete the created template files")
+        print("- Review and complete the created secure template files")
         print("- Remove TODO_*.md files when content is complete")
+        if SANITIZER_AVAILABLE:
+            print("- All templates include security enhancements")
 
     return 0 if (basic_ok and full_ok) else 1
 
