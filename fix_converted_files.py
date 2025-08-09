@@ -42,17 +42,27 @@ def fix_latex_syntax(content: str) -> str:
         ('\\section{\\section{', '\\section{'),
         ('\\subsection{\\subsection{', '\\subsection{'),
         
-        # Fix emoji and special symbols
-        ('🧩', '\\textcolor{ctmmBlue}{\\faIcon{puzzle-piece}}'),
-        ('🎯', '\\textcolor{ctmmGreen}{\\faIcon{target}}'),
-        ('🧭', '\\textcolor{ctmmOrange}{\\faIcon{compass}}'),
-        ('💡', '\\textcolor{ctmmYellow}{\\faIcon{lightbulb}}'),
-        ('🟢', '\\textcolor{ctmmGreen}{\\faIcon{circle}}'),
-        ('🔴', '\\textcolor{ctmmRed}{\\faIcon{circle}}'),
-        ('🟡', '\\textcolor{ctmmYellow}{\\faIcon{circle}}'),
-        ('📝', '\\textcolor{ctmmBlue}{\\faIcon{edit}}'),
-        ('🛑', '\\textcolor{ctmmRed}{\\faIcon{stop}}'),
-        ('🧠', '\\textcolor{ctmmPurple}{\\faIcon{brain}}'),
+        # Fix emoji and special symbols (using correct FontAwesome5 syntax)
+        ('🧩', '\\textcolor{ctmmBlue}{\\faPuzzlePiece}'),
+        ('🎯', '\\textcolor{ctmmGreen}{\\faBullseye}'),
+        ('🧭', '\\textcolor{ctmmOrange}{\\faCompass}'),
+        ('💡', '\\textcolor{ctmmYellow}{\\faLightbulb}'),
+        ('🟢', '\\textcolor{ctmmGreen}{\\faCircle}'),
+        ('🔴', '\\textcolor{ctmmRed}{\\faCircle}'),
+        ('🟡', '\\textcolor{ctmmYellow}{\\faCircle}'),
+        ('📝', '\\textcolor{ctmmBlue}{\\faEdit}'),
+        ('🛑', '\\textcolor{ctmmRed}{\\faStop}'),
+        ('🧠', '\\textcolor{ctmmPurple}{\\faBrain}'),
+        
+        # Fix incorrect FontAwesome syntax in converted files
+        ('\\faIcon{puzzle-piece}', '\\faPuzzlePiece'),
+        ('\\faIcon{target}', '\\faBullseye'),
+        ('\\faIcon{compass}', '\\faCompass'),
+        ('\\faIcon{lightbulb}', '\\faLightbulb'),
+        ('\\faIcon{circle}', '\\faCircle'),
+        ('\\faIcon{edit}', '\\faEdit'),
+        ('\\faIcon{stop}', '\\faStop'),
+        ('\\faIcon{brain}', '\\faBrain'),
     ]
     
     fixed_content = content

@@ -1,17 +1,17 @@
 
 # Enhanced CTMM Build System Report
-Generated: 2025-08-09 01:57:31
+Generated: 2025-08-09 02:00:43
 
 ## Build Summary
 - **Overall Success**: False
 - **Compilation Success**: False
-- **Build Time**: 1.12 seconds
+- **Build Time**: 1.15 seconds
 - **Passes Completed**: 1
 
 ## PDF Analysis
 - **File Generated**: True
-- **File Size**: 480,793 bytes
-- **Page Count**: 30
+- **File Size**: 493,518 bytes
+- **Page Count**: 34
 - **Quality Score**: 80/100
 - **Interactive Forms**: False
 
@@ -22,14 +22,13 @@ Generated: 2025-08-09 01:57:31
 - Add interactive form elements using form-elements.sty
 
 ## Error Analysis
-- **Errors**: 40
-- **Warnings**: 15
+- **Errors**: 90
+- **Warnings**: 28
 - **Critical Issues**: 0
 
 ### Critical Issues
 
 ### Error Recommendations
-- Update package usage or check package documentation
 
 ## Optimization Recommendations
 

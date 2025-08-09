@@ -1,4 +1,4 @@
-\ProvidesPackage{style/form-elements}[2025/08/02 CTMM Form Elements v1.2.0]
+\ProvidesPackage{style/form-elements}[2025/08/02 CTMM Form Elements v1.3.0]
 
 % Required packages
 \RequirePackage{tikz}
@@ -19,6 +19,10 @@
     \newcommand{\@ctmmInteractive}{true}%
 }
 \makeatother
+
+% Simple checkbox commands for non-interactive mode
+\newcommand{\checkbox}{$\square$}
+\newcommand{\checkedbox}{$\blacksquare$}
 
 % Text Field mit verbessertem Design
 % Usage: \ctmmTextField[width]{default text}{field name}

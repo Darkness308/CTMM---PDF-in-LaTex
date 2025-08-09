@@ -353,6 +353,8 @@ class EnhancedBuildSystem:
                 cmd,
                 capture_output=True,
                 text=True,
+                encoding='utf-8',
+                errors='replace',  # Handle encoding issues gracefully
                 check=False,
                 timeout=300  # 5 minute timeout
             )
