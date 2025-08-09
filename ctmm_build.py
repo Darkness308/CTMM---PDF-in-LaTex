@@ -9,6 +9,7 @@ import subprocess
 import sys
 from pathlib import Path
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -86,14 +87,20 @@ def create_template(file_path):
     todo_path = path.parent / f"TODO_{path.stem}.md"
     todo_content = f"""# TODO: Complete {path.name}
 
+## File: {file_path}
 **Status:** Template created, needs content
 
+## Description
+This file was automatically created by the CTMM Build System because it was referenced in main.tex but missing.
+
 ## Tasks
-- [ ] Add proper content
+- [ ] Add proper content for this {'style package' if path.suffix == '.sty' else 'module'}
 - [ ] Review and test functionality
 - [ ] Update documentation
+- [ ] Remove this TODO file when complete
 
-Created by CTMM Build System
+## Created
+{datetime.fromtimestamp(path.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S') if path.exists() else 'Just now'} by CTMM Build System
 """
     with open(todo_path, 'w', encoding='utf-8') as f:
         f.write(todo_content)
