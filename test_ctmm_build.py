@@ -123,6 +123,11 @@ def run_tests():
     return result.wasSuccessful()
 
 
-if __name__ == "__main__":
+def main():
+    """Run all tests and return exit code."""
     success = run_tests()
-    sys.exit(0 if success else 1)
+    return 0 if success else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

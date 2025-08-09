@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
@@ -66,7 +67,7 @@ class CTMMBuildSystem:
         
         if not self.main_tex_path.exists():
             logger.error(f"Main TeX file {self.main_tex_path} not found!")
-            sys.exit(1)
+            raise FileNotFoundError(f"Main TeX file {self.main_tex_path} not found!")
             
         content = self._read_file_safely(self.main_tex_path)
             
@@ -383,7 +384,7 @@ def main():
     build_system = CTMMBuildSystem(args.main_tex)
     success = build_system.run_full_check()
     
-    sys.exit(0 if success else 1)
+    return 0 if success else 1
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
