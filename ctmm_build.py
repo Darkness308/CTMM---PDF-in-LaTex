@@ -14,6 +14,14 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
+# Import LaTeX validator if available
+try:
+    from latex_validator import LaTeXValidator
+    VALIDATOR_AVAILABLE = True
+except ImportError:
+    VALIDATOR_AVAILABLE = False
+    logger.debug("LaTeX validator not available for escaping checks")
+
 
 def filename_to_title(filename):
     """Convert filename to a readable title."""
@@ -181,9 +189,46 @@ def test_full_build(main_tex_path="main.tex"):
         return False
 
 
+def validate_latex_files():
+    """Validate LaTeX files for excessive escaping issues."""
+    if not VALIDATOR_AVAILABLE:
+        logger.debug("Skipping LaTeX validation - validator not available")
+        return True
+        
+    logger.info("Validating LaTeX files for escaping issues...")
+    validator = LaTeXValidator()
+    
+    # Check main.tex and modules directory
+    issues_found = False
+    
+    for path in [Path("main.tex"), Path("modules")]:
+        if not path.exists():
+            continue
+            
+        if path.is_file():
+            is_valid, issues, _ = validator.validate_file(path)
+            if not is_valid:
+                logger.warning(f"LaTeX escaping issues found in {path}: {list(issues.keys())}")
+                issues_found = True
+        elif path.is_dir():
+            results = validator.validate_directory(path, fix=False)
+            for file_path, result in results.items():
+                if not result['valid']:
+                    logger.warning(f"LaTeX escaping issues found in {file_path}: {list(result['issues'].keys())}")
+                    issues_found = True
+    
+    if not issues_found:
+        logger.info("✓ No LaTeX escaping issues found")
+    
+    return not issues_found
+
+
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
+
+    # Validate LaTeX files for escaping issues
+    latex_valid = validate_latex_files()
 
     # Scan for references
     style_files, module_files = scan_references()
@@ -210,6 +255,7 @@ def main():
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
+    print(f"LaTeX validation: {'✓ PASS' if latex_valid else '✗ ISSUES FOUND'}")
     print(f"Style files: {len(style_files)}")
     print(f"Module files: {len(module_files)}")
     print(f"Missing files: {len(missing_files)} (templates created)")
@@ -220,8 +266,13 @@ def main():
         print("\nNEXT STEPS:")
         print("- Review and complete the created template files")
         print("- Remove TODO_*.md files when content is complete")
+    
+    if not latex_valid:
+        print("\nLATEX VALIDATION:")
+        print("- Escaping issues found in LaTeX files")
+        print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
 
-    return 0 if (basic_ok and full_ok) else 1
+    return 0 if (basic_ok and full_ok and latex_valid) else 1
 
 
 if __name__ == "__main__":
