@@ -65,12 +65,13 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Checkbox Convention**: Use CTMM form elements instead of direct symbols:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckbox{label}     % Interactive checkbox from form-elements.sty
+  $\square$                % Basic empty checkbox (avoid if possible)
   ```
 - **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- **Form Elements**: Use `\ctmmCheckbox{}`, `\ctmmRadioButton{}{}{}`, `\ctmmTextfield{}{}` from `form-elements.sty`
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -117,6 +118,14 @@ python3 build_system.py --verbose  # Granular analysis
 - `Undefined control sequence` → Check if macro is defined in preamble
 - `Command already defined` → Remove duplicate macro definitions
 - Missing file errors → Run `ctmm_build.py` to auto-generate templates
+- `Unknown option 'ngerman'` → Install `texlive-lang-german` package
+- `Can be used only in preamble` → Move `\usepackage{}` commands to preamble in `main.tex`
+
+**Common Installation Issues:**
+- **Missing pdflatex**: Install `texlive-latex-base` 
+- **Missing German support**: Install `texlive-lang-german`
+- **Missing fonts**: Install `texlive-fonts-recommended` and `texlive-fonts-extra`
+- **Missing packages**: Install `texlive-latex-extra` for additional LaTeX packages
 
 **Module Guidelines:**
 - Use semantic section structure: `\section{Title}`, `\subsection{}`
@@ -151,10 +160,19 @@ python3 build_system.py --verbose  # Granular analysis
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb, pifont
 - **Font encoding**: T1 with UTF-8 input
-- **Language**: ngerman babel
+- **Language**: ngerman babel (requires `texlive-lang-german` package)
 - **PDF features**: Interactive forms, bookmarks, metadata
+
+**Installation Commands:**
+```bash
+# Ubuntu/Debian systems
+sudo apt install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-german
+
+# For Python dependencies
+pip install chardet
+```
 
 ### Development Environment
 - **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
@@ -181,6 +199,8 @@ python3 build_system.py --verbose  # Granular analysis
 - Reference issue numbers when applicable
 - Keep commits focused on single changes
 - Test thoroughly before pushing
+- **Validate YAML**: Check GitHub workflow files with `yamllint` before committing
+- **Test locally**: Run `make check` and `python3 ctmm_build.py` before pushing
 
 ---
 
@@ -198,8 +218,17 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckbox{label}` - Interactive checkbox from form-elements.sty
+- `\ctmmRadioButton{group}{value}{label}` - Radio button
+- `\ctmmTextfield{name}{width}` - Text input field
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
+
+**CTMM Colors:**
+- `ctmmBlue` - Primary blue (#003087)
+- `ctmmGreen` - Success green (#4CAF50)
+- `ctmmOrange` - Accent orange (#FF6200)
+- `ctmmRed` - Alert red (#D32F2F)
+- `ctmmPurple` - Special purple (#7B1FA2)
 
 Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
