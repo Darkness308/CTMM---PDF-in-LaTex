@@ -9,6 +9,7 @@ import subprocess
 import sys
 from pathlib import Path
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -93,7 +94,7 @@ def create_template(file_path):
 - [ ] Review and test functionality
 - [ ] Update documentation
 
-Created by CTMM Build System
+Created {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} by CTMM Build System
 """
     with open(todo_path, 'w', encoding='utf-8') as f:
         f.write(todo_content)
