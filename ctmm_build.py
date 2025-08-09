@@ -138,6 +138,11 @@ def test_basic_build(main_tex_path="main.tex"):
             logger.error("✗ Basic build failed")
             logger.error("LaTeX errors detected (check %s.log for details)",
                          temp_file)
+            # Log specific errors for debugging
+            if result.stdout and "Error" in result.stdout:
+                logger.debug("LaTeX stdout errors: %s", result.stdout[-500:])
+            if result.stderr:
+                logger.debug("LaTeX stderr: %s", result.stderr[-500:])
 
         return success
 
