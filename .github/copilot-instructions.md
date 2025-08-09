@@ -65,12 +65,12 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Checkbox Convention**: Use predefined macros from `form-elements.sty`:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[field_name]{Label}  % Interactive checkbox with green styling
   ```
 - **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- For other form elements, use `\ctmmTextField[width]{default}{name}` and `\ctmmRadioButton{group}{value}{label}`
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -87,7 +87,10 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Custom Elements:**
 - `\begin{ctmmBlueBox}{Title}` - Styled info boxes
-- Form elements from `form-elements.sty`
+- Form elements from `form-elements.sty`:
+  - `\ctmmCheckBox[field_name]{Label}` - Interactive checkboxes
+  - `\ctmmTextField[width]{default}{name}` - Text input fields  
+  - `\ctmmRadioButton{group}{value}{label}` - Radio buttons
 - Navigation system with `\faCompass` icons
 - Interactive PDF features with hyperref
 
@@ -198,7 +201,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckBox[field_name]{Label}` - Interactive form checkboxes
+- `\ctmmTextField[width]{default}{name}` - Text input fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
