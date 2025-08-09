@@ -20,6 +20,15 @@ main_basic_test.*
 *.temp.*
 *.test_*.*
 
+## Repository cleanup - problematic files:
+modules/Untitled*
+modules/test.*
+modules/*~
+modules/*.md
+*~
+.DS_Store
+Thumbs.db
+
 ## Python cache files:
 __pycache__/
 *.py[cod]
