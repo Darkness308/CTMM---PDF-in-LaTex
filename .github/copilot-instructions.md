@@ -13,6 +13,8 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 
 **Language**: Primary content is in German (Deutsch)
 
+> **Note**: This repository also contains a German README.md with build system documentation. Both documents complement each other for comprehensive project understanding.
+
 ## Repository Structure
 
 ```
@@ -65,12 +67,13 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Form Elements Convention**: Use CTMM form elements from `form-elements.sty`:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[fieldname]{Label}          % Interactive checkbox
+  \ctmmTextField[width]{default}{fieldname} % Text input field
+  \ctmmTextArea[width]{lines}{fieldname}{default} % Multi-line text area
   ```
-- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- **NEVER** use `\Box`, `\blacksquare`, or raw form commands directly (causes undefined control sequence errors)
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -151,7 +154,7 @@ python3 build_system.py --verbose  # Granular analysis
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb, geometry, babel (ngerman), calc, forloop, ifthen, pifont
 - **Font encoding**: T1 with UTF-8 input
 - **Language**: ngerman babel
 - **PDF features**: Interactive forms, bookmarks, metadata
@@ -198,7 +201,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckBox[fieldname]{Label}` - Interactive form checkboxes  
+- `\ctmmTextField[width]{default}{fieldname}` - Text input fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
