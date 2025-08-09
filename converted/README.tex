@@ -63,7 +63,7 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
   \begin{itemize}
   \tightlist
   \item
-    \texttt{\textbackslash{}usepackage{...}} darf nur in der Hauptdatei (z.B. \texttt{main.tex}) vor \texttt{\textbackslash{}begin{document}} stehen, niemals in Modulen oder nach \texttt{\textbackslash{}begin{document}}.
+    \texttt{\usepackage{...}} darf nur in der Hauptdatei (z.B. \texttt{main.tex}) vor \texttt{\begin{document}} stehen, niemals in Modulen oder nach \texttt{\begin{document}}.
   \end{itemize}
 \item
   \textbf{Makros und Befehle:}
@@ -77,15 +77,15 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\\% In der Präambel:}
-\BuiltInTok{\textbackslash{}usepackage}\NormalTok{{}\ExtensionTok{amssymb}\NormalTok{}}
-\FunctionTok{\textbackslash{}newcommand}\NormalTok{{}\ExtensionTok{\textbackslash{}checkbox}\NormalTok{}{}\SpecialStringTok{\$}\SpecialCharTok{\textbackslash{}square}\SpecialStringTok{\$}\NormalTok{}}
-\FunctionTok{\textbackslash{}newcommand}\NormalTok{{}\ExtensionTok{\textbackslash{}checkedbox}\NormalTok{}{}\SpecialStringTok{\$}\SpecialCharTok{\textbackslash{}blacksquare}\SpecialStringTok{\$}\NormalTok{}}
+\BuiltInTok{\usepackage}\NormalTok{{}\ExtensionTok{amssymb}\NormalTok{}}
+\FunctionTok{\newcommand}\NormalTok{{}\ExtensionTok{\checkbox}\NormalTok{}{}\SpecialStringTok{\$}\SpecialCharTok{\square}\SpecialStringTok{\$}\NormalTok{}}
+\FunctionTok{\newcommand}\NormalTok{{}\ExtensionTok{\checkedbox}\NormalTok{}{}\SpecialStringTok{\$}\SpecialCharTok{\blacksquare}\SpecialStringTok{\$}\NormalTok{}}
 \end{Highlighting}
 \end{Shaded}
   \item
-    \textbf{Wichtig:} Verwende in Modulen und Tabellen ausschließlich die Makros \texttt{\textbackslash{}checkbox} und \texttt{\textbackslash{}checkedbox} für Checkboxen. Benutze niemals direkt \texttt{\textbackslash{}Box} oder \texttt{\textbackslash{}blacksquare}, da dies zu \texttt{Undefined\ control\ sequence}-Fehlern führen kann.
+    \textbf{Wichtig:} Verwende in Modulen und Tabellen ausschließlich die Makros \texttt{\checkbox} und \texttt{\checkedbox} für Checkboxen. Benutze niemals direkt \texttt{\Box} oder \texttt{\blacksquare}, da dies zu \texttt{Undefined\ control\ sequence}-Fehlern führen kann.
   \item
-    Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch \texttt{\textbackslash{}Box} oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
+    Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch \texttt{\Box} oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
   \end{itemize}
 \item
   \textbf{Module:}

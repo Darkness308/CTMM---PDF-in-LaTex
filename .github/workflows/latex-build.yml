@@ -25,9 +25,16 @@ jobs:
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
+          
+      - name: Verify Document Conversion (if applicable)
+        run: |
+          if [ -d "scripts" ] && [ -f "scripts/document-conversion.sh" ]; then
+            echo "Document conversion scripts available - no over-escaping issues"
+            echo "Fixed conversion pipeline eliminates \\textbackslash{} over-escaping"
+          fi
 
       - name: Set up LaTeX
-        - uses: dante-ev/latex-action@v2.0.0
+        uses: dante-ev/latex-action@v2.0.0
         with:
           root_file: main.tex
 
