@@ -19,6 +19,7 @@ import sys
 import tempfile
 import shutil
 import chardet
+import datetime
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse

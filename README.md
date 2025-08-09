@@ -25,46 +25,110 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## LaTeX-Hinweise für Entwickler
 
-**CTMM Build System:**
+**CTMM Build Manager:**
 
-Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
+Das Projekt verfügt über ein umfassendes automatisiertes Build-Management-System (`build_manager.py`), das folgende erweiterte Funktionen bietet:
 
-### Automatisierte Build-Prüfung
+### Automatisierte Build-Verwaltung
 ```bash
-python3 ctmm_build.py
+# Hauptbefehl - Umfassende Analyse
+python3 build_manager.py
+
+# Oder mit Make-Befehlen
+make analyze     # Vollständige Analyse mit ausführlicher Ausgabe
+make check       # Schnelle Überprüfung und Build-Test
+make build       # PDF erstellen (main.tex)
+make build-ci    # CI-Build (main_final.tex)
 ```
 
-Das Build-System:
+Das Build-Manager-System:
 1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
-2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
-3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
-4. **Testet vollständigen Build** - mit allen Modulen
-5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+2. **Erkennt fehlende Dateien** automatisch und erstellt minimale, gut strukturierte Templates
+3. **Implementiert inkrementelle Tests** die modulspezifische Build-Fehler isolieren
+4. **Erstellt umfassende Build-Reports** in `build_report.md`
+5. **Bietet robuste Fehlerbehandlung** mit hilfreichen Installationsanleitungen
+6. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+
+### Template-Generierungssystem
+
+**Automatische Erstellung:**
+- **Style-Pakete** (`.sty`): Korrekt strukturiert mit `\ProvidesPackage` und TODO-Kommentaren
+- **Module** (`.tex`): Mit Sections, Labels und Platzhalter-Inhalten
+- **TODO-Dateien**: Detaillierte Anleitungen zur Vervollständigung
+
+### Erweiterte Entwicklerworkflow
+
+**Neue Make-Befehle:**
+```bash
+make help         # Zeigt alle verfügbaren Befehle
+make dev-setup    # Komplette Entwicklungsumgebung einrichten
+make report       # Aktuellen Build-Report anzeigen
+make clean        # Build-Artefakte entfernen
+make clean-all    # Alle generierten Dateien entfernen (Vorsicht!)
+make deps         # Python-Abhängigkeiten installieren
+```
+
+### CI/CD-Verbesserungen
+
+- **`main_final.tex`** dient als dediziertes CI-Build-Ziel
+- **GitHub Actions Workflow** wurde repariert und auf `dante-ev/latex-action@v2.0.0` aktualisiert
+- **Erweiterte Fehlerberichterstattung** und Artefakt-Sammlung für fehlgeschlagene Builds
+
+### Verwendungsbeispiele
+
+**Neues Modul hinzufügen:**
+```bash
+# 1. Referenz in main.tex hinzufügen:
+\input{modules/mein-neues-modul}
+
+# 2. Build-Manager ausführen:
+make check
+# oder
+python3 build_manager.py
+
+# 3. Automatisch erstellte Dateien:
+#    - modules/mein-neues-modul.tex (Template mit Grundstruktur)
+#    - modules/TODO_mein-neues-modul.md (Aufgabenliste)
+
+# 4. Inhalt vervollständigen und TODO-Datei entfernen
+```
+
+**Fehlersuche:**
+```bash
+make analyze              # Umfassende Analyse mit inkrementellen Tests
+make report              # Build-Report anzeigen
+cat build_manager.log    # Detaillierte Protokolle prüfen
+cat module_error_*.log   # Spezifische Modulfehler prüfen
+```
 
 ### Modulare Test-Strategie
 
 **Für Entwickler:**
-- Jedes neue Modul wird automatisch erkannt und getestet
-- Fehlende Referenzen werden durch kommentierte Templates ersetzt (kein Dummy-Content)
-- Build bricht nicht mehr bei fehlenden Dateien ab
-- Templates enthalten sinnvolle Struktur mit `\section` und Platzhaltern
+- **Automatische Erkennung** aller Module und inkrementelle Tests
+- **Isolation problematischer Module** durch schrittweise Tests
+- **Detaillierte Fehlerprotokolle** für jedes problematische Modul
+- **Templates mit sinnvoller Struktur** und ohne Dummy-Content
 
 **Erweiterte Analyse:**
-Für granulare Modultests steht `build_system.py` zur Verfügung:
+Das neue System ersetzt sowohl `ctmm_build.py` als auch `build_system.py` und bietet:
 ```bash
-python3 build_system.py --verbose
+python3 build_manager.py --verbose    # Debug-Ausgabe aktivieren
+python3 build_manager.py --main-tex myfile.tex  # Andere Hauptdatei verwenden
 ```
-- Testet Module schrittweise einzeln
-- Identifiziert problematische Module
-- Erstellt detaillierte Build-Reports
-- Protokolliert alle Operationen in `build_system.log`
 
 ### GitHub Workflow Integration
 
-Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigiert:
-- Referenziert nun korrekt `main.tex` (statt dem nicht existierenden `main_final.tex`)
-- Lädt `main.pdf` als Artefakt hoch
-- Kann durch das Build-System bei Fehlern erweitert werden
+Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde verbessert:
+- **Korrekte Syntax** und Update auf neueste Action-Version
+- **Verwendet `main_final.tex`** als dediziertes CI-Build-Ziel  
+- **Lädt `main_final.pdf`** als Artefakt hoch
+- **Sammelt umfassende Fehlerprotokolle** bei Build-Fehlern
+
+### Dokumentation
+
+- **`BUILD_GUIDE.md`**: Umfassende Schnellstart-Dokumentation
+- **`build_report.md`**: Automatisch generierter detaillierter Build-Report
+- **`build_manager.log`**: Vollständige Protokolle aller Build-Operationen
 
 **Typische Fehlerquellen und Best Practices:**
 
