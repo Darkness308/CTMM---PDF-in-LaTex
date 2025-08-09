@@ -19,7 +19,7 @@ import sys
 import tempfile
 import shutil
 import chardet
-from datetime import datetime
+from datetime import datetime  # Used for timestamping TODO files (line 191)
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
