@@ -62,6 +62,7 @@ python3 build_system.py --verbose  # Granular analysis
 - **CRITICAL**: All `\usepackage{...}` commands MUST be in the preamble of `main.tex`
 - **NEVER** load packages in modules or after `\begin{document}`
 - Error: `Can be used only in preamble` → Move package to preamble
+- **If this rule is violated, the LaTeX build will fail with the above error, and the PDF will not be generated until the offending `\usepackage` command is moved to the preamble. This can halt automated builds and block document updates.**
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
@@ -143,7 +144,7 @@ python3 build_system.py --verbose  # Granular analysis
 
 ### 🇩🇪 German Language Context
 
-- Use formal therapeutic German (Sie-Form for clients)
+- Use formal therapeutic German (Sie-Form) for clients throughout all materials, unless a specific context (e.g., informal exercises or direct speech in worksheets) clearly warrants the Du-Form. If in doubt, prefer Sie-Form for consistency and professionalism. When using Du-Form, provide a brief rationale in comments or documentation.
 - Medical/psychological terminology should be accurate
 - Include pronunciation guides for technical terms when helpful
 - Maintain consistency in therapeutic vocabulary
