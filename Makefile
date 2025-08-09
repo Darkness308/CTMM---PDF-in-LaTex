@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help
+.PHONY: build check clean test help unit-test
 
 # Default target
 all: check build
@@ -26,6 +26,11 @@ test:
 	@echo "Testing build system..."
 	python3 ctmm_build.py | grep -E "(PASS|FAIL|ERROR|WARNING)" || true
 
+# Run unit tests
+unit-test:
+	@echo "Running unit tests..."
+	python3 test_ctmm_build.py
+
 # Clean build artifacts
 clean:
 	rm -f *.aux *.log *.out *.toc *.pdf
@@ -45,11 +50,12 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all      - Run check and build (default)"
-	@echo "  check    - Check dependencies and run build system"
-	@echo "  build    - Build the PDF"
-	@echo "  analyze  - Run detailed module analysis"
-	@echo "  test     - Quick test of build system"
-	@echo "  clean    - Remove build artifacts"
-	@echo "  deps     - Install Python dependencies"
-	@echo "  help     - Show this help"
+	@echo "  all       - Run check and build (default)"
+	@echo "  check     - Check dependencies and run build system"
+	@echo "  build     - Build the PDF"
+	@echo "  analyze   - Run detailed module analysis"
+	@echo "  test      - Quick test of build system"
+	@echo "  unit-test - Run unit tests for Python functions"
+	@echo "  clean     - Remove build artifacts"
+	@echo "  deps      - Install Python dependencies"
+	@echo "  help      - Show this help"
