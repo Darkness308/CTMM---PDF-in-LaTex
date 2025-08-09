@@ -70,6 +70,7 @@ python3 build_system.py --verbose  # Granular analysis
   \checkbox        % Empty checkbox: □
   \checkedbox      % Filled checkbox: ■
   ```
+- **Text Fields**: Use the `\ctmmTextField[width]{default text}{field name}` macro for interactive forms
 - **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
 
 #### Module Development
@@ -198,7 +199,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\checkbox` / `\checkedbox` - Form checkboxes  
+- `\ctmmTextField[width]{default text}{field name}` - Interactive text fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
