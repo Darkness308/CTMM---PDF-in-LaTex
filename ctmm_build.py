@@ -152,29 +152,41 @@ def test_basic_build(main_tex_path="main.tex"):
                 cleanup_file.unlink()
 
 
-def test_full_build(main_tex_path="main.tex"):
-    """Test full build with all modules."""
+def test_full_build(main_tex_path="main.tex", multi_pass=True):
+    """Test full build with all modules and optional multi-pass compilation."""
     logger.info("Testing full build (with all modules)...")
 
     try:
-        result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', main_tex_path],
-            capture_output=True,
-            text=True,
-            errors='replace',
-            check=False
-        )
+        passes = 2 if multi_pass else 1
+        
+        for pass_num in range(1, passes + 1):
+            logger.info(f"Pass {pass_num}/{passes}...")
+            
+            result = subprocess.run(
+                ['pdflatex', '-interaction=nonstopmode', main_tex_path],
+                capture_output=True,
+                text=True,
+                errors='replace',
+                check=False
+            )
+            
+            if result.returncode != 0:
+                logger.error(f"Build failed on pass {pass_num}")
+                logger.error("Check main.log for detailed error information")
+                return False
+            else:
+                logger.info(f"Pass {pass_num} completed successfully")
 
-        success = result.returncode == 0
-        if success:
-            logger.info("✓ Full build successful")
-            if Path('main.pdf').exists():
-                logger.info("✓ PDF generated successfully")
+        # Verify PDF output
+        pdf_path = Path(main_tex_path).with_suffix('.pdf')
+        if pdf_path.exists():
+            file_size = pdf_path.stat().st_size
+            logger.info(f"✓ PDF generated successfully ({file_size:,} bytes)")
         else:
-            logger.error("✗ Full build failed")
-            logger.error("Check main.log for detailed error information")
-
-        return success
+            logger.error("PDF was not generated")
+            return False
+        
+        return True
 
     except Exception as e:
         logger.error("Full build test failed: %s", e)

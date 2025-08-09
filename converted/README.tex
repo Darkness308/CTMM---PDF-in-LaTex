@@ -1,0 +1,145 @@
+# CTMM Project Documentation
+
+This repository contains comprehensive LaTeX-based therapeutic materials for the CTMM (Catch-Track-Map-Match) system, designed for creating professional therapy documents for neurodiverse couples dealing with mental health challenges.
+
+## Overview
+
+The CTMM system provides structured therapeutic materials for:
+- Depression and mood disorders
+- Trigger management
+- Borderline Personality Disorder (BPD)
+- ADHD, Autism Spectrum Disorder (ASD)
+- Complex PTSD (CPTSD)
+- Relationship dynamics and binding patterns
+
+## Build System
+
+This project features a comprehensive LaTeX workflow system with:
+- **Enhanced build system** with multi-pass compilation and error handling
+- **Document conversion pipeline** for Word/Markdown to LaTeX conversion
+- **Advanced error analysis** and code optimization recommendations
+- **Automated PDF verification** and quality assurance
+
+### Quick Start
+
+```bash
+# Check build system and dependencies
+python3 ctmm_build.py
+
+# Build PDF with multi-pass compilation
+make build
+
+# Run detailed analysis
+python3 build_system.py --verbose
+```
+
+## Repository Structure
+
+```
+├── main.tex                    # Main LaTeX document
+├── style/                      # LaTeX style files
+│   ├── ctmm-design.sty        # CTMM design elements
+│   ├── form-elements.sty      # Interactive forms
+│   └── ctmm-diagrams.sty      # Custom diagrams
+├── modules/                    # Therapy modules
+├── converted/                  # Converted documents
+├── ctmm_build.py              # Main build system
+├── build_system.py            # Advanced analysis
+├── conversion_pipeline.py     # Document conversion
+└── .github/workflows/         # CI/CD automation
+```
+
+## Document Conversion
+
+The conversion pipeline supports transforming therapy materials from various formats:
+
+```bash
+# Convert single Markdown file
+python3 conversion_pipeline.py --source document.md
+
+# Batch convert directory
+python3 conversion_pipeline.py --source docs/ --batch
+
+# Create therapy tool template
+python3 conversion_pipeline.py --tool "Tool Name" --tool-number 24
+```
+
+## Development Guidelines
+
+### Adding New Modules
+
+1. Reference in `main.tex`: `\input{modules/new-module}`
+2. Run build system: `python3 ctmm_build.py`
+3. Complete auto-generated template
+4. Test: `make check`
+
+### LaTeX Best Practices
+
+- All `\usepackage` commands in preamble only
+- Use predefined macros: `\checkbox`, `\checkedbox`
+- CTMM colors: `ctmmBlue`, `ctmmOrange`, `ctmmGreen`, `ctmmPurple`
+- German language content with proper encoding
+
+## Quality Assurance
+
+The build system provides comprehensive quality checks:
+- **Multi-pass compilation** for cross-references
+- **Error analysis** with actionable recommendations
+- **PDF verification** and file integrity checks
+- **Module isolation testing** to identify issues
+- **Code optimization suggestions**
+
+## Therapy Content
+
+### Content Types
+- **Arbeitsblätter** (Worksheets): Interactive self-reflection forms
+- **Trigger Management**: Coping strategies and identification tools
+- **Psychoeducation**: Mental health condition information
+- **Relationship Tools**: Communication and binding pattern resources
+
+### Sensitivity Notice
+This repository contains mental health resources. Contributors should:
+- Respect privacy (no personal information)
+- Ensure clinical accuracy
+- Maintain therapeutic, non-judgmental language
+- Follow German therapeutic language conventions
+
+## Technical Requirements
+
+### Dependencies
+- **LaTeX**: TeX Live with German language support
+- **Python**: 3.6+ with chardet package
+- **Optional**: Pandoc for Word document conversion
+
+### Installation
+```bash
+# Ubuntu/Debian
+sudo apt-get install texlive-latex-extra texlive-lang-german
+pip install chardet
+
+# Codespace (pre-configured)
+make deps
+```
+
+## Contributing
+
+1. Test builds before submitting: `make check`
+2. Verify PDF output renders correctly
+3. Use descriptive commit messages
+4. Update documentation for new features
+5. Maintain sensitivity to mental health contexts
+
+## License
+
+See LICENSE file for licensing information.
+
+## Support
+
+For issues with the build system or document conversion:
+1. Check `build_report.md` for analysis
+2. Review log files for detailed errors
+3. Run verbose analysis: `python3 build_system.py --verbose`
+
+---
+
+**Note**: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.

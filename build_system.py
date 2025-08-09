@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
@@ -54,11 +55,14 @@ class CTMMBuildSystem:
             with open(file_path, 'rb') as f:
                 raw_data = f.read()
                 detected = chardet.detect(raw_data)
-                encoding = detected.get('encoding', 'utf-8')
+                encoding = detected.get('encoding', 'latin-1')  # Fallback to latin-1 for German texts
                 
             logger.debug(f"Detected encoding for {file_path}: {encoding}")
             with open(file_path, 'r', encoding=encoding, errors='replace') as f:
                 return f.read()
+        except Exception as e:
+            logger.error(f"Error reading file {file_path}: {e}")
+            return ""
     
     def scan_main_tex(self) -> None:
         """Scan main.tex for all usepackage{style/...} and input{modules/...} commands."""
@@ -245,7 +249,7 @@ This file was automatically created by the CTMM Build System because it was refe
         module_list = sorted(list(self.module_files))
         
         for i, current_module in enumerate(module_list):
-            logger.info(f"Testing with modules 0-{i}: {' '.join(module_list[:i+1])}")
+            logger.info(f"Testing with modules 0-{i}: {' '.join([Path(m).stem for m in module_list[:i+1]])}")
             
             # Create content with modules 0 to i enabled
             modified_content = original_content
@@ -264,37 +268,42 @@ This file was automatically created by the CTMM Build System because it was refe
                         modified_content
                     )
             
-            # Test build with current module set
+            # Test build with current module set (with error handling)
             temp_file = self.main_tex_path.with_suffix(f'.test_{i}.tex')
-            with open(temp_file, 'w', encoding='utf-8') as f:
-                f.write(modified_content)
-                
+            
             try:
+                with open(temp_file, 'w', encoding='utf-8') as f:
+                    f.write(modified_content)
+                    
                 result = subprocess.run(
                     ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                     capture_output=True,
                     text=True,
+                    errors='replace',  # Handle encoding issues
                     cwd=str(self.main_tex_path.parent)
                 )
                 
                 if result.returncode == 0:
-                    logger.info(f"✓ Build successful with {current_module}")
+                    logger.info(f"✓ Build successful with {Path(current_module).stem}")
                 else:
-                    logger.error(f"✗ Build failed when adding {current_module}")
+                    logger.error(f"✗ Build failed when adding {Path(current_module).stem}")
                     self.problematic_modules.append(current_module)
                     
-                    # Log error details
+                    # Log error details with better handling
                     error_log = f"build_error_{Path(current_module).stem}.log"
-                    with open(error_log, 'w') as f:
+                    with open(error_log, 'w', encoding='utf-8') as f:
                         f.write(f"Build error when testing {current_module}\n")
                         f.write(f"Return code: {result.returncode}\n\n")
                         f.write("STDOUT:\n")
-                        f.write(result.stdout)
+                        f.write(result.stdout if result.stdout else "No stdout\n")
                         f.write("\n\nSTDERR:\n")
-                        f.write(result.stderr)
+                        f.write(result.stderr if result.stderr else "No stderr\n")
                     
                     logger.error(f"Error details saved to {error_log}")
                     
+            except Exception as e:
+                logger.error(f"Exception when testing module {current_module}: {e}")
+                self.problematic_modules.append(current_module)
             finally:
                 # Clean up
                 if temp_file.exists():
@@ -304,8 +313,126 @@ This file was automatically created by the CTMM Build System because it was refe
                     if aux_file.exists():
                         aux_file.unlink()
     
+    def multi_pass_build(self, passes: int = 2) -> bool:
+        """Perform multi-pass compilation for cross-references and bibliography."""
+        logger.info(f"Starting multi-pass build ({passes} passes)...")
+        
+        for pass_num in range(1, passes + 1):
+            logger.info(f"Pass {pass_num}/{passes}...")
+            
+            try:
+                result = subprocess.run(
+                    ['pdflatex', '-interaction=nonstopmode', self.main_tex_path.name],
+                    capture_output=True,
+                    text=True,
+                    errors='replace',
+                    cwd=str(self.main_tex_path.parent)
+                )
+                
+                if result.returncode != 0:
+                    logger.error(f"Multi-pass build failed on pass {pass_num}")
+                    return False
+                else:
+                    logger.info(f"Pass {pass_num} completed successfully")
+                    
+            except Exception as e:
+                logger.error(f"Exception during pass {pass_num}: {e}")
+                return False
+        
+        logger.info("Multi-pass build completed successfully")
+        return True
+    
+    def verify_pdf_output(self) -> bool:
+        """Verify that PDF was generated and is valid."""
+        pdf_path = self.main_tex_path.with_suffix('.pdf')
+        
+        if not pdf_path.exists():
+            logger.error("PDF file was not generated")
+            return False
+            
+        # Check file size
+        file_size = pdf_path.stat().st_size
+        if file_size == 0:
+            logger.error("PDF file is empty")
+            return False
+        elif file_size < 1000:  # Less than 1KB is suspicious
+            logger.warning(f"PDF file is very small ({file_size} bytes)")
+        
+        logger.info(f"PDF verified: {pdf_path} ({file_size:,} bytes)")
+        return True
+    
+    def analyze_latex_errors(self) -> Dict[str, List[str]]:
+        """Analyze LaTeX log file for common errors and provide recommendations."""
+        log_path = self.main_tex_path.with_suffix('.log')
+        
+        if not log_path.exists():
+            return {}
+        
+        log_content = self._read_file_safely(log_path)
+        
+        error_analysis = {
+            'undefined_control_sequences': [],
+            'missing_packages': [],
+            'encoding_issues': [],
+            'overfull_boxes': [],
+            'underfull_boxes': [],
+            'general_errors': []
+        }
+        
+        lines = log_content.split('\n')
+        for i, line in enumerate(lines):
+            if 'Undefined control sequence' in line:
+                error_analysis['undefined_control_sequences'].append(line.strip())
+            elif 'Package' in line and 'not found' in line:
+                error_analysis['missing_packages'].append(line.strip())
+            elif 'inputenc Error' in line or 'UTF-8' in line:
+                error_analysis['encoding_issues'].append(line.strip())
+            elif 'Overfull' in line:
+                error_analysis['overfull_boxes'].append(line.strip())
+            elif 'Underfull' in line:
+                error_analysis['underfull_boxes'].append(line.strip())
+            elif '!' in line and i > 0:  # General LaTeX errors
+                error_analysis['general_errors'].append(line.strip())
+        
+        return error_analysis
+    
+    def generate_optimization_recommendations(self) -> List[str]:
+        """Generate actionable recommendations for code optimization."""
+        recommendations = []
+        
+        # Analyze error patterns
+        error_analysis = self.analyze_latex_errors()
+        
+        if error_analysis.get('undefined_control_sequences'):
+            recommendations.append("• Review undefined control sequences - ensure all custom commands are defined in preamble")
+        
+        if error_analysis.get('missing_packages'):
+            recommendations.append("• Install missing LaTeX packages or add required \\usepackage commands")
+        
+        if error_analysis.get('encoding_issues'):
+            recommendations.append("• Fix character encoding issues - ensure UTF-8 encoding throughout")
+        
+        if len(error_analysis.get('overfull_boxes', [])) > 10:
+            recommendations.append("• Consider reformatting text to reduce overfull hbox warnings")
+        
+        if len(error_analysis.get('underfull_boxes', [])) > 20:
+            recommendations.append("• Review paragraph formatting to reduce underfull hbox warnings")
+        
+        # Check for problematic modules
+        if self.problematic_modules:
+            recommendations.append(f"• Fix {len(self.problematic_modules)} problematic modules: {', '.join([Path(m).stem for m in self.problematic_modules])}")
+        
+        # General recommendations
+        if not recommendations:
+            recommendations.append("• No major issues detected - consider regular maintenance and updates")
+        
+        return recommendations
+    
     def generate_report(self) -> str:
-        """Generate a comprehensive build report."""
+        """Generate a comprehensive build report with error analysis and optimization recommendations."""
+        error_analysis = self.analyze_latex_errors()
+        recommendations = self.generate_optimization_recommendations()
+        
         report = f"""
 CTMM Build System Report
 ========================
@@ -328,21 +455,38 @@ CTMM Build System Report
 ## Problematic Modules
 {chr(10).join(f"- {f}" for f in self.problematic_modules) if self.problematic_modules else "None"}
 
-## Recommendations
+## Error Analysis
 """
         
+        for error_type, errors in error_analysis.items():
+            if errors:
+                report += f"### {error_type.replace('_', ' ').title()}\n"
+                for error in errors[:5]:  # Limit to first 5 errors
+                    report += f"- {error}\n"
+                if len(errors) > 5:
+                    report += f"- ... and {len(errors) - 5} more\n"
+                report += "\n"
+        
+        if not any(error_analysis.values()):
+            report += "No specific errors detected in log analysis.\n\n"
+        
+        report += "## Optimization Recommendations\n"
+        for rec in recommendations:
+            report += f"{rec}\n"
+        
+        report += "\n## Status\n"
         if not self.missing_files and not self.problematic_modules:
-            report += "✓ All files exist and build successfully. No action needed."
+            report += "✓ All files exist and build successfully. System ready for production."
         else:
             if self.missing_files:
-                report += f"- Review and complete {len(self.missing_files)} template file(s)\n"
+                report += f"⚠ Review and complete {len(self.missing_files)} template file(s)\n"
             if self.problematic_modules:
-                report += f"- Fix {len(self.problematic_modules)} problematic module(s)\n"
+                report += f"❌ Fix {len(self.problematic_modules)} problematic module(s)\n"
                 
         return report
     
     def run_full_check(self) -> bool:
-        """Run the complete build system check."""
+        """Run the complete build system check with enhanced analysis."""
         logger.info("Starting CTMM Build System full check...")
         
         try:
@@ -353,10 +497,21 @@ CTMM Build System Report
             basic_build_ok = self.test_basic_build()
             if basic_build_ok:
                 self.test_modules_incrementally()
+                
+                # If no problematic modules, try multi-pass build
+                if not self.problematic_modules:
+                    logger.info("All modules passed individual tests, attempting multi-pass build...")
+                    multi_pass_ok = self.multi_pass_build()
+                    pdf_ok = self.verify_pdf_output()
+                    
+                    if multi_pass_ok and pdf_ok:
+                        logger.info("✓ Complete build system check successful")
+                    else:
+                        logger.warning("⚠ Multi-pass build or PDF verification had issues")
             
-            # Generate and save report
+            # Generate and save comprehensive report
             report = self.generate_report()
-            with open('build_report.md', 'w') as f:
+            with open('build_report.md', 'w', encoding='utf-8') as f:
                 f.write(report)
             
             logger.info("Build system check complete. Report saved to build_report.md")
