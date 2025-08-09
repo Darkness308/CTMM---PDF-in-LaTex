@@ -1,114 +1,257 @@
 # CTMM-System
 
-Ein modulares LaTeX-Framework für Catch-Track-Map-Match Therapiematerialien.
+Ein modulares LaTeX-Framework für Catch-Track-Map-Match Therapiematerialien mit automatisiertem Build-Management.
 
 ## Überblick
+
 Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CTMM-Therapiedokumenten, einschließlich:
 - Depression & Stimmungstief Module
 - Trigger-Management
 - Bindungsdynamik
 - Formularelemente für therapeutische Dokumentation
+- **Automatisiertes Build-Management mit Fehlerdiagnose**
+- **Template-Generierung für fehlende Dateien**
+- **CI/CD-Integration mit GitHub Actions**
 
-## Verwendung
-1. Klone das Repository
-2. Kompiliere main.tex mit einem LaTeX-Editor
-3. Oder öffne das Projekt in einem GitHub Codespace
+## 🚀 Schnellstart
 
-## Struktur
-- `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
-- `/modules/` - Individuelle CTMM-Module als separate .tex-Dateien
-- `/assets/` - Diagramme und visuelle Elemente
+### Installation
 
-## Anforderungen
-- LaTeX-Installation mit TikZ und hyperref
-- Oder GitHub Codespace (vorkonfiguriert)
-
-## LaTeX-Hinweise für Entwickler
-
-**CTMM Build System:**
-
-Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
-
-### Automatisierte Build-Prüfung
 ```bash
-python3 ctmm_build.py
+# Repository klonen
+git clone https://github.com/Darkness308/CTMM---PDF-in-LaTex.git
+cd CTMM---PDF-in-LaTex
+
+# Python-Abhängigkeiten installieren
+make deps
+
+# LaTeX-Installation (system-spezifisch)
+make install-latex  # Zeigt Installationsanweisungen
 ```
 
-Das Build-System:
-1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
-2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
-3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
-4. **Testet vollständigen Build** - mit allen Modulen
-5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+### Verwendung
 
-### Modulare Test-Strategie
-
-**Für Entwickler:**
-- Jedes neue Modul wird automatisch erkannt und getestet
-- Fehlende Referenzen werden durch kommentierte Templates ersetzt (kein Dummy-Content)
-- Build bricht nicht mehr bei fehlenden Dateien ab
-- Templates enthalten sinnvolle Struktur mit `\section` und Platzhaltern
-
-**Erweiterte Analyse:**
-Für granulare Modultests steht `build_system.py` zur Verfügung:
+**Entwicklungsworkflow (empfohlen):**
 ```bash
-python3 build_system.py --verbose
+make dev        # Kompletter Workflow: Check + Analyse + Build
 ```
-- Testet Module schrittweise einzeln
-- Identifiziert problematische Module
-- Erstellt detaillierte Build-Reports
-- Protokolliert alle Operationen in `build_system.log`
 
-### GitHub Workflow Integration
+**Einzelne Schritte:**
+```bash
+make analyze    # Umfassende Build-Analyse
+make build      # PDF erstellen (main.pdf)
+make check      # Schnelle Systemprüfung
+```
 
-Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigiert:
-- Referenziert nun korrekt `main.tex` (statt dem nicht existierenden `main_final.tex`)
-- Lädt `main.pdf` als Artefakt hoch
-- Kann durch das Build-System bei Fehlern erweitert werden
+**CI/Produktions-Workflow:**
+```bash
+make ci         # Kompletter CI-Workflow
+make build-ci   # CI-Version erstellen (main_final.pdf)
+```
 
-**Typische Fehlerquellen und Best Practices:**
+## 🏗️ Build-System-Architektur
 
-- **Pakete immer in der Präambel laden:**
-  - `\usepackage{...}` darf nur in der Hauptdatei (z.B. `main.tex`) vor `\begin{document}` stehen, niemals in Modulen oder nach `\begin{document}`.
-- **Makros und Befehle:**
-  - Definiere neue Makros (z.B. Checkboxen, Textfelder) zentral in der Präambel oder in einem Style-File, nicht in einzelnen Modulen.
-  - Beispiel für Checkboxen:
-    ```tex
-    % In der Präambel:
-    \usepackage{amssymb}
-    \newcommand{\checkbox}{$\square$}
-    \newcommand{\checkedbox}{$\blacksquare$}
-    ```
-  - **Wichtig:** Verwende in Modulen und Tabellen ausschließlich die Makros `\checkbox` und `\checkedbox` für Checkboxen. Benutze niemals direkt `\Box` oder `\blacksquare`, da dies zu `Undefined control sequence`-Fehlern führen kann.
-  - Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch `\Box` oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
-- **Module:**
-  - Module sollten keine Pakete laden oder globale Makros definieren.
-  - Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
-- **Fehlermeldungen:**
-  - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
-  - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
-  - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
+### Kernkomponenten
 
-### Vorgehen bei neuen Modulen
+| Komponente | Zweck | Verwendung |
+|------------|-------|------------|
+| **`build_manager.py`** | Hauptsystem mit umfassender Analyse | `python3 build_manager.py` |
+| **`ctmm_build.py`** | Schnelle Systemprüfung | `python3 ctmm_build.py` |
+| **`main.tex`** | Entwicklungsversion | Lokale Builds |
+| **`main_final.tex`** | CI/Produktionsversion | Automatisierte Builds |
 
-1. **Referenz in main.tex hinzufügen:**
-   ```tex
-   \input{modules/mein-neues-modul}
-   ```
+### Automatische Funktionen
 
-2. **Build-System ausführen:**
-   ```bash
-   python3 ctmm_build.py
-   ```
+✅ **Datei-Erkennung**: Scannt `main.tex` nach `\usepackage{style/...}` und `\input{modules/...}`  
+✅ **Template-Generierung**: Erstellt automatisch fehlende .sty und .tex Dateien  
+✅ **Inkrementelle Tests**: Testet Module einzeln zur Fehleridentifikation  
+✅ **Umfassende Reports**: Generiert `build_report.md` mit detaillierter Analyse  
+✅ **Fehlerdiagnose**: Spezifische Fehlerlogs für jedes problematische Modul  
 
-3. **Template wird automatisch erstellt:**
-   - `modules/mein-neues-modul.tex` mit Grundstruktur
-   - `modules/TODO_mein-neues-modul.md` mit Aufgabenliste
+## 📋 Make-Kommandos
 
-4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
+| Kommando | Beschreibung | Verwendung |
+|----------|--------------|------------|
+| `make analyze` | **Empfohlen**: Vollständige Analyse | Regelmäßige Entwicklung |
+| `make build` | Entwicklungsversion erstellen | Lokale PDF-Erstellung |
+| `make build-ci` | CI/Produktionsversion erstellen | Release-Builds |
+| `make dev` | Kompletter Entwicklungsworkflow | Vollständiger lokaler Workflow |
+| `make ci` | Kompletter CI-Workflow | Automatisierte Builds |
+| `make clean` | Build-Artefakte entfernen | Vor Commits |
+| `make clean-all` | Alle generierten Dateien entfernen | Neustart |
 
-**README regelmäßig pflegen:**
-- Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
+## 📂 Projektstruktur
 
-**Tipp:**
-Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+```
+CTMM-System/
+├── main.tex                    # Entwicklungs-Build-Ziel
+├── main_final.tex              # CI/Produktions-Build-Ziel
+├── build_manager.py            # Haupt-Build-System ⭐
+├── ctmm_build.py              # Schnellprüfung
+├── BUILD_GUIDE.md             # Ausführliche Dokumentation
+├── style/                     # Style-Pakete (.sty)
+│   ├── ctmm-design.sty
+│   ├── form-elements.sty
+│   └── ctmm-diagrams.sty
+├── modules/                   # Inhaltsmodule (.tex)
+│   ├── navigation-system.tex
+│   ├── depression.tex
+│   └── ...
+└── build/                     # Build-Artefakte (generiert)
+    ├── build_report.md        # Analyse-Report
+    └── build_error_*.log      # Fehlerprotokolle
+```
+
+## 🔧 Entwicklung neuer Module
+
+### 1. Modul referenzieren
+```latex
+% In main.tex hinzufügen:
+\input{modules/mein-neues-modul}
+```
+
+### 2. Analyse ausführen
+```bash
+make analyze
+```
+
+### 3. Automatisch generierte Templates bearbeiten
+- `modules/mein-neues-modul.tex` - Modulvorlage mit TODO-Kommentaren
+- `modules/TODO_mein-neues-modul.md` - Aufgabenliste
+
+### 4. Implementation testen
+```bash
+make build
+```
+
+## 🎨 LaTeX Best Practices
+
+### Kritische Regeln
+
+**📦 Pakete nur in der Präambel:**
+```latex
+% ✅ Richtig - in main.tex vor \begin{document}
+\usepackage{style/ctmm-design}
+
+% ❌ Falsch - niemals in Modulen oder nach \begin{document}
+```
+
+**🔧 Makros zentral definieren:**
+```latex
+% ✅ Richtig - in Präambel oder Style-Datei
+\newcommand{\checkbox}{$\square$}
+\newcommand{\checkedbox}{$\blacksquare$}
+
+% In Modulen verwenden:
+\checkbox~Option 1
+\checkedbox~Option 2
+```
+
+**❌ Häufige Fehler vermeiden:**
+- `Can be used only in preamble` → Paket in die Präambel verschieben
+- `Undefined control sequence` → Makro-Definition prüfen
+- `Command already defined` → Doppelte Definitionen entfernen
+
+### Checkbox-Konvention
+
+**Immer verwenden:**
+```latex
+\checkbox        % Leere Checkbox: □
+\checkedbox      % Gefüllte Checkbox: ■
+```
+
+**Niemals verwenden:**
+```latex
+\Box            % Kann zu Fehlern führen
+\blacksquare    % Kann zu Fehlern führen
+```
+
+## 🔍 Fehlerdiagnose
+
+### Build-Report prüfen
+```bash
+cat build_report.md
+```
+
+### Spezifische Fehlerlogs
+```bash
+ls build_error_*.log
+cat build_error_module-name.log
+```
+
+### Inkrementelles Debugging
+1. Problematische Module in `main.tex` auskommentieren
+2. Erfolgreich builden
+3. Module einzeln wieder aktivieren
+
+## 🔄 CI/CD Integration
+
+### GitHub Actions
+
+Das System integriert sich nahtlos mit GitHub Actions:
+
+```yaml
+- name: CTMM Build System Check
+  run: python3 build_manager.py
+
+- name: Build LaTeX PDF
+  uses: dante-ev/latex-action@v2.0.0
+  with:
+    root_file: main_final.tex
+```
+
+### Build-Artefakte
+
+CI-Builds erzeugen:
+- `main_final.pdf` - Produktions-PDF
+- `build_report.md` - Analyse-Report
+- Fehlerlogs (bei Problemen)
+
+## 📚 Weiterführende Dokumentation
+
+- **[BUILD_GUIDE.md](BUILD_GUIDE.md)** - Vollständige Build-System-Dokumentation
+- **[GitHub Actions](.github/workflows/)** - CI/CD-Konfiguration
+- **[Style-Pakete](style/)** - Design-System-Dokumentation
+
+## ⚡ Typische Workflows
+
+### Tägliche Entwicklung
+```bash
+# Nach Änderungen:
+make analyze    # Status prüfen
+make build      # PDF erstellen
+```
+
+### Vor Commits
+```bash
+make clean      # Aufräumen
+make analyze    # Finale Prüfung
+```
+
+### Release-Vorbereitung
+```bash
+make ci         # Vollständiger CI-Test
+```
+
+## 🆘 Hilfe und Support
+
+### Build-Probleme
+1. `build_report.md` konsultieren
+2. Fehlerlogs in `build_error_*.log` prüfen
+3. `make clean && make analyze` ausführen
+
+### LaTeX-Installationsprobleme
+```bash
+make install-latex  # Installationsanweisungen
+```
+
+### Erweiterte Analyse
+```bash
+python3 build_manager.py --verbose
+```
+
+---
+
+**🎯 Tipp**: Verwende `make analyze` regelmäßig - es ist der beste Weg, Probleme frühzeitig zu erkennen und das System gesund zu halten!
+
+**📖 Vollständige Dokumentation**: Siehe [BUILD_GUIDE.md](BUILD_GUIDE.md) für detaillierte Informationen zu allen Features und erweiterten Verwendungsmöglichkeiten.
