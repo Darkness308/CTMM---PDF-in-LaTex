@@ -143,7 +143,13 @@ python3 build_system.py --verbose  # Granular analysis
 
 ### 🇩🇪 German Language Context
 
-- Use formal therapeutic German (Sie-Form for clients)
+- **Sie-Form (formal)**: Use throughout all materials for professional therapeutic communication, instructions, and guidance (e.g., "Testen Sie", "Beschreiben Sie", "Nutzen Sie")
+- **Du-Form (informal)**: Only in specific contexts where informality enhances therapeutic connection:
+  - Self-reflection exercises and introspective prompts (e.g., "Nimm dir einen Moment Zeit")
+  - Direct personal guidance in crisis situations (e.g., "hilft dir")
+  - Informal educational content aimed at friends/peers
+- **When in doubt**: Always prefer Sie-Form for consistency and professionalism
+- **Documentation requirement**: When using Du-Form, provide brief rationale in LaTeX comments
 - Medical/psychological terminology should be accurate
 - Include pronunciation guides for technical terms when helpful
 - Maintain consistency in therapeutic vocabulary
