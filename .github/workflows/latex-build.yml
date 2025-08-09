@@ -25,7 +25,7 @@ jobs:
       - name: Install LaTeX
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-latex-recommended texlive-lang-german
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-latex-recommended texlive-lang-german texlive-pictures
 
       - name: Run CTMM Build System Check
         run: |
@@ -51,5 +51,7 @@ jobs:
           name: build_logs
           path: |
             *.log
+            *.aux
             build_error_*.log
             build_system.log
+            main_basic_test.*
