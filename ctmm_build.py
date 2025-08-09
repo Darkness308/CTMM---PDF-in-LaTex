@@ -166,13 +166,20 @@ def test_full_build(main_tex_path="main.tex"):
         )
 
         success = result.returncode == 0
+        logger.info(f"pdflatex return code: {result.returncode}")
+        
         if success:
             logger.info("✓ Full build successful")
             if Path('main.pdf').exists():
                 logger.info("✓ PDF generated successfully")
+            else:
+                logger.warning("Build succeeded but PDF not found")
         else:
             logger.error("✗ Full build failed")
             logger.error("Check main.log for detailed error information")
+            # Show last few lines of stderr for debugging
+            if result.stderr:
+                logger.error(f"Error output: {result.stderr[-500:]}")
 
         return success
 

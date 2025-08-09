@@ -23,6 +23,7 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(
@@ -49,16 +50,26 @@ class CTMMBuildSystem:
             # Try UTF-8 first
             with open(file_path, 'r', encoding='utf-8') as f:
                 return f.read()
-        except UnicodeDecodeError:
+        except UnicodeDecodeError as e:
+            logger.warning(f"UTF-8 decode error in {file_path}: {e}")
             # Detect encoding
-            with open(file_path, 'rb') as f:
-                raw_data = f.read()
-                detected = chardet.detect(raw_data)
-                encoding = detected.get('encoding', 'utf-8')
-                
-            logger.debug(f"Detected encoding for {file_path}: {encoding}")
-            with open(file_path, 'r', encoding=encoding, errors='replace') as f:
-                return f.read()
+            try:
+                with open(file_path, 'rb') as f:
+                    raw_data = f.read()
+                    detected = chardet.detect(raw_data)
+                    encoding = detected.get('encoding', 'utf-8')
+                    
+                logger.debug(f"Detected encoding for {file_path}: {encoding}")
+                with open(file_path, 'r', encoding=encoding, errors='replace') as f:
+                    return f.read()
+            except Exception as e2:
+                logger.error(f"Failed to read {file_path} with detected encoding: {e2}")
+                # Fallback: read with errors='replace'
+                with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+                    return f.read()
+        except Exception as e:
+            logger.error(f"Failed to read file {file_path}: {e}")
+            return ""
     
     def scan_main_tex(self) -> None:
         """Scan main.tex for all usepackage{style/...} and input{modules/...} commands."""
@@ -240,40 +251,46 @@ This file was automatically created by the CTMM Build System because it was refe
             
         logger.info("Testing modules incrementally...")
         
-        original_content = self._read_file_safely(self.main_tex_path)
+        try:
+            original_content = self._read_file_safely(self.main_tex_path)
+        except Exception as e:
+            logger.error(f"Failed to read main.tex file: {e}")
+            return
             
         module_list = sorted(list(self.module_files))
         
         for i, current_module in enumerate(module_list):
             logger.info(f"Testing with modules 0-{i}: {' '.join(module_list[:i+1])}")
             
-            # Create content with modules 0 to i enabled
-            modified_content = original_content
-            for j, module in enumerate(module_list):
-                module_pattern = f"modules/{Path(module).stem}"
-                input_pattern = f"\\input{{{module_pattern}}}"
+            try:
+                # Create content with modules 0 to i enabled
+                modified_content = original_content
+                for j, module in enumerate(module_list):
+                    module_pattern = f"modules/{Path(module).stem}"
+                    
+                    if j <= i:
+                        # Keep this module enabled
+                        continue
+                    else:
+                        # Comment out this module - use more precise pattern matching
+                        pattern = f'(\\\\input\\{{{re.escape(module_pattern)}\\}})'
+                        replacement = r'% \1  % Disabled for incremental testing'
+                        modified_content = re.sub(pattern, replacement, modified_content)
                 
-                if j <= i:
-                    # Keep this module enabled
-                    continue
-                else:
-                    # Comment out this module
-                    modified_content = re.sub(
-                        f'(\\\\input\\{{{module_pattern}\\}})',
-                        r'% \1  % Disabled for incremental testing',
-                        modified_content
-                    )
-            
-            # Test build with current module set
-            temp_file = self.main_tex_path.with_suffix(f'.test_{i}.tex')
-            with open(temp_file, 'w', encoding='utf-8') as f:
-                f.write(modified_content)
+                # Test build with current module set
+                temp_file = self.main_tex_path.with_suffix(f'.test_{i}.tex')
+                with open(temp_file, 'w', encoding='utf-8', errors='replace') as f:
+                    f.write(modified_content)
+            except Exception as e:
+                logger.error(f"Failed to prepare test file for {current_module}: {e}")
+                continue
                 
             try:
                 result = subprocess.run(
                     ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                     capture_output=True,
                     text=True,
+                    errors='replace',  # Handle any encoding issues in subprocess output
                     cwd=str(self.main_tex_path.parent)
                 )
                 
@@ -285,7 +302,7 @@ This file was automatically created by the CTMM Build System because it was refe
                     
                     # Log error details
                     error_log = f"build_error_{Path(current_module).stem}.log"
-                    with open(error_log, 'w') as f:
+                    with open(error_log, 'w', encoding='utf-8', errors='replace') as f:
                         f.write(f"Build error when testing {current_module}\n")
                         f.write(f"Return code: {result.returncode}\n\n")
                         f.write("STDOUT:\n")
@@ -295,6 +312,9 @@ This file was automatically created by the CTMM Build System because it was refe
                     
                     logger.error(f"Error details saved to {error_log}")
                     
+            except Exception as e:
+                logger.error(f"Failed to run pdflatex for {current_module}: {e}")
+                self.problematic_modules.append(current_module)
             finally:
                 # Clean up
                 if temp_file.exists():
