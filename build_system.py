@@ -23,6 +23,10 @@ from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
 import logging
+from datetime import datetime
+
+# Import the filename_to_title function from ctmm_build.py to avoid code duplication
+from ctmm_build import filename_to_title
 
 # Configure logging
 logging.basicConfig(
@@ -140,7 +144,7 @@ class CTMMBuildSystem:
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
-\\section{{TODO: {path.stem.replace('-', ' ').title()}}}
+\\section{{TODO: {filename_to_title(path.stem)}}}
 \\label{{sec:{path.stem}}}
 
 % TODO: Add module content here
