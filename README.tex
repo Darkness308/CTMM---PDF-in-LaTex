@@ -136,7 +136,7 @@ Das GitHub Actions Workflow (\texttt{.github/workflows/latex-build.yml}) wurde k
 \tightlist
 \item
   \textbf{Pakete immer in der Präambel laden:}
-  \texttt{\textbackslash{}usepackage\{...\}} darf nur in der Hauptdatei (z.B. \texttt{main.tex}) vor \texttt{\textbackslash{}begin\{document\}} stehen, niemals in Modulen oder nach \texttt{\textbackslash{}begin\{document\}}.
+  \verb|\usepackage{...}| darf nur in der Hauptdatei (z.B. \texttt{main.tex}) vor \verb|\begin{document}| stehen, niemals in Modulen oder nach \verb|\begin{document}|.
 \item
   \textbf{Makros und Befehle:}
   Definiere neue Makros (z.B. Checkboxen, Textfelder) zentral in der Präambel oder in einem Style-File, nicht in einzelnen Modulen.
