@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 CTMM LaTeX Escaping Fix Tool
 
 This tool addresses the over-escaping issue mentioned in PR #3, where LaTeX commands
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 
 def fix_latex_escaping(content):
-    """
+    r"""
     Fix over-escaped LaTeX commands in content.
     
     Converts patterns like:
