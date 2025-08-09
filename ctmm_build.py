@@ -128,7 +128,8 @@ def test_basic_build(main_tex_path="main.tex"):
             capture_output=True,
             text=True,
             errors='replace',  # Handle encoding issues
-            check=False
+            check=False,
+            cwd=str(Path(main_tex_path).parent)
         )
 
         success = result.returncode == 0
@@ -162,7 +163,8 @@ def test_full_build(main_tex_path="main.tex"):
             capture_output=True,
             text=True,
             errors='replace',
-            check=False
+            check=False,
+            cwd=str(Path(main_tex_path).parent)
         )
 
         success = result.returncode == 0
