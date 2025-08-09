@@ -10,9 +10,30 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 - Formularelemente für therapeutische Dokumentation
 
 ## Verwendung
+
+### Einfache Verwendung
 1. Klone das Repository
-2. Kompiliere main.tex mit einem LaTeX-Editor
-3. Oder öffne das Projekt in einem GitHub Codespace
+2. Installiere LaTeX-Abhängigkeiten (siehe Anforderungen unten)
+3. Führe das Build-System aus: `python3 ctmm_build.py`
+4. Kompiliere main.tex oder nutze `make build`
+5. Oder öffne das Projekt in einem GitHub Codespace
+
+### Build-System Kommandos
+```bash
+# Haupt-Build-System (empfohlen)
+python3 ctmm_build.py
+
+# Erweiterte Analyse mit detailliertem Modul-Testing
+python3 build_system.py --verbose
+
+# Makefile-Ziele
+make check    # Build-System prüfen
+make build    # PDF erstellen  
+make analyze  # Detaillierte Analyse
+make test     # Schneller Test
+make clean    # Artefakte löschen
+make help     # Hilfe anzeigen
+```
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
@@ -20,14 +41,46 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 - `/assets/` - Diagramme und visuelle Elemente
 
 ## Anforderungen
-- LaTeX-Installation mit TikZ und hyperref
-- Oder GitHub Codespace (vorkonfiguriert)
+
+### LaTeX-Pakete
+- LaTeX-Installation (TeX Live empfohlen)
+- Erforderliche Pakete: `texlive-latex-recommended`, `texlive-latex-extra`, `texlive-lang-german`, `texlive-fonts-extra`
+- Ubuntu/Debian: `sudo apt-get install texlive-latex-recommended texlive-latex-extra texlive-lang-german texlive-fonts-extra`
+
+### Python-Abhängigkeiten
+- Python 3.x
+- `pip install chardet` (für Encoding-Erkennung)
+
+### Oder GitHub Codespace
+- Vorkonfigurierte Umgebung mit allen Abhängigkeiten
 
 ## LaTeX-Hinweise für Entwickler
 
 **CTMM Build System:**
 
-Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
+Das Projekt verfügt über ein umfassendes, zweistufiges Build-System:
+
+### 1. Haupt-Build-System (`ctmm_build.py`)
+```bash
+python3 ctmm_build.py
+```
+
+**Funktionen:**
+1. **Automatische Dateierkennung** - Scannt main.tex nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
+2. **Template-Erstellung** - Erstellt minimale, funktionsfähige Templates für fehlende Dateien
+3. **Build-Tests** - Testet Grundgerüst (ohne Module) und vollständigen Build
+4. **TODO-Management** - Erstellt TODO-Dateien für neue Templates mit Vervollständigungsrichtlinien
+
+### 2. Erweiterte Analyse (`build_system.py`)
+```bash  
+python3 build_system.py --verbose
+```
+
+**Zusätzliche Funktionen:**
+1. **Inkrementelles Modul-Testing** - Testet Module einzeln zur Fehleridentifikation
+2. **Encoding-sichere Dateilesung** - Robuste UTF-8 und andere Encoding-Unterstützung
+3. **Detaillierte Fehlerberichte** - Speichert spezifische Fehlerlogs für problematische Module
+4. **Umfassende Build-Berichte** - Generiert detaillierte Markdown-Berichte (build_report.md)
 
 ### Automatisierte Build-Prüfung
 ```bash

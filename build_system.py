@@ -19,6 +19,7 @@ import sys
 import tempfile
 import shutil
 import chardet
+from datetime import datetime
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
@@ -240,7 +241,11 @@ This file was automatically created by the CTMM Build System because it was refe
             
         logger.info("Testing modules incrementally...")
         
-        original_content = self._read_file_safely(self.main_tex_path)
+        try:
+            original_content = self._read_file_safely(self.main_tex_path)
+        except Exception as e:
+            logger.error(f"Could not read main tex file for incremental testing: {e}")
+            return
             
         module_list = sorted(list(self.module_files))
         
@@ -266,14 +271,15 @@ This file was automatically created by the CTMM Build System because it was refe
             
             # Test build with current module set
             temp_file = self.main_tex_path.with_suffix(f'.test_{i}.tex')
-            with open(temp_file, 'w', encoding='utf-8') as f:
-                f.write(modified_content)
-                
             try:
+                with open(temp_file, 'w', encoding='utf-8') as f:
+                    f.write(modified_content)
+                    
                 result = subprocess.run(
                     ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                     capture_output=True,
                     text=True,
+                    errors='replace',  # Handle encoding issues in subprocess output
                     cwd=str(self.main_tex_path.parent)
                 )
                 
@@ -285,7 +291,7 @@ This file was automatically created by the CTMM Build System because it was refe
                     
                     # Log error details
                     error_log = f"build_error_{Path(current_module).stem}.log"
-                    with open(error_log, 'w') as f:
+                    with open(error_log, 'w', encoding='utf-8') as f:
                         f.write(f"Build error when testing {current_module}\n")
                         f.write(f"Return code: {result.returncode}\n\n")
                         f.write("STDOUT:\n")
@@ -294,6 +300,10 @@ This file was automatically created by the CTMM Build System because it was refe
                         f.write(result.stderr)
                     
                     logger.error(f"Error details saved to {error_log}")
+                    
+            except Exception as e:
+                logger.error(f"Error during incremental testing of {current_module}: {e}")
+                self.problematic_modules.append(current_module)
                     
             finally:
                 # Clean up
