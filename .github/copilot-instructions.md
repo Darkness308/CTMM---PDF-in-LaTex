@@ -65,12 +65,13 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Checkbox Convention**: Use CTMM form elements:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[fieldname]{Label text}  % Interactive checkbox from form-elements.sty
+  \ctmmTextField[width]{default}{name}  % Text input field
+  \ctmmRadioButton{group}{value}{label} % Radio button
   ```
-- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- **NEVER** use raw LaTeX symbols like `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -161,6 +162,19 @@ python3 build_system.py --verbose  # Granular analysis
 - **GitHub Codespace**: Pre-configured environment available
 - **CI/CD**: Automated PDF building via GitHub Actions
 
+### GitHub Actions Workflows
+The repository includes automated workflows in `.github/workflows/`:
+
+**LaTeX Build Workflow** (`latex-build.yml`):
+- Triggers on push/PR to main branch
+- Runs `python3 ctmm_build.py` for comprehensive testing
+- Sets up LaTeX environment and builds PDF
+- Uploads PDF as build artifact
+
+**Static Site** (`static.yml`):
+- Builds documentation and static resources
+- Deploys to GitHub Pages when configured
+
 ## Contributing Best Practices
 
 ### Code Reviews
@@ -198,7 +212,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckBox[fieldname]{label}` - Interactive form checkboxes
+- `\ctmmTextField[width]{default}{name}` - Text input fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
