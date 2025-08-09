@@ -151,7 +151,7 @@ python3 build_system.py --verbose  # Granular analysis
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb, geometry, calc, forloop, ifthen, pifont
 - **Font encoding**: T1 with UTF-8 input
 - **Language**: ngerman babel
 - **PDF features**: Interactive forms, bookmarks, metadata
