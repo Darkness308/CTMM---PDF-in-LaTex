@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help
+.PHONY: build check clean test test-function test-all help
 
 # Default target
 all: check build
@@ -26,6 +26,14 @@ test:
 	@echo "Testing build system..."
 	python3 ctmm_build.py | grep -E "(PASS|FAIL|ERROR|WARNING)" || true
 
+# Test filename_to_title function
+test-function:
+	@echo "Testing filename_to_title function..."
+	python3 test_filename_to_title.py
+
+# Run all tests
+test-all: test test-function
+
 # Clean build artifacts
 clean:
 	rm -f *.aux *.log *.out *.toc *.pdf
@@ -50,6 +58,8 @@ help:
 	@echo "  build    - Build the PDF"
 	@echo "  analyze  - Run detailed module analysis"
 	@echo "  test     - Quick test of build system"
+	@echo "  test-function - Test filename_to_title function"
+	@echo "  test-all - Run all tests"
 	@echo "  clean    - Remove build artifacts"
 	@echo "  deps     - Install Python dependencies"
 	@echo "  help     - Show this help"
