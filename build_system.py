@@ -21,6 +21,7 @@ import shutil
 import chardet
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
+from datetime import datetime
 import argparse
 import logging
 
@@ -42,6 +43,55 @@ class CTMMBuildSystem:
         self.module_files: Set[str] = set()
         self.missing_files: List[str] = []
         self.problematic_modules: List[str] = []
+        
+    def filename_to_title(self, filename):
+        """
+        Convert filename to a readable title with robust edge case handling.
+        
+        Handles:
+        - Multiple separators (hyphens, underscores, dots)
+        - Numbers as word boundaries  
+        - Common therapy/medical abbreviations
+        - German characters (ü, ä, ö, ß)
+        - LaTeX-safe output
+        """
+        if not filename:
+            return ""
+        
+        # Replace various separators with spaces
+        title = filename
+        
+        # Replace explicit separators
+        title = title.replace('_', ' ').replace('-', ' ').replace('.', ' ')
+        
+        # Add spaces before numbers (word123 -> word 123)
+        title = re.sub(r'([a-zA-ZüäöÜÄÖß])(\d)', r'\1 \2', title)
+        
+        # Add spaces after numbers (123word -> 123 word)  
+        title = re.sub(r'(\d)([a-zA-ZüäöÜÄÖß])', r'\1 \2', title)
+        
+        # Split into words and process each
+        words = title.split()
+        capitalized_words = []
+        
+        for word in words:
+            if not word:
+                continue
+                
+            word_lower = word.lower()
+            
+            # Keep common therapy/medical abbreviations uppercase
+            if word_lower in ['bpd', 'adhs', 'ass', 'ptbs', 'kptbs', 'ctmm', 'pdf', 'dbt', 'cbt']:
+                capitalized_words.append(word.upper())
+            else:
+                # Standard capitalization
+                capitalized_words.append(word.capitalize())
+        
+        # Join and clean up multiple spaces
+        result = ' '.join(capitalized_words)
+        result = re.sub(r'\s+', ' ', result).strip()
+        
+        return result
         
     def _read_file_safely(self, file_path: Path) -> str:
         """Read a file with automatic encoding detection."""
@@ -140,7 +190,7 @@ class CTMMBuildSystem:
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
-\\section{{TODO: {path.stem.replace('-', ' ').title()}}}
+\\section{{TODO: {self.filename_to_title(path.stem)}}}
 \\label{{sec:{path.stem}}}
 
 % TODO: Add module content here
