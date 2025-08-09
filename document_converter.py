@@ -31,18 +31,27 @@ class DocumentConverter:
         self.input_dir = Path(input_dir)
         self.output_dir = Path(output_dir)
         self.over_escape_patterns = [
+            # Most specific patterns first
+            (r'\\section\\textbackslash\{\}\{', r'\\section{'),
+            (r'\\subsection\\textbackslash\{\}\{', r'\\subsection{'),
+            (r'\\label\\textbackslash\{\}\{', r'\\label{'),
+            (r'\\textbf\\textbackslash\{\}\{', r'\\textbf{'),
+            
             # Common over-escaping patterns from PR description
-            (r'\\textbackslash\{\}', r'\\'),
             (r'\\textbf\\textbackslash\{\}', r'\\textbf'),
             (r'\\section\\textbackslash\{\}', r'\\section'),
             (r'\\subsection\\textbackslash\{\}', r'\\subsection'),
             (r'\\label\\textbackslash\{\}', r'\\label'),
             (r'\\texorpdfstring\\textbackslash\{\}', r'\\texorpdfstring'),
             (r'\\hypertarget\\textbackslash\{\}', r'\\hypertarget'),
-            # Additional patterns
+            
+            # Fix the escaped braces  
+            (r'\\textbackslash\{\}\{', r'{'),
+            (r'\\textbackslash\{\}\}', r'}'),
+            
+            # General patterns (most general last)
             (r'\\textbackslash\{\}([a-zA-Z]+)', r'\\\1'),
-            (r'\\textbackslash\{\}\{', r'\\{'),
-            (r'\\textbackslash\{\}\}', r'\\}'),
+            (r'\\textbackslash\{\}', r'\\'),
         ]
     
     def ensure_output_dir(self):

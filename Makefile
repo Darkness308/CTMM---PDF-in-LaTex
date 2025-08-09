@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help unit-test convert convert-clean
+.PHONY: build check clean test help unit-test convert convert-clean test-converter
 
 # Default target
 all: check build
@@ -30,6 +30,11 @@ test:
 unit-test:
 	@echo "Running unit tests..."
 	python3 test_ctmm_build.py
+
+# Run document converter tests
+test-converter:
+	@echo "Running document converter tests..."
+	python3 test_document_converter.py
 
 # Convert Word documents to LaTeX
 convert:
@@ -66,6 +71,7 @@ help:
 	@echo "  analyze     - Run detailed module analysis"
 	@echo "  test        - Quick test of build system"
 	@echo "  unit-test   - Run unit tests for Python functions"
+	@echo "  test-converter - Run document converter unit tests"
 	@echo "  convert     - Convert Word documents to LaTeX"
 	@echo "  convert-clean - Fix over-escaped LaTeX files"
 	@echo "  clean       - Remove build artifacts"
