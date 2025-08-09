@@ -2,6 +2,7 @@
 .vscode/tasks.generated.json
 .vscode/tasks.en.json
 .vscode/tasks.*.json
+!.vscode/tasks.template.json
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
