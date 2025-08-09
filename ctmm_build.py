@@ -55,29 +55,22 @@ def create_template(file_path):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
-        content = f"""% {path.name} - CTMM Style Package
-% TODO: Add content for this style package
-
-\\NeedsTeXFormat{{LaTeX2e}}
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
-
-% TODO: Add package dependencies and commands here
-
-% End of package
-"""
+        content = f"% {path.name} - CTMM Style Package\n"
+        content += "% TODO: Add content for this style package\n\n"
+        content += "\\NeedsTeXFormat{LaTeX2e}\n"
+        content += "\\ProvidesPackage{" + path.stem + "}[2024/01/01 CTMM " + path.stem + " package]\n\n"
+        content += "% TODO: Add package dependencies and commands here\n\n"
+        content += "% End of package\n"
     else:
-        content = f"""% {path.name} - CTMM Module
-% TODO: Add content for this module
-
-\\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
-
-\\begin{{center}}
-\\textit{{This module is under development. Content will be added soon.}}
-\\end{{center}}
-
-% TODO: Complete implementation
-"""
+        title = filename_to_title(path.stem)
+        content = f"% {path.name} - CTMM Module\n"
+        content += "% TODO: Add content for this module\n\n"
+        content += "\\section{TODO: " + title + "}\n"
+        content += "\\label{sec:" + path.stem + "}\n\n"
+        content += "\\begin{center}\n"
+        content += "\\textit{This module is under development. Content will be added soon.}\n"
+        content += "\\end{center}\n\n"
+        content += "% TODO: Complete implementation\n"
 
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
