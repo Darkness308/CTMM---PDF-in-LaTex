@@ -1,0 +1,119 @@
+% main_final.tex - Dedicated CI Build Target for CTMM System
+% This file is optimized for continuous integration builds and automated testing
+% It includes the complete CTMM system with all modules and features
+
+\documentclass[a4paper,12pt]{article}
+
+% Core LaTeX packages
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
+\usepackage{amssymb}
+
+% CTMM Design System packages
+\usepackage{style/ctmm-design}
+\usepackage{style/form-elements}
+\usepackage{style/ctmm-diagrams}
+
+% Document configuration optimized for CI
+\geometry{
+  a4paper,
+  margin=2.5cm,
+  top=3cm,
+  bottom=3cm
+}
+
+% Hyperref configuration for CI builds
+\hypersetup{
+  colorlinks=false,
+  pdfborder={0 0 0},
+  pdftitle={CTMM-System - CI Build},
+  pdfauthor={CTMM-Team},
+  pdfsubject={Automated CI Build of CTMM Therapy Materials},
+  pdfkeywords={CTMM, CI, LaTeX, Automated Build},
+  pdfcreator={CTMM Build Management System},
+  pdfproducer={pdfLaTeX CI Pipeline},
+  bookmarksopen=false,  % Reduced for CI
+  unicode=true
+}
+
+\begin{document}
+
+% Title page for CI build
+\title{%
+  {\Huge\textcolor{ctmmBlue}{CTMM-System}}\\
+  \vspace{0.5cm}
+  {\Large\textcolor{ctmmOrange}{Continuous Integration Build}}\\
+  \vspace{0.3cm}
+  {\normalsize Automated Build Verification}
+}
+\author{CTMM Build Management System}
+\date{\today}
+\maketitle
+
+\tableofcontents
+\newpage
+
+% CI Build Information
+\section{CI Build Information}
+\label{sec:ci-info}
+
+This document was generated automatically by the CTMM Build Management System as part of the continuous integration pipeline. It includes all modules and components to verify the complete system builds correctly.
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Build Type:} & Continuous Integration \\
+\textbf{Generated:} & \today \\
+\textbf{System:} & CTMM LaTeX Project \\
+\textbf{Purpose:} & Automated Build Verification \\
+\end{tabular}
+\end{center}
+
+% Include all CTMM modules for comprehensive testing
+\input{modules/navigation-system}
+\input{modules/depression}
+\input{modules/bindungsleitfaden}
+\input{modules/triggermanagement}
+\input{modules/notfallkarten}
+\input{modules/safewords}
+\input{modules/interactive}
+\input{modules/qrcode}
+\input{modules/therapiekoordination}
+\input{modules/selbstreflexion}
+
+% Worksheets (Arbeitsblätter)
+\input{modules/arbeitsblatt-checkin}
+\input{modules/arbeitsblatt-trigger}
+\input{modules/arbeitsblatt-depression-monitoring}
+
+% Demo and testing modules
+\input{modules/demo-interactive}
+
+% CI Build verification section
+\section{Build Verification}
+\label{sec:build-verification}
+
+If you can read this section, the CTMM LaTeX system has successfully compiled all modules and components. This indicates:
+
+\begin{itemize}
+\item All style packages loaded correctly
+\item All module files compiled without errors
+\item LaTeX dependencies are properly installed
+\item CTMM design system is functional
+\item Interactive elements are working
+\end{itemize}
+
+\subsection{System Status}
+\begin{center}
+\textcolor{ctmmGreen}{\faCheckCircle} \textbf{BUILD SUCCESSFUL}
+\end{center}
+
+This CI build verifies the integrity and functionality of the complete CTMM therapeutic materials system.
+
+\end{document}
