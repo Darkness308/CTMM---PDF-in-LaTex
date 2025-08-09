@@ -26,7 +26,7 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 │   ├── trigger*.tex           # Trigger management modules
 │   ├── depression.tex         # Depression-related content
 │   └── ...                    # Other therapeutic modules
-├── therapie-material/          # Additional therapy resources
+├── therapie-material/          # Reference therapy documents (Word format)
 ├── ctmm_build.py              # Automated build system (primary)
 ├── build_system.py            # Detailed module analysis
 ├── Makefile                   # Build commands
@@ -45,8 +45,10 @@ python3 ctmm_build.py
 **What the build system does:**
 1. Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
 2. Auto-generates missing template files with proper structure
-3. Tests basic build (without modules) and full build
+3. Tests basic build (without modules) and full build (requires pdflatex)
 4. Creates TODO files for new templates with completion guidelines
+
+**Note**: Build tests will show FAIL if pdflatex is not installed, but dependency checking and file generation still work correctly.
 
 **Alternative Commands:**
 ```bash
@@ -134,6 +136,13 @@ python3 build_system.py --verbose  # Granular analysis
 - **Clinical accuracy**: Ensure therapeutic techniques are evidence-based
 - **Cultural sensitivity**: Content is designed for German-speaking therapy contexts
 - **Professional tone**: Maintain therapeutic, non-judgmental language
+
+**CTMM Methodology:**
+CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing triggers and relationship challenges:
+- **Catch:** Recognize triggers and emotional states
+- **Track:** Monitor feelings and situational patterns  
+- **Map:** Understand underlying patterns and dynamics
+- **Match:** Adapt responses and interventions appropriately
 
 **Content Types:**
 - **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
