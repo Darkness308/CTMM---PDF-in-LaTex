@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          clean: true  # Ensure clean checkout
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -22,14 +24,19 @@ jobs:
         run: |
           pip install chardet
 
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-bibtex-extra
+
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
-
-      - name: Set up LaTeX
-        - uses: dante-ev/latex-action@v2.0.0
-        with:
-          root_file: main.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
