@@ -1,8 +1,16 @@
 {
     "version": "2.0.0",
+    "_comment": "This file uses the CTMM localization system. Labels are externalized to support internationalization.",
+    "_localization": {
+        "system": "localization/constants.json",
+        "language": "de",
+        "template": "tasks.template.json"
+    },
     "tasks": [
         {
             "label": "CTMM: Kompilieren",
+            "_label_key": "tasks.compile",
+            "_label_note": "Localized via CTMM localization system",
             "type": "shell",
             "command": "pdflatex",
             "args": [
@@ -18,7 +26,10 @@
             },
             "problemMatcher": {
                 "owner": "latex",
-                "fileLocation": ["relative", "${workspaceRoot}"],
+                "fileLocation": [
+                    "relative",
+                    "${workspaceRoot}"
+                ],
                 "pattern": {
                     "regexp": "^(.*):(\\d+):\\s+(.*)",
                     "file": 1,
