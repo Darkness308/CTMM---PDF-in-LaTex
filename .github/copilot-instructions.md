@@ -203,6 +203,13 @@ python3 build_system.py --verbose  # Granular analysis
 - Ensure German text is properly encoded
 - Validate therapeutic content accuracy
 
+**Testing Changes:**
+- Use `make check` for quick build system validation
+- Use `python3 ctmm_build.py` to test file structure and references
+- Use `make test` for rapid build system verification without full PDF generation
+- Test individual modules by temporarily commenting others in `main.tex`
+- Verify interactive form elements work in PDF viewers that support forms
+
 ### Documentation Updates
 - Update README.md for new features or conventions
 - Document new macros or style changes
