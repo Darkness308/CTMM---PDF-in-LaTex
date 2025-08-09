@@ -41,6 +41,28 @@ Das Build-System:
 4. **Testet vollständigen Build** - mit allen Modulen
 5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
 
+### LaTeX Escaping Fix Tool
+
+Das Repository enthält ein Tool zur Behebung von Escaping-Problemen (`fix_latex_escaping.py`):
+
+```bash
+# Prüfen auf Escaping-Probleme
+python3 fix_latex_escaping.py --check converted/
+
+# Probleme beheben (mit Backup)
+python3 fix_latex_escaping.py --backup converted/
+
+# Gesamtes Verzeichnis verarbeiten
+python3 fix_latex_escaping.py modules/
+```
+
+**Häufige Probleme die behoben werden:**
+- Übermäßige `\textbackslash{}` Escaping-Sequenzen 
+- Über-escaped LaTeX-Befehle aus Dokumentkonvertierung
+- Probleme mit pandoc oder anderen Konvertierungstools
+
+**Hinweis:** Dieses Tool behebt die in PR #3 identifizierten Escaping-Probleme.
+
 ### Unit Tests
 
 Das Build-System enthält Unit Tests für kritische Funktionen:
