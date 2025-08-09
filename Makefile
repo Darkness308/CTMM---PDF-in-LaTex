@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help unit-test
+.PHONY: build check clean test help unit-test convert convert-clean
 
 # Default target
 all: check build
@@ -9,6 +9,16 @@ all: check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Convert Word documents to LaTeX
+convert:
+	@echo "Converting Word documents to clean LaTeX..."
+	python3 document_converter.py --source therapie-material --output converted
+
+# Clean over-escaped LaTeX files
+convert-clean:
+	@echo "Cleaning over-escaped LaTeX files..."
+	python3 document_converter.py --clean --output converted
 
 # Build PDF
 build:
@@ -44,18 +54,21 @@ deps:
 	@echo "Installing Python dependencies..."
 	pip install chardet
 	@echo "LaTeX packages should be installed via your system package manager"
+	@echo "For document conversion: apt-get install pandoc (optional)"
 
 # Help
 help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system"
-	@echo "  unit-test - Run unit tests for Python functions"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all           - Run check and build (default)"
+	@echo "  check         - Check dependencies and run build system"
+	@echo "  convert       - Convert Word documents to clean LaTeX"
+	@echo "  convert-clean - Fix over-escaped LaTeX files"
+	@echo "  build         - Build the PDF"
+	@echo "  analyze       - Run detailed module analysis"
+	@echo "  test          - Quick test of build system"
+	@echo "  unit-test     - Run unit tests for Python functions"
+	@echo "  clean         - Remove build artifacts"
+	@echo "  deps          - Install Python dependencies"
+	@echo "  help          - Show this help"
