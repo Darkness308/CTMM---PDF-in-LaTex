@@ -19,6 +19,7 @@ import sys
 import tempfile
 import shutil
 import chardet
+import datetime
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
@@ -27,7 +28,7 @@ import logging
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format='[%(levelname)s] %(message)s',
     handlers=[
         logging.FileHandler('build_system.log'),
         logging.StreamHandler()

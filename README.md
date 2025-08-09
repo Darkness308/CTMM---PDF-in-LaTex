@@ -1,114 +1,244 @@
-# CTMM-System
+# CTMM-System: Interaktive Therapie-Materialien in LaTeX
 
-Ein modulares LaTeX-Framework für Catch-Track-Map-Match Therapiematerialien.
+Ein umfassendes System zur Erstellung professioneller Therapiematerialien mit ausfüllbaren Formularen, speziell entwickelt für neurodiverse Paare und Personen mit psychischen Herausforderungen.
 
-## Überblick
-Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CTMM-Therapiedokumenten, einschließlich:
-- Depression & Stimmungstief Module
-- Trigger-Management
-- Bindungsdynamik
-- Formularelemente für therapeutische Dokumentation
+## 🚀 Quick Start
 
-## Verwendung
-1. Klone das Repository
-2. Kompiliere main.tex mit einem LaTeX-Editor
-3. Oder öffne das Projekt in einem GitHub Codespace
+### Automated Build Management
 
-## Struktur
-- `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
-- `/modules/` - Individuelle CTMM-Module als separate .tex-Dateien
-- `/assets/` - Diagramme und visuelle Elemente
+The CTMM project includes a comprehensive automated build management system:
 
-## Anforderungen
-- LaTeX-Installation mit TikZ und hyperref
-- Oder GitHub Codespace (vorkonfiguriert)
-
-## LaTeX-Hinweise für Entwickler
-
-**CTMM Build System:**
-
-Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
-
-### Automatisierte Build-Prüfung
 ```bash
-python3 ctmm_build.py
+# Run comprehensive build analysis
+python3 build_manager.py
+# or
+make check
+
+# Build the PDF
+make build        # Builds main.tex
+make build-ci     # Builds main_final.tex for CI
+
+# Clean up
+make clean        # Remove build artifacts
+make clean-all    # Remove all generated files
 ```
 
-Das Build-System:
-1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
-2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
-3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
-4. **Testet vollständigen Build** - mit allen Modulen
-5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+### Key Features
 
-### Modulare Test-Strategie
+- **🔧 Automated Build Management**: Scans `main.tex` for dependencies and creates missing templates
+- **📋 Template Generation**: Automatically creates structured `.sty` and `.tex` templates
+- **🧪 Incremental Testing**: Isolates module-specific build errors through systematic testing
+- **📊 Comprehensive Reporting**: Generates detailed `build_report.md` with analysis and recommendations
+- **🛠️ Installation Guidance**: Provides helpful error messages and installation instructions
 
-**Für Entwickler:**
-- Jedes neue Modul wird automatisch erkannt und getestet
-- Fehlende Referenzen werden durch kommentierte Templates ersetzt (kein Dummy-Content)
-- Build bricht nicht mehr bei fehlenden Dateien ab
-- Templates enthalten sinnvolle Struktur mit `\section` und Platzhaltern
+## 📖 Detailed Documentation
 
-**Erweiterte Analyse:**
-Für granulare Modultests steht `build_system.py` zur Verfügung:
-```bash
-python3 build_system.py --verbose
+- **[BUILD_GUIDE.md](BUILD_GUIDE.md)**: Comprehensive quick-start guide and troubleshooting
+- **[build_report.md](build_report.md)**: Generated analysis report (created after running build system)
+
+## 🏗️ Build System Architecture
+
+### Core Components
+
+- **`build_manager.py`**: Main comprehensive build management system
+- **`ctmm_build.py`**: Simplified build system for basic operations
+- **`build_system.py`**: Detailed module analysis and testing
+- **`main_final.tex`**: Dedicated CI build target
+- **`Makefile`**: Intuitive command interface
+
+### Workflow
+
+1. **Dependency Scanning**: Analyzes `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}`
+2. **Template Generation**: Creates minimal templates for missing files with TODO guidelines
+3. **Incremental Testing**: Tests modules one by one to isolate build errors
+4. **Error Reporting**: Generates comprehensive reports and specific error logs
+5. **Build Optimization**: Provides recommendations for resolving issues
+
+## 📁 Project Structure
+
 ```
-- Testet Module schrittweise einzeln
-- Identifiziert problematische Module
-- Erstellt detaillierte Build-Reports
-- Protokolliert alle Operationen in `build_system.log`
+├── main.tex                    # Main document (development)
+├── main_final.tex             # CI build target
+├── build_manager.py           # Comprehensive build management
+├── ctmm_build.py             # Simplified build system
+├── build_system.py           # Detailed analysis system
+├── Makefile                   # Build commands
+├── BUILD_GUIDE.md            # Quick start documentation
+├── style/                     # LaTeX style files
+│   ├── ctmm-design.sty      # CTMM design elements
+│   ├── form-elements.sty    # Interactive form components
+│   └── ctmm-diagrams.sty    # Custom diagrams
+├── modules/                   # Therapy content modules
+│   ├── arbeitsblatt-*.tex   # Worksheets
+│   ├── trigger*.tex         # Trigger management
+│   └── *.tex               # Other therapy modules
+└── .github/workflows/        # CI/CD automation
+```
 
-### GitHub Workflow Integration
+## 🛠️ Available Commands
 
-Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigiert:
-- Referenziert nun korrekt `main.tex` (statt dem nicht existierenden `main_final.tex`)
-- Lädt `main.pdf` als Artefakt hoch
-- Kann durch das Build-System bei Fehlern erweitert werden
+| Command | Description |
+|---------|-------------|
+| `make check` | Run build manager analysis |
+| `make build` | Build main PDF (main.tex) |
+| `make build-ci` | Build CI PDF (main_final.tex) |
+| `make analyze` | Run comprehensive analysis |
+| `make test` | Quick build system test |
+| `make clean` | Remove build artifacts |
+| `make clean-all` | Remove all generated files |
+| `make help` | Show available commands |
 
-**Typische Fehlerquellen und Best Practices:**
+### Build Manager Options
 
-- **Pakete immer in der Präambel laden:**
-  - `\usepackage{...}` darf nur in der Hauptdatei (z.B. `main.tex`) vor `\begin{document}` stehen, niemals in Modulen oder nach `\begin{document}`.
-- **Makros und Befehle:**
-  - Definiere neue Makros (z.B. Checkboxen, Textfelder) zentral in der Präambel oder in einem Style-File, nicht in einzelnen Modulen.
-  - Beispiel für Checkboxen:
-    ```tex
-    % In der Präambel:
-    \usepackage{amssymb}
-    \newcommand{\checkbox}{$\square$}
-    \newcommand{\checkedbox}{$\blacksquare$}
-    ```
-  - **Wichtig:** Verwende in Modulen und Tabellen ausschließlich die Makros `\checkbox` und `\checkedbox` für Checkboxen. Benutze niemals direkt `\Box` oder `\blacksquare`, da dies zu `Undefined control sequence`-Fehlern führen kann.
-  - Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch `\Box` oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
-- **Module:**
-  - Module sollten keine Pakete laden oder globale Makros definieren.
-  - Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
-- **Fehlermeldungen:**
-  - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
-  - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
-  - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
+```bash
+python3 build_manager.py              # Basic analysis
+python3 build_manager.py --verbose    # Detailed logging
+python3 build_manager.py --test-file main_final.tex  # Test specific file
+```
 
-### Vorgehen bei neuen Modulen
+## 🧠 Content Overview
 
-1. **Referenz in main.tex hinzufügen:**
-   ```tex
-   \input{modules/mein-neues-modul}
+### Therapeutic Focus Areas
+
+- **Depression und Stimmungsstörungen**
+- **Trigger-Management und Bewältigungsstrategien**
+- **Borderline-Persönlichkeitsstörung (BPS)**
+- **ADHS und Autismus-Spektrum-Störung (ASS)**
+- **Komplexe PTBS (KPTBS)**
+- **Beziehungsdynamiken und Bindungsmuster**
+
+### Interactive Features
+
+- ✅ **Ausfüllbare PDF-Formulare** mit Checkboxen und Textfeldern
+- 🎨 **CTMM-Farbschema** für konsistente Gestaltung
+- 📱 **QR-Codes** für digitale Ressourcen
+- 🧭 **Navigationssystem** mit FontAwesome-Icons
+- 📋 **Strukturierte Arbeitsblätter** für Selbstreflexion
+
+## ⚙️ Installation
+
+### Prerequisites
+
+**LaTeX Distribution:**
+```bash
+# Ubuntu/Debian
+sudo apt-get install texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-lang-german
+
+# macOS (Homebrew)
+brew install --cask mactex
+
+# Windows
+# Download MiKTeX from https://miktex.org/
+```
+
+**Python Dependencies:**
+```bash
+pip install chardet
+```
+
+### Verification
+
+```bash
+# Test installation
+python3 build_manager.py --verbose
+
+# Check LaTeX packages
+make deps
+```
+
+## 🔄 Development Workflow
+
+### Adding New Content
+
+1. **Add reference in main.tex:**
+   ```latex
+   \input{modules/my-new-module}
    ```
 
-2. **Build-System ausführen:**
+2. **Run build system:**
    ```bash
-   python3 ctmm_build.py
+   python3 build_manager.py
    ```
 
-3. **Template wird automatisch erstellt:**
-   - `modules/mein-neues-modul.tex` mit Grundstruktur
-   - `modules/TODO_mein-neues-modul.md` mit Aufgabenliste
+3. **Complete generated template:**
+   - Edit the created `.tex` file
+   - Follow guidelines in `TODO_*.md`
+   - Remove TODO file when complete
 
-4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
+### Build Testing
 
-**README regelmäßig pflegen:**
-- Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
+```bash
+# Test your changes
+make check
 
-**Tipp:**
-Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+# Build PDF
+make build
+
+# Check for issues
+cat build_report.md
+```
+
+## 📊 Understanding Output
+
+### Build Status
+
+- ✅ **SUCCESS**: All systems operational
+- ⚠️ **WARNING**: Minor issues detected
+- ❌ **FAILED**: Build errors need attention
+
+### Generated Files
+
+- `build_report.md`: Comprehensive analysis and recommendations
+- `build_manager.log`: Detailed operation log
+- `TODO_*.md`: Task lists for new templates
+- `build_error_*.log`: Specific error diagnostics
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**Missing LaTeX Packages:**
+```bash
+# Install missing packages
+sudo apt-get install texlive-lang-german
+sudo apt-get install texlive-fonts-extra
+```
+
+**Build Failures:**
+```bash
+# Check detailed error logs
+cat build_error_modulename.log
+
+# Clean and retry
+make clean-all
+python3 build_manager.py
+```
+
+**Template Completion:**
+```bash
+# List incomplete templates
+ls TODO_*.md
+
+# Complete templates and remove TODO files
+rm TODO_*.md  # after completing content
+```
+
+## 🤝 Contributing
+
+1. **Run build system** before making changes
+2. **Add new content** through main.tex references
+3. **Complete generated templates** following guidelines
+4. **Test builds** with `make build`
+5. **Check reports** in `build_report.md`
+
+## 📄 License
+
+Dieses Projekt steht unter der [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+Entwickelt für die therapeutische Arbeit mit neurodiversen Paaren und Personen mit komplexen psychischen Herausforderungen.
+
+---
+
+💡 **Tip**: Start with `python3 build_manager.py` to analyze your system and get recommendations for next steps.
