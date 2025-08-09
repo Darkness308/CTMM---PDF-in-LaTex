@@ -58,6 +58,8 @@ sanitize_latex() {
     local temp_file="${input_file}.tmp"
     
     # Replace non-LaTeX compatible characters with LaTeX commands
+    # NOTE: We do NOT escape backslashes here because pandoc already produces proper LaTeX
+    # Escaping backslashes would break all LaTeX commands like \section, \textbf, etc.
     sed -e 's/&/\\&/g' \
         -e 's/%/\\%/g' \
         -e 's/\$/\\$/g' \
@@ -65,18 +67,11 @@ sanitize_latex() {
         -e 's/_/\\_/g' \
         -e 's/\^/\\textasciicircum{}/g' \
         -e 's/~/\\textasciitilde{}/g' \
-        -e 's/{/\\{/g' \
-        -e 's/}/\\}/g' \
-        -e 's/\\/\\textbackslash{}/g' \
         -e 's/"/``/g' \
         -e "s/'/'/g" \
         "$input_file" > "$temp_file"
     
     mv "$temp_file" "$input_file"
-    
-    # Fix double escaping from previous operations
-    sed -i 's/\\textbackslash{}textbackslash{}/\\textbackslash{}/g' "$input_file"
-    sed -i 's/\\\\textbackslash{}/\\textbackslash{}/g' "$input_file"
 }
 
 check_latex_syntax() {
