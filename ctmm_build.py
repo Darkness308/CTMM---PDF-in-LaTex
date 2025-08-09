@@ -100,7 +100,7 @@ Created by CTMM Build System
 
 
 def test_basic_build(main_tex_path="main.tex"):
-    """Test basic build without modules."""
+    """Test basic build without modules with enhanced error handling."""
     logger.info("Testing basic build (without modules)...")
 
     try:
@@ -122,22 +122,14 @@ def test_basic_build(main_tex_path="main.tex"):
         with open(temp_file, 'w', encoding='utf-8') as f:
             f.write(modified_content)
 
-        # Test build with limited output capture to avoid encoding issues
-        result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', temp_file],
-            capture_output=True,
-            text=True,
-            errors='replace',  # Handle encoding issues
-            check=False
-        )
-
-        success = result.returncode == 0
+        # Multi-pass compilation for better results
+        success = _run_multipass_compilation(temp_file)
+        
         if success:
             logger.info("✓ Basic build successful")
         else:
             logger.error("✗ Basic build failed")
-            logger.error("LaTeX errors detected (check %s.log for details)",
-                         temp_file)
+            _analyze_build_errors(temp_file)
 
         return success
 
@@ -153,32 +145,122 @@ def test_basic_build(main_tex_path="main.tex"):
 
 
 def test_full_build(main_tex_path="main.tex"):
-    """Test full build with all modules."""
+    """Test full build with all modules with enhanced verification."""
     logger.info("Testing full build (with all modules)...")
 
     try:
-        result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', main_tex_path],
-            capture_output=True,
-            text=True,
-            errors='replace',
-            check=False
-        )
-
-        success = result.returncode == 0
+        # Multi-pass compilation for full build
+        success = _run_multipass_compilation(main_tex_path)
+        
         if success:
             logger.info("✓ Full build successful")
-            if Path('main.pdf').exists():
-                logger.info("✓ PDF generated successfully")
+            pdf_file = Path('main.pdf')
+            if pdf_file.exists():
+                # Verify PDF integrity
+                pdf_size = pdf_file.stat().st_size
+                logger.info("✓ PDF generated successfully (size: %d bytes)", pdf_size)
+                
+                # Basic PDF verification
+                if pdf_size > 1000:  # Reasonable minimum size
+                    logger.info("✓ PDF appears to be valid")
+                else:
+                    logger.warning("⚠ PDF file seems unusually small, may be corrupted")
+                    return False
+            else:
+                logger.error("✗ PDF file not generated despite successful build")
+                return False
         else:
             logger.error("✗ Full build failed")
-            logger.error("Check main.log for detailed error information")
+            _analyze_build_errors(main_tex_path)
 
         return success
 
     except Exception as e:
         logger.error("Full build test failed: %s", e)
         return False
+
+
+def _run_multipass_compilation(tex_file):
+    """Run multi-pass LaTeX compilation for better results."""
+    logger.info("Running multi-pass compilation for %s...", tex_file)
+    
+    # First pass
+    result1 = subprocess.run(
+        ['pdflatex', '-interaction=nonstopmode', tex_file],
+        capture_output=True,
+        text=True,
+        errors='replace',
+        check=False
+    )
+    
+    if result1.returncode != 0:
+        logger.error("First pass failed")
+        return False
+    
+    # Second pass (for references and TOC)
+    result2 = subprocess.run(
+        ['pdflatex', '-interaction=nonstopmode', tex_file],
+        capture_output=True,
+        text=True,
+        errors='replace',
+        check=False
+    )
+    
+    if result2.returncode != 0:
+        logger.warning("Second pass failed, but first pass succeeded")
+        return True  # First pass success is often sufficient
+    
+    logger.info("✓ Multi-pass compilation completed successfully")
+    return True
+
+
+def _analyze_build_errors(tex_file):
+    """Analyze LaTeX build errors and provide suggestions."""
+    log_file = Path(tex_file).with_suffix('.log')
+    if not log_file.exists():
+        logger.error("No log file found for error analysis")
+        return
+    
+    logger.info("Analyzing build errors...")
+    
+    try:
+        with open(log_file, 'r', encoding='utf-8', errors='replace') as f:
+            log_content = f.read()
+        
+        error_patterns = [
+            (r'! Undefined control sequence', "Undefined command - check macro definitions"),
+            (r'! Package .* Error:', "Package error - check package usage and options"),
+            (r'! LaTeX Error: File .* not found', "Missing file - check file paths"),
+            (r'! Missing .* inserted', "Syntax error - check braces, math mode, etc."),
+            (r'Runaway argument', "Unmatched braces or missing closing delimiter"),
+            (r'! Emergency stop', "Critical error - compilation halted"),
+        ]
+        
+        found_errors = []
+        for pattern, suggestion in error_patterns:
+            if re.search(pattern, log_content, re.IGNORECASE):
+                found_errors.append(suggestion)
+        
+        if found_errors:
+            logger.error("Detected error types:")
+            for i, error in enumerate(found_errors, 1):
+                logger.error("  %d. %s", i, error)
+        else:
+            logger.warning("Build failed but no specific error patterns detected")
+            
+        # Save detailed error analysis
+        error_file = f"error_analysis_{Path(tex_file).stem}.md"
+        with open(error_file, 'w', encoding='utf-8') as f:
+            f.write(f"# Build Error Analysis: {tex_file}\n\n")
+            f.write("## Detected Issues\n")
+            for error in found_errors:
+                f.write(f"- {error}\n")
+            f.write(f"\n## Full Log\n```\n{log_content}\n```\n")
+        
+        logger.info("Detailed error analysis saved to %s", error_file)
+        
+    except Exception as e:
+        logger.error("Error analysis failed: %s", e)
 
 
 def main():

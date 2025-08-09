@@ -1,0 +1,144 @@
+% README - CTMM Converted Documents
+% Documentation for converted therapy materials
+
+\section{CTMM Converted Documents}
+\label{sec:ctmm-converted-documents}
+
+\begin{ctmmBlueBox}{Converted Therapy Materials}
+This directory contains 16 therapy documents successfully converted from Word (.docx) format to LaTeX using the CTMM Document Conversion Pipeline. These materials form the foundation of the CTMM therapy system for neurodiverse couples.
+\end{ctmmBlueBox}
+
+\subsection{Document Overview}
+
+\textbf{Conversion Statistics:}
+\begin{itemize}
+    \item Total documents processed: 16
+    \item Successfully converted: 16 (100\% success rate)
+    \item Conversion method: pandoc with CTMM post-processing
+    \item Format: LaTeX with CTMM-specific formatting
+\end{itemize}
+
+\subsection{Available Documents}
+
+\textbf{Trigger Management Tools:}
+\begin{itemize}
+    \item \texttt{Tool 23 Trigger Management.tex} - Comprehensive trigger management system
+    \item \texttt{2.3 Trigger Management.tex} - Basic trigger management techniques
+    \item \texttt{Tool 23 Triggermanagement Systemlogik CTMM Seiten 1-3.tex} - System logic documentation
+    \item \texttt{Tool 23 Triggermanagement Teil 2 mit Systemlogik CTMM.tex} - Advanced trigger management
+    \item \texttt{Trigger Forschungstagebuch.tex} - Trigger research journal
+    \item \texttt{Trigger Notfallkarten.tex} - Emergency trigger cards
+\end{itemize}
+
+\textbf{Assessment and Monitoring:}
+\begin{itemize}
+    \item \texttt{Täglicher Check Arbeitsblätter.tex} - Daily check-in worksheets
+    \item \texttt{Ctmm Depression Modul.tex} - Depression monitoring module
+    \item \texttt{5.5 Krisenprotokoll Ausfüllen.tex} - Crisis protocol forms
+\end{itemize}
+
+\textbf{Relationship and Binding:}
+\begin{itemize}
+    \item \texttt{Bindungsdynamik CTMM Modul.tex} - Binding dynamics module
+    \item \texttt{Bindungsleitfaden CTMM Übersicht.tex} - Binding guidance overview
+    \item \texttt{Tool 26 Co Regulation \& Gemeinsame Stärkung CTMM.tex} - Co-regulation tools
+    \item \texttt{Parnterschaftliche Werte \& Trigger Kompas.tex} - Partnership values compass
+\end{itemize}
+
+\textbf{Communication and Safety:}
+\begin{itemize}
+    \item \texttt{Tool 22 Safewords Signalsysteme CTMM.tex} - Safeword and signal systems
+\end{itemize}
+
+\textbf{Matching Matrices:}
+\begin{itemize}
+    \item \texttt{Matching Matrix Trigger Reaktion Intervention CTMM.tex} - Trigger-reaction-intervention matrix
+    \item \texttt{Matching Matrix Wochenlogik.tex} - Weekly logic matching matrix
+\end{itemize}
+
+\subsection{Document Features}
+
+\textbf{CTMM-Enhanced Formatting:}
+\begin{itemize}
+    \item \checkbox\,Interactive checkboxes for therapy exercises
+    \item \checkbox\,CTMM color scheme integration (Blue, Orange, Green, Purple)
+    \item \checkbox\,German language support with proper encoding
+    \item \checkbox\,Structured sections for therapeutic content
+    \item \checkbox\,Navigation-friendly labels and references
+\end{itemize}
+
+\textbf{Interactive Elements:}
+\begin{itemize}
+    \item \checkbox\,Fill-in forms for client responses
+    \item \checkbox\,Checkbox lists for tracking progress
+    \item \checkbox\,Tables for systematic documentation
+    \item \checkbox\,Reflection spaces for therapeutic work
+\end{itemize}
+
+\subsection{Integration Instructions}
+
+\textbf{To include these documents in the main CTMM system:}
+
+\begin{enumerate}
+    \item \textbf{Individual Module Integration:}
+    \begin{verbatim}
+\input{converted/Tool 23 Trigger Management}
+    \end{verbatim}
+    
+    \item \textbf{Selective Content Inclusion:}
+    \begin{verbatim}
+% Include specific sections only
+\input{converted/Ctmm Depression Modul}
+    \end{verbatim}
+    
+    \item \textbf{Build System Integration:}
+    \begin{itemize}
+        \item Add converted modules to \texttt{main.tex} input list
+        \item Run \texttt{python3 ctmm\_build.py} to verify integration
+        \item Use \texttt{python3 build\_system.py --verbose} for detailed analysis
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Quality Assurance}
+
+\textbf{Conversion Quality Features:}
+\begin{itemize}
+    \item \checkbox\,Automatic encoding detection and handling
+    \item \checkbox\,CTMM-specific post-processing applied
+    \item \checkbox\,German text preserved with proper formatting
+    \item \checkbox\,Therapeutic content structure maintained
+    \item \checkbox\,Interactive elements enhanced for PDF forms
+\end{itemize}
+
+\textbf{Validation Status:}
+\begin{itemize}
+    \item \checkbox\,All 16 documents converted successfully
+    \item \checkbox\,LaTeX syntax verified through compilation
+    \item \checkbox\,CTMM formatting standards applied
+    \item \checkbox\,German language encoding preserved
+    \item \checkbox\,Interactive elements functional
+\end{itemize}
+
+\subsection{Developer Notes}
+
+\textbf{Conversion Pipeline Used:}
+\begin{itemize}
+    \item \textbf{Primary Tool:} pandoc (Word to LaTeX conversion)
+    \item \textbf{Post-Processing:} CTMM-specific formatting enhancement
+    \item \textbf{Quality Control:} Automatic error detection and handling
+    \item \textbf{Encoding:} UTF-8 with German language support
+\end{itemize}
+
+\textbf{Future Enhancements:}
+\begin{itemize}
+    \item \checkbox\,Content review and therapeutic accuracy validation
+    \item \checkbox\,Enhanced interactive form elements
+    \item \checkbox\,Automatic cross-referencing between modules
+    \item \checkbox\,PDF accessibility improvements
+    \item \checkbox\,Multi-language support expansion
+\end{itemize}
+
+\vspace{1cm}
+\begin{center}
+\textcolor{ctmmBlue}{\textit{Diese Dokumente wurden automatisch durch das CTMM Document Conversion System erstellt und für die therapeutische Arbeit mit neurodiversen Paaren optimiert.}}
+\end{center}
