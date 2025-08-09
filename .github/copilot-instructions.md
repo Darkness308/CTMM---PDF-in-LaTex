@@ -65,17 +65,27 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **CTMM Form Elements**: Use predefined interactive form macros from `form-elements.sty`:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[field_name]{Label}           % Interactive checkbox
+  \ctmmTextField[width]{default}{field_name} % Text input field
+  \ctmmTextArea[width][height]{default}{field_name} % Multi-line text
+  \ctmmRadioButton{group_name}{value}{label} % Radio button
   ```
-- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- **NEVER** use raw LaTeX form commands or undefined symbols directly
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
 - Use existing macros and commands defined in preamble/style files
 - Keep modules focused on single therapeutic concepts
+
+**Module Structure Conventions:**
+- Start with `\section*{\textcolor{ctmmBlue}{\faIcon~Title}}` for main headers
+- Use `\label{sec:module-name}` for cross-referencing
+- Include `\addcontentsline{toc}{section}{Title}` for TOC entries
+- Add therapeutic context in `\begin{quote}` blocks when appropriate
+- Use FontAwesome icons (`\fa...`) to categorize content visually
+- Structure worksheets with clear subsections using `\subsection*{\faIcon~Subsection}`
 
 ### 🎨 CTMM Design System
 
@@ -86,8 +96,13 @@ python3 build_system.py --verbose  # Granular analysis
 - `ctmmPurple` - Purple for special sections
 
 **Custom Elements:**
-- `\begin{ctmmBlueBox}{Title}` - Styled info boxes
-- Form elements from `form-elements.sty`
+- `\begin{ctmmBlueBox}{Title}` - Styled info boxes (primary)
+- `\begin{ctmmGreenBox}{Title}` - Success/positive boxes
+- `\begin{ctmmOrangeBox}{Title}` - Warning/attention boxes  
+- `\begin{ctmmRedBox}{Title}` - Error/critical boxes
+- `\begin{ctmmPurpleBox}{Title}` - Special/advanced boxes
+- `\begin{ctmmYellowBox}{Title}` - Tips/tooltips boxes
+- Form elements from `form-elements.sty` (see Custom Macros section)
 - Navigation system with `\faCompass` icons
 - Interactive PDF features with hyperref
 
@@ -137,9 +152,18 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Content Types:**
 - **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
+  - Structured with clear sections using `\faIcon` symbols
+  - Include `\ctmmTextField` and `\ctmmCheckBox` for user input
+  - Often have tooltip boxes with `\begin{ctmmYellowBox}{\faLightbulb~Tooltip}`
 - **Trigger Management**: Coping strategies and identification tools
+  - Use systematic categorization (situation, emotions, responses)
+  - Include cross-references to related modules with `\ctmmRef`
 - **Psychoeducation**: Information about mental health conditions
+  - Chapter structure with `\section*{\textcolor{ctmmBlue}{\faIcon~Title}}`
+  - Include quotes with therapeutic context in `\begin{quote}` blocks
 - **Relationship Tools**: Communication and binding pattern resources
+  - Interactive elements for couples to use together
+  - Clear role definitions and instructions
 
 ### 🇩🇪 German Language Context
 
@@ -148,13 +172,22 @@ python3 build_system.py --verbose  # Granular analysis
 - Include pronunciation guides for technical terms when helpful
 - Maintain consistency in therapeutic vocabulary
 
+**Therapeutic Content Organization:**
+- Content follows CTMM methodology: **Catch-Track-Map-Match**
+- Modules often reference chapter numbers (e.g., `Kap. 2.5`, `Kap. 3.2`)
+- Cross-references between related tools and techniques
+- Use of systematic categorization for therapeutic elements
+- Tooltip boxes provide guidance: `\begin{ctmmYellowBox}{\faLightbulb~Tooltip}`
+
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Core packages**: tikz, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Form packages**: pifont (checkbox symbols), calc, forloop, ifthen
 - **Font encoding**: T1 with UTF-8 input
-- **Language**: ngerman babel
+- **Language**: ngerman babel for German typesetting
 - **PDF features**: Interactive forms, bookmarks, metadata
+- **Geometry**: A4 paper with custom margins (2.5cm, top/bottom 3cm)
 
 ### Development Environment
 - **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
@@ -198,8 +231,10 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
-- `\begin{ctmmBlueBox}{title}` - Styled info boxes
+- `\ctmmCheckBox[field_name]{Label}` - Interactive checkboxes
+- `\ctmmTextField[width]{default}{field_name}` - Text input fields
+- `\begin{ctmmBlueBox}{title}` - Styled info boxes (all colors available)
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
+- `\ctmmRef{section}{text}` - Cross-references with CTMM styling
 
 Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
