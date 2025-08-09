@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          clean: true
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -22,12 +24,18 @@ jobs:
         run: |
           pip install chardet
 
+      - name: Clean workspace
+        run: |
+          # Remove any potential leftover files that could cause git conflicts
+          rm -rf converted/ converted_files/ processed/ || true
+          git clean -fdx || true
+
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
 
       - name: Set up LaTeX
-        - uses: dante-ev/latex-action@v2.0.0
+        uses: dante-ev/latex-action@v2.0.0
         with:
           root_file: main.tex
 
