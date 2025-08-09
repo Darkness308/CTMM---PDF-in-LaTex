@@ -19,6 +19,7 @@ import sys
 import tempfile
 import shutil
 import chardet
+from datetime import datetime
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
@@ -210,6 +211,7 @@ This file was automatically created by the CTMM Build System because it was refe
                 ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                 capture_output=True,
                 text=True,
+                errors='replace',  # Handle encoding issues gracefully
                 cwd=str(self.main_tex_path.parent)
             )
             
@@ -274,6 +276,7 @@ This file was automatically created by the CTMM Build System because it was refe
                     ['pdflatex', '-interaction=nonstopmode', temp_file.name],
                     capture_output=True,
                     text=True,
+                    errors='replace',  # Handle encoding issues gracefully
                     cwd=str(self.main_tex_path.parent)
                 )
                 
