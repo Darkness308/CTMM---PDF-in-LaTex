@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help unit-test
+.PHONY: build check clean test help unit-test convert convert-clean
 
 # Default target
 all: check build
@@ -31,6 +31,16 @@ unit-test:
 	@echo "Running unit tests..."
 	python3 test_ctmm_build.py
 
+# Convert Word documents to LaTeX
+convert:
+	@echo "Converting Word documents to LaTeX..."
+	python3 document_converter.py
+
+# Fix over-escaped LaTeX files  
+convert-clean:
+	@echo "Fixing over-escaped LaTeX files..."
+	python3 document_converter.py --clean
+
 # Clean build artifacts
 clean:
 	rm -f *.aux *.log *.out *.toc *.pdf
@@ -50,12 +60,14 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system"
-	@echo "  unit-test - Run unit tests for Python functions"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all         - Run check and build (default)"
+	@echo "  check       - Check dependencies and run build system"
+	@echo "  build       - Build the PDF"
+	@echo "  analyze     - Run detailed module analysis"
+	@echo "  test        - Quick test of build system"
+	@echo "  unit-test   - Run unit tests for Python functions"
+	@echo "  convert     - Convert Word documents to LaTeX"
+	@echo "  convert-clean - Fix over-escaped LaTeX files"
+	@echo "  clean       - Remove build artifacts"
+	@echo "  deps        - Install Python dependencies"
+	@echo "  help        - Show this help"
