@@ -65,12 +65,13 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Checkbox Convention**: For simple checkboxes, use:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  $\square$        % Empty checkbox: □
+  $\blacksquare$   % Filled checkbox: ■
   ```
-- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+  For interactive forms, use the `\ctmmCheckBox` components from `form-elements.sty`
+- **NEVER** use `\Box` directly (causes undefined control sequence errors)
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -198,7 +199,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `$\square$` / `$\blacksquare$` - Simple checkboxes
+- `\ctmmCheckBox` - Interactive form checkboxes  
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
