@@ -97,10 +97,37 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 - **Module:**
   - Module sollten keine Pakete laden oder globale Makros definieren.
   - Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
+- **Over-Escaping vermeiden:**
+  - Das Projekt erkennt automatisch Over-Escaping-Probleme (z.B. `\\&` statt `\&`)
+  - Bei Konvertierung von Markdown zu LaTeX können solche Probleme auftreten
+  - Das Build-System warnt vor Over-Escaping und bietet automatische Reparatur
 - **Fehlermeldungen:**
   - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
   - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
   - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
+
+### Over-Escaping Fix Tool
+
+Das Projekt enthält ein automatisches Tool zur Erkennung und Behebung von Over-Escaping-Problemen:
+
+```bash
+# Prüfung auf Over-Escaping (Testlauf)
+python3 fix_over_escaping.py --dry-run
+
+# Automatische Reparatur aller Module
+python3 fix_over_escaping.py
+
+# Reparatur spezifischer Dateien
+python3 fix_over_escaping.py modules/safewords.tex
+```
+
+**Häufige Over-Escaping-Probleme:**
+- `\\&` statt `\&` (doppelt escaped)
+- `\hypertarget{}` und `\texorpdfstring{}` (pandoc-Artefakte)
+- Unnötige `\begin{quote}` Umhüllung in Listen
+- `\ul{}` statt `\underline{}`
+
+Das Build-System prüft automatisch auf solche Probleme und warnt entsprechend.
 
 ### Vorgehen bei neuen Modulen
 

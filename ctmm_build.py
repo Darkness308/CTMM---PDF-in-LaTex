@@ -181,6 +181,32 @@ def test_full_build(main_tex_path="main.tex"):
         return False
 
 
+def check_over_escaping():
+    """Check for over-escaping issues in LaTeX files."""
+    logger.info("Checking for over-escaping issues...")
+    
+    try:
+        result = subprocess.run(
+            ['python3', 'fix_over_escaping.py', '--dry-run'],
+            capture_output=True,
+            text=True,
+            errors='replace',
+            check=False
+        )
+        
+        if "over-escaping issues" in result.stdout and "0 files had over-escaping issues" not in result.stdout:
+            logger.warning("Over-escaping issues detected!")
+            logger.warning("Run 'python3 fix_over_escaping.py' to fix them")
+            return False
+        else:
+            logger.info("✓ No over-escaping issues found")
+            return True
+            
+    except Exception as e:
+        logger.warning("Could not check for over-escaping: %s", e)
+        return True  # Don't fail build if tool isn't available
+
+
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
@@ -205,6 +231,9 @@ def main():
     # Test builds
     basic_ok = test_basic_build()
     full_ok = test_full_build()
+    
+    # Check for over-escaping issues
+    escaping_ok = check_over_escaping()
 
     # Summary
     print("\n" + "="*50)
@@ -215,11 +244,15 @@ def main():
     print(f"Missing files: {len(missing_files)} (templates created)")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
+    print(f"Over-escaping check: {'✓ CLEAN' if escaping_ok else '⚠ ISSUES FOUND'}")
 
     if missing_files:
         print("\nNEXT STEPS:")
         print("- Review and complete the created template files")
         print("- Remove TODO_*.md files when content is complete")
+    
+    if not escaping_ok:
+        print("- Run 'python3 fix_over_escaping.py' to fix over-escaping issues")
 
     return 0 if (basic_ok and full_ok) else 1
 
