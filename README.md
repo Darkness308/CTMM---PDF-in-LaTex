@@ -86,6 +86,7 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
   - Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
 - **Fehlermeldungen:**
   - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
+  - **Bei Verletzung dieser Regel schlägt der LaTeX-Build mit obigem Fehler fehl, und das PDF wird nicht generiert, bis der fehlerhafte `\usepackage`-Befehl in die Präambel verschoben wird. Dies kann automatisierte Builds stoppen und Dokumentaktualisierungen blockieren.**
   - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
   - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
 
