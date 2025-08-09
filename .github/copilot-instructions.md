@@ -65,11 +65,14 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Checkbox Convention**: Use the CTMM form system:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[fieldname]{label}  % Interactive checkbox with label
   ```
+- **Form Elements**: Available from `form-elements.sty`:
+  - `\ctmmTextField[width]{default}{fieldname}` - Text input fields
+  - `\ctmmTextArea[width]{height}{fieldname}{}` - Multi-line text areas
+  - `\ctmmRadioButton{group}{value}{label}` - Radio buttons
 - **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
 
 #### Module Development
@@ -151,7 +154,7 @@ python3 build_system.py --verbose  # Granular analysis
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb, geometry, pifont, ifthen, calc, forloop
 - **Font encoding**: T1 with UTF-8 input
 - **Language**: ngerman babel
 - **PDF features**: Interactive forms, bookmarks, metadata
@@ -198,7 +201,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckBox[fieldname]{label}` - Interactive form checkboxes
+- `\ctmmTextField[width]{default}{fieldname}` - Text input fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
