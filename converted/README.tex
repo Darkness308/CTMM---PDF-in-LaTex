@@ -1,0 +1,182 @@
+\hypertarget{ctmm-system}{%
+\section{CTMM-System}\label{ctmm-system}}
+
+Ein modulares LaTeX-Framework für Catch-Track-Map-Match Therapiematerialien.
+
+\hypertarget{uxfcberblick}{%
+\subsection{Überblick}\label{uxfcberblick}}
+
+Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CTMM-Therapiedokumenten, einschließlich: - Depression \& Stimmungstief Module - Trigger-Management - Bindungsdynamik - Formularelemente für therapeutische Dokumentation
+
+\hypertarget{verwendung}{%
+\subsection{Verwendung}\label{verwendung}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Klone das Repository
+\item
+  Kompiliere main.tex mit einem LaTeX-Editor
+\item
+  Oder öffne das Projekt in einem GitHub Codespace
+\end{enumerate}
+
+\hypertarget{struktur}{%
+\subsection{Struktur}\label{struktur}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{/style/} - Design-Dateien und gemeinsam verwendete Komponenten
+\item
+  \texttt{/modules/} - Individuelle CTMM-Module als separate .tex-Dateien
+\item
+  \texttt{/assets/} - Diagramme und visuelle Elemente
+\end{itemize}
+
+\hypertarget{anforderungen}{%
+\subsection{Anforderungen}\label{anforderungen}}
+
+\begin{itemize}
+\tightlist
+\item
+  LaTeX-Installation mit TikZ und hyperref
+\item
+  Oder GitHub Codespace (vorkonfiguriert)
+\end{itemize}
+
+\hypertarget{latex-hinweise-fuxfcr-entwickler}{%
+\subsection{LaTeX-Hinweise für Entwickler}\label{latex-hinweise-fuxfcr-entwickler}}
+
+\textbf{CTMM Build System:}
+
+Das Projekt verfügt über ein automatisches Build-System (\texttt{ctmm\_build.py}), das folgende Funktionen bietet:
+
+\hypertarget{automatisierte-build-pruxfcfung}{%
+\subsubsection{Automatisierte Build-Prüfung}\label{automatisierte-build-pruxfcfung}}
+
+\begin{verbatim}
+python3 ctmm_build.py
+\end{verbatim}
+
+Das Build-System: 1. \textbf{Scannt main.tex} nach allen \texttt{usepackage\{style/...\}} und \texttt{input\{modules/...\}} Befehlen 2. \textbf{Prüft Dateiexistenz} - erstellt minimale Templates für fehlende Dateien 3. \textbf{Testet Grundgerüst} - Build ohne Module zum Testen der Basis-Struktur 4. \textbf{Testet vollständigen Build} - mit allen Modulen 5. \textbf{Erstellt TODO-Dateien} für neue Template-Dateien mit Hinweisen zur Vervollständigung
+
+\hypertarget{modulare-test-strategie}{%
+\subsubsection{Modulare Test-Strategie}\label{modulare-test-strategie}}
+
+\textbf{Für Entwickler:} - Jedes neue Modul wird automatisch erkannt und getestet - Fehlende Referenzen werden durch kommentierte Templates ersetzt (kein Dummy-Content) - Build bricht nicht mehr bei fehlenden Dateien ab - Templates enthalten sinnvolle Struktur mit \texttt{section} und Platzhaltern
+
+\textbf{Erweiterte Analyse:} Für granulare Modultests steht \texttt{build\_system.py} zur Verfügung:
+
+\begin{verbatim}
+python3 build_system.py --verbose
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Testet Module schrittweise einzeln
+\item
+  Identifiziert problematische Module
+\item
+  Erstellt detaillierte Build-Reports
+\item
+  Protokolliert alle Operationen in \texttt{build\_system.log}
+\end{itemize}
+
+\hypertarget{github-workflow-integration}{%
+\subsubsection{GitHub Workflow Integration}\label{github-workflow-integration}}
+
+Das GitHub Actions Workflow (\texttt{.github/workflows/latex-build.yml}) wurde korrigiert: - Referenziert nun korrekt \texttt{main.tex} (statt dem nicht existierenden \texttt{main\_final.tex}) - Lädt \texttt{main.pdf} als Artefakt hoch - Kann durch das Build-System bei Fehlern erweitert werden
+
+\textbf{Typische Fehlerquellen und Best Practices:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pakete immer in der Präambel laden:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{usepackage\{...\}} darf nur in der Hauptdatei (z.B. \texttt{main.tex}) vor \texttt{begin\{document\}} stehen, niemals in Modulen oder nach \texttt{begin\{document\}}.
+  \end{itemize}
+\item
+  \textbf{Makros und Befehle:}
+
+  \begin{itemize}
+  \item
+    Definiere neue Makros (z.B. Checkboxen, Textfelder) zentral in der Präambel oder in einem Style-File, nicht in einzelnen Modulen.
+  \item
+    Beispiel für Checkboxen:
+
+\begin{verbatim}
+% In der Präambel:
+\usepackage{amssymb}
+\newcommand{\checkbox}{$\square$}
+\newcommand{\checkedbox}{$\blacksquare$}
+\end{verbatim}
+  \item
+    \textbf{Wichtig:} Verwende in Modulen und Tabellen ausschließlich die Makros \texttt{checkbox} und \texttt{checkedbox} für Checkboxen. Benutze niemals direkt \texttt{Box} oder \texttt{blacksquare}, da dies zu \texttt{Undefined\ control\ sequence}-Fehlern führen kann.
+  \item
+    Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch \texttt{Box} oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
+  \end{itemize}
+\item
+  \textbf{Module:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Module sollten keine Pakete laden oder globale Makros definieren.
+  \item
+    Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
+  \end{itemize}
+\item
+  \textbf{Fehlermeldungen:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{Can\ be\ used\ only\ in\ preamble}: Ein Paket wurde im Fließtext geladen -- in die Präambel verschieben!
+  \item
+    \texttt{Undefined\ control\ sequence}: Ein Makro ist nicht definiert -- Definition prüfen oder in die Präambel verschieben.
+  \item
+    \texttt{Command\ ...\ already\ defined}: Ein Makro wurde doppelt definiert -- nur eine Definition behalten (am besten zentral).
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{vorgehen-bei-neuen-modulen}{%
+\subsubsection{Vorgehen bei neuen Modulen}\label{vorgehen-bei-neuen-modulen}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Referenz in main.tex hinzufügen:}
+
+\begin{verbatim}
+\input{modules/mein-neues-modul}
+\end{verbatim}
+\item
+  \textbf{Build-System ausführen:}
+
+\begin{verbatim}
+python3 ctmm_build.py
+\end{verbatim}
+\item
+  \textbf{Template wird automatisch erstellt:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{modules/mein-neues-modul.tex} mit Grundstruktur
+  \item
+    \texttt{modules/TODO\_mein-neues-modul.md} mit Aufgabenliste
+  \end{itemize}
+\item
+  \textbf{Inhalt ergänzen} und TODO-Datei entfernen wenn fertig
+\end{enumerate}
+
+\textbf{README regelmäßig pflegen:} - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
+
+\textbf{Tipp:} Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst -- und ergänze sie zentral, nicht im Modul selbst.
