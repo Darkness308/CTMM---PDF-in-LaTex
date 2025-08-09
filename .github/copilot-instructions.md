@@ -1,5 +1,7 @@
 # Copilot Instructions for CTMM-System
 
+**ALWAYS reference these instructions first and fallback to search or additional context gathering only when you encounter unexpected information that does not match the information here.**
+
 ## Project Overview
 
 This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
@@ -32,6 +34,55 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 ├── Makefile                   # Build commands
 └── .github/workflows/         # CI/CD for PDF generation
 ```
+
+## Working Effectively
+
+### Bootstrap, Build, and Test the Repository
+
+Run these commands to set up and validate the repository:
+
+```bash
+# Install LaTeX dependencies
+sudo apt update
+sudo apt install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-german
+
+# Install Python dependencies  
+pip install chardet
+
+# Validate build system - takes ~1.7 seconds
+python3 ctmm_build.py
+
+# Build PDF - takes ~2.2 seconds  
+make build
+
+# Full check and build - takes ~4 seconds
+make all
+```
+
+### Build Commands and Timing
+
+- **Primary build check**: `python3 ctmm_build.py` - 1.7 seconds
+- **PDF generation**: `make build` - 2.2 seconds  
+- **Complete workflow**: `make all` - 4 seconds
+- **Clean artifacts**: `make clean` - immediate
+- **Dependencies**: `make deps` - immediate if already installed
+
+**All commands complete quickly (under 5 seconds). No special timeout requirements needed.**
+
+### Validation
+
+**ALWAYS run these validation steps after making changes:**
+
+1. **Build system check**: `python3 ctmm_build.py` - must show "✓ PASS" for both basic and full builds
+2. **PDF generation**: `make build` - must complete without errors and generate `main.pdf`
+3. **File verification**: `ls -la main.pdf && file main.pdf` - must show valid PDF document
+4. **Manual validation**: Open and inspect `main.pdf` to ensure content renders correctly
+
+**Critical validation scenario**: After any module or style changes, ALWAYS run:
+```bash
+make clean && make all
+```
+Then verify the PDF contains the expected content and no compilation errors occurred.
 
 ## LaTeX Architecture & Conventions
 
@@ -181,6 +232,121 @@ python3 build_system.py --verbose  # Granular analysis
 - Reference issue numbers when applicable
 - Keep commits focused on single changes
 - Test thoroughly before pushing
+
+---
+
+## Common Tasks
+
+Run these commands for frequent development activities:
+
+### Environment Setup (First Time)
+```bash
+# Check if LaTeX is installed
+which pdflatex || echo "LaTeX not installed"
+
+# Install LaTeX on Ubuntu/Debian systems
+sudo apt update && sudo apt install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-german
+
+# Install Python dependencies
+pip install chardet
+
+# Verify installation
+python3 --version  # Should show Python 3.x
+pdflatex --version  # Should show pdfTeX version
+```
+
+### Daily Development Workflow
+```bash
+# Start with clean state
+make clean
+
+# Check build system
+python3 ctmm_build.py
+
+# Build PDF  
+make build
+
+# Verify PDF was created
+ls -la main.pdf && file main.pdf
+```
+
+### Adding New Modules
+```bash
+# 1. Add reference to main.tex manually:
+# \input{modules/my-new-module}
+
+# 2. Run build system to auto-generate template
+python3 ctmm_build.py
+
+# 3. Edit the generated file: modules/my-new-module.tex
+
+# 4. Test build
+make build
+
+# 5. Remove TODO file when complete: modules/TODO_my-new-module.md
+```
+
+### Troubleshooting Build Issues
+```bash
+# Check detailed analysis (takes ~10 seconds)
+make analyze
+
+# Clean and rebuild
+make clean && make all
+
+# Check for encoding issues in modules
+python3 build_system.py --verbose
+```
+
+## Repository Contents
+
+Use these reference outputs instead of running commands to save time:
+
+### Root Directory Listing
+```
+.devcontainer/
+.git/
+.github/
+.gitignore
+.vscode/
+HYPERLINK-STATUS.md
+LICENSE  
+Makefile
+README.md
+build/
+build_system.py*
+ctmm_build.py*
+main.pdf
+main.tex
+modules/
+style/
+therapie-material/
+```
+
+### Modules Directory
+```
+arbeitsblatt-checkin.tex
+arbeitsblatt-depression-monitoring.tex  
+arbeitsblatt-trigger.tex
+bindungsleitfaden.tex
+demo-interactive.tex
+depression.tex
+interactive.tex
+navigation-system.tex
+notfallkarten.tex
+qrcode.tex
+safewords.tex
+selbstreflexion.tex
+therapiekoordination.tex
+triggermanagement.tex
+```
+
+### Style Directory  
+```
+ctmm-design.sty
+ctmm-diagrams.sty
+form-elements.sty
+```
 
 ---
 
