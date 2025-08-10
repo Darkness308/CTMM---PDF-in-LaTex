@@ -41,6 +41,19 @@ Das Build-System:
 4. **Testet vollständigen Build** - mit allen Modulen
 5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
 
+### Unit Tests
+
+Das Build-System enthält Unit Tests für kritische Funktionen:
+
+```bash
+# Python-Unit-Tests ausführen
+make unit-test
+# oder direkt:
+python3 test_ctmm_build.py
+```
+
+Die Tests überprüfen die `filename_to_title()` Funktion mit verschiedenen Eingabeformaten (Unterstriche, Bindestriche, Groß-/Kleinschreibung, etc.).
+
 ### Modulare Test-Strategie
 
 **Für Entwickler:**
