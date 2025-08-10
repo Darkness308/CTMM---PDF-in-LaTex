@@ -12,17 +12,18 @@ This script:
 6. Logs all operations for debugging
 """
 
-import os
 import re
 import subprocess
 import sys
-import tempfile
-import shutil
 import chardet
 from datetime import datetime
 from pathlib import Path
+copilot/fix-47
+from typing import List, Set
+
 from typing import List, Tuple, Dict, Set
 from datetime import datetime
+main
 import argparse
 import logging
 
@@ -66,16 +67,16 @@ class CTMMBuildSystem:
                 detected = chardet.detect(raw_data)
                 encoding = detected.get('encoding', 'utf-8')
                 
-            logger.debug(f"Detected encoding for {file_path}: {encoding}")
+            logger.debug("Detected encoding for %s: %s", file_path, encoding)
             with open(file_path, 'r', encoding=encoding, errors='replace') as f:
                 return f.read()
     
     def scan_main_tex(self) -> None:
         """Scan main.tex for all usepackage{style/...} and input{modules/...} commands."""
-        logger.info(f"Scanning {self.main_tex_path} for package and input references...")
+        logger.info("Scanning %s for package and input references...", self.main_tex_path)
         
         if not self.main_tex_path.exists():
-            logger.error(f"Main TeX file {self.main_tex_path} not found!")
+            logger.error("Main TeX file %s not found!", self.main_tex_path)
             sys.exit(1)
             
         content = self._read_file_safely(self.main_tex_path)
@@ -90,8 +91,8 @@ class CTMMBuildSystem:
         module_matches = re.findall(module_pattern, content)
         self.module_files = {f"modules/{match}.tex" for match in module_matches}
         
-        logger.info(f"Found {len(self.style_files)} style files: {', '.join(self.style_files)}")
-        logger.info(f"Found {len(self.module_files)} module files: {', '.join(self.module_files)}")
+        logger.info("Found %d style files: %s", len(self.style_files), ', '.join(self.style_files))
+        logger.info("Found %d module files: %s", len(self.module_files), ', '.join(self.module_files))
     
     def check_file_existence(self) -> None:
         """Check if all referenced files exist."""
@@ -101,12 +102,12 @@ class CTMMBuildSystem:
         for file_path in all_files:
             if not Path(file_path).exists():
                 self.missing_files.append(file_path)
-                logger.warning(f"Missing file: {file_path}")
+                logger.warning("Missing file: %s", file_path)
             else:
-                logger.debug(f"Found file: {file_path}")
+                logger.debug("Found file: %s", file_path)
                 
         if self.missing_files:
-            logger.warning(f"Found {len(self.missing_files)} missing files")
+            logger.warning("Found %d missing files", len(self.missing_files))
         else:
             logger.info("All referenced files exist")
     
@@ -170,7 +171,7 @@ class CTMMBuildSystem:
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(template_content)
                 
-            logger.info(f"Created template: {file_path}")
+            logger.info("Created template: %s", file_path)
             
             # Create TODO file
             todo_path = path.parent / f"TODO_{path.stem}.md"
@@ -194,7 +195,7 @@ This file was automatically created by the CTMM Build System because it was refe
             with open(todo_path, 'w', encoding='utf-8') as f:
                 f.write(todo_content)
                 
-            logger.info(f"Created TODO: {todo_path}")
+            logger.info("Created TODO: %s", todo_path)
     
     def test_basic_build(self) -> bool:
         """Test build with all input lines temporarily commented out."""
@@ -228,7 +229,7 @@ This file was automatically created by the CTMM Build System because it was refe
                 logger.info("Basic build (without modules) successful")
             else:
                 logger.error("Basic build failed even without modules")
-                logger.error(f"Error output: {result.stderr}")
+                logger.error("Error output: %s", result.stderr)
                 
             return success
             
@@ -255,13 +256,12 @@ This file was automatically created by the CTMM Build System because it was refe
         module_list = sorted(list(self.module_files))
         
         for i, current_module in enumerate(module_list):
-            logger.info(f"Testing with modules 0-{i}: {' '.join(module_list[:i+1])}")
+            logger.info("Testing with modules 0-%d: %s", i, ' '.join(module_list[:i + 1]))
             
             # Create content with modules 0 to i enabled
             modified_content = original_content
             for j, module in enumerate(module_list):
-                module_pattern = f"modules/{Path(module).stem}"
-                input_pattern = f"\\input{{{module_pattern}}}"
+                module_pattern = "modules/%s" % Path(module).stem
                 
                 if j <= i:
                     # Keep this module enabled
@@ -269,13 +269,13 @@ This file was automatically created by the CTMM Build System because it was refe
                 else:
                     # Comment out this module
                     modified_content = re.sub(
-                        f'(\\\\input\\{{{module_pattern}\\}})',
+                        '(\\\\input\\{%s\\})' % module_pattern,
                         r'% \1  % Disabled for incremental testing',
                         modified_content
                     )
             
             # Test build with current module set
-            temp_file = self.main_tex_path.with_suffix(f'.test_{i}.tex')
+            temp_file = self.main_tex_path.with_suffix('.test_%d.tex' % i)
             with open(temp_file, 'w', encoding='utf-8') as f:
                 f.write(modified_content)
                 
@@ -288,22 +288,22 @@ This file was automatically created by the CTMM Build System because it was refe
                 )
                 
                 if result.returncode == 0:
-                    logger.info(f"✓ Build successful with {current_module}")
+                    logger.info("✓ Build successful with %s", current_module)
                 else:
-                    logger.error(f"✗ Build failed when adding {current_module}")
+                    logger.error("✗ Build failed when adding %s", current_module)
                     self.problematic_modules.append(current_module)
                     
                     # Log error details
-                    error_log = f"build_error_{Path(current_module).stem}.log"
+                    error_log = "build_error_%s.log" % Path(current_module).stem
                     with open(error_log, 'w') as f:
-                        f.write(f"Build error when testing {current_module}\n")
-                        f.write(f"Return code: {result.returncode}\n\n")
+                        f.write("Build error when testing %s\n" % current_module)
+                        f.write("Return code: %d\n\n" % result.returncode)
                         f.write("STDOUT:\n")
                         f.write(result.stdout)
                         f.write("\n\nSTDERR:\n")
                         f.write(result.stderr)
                     
-                    logger.error(f"Error details saved to {error_log}")
+                    logger.error("Error details saved to %s", error_log)
                     
             finally:
                 # Clean up
@@ -375,7 +375,7 @@ CTMM Build System Report
             return len(self.problematic_modules) == 0
             
         except Exception as e:
-            logger.error(f"Build system check failed: {e}")
+            logger.error("Build system check failed: %s", e)
             return False
 
 def main():
