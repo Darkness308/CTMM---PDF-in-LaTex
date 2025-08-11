@@ -23,7 +23,6 @@ from typing import List, Set
 
 from typing import List, Tuple, Dict, Set
 from datetime import datetime
-main
 import argparse
 import logging
 
