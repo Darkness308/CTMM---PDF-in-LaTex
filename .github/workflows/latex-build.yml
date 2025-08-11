@@ -1,4 +1,4 @@
-name: Build LaTeX PDF
+name: "Build LaTeX PDF"
 
 on:
   push:
@@ -34,6 +34,11 @@ jobs:
         uses: dante-ev/latex-action@v2.1.0
         with:
           root_file: main.tex
+          args: -interaction=nonstopmode -file-line-error
+          extra_packages: |
+            babel-german
+            hyphen-german
+            collection-langgerman
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
