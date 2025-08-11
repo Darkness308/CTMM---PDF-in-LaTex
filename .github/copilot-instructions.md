@@ -26,11 +26,18 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 │   ├── trigger*.tex           # Trigger management modules
 │   ├── depression.tex         # Depression-related content
 │   └── ...                    # Other therapeutic modules
-├── therapie-material/          # Additional therapy resources
+├── therapie-material/          # Additional Word documents (.docx)
+│   ├── Tool *.docx            # Original therapeutic tools
+│   ├── *Matrix*.docx          # Matching matrices and logic
+│   └── *Arbeitsblätter*.docx  # Worksheet templates
 ├── ctmm_build.py              # Automated build system (primary)
 ├── build_system.py            # Detailed module analysis
+├── test_ctmm_build.py         # Unit tests for build system
+├── validate_latex_syntax.py   # LaTeX syntax validation
 ├── Makefile                   # Build commands
 └── .github/workflows/         # CI/CD for PDF generation
+    ├── latex-build.yml        # Main PDF build workflow
+    └── latex-validation.yml   # Syntax validation workflow
 ```
 
 ## LaTeX Architecture & Conventions
@@ -53,7 +60,12 @@ python3 ctmm_build.py
 make check          # Run build system check
 make build          # Build PDF with pdflatex
 make analyze        # Detailed module testing
+make test           # Quick test + unit tests
+make test-unit      # Run only unit tests
+make clean          # Remove build artifacts
+make deps           # Install Python dependencies
 python3 build_system.py --verbose  # Granular analysis
+python3 validate_latex_syntax.py   # LaTeX syntax validation
 ```
 
 ### 📄 LaTeX Best Practices
@@ -111,6 +123,20 @@ python3 build_system.py --verbose  # Granular analysis
 
 4. **Complete the module** and remove TODO file when finished
 
+### Testing and Validation
+
+**Build System Tests:**
+```bash
+python3 test_ctmm_build.py     # Unit tests for build functions
+make test                       # Combined build + unit tests
+python3 validate_latex_syntax.py  # LaTeX syntax validation
+```
+
+**Manual Testing:**
+- Test individual modules by temporarily commenting others in `main.tex`
+- Verify PDF output for formatting and interactive elements
+- Check German text encoding and therapeutic accuracy
+
 ### Troubleshooting Common Issues
 
 **Build Errors:**
@@ -140,6 +166,7 @@ python3 build_system.py --verbose  # Granular analysis
 - **Trigger Management**: Coping strategies and identification tools
 - **Psychoeducation**: Information about mental health conditions
 - **Relationship Tools**: Communication and binding pattern resources
+- **Reference Materials**: Original Word documents in `therapie-material/` containing source content and templates
 
 ### 🇩🇪 German Language Context
 
@@ -160,15 +187,21 @@ python3 build_system.py --verbose  # Granular analysis
 - **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
 - **GitHub Codespace**: Pre-configured environment available
 - **CI/CD**: Automated PDF building via GitHub Actions
+  - Uses `dante-ev/latex-action@v2.1.0` for LaTeX compilation
+  - Includes syntax validation with `validate_latex_syntax.py`
+  - Uploads PDF artifacts and build logs on failure
+  - Runs on push/PR to main branch
 
 ## Contributing Best Practices
 
 ### Code Reviews
 - Test builds before submitting PR
+- Run unit tests: `python3 test_ctmm_build.py`
 - Verify PDF output renders correctly
 - Check for LaTeX compilation warnings
 - Ensure German text is properly encoded
 - Validate therapeutic content accuracy
+- Run syntax validation: `python3 validate_latex_syntax.py`
 
 ### Documentation Updates
 - Update README.md for new features or conventions
@@ -190,12 +223,15 @@ python3 build_system.py --verbose  # Granular analysis
 - `python3 ctmm_build.py` - Main build system
 - `make check` - Quick dependency check
 - `make build` - Generate PDF
+- `make test` - Run build system + unit tests  
 - `make clean` - Remove artifacts
+- `make deps` - Install Python dependencies
 
 **Key Files:**
 - `main.tex` - Document entry point and preamble
 - `style/*.sty` - Design and component definitions
 - `modules/*.tex` - Individual therapy content
+- `therapie-material/*.docx` - Source reference materials
 
 **Common Macros:**
 - `\checkbox` / `\checkedbox` - Form checkboxes
