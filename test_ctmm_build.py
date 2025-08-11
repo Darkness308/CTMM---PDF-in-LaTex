@@ -13,7 +13,16 @@ import unittest
 import sys
 from pathlib import Path
 
-copilot/fix-47
+Unit tests for CTMM Build System functions.
+Tests the ctmm_build.py module functions for correctness.
+
+Unit tests for CTMM Build System functions
+Tests the filename_to_title() function with various input formats.
+"""
+
+import unittest
+import sys
+from pathlib import Path
 # Add current directory to path for importing ctmm_build
 sys.path.insert(0, str(Path(__file__).parent))
 import ctmm_build
