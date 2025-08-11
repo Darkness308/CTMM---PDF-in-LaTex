@@ -217,7 +217,6 @@ def test_modules_incrementally():
 def generate_build_report():
     """Generate build report (placeholder for now)."""
     logger.info("Build report generated")
-    return True
 
 
 def test_full_build(main_tex_path="main.tex"):
