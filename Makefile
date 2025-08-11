@@ -1,10 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-copilot/fix-47
 .PHONY: build check clean test test-unit help
-
-.PHONY: build check clean test help unit-test
- main
 
 # Default target
 all: check build
@@ -62,24 +58,12 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-copilot/fix-47
-	@echo "  all      - Run check and build (default)"
-	@echo "  check    - Check dependencies and run build system"
-	@echo "  build    - Build the PDF"
-	@echo "  analyze  - Run detailed module analysis"
-	@echo "  test     - Quick test of build system + unit tests"
-	@echo "  test-unit- Run only unit tests for ctmm_build.py"
-	@echo "  clean    - Remove build artifacts"
-	@echo "  deps     - Install Python dependencies"
-	@echo "  help     - Show this help"
-
 	@echo "  all       - Run check and build (default)"
 	@echo "  check     - Check dependencies and run build system"
 	@echo "  build     - Build the PDF"
 	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system"
-	@echo "  unit-test - Run unit tests for Python functions"
+	@echo "  test      - Quick test of build system + unit tests"
+	@echo "  test-unit - Run only unit tests for ctmm_build.py"
 	@echo "  clean     - Remove build artifacts"
 	@echo "  deps      - Install Python dependencies"
 	@echo "  help      - Show this help"
-main
