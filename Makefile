@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit help
+.PHONY: build check clean test test-unit validate-pr help
 
 # Default target
 all: check build
@@ -9,6 +9,11 @@ all: check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Validate PR content (for contributors)
+validate-pr:
+	@echo "Validating PR content for Copilot review..."
+	python3 validate_pr.py
 
 # Build PDF
 build:
@@ -58,12 +63,13 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system + unit tests"
-	@echo "  test-unit - Run only unit tests for ctmm_build.py"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all        - Run check and build (default)"
+	@echo "  check      - Check dependencies and run build system"
+	@echo "  validate-pr- Validate PR content for Copilot review"
+	@echo "  build      - Build the PDF"
+	@echo "  analyze    - Run detailed module analysis"
+	@echo "  test       - Quick test of build system + unit tests"
+	@echo "  test-unit  - Run only unit tests for ctmm_build.py"
+	@echo "  clean      - Remove build artifacts"
+	@echo "  deps       - Install Python dependencies"
+	@echo "  help       - Show this help"
