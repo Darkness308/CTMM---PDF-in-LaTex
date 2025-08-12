@@ -110,14 +110,21 @@ def check_file_changes(base_branch="main"):
 def check_ctmm_build():
     """Run the CTMM build system to validate the project."""
     print("\n🔧 Running CTMM build system...")
-    success, stdout, stderr = run_command("python3 ctmm_build.py", capture_output=False)
+    success, stdout, stderr = run_command("python3 ctmm_build.py")
     
     if not success:
-        print(f"❌ CTMM build failed: {stderr}")
+        print(f"❌ CTMM build failed")
+        if stderr:
+            print(f"Error details: {stderr}")
         return False
     
-    print("✅ CTMM build system passed")
-    return True
+    # Check the output for success indicators
+    if stdout and ("PASS" in stdout or "✓" in stdout):
+        print("✅ CTMM build system passed")
+        return True
+    else:
+        print("⚠️  CTMM build completed but status unclear")
+        return True  # Don't fail if we can't parse the output clearly
 
 def validate_latex_files():
     """Check for common LaTeX issues in changed files."""
