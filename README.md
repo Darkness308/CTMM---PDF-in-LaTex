@@ -120,6 +120,28 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 
 4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
 
+### Pull Request Validation
+
+**Vor dem Erstellen von Pull Requests** validieren, dass Copilot die Änderungen reviewen kann:
+
+```bash
+# Schnelle Validierung
+make validate-pr
+
+# Vollständige Pre-Commit-Prüfung
+make pre-commit
+
+# Manuelle Validierung
+python3 validate_pr_readiness.py
+```
+
+**Häufige Probleme:**
+- ❌ PR ohne Datei-Änderungen → Copilot kann nicht reviewen
+- ❌ Nur Whitespace-Änderungen → Keine bedeutsamen Änderungen
+- ❌ Uncommitted Changes → `git add .` und `git commit` vergessen
+
+**Siehe auch:** [PR_GUIDELINES.md](PR_GUIDELINES.md) für detaillierte Anleitungen.
+
 **README regelmäßig pflegen:**
 - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
 

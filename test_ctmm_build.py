@@ -18,7 +18,6 @@ import ctmm_build
 sys.path.insert(0, str(Path(__file__).parent))
 
 from ctmm_build import filename_to_title
-main
 
 
 class TestFilenameToTitle(unittest.TestCase):
