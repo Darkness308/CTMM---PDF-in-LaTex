@@ -1,18 +1,5 @@
 #!/usr/bin/env python3
 """
-copilot/fix-47
-Unit tests for CTMM Build System functions.
-Tests the ctmm_build.py module functions for correctness.
-
-Unit tests for CTMM Build System functions
-Tests the filename_to_title() function with various input formats.
-main
-"""
-
-import unittest
-import sys
-from pathlib import Path
-
 Unit tests for CTMM Build System functions.
 Tests the ctmm_build.py module functions for correctness.
 
@@ -37,7 +24,6 @@ main
 class TestFilenameToTitle(unittest.TestCase):
     """Test cases for the filename_to_title function."""
 
-copilot/fix-47
     def test_underscores_to_spaces(self):
         """Test that underscores are converted to spaces."""
         result = ctmm_build.filename_to_title("test_module_name")
