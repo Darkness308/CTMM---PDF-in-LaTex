@@ -18,11 +18,7 @@ import sys
 import chardet
 from datetime import datetime
 from pathlib import Path
-copilot/fix-47
-from typing import List, Set
-
-from typing import List, Tuple, Dict, Set
-from datetime import datetime
+from typing import List, Set, Tuple, Dict
 import argparse
 import logging
 
