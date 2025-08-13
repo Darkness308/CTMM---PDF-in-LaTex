@@ -36,7 +36,7 @@ jobs:
           root_file: main.tex
           args: -pdf -interaction=nonstopmode -halt-on-error
           extra_system_packages: |
-            babel-german
+            texlive-lang-german
             hyphen-german
           extra_fonts: |
             texlive-fonts-recommended
