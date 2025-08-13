@@ -32,16 +32,16 @@ def create_sample_over_escaped_files():
     readme_content = """\\textbackslash{}hypertarget\\textbackslash{}{ctmm-system\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
 \\textbackslash{}section\\textbackslash{}{CTMM-System\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{ctmm-system\\textbackslash{}}\\textbackslash{}}
 
-Ein modulares LaTeX-Framework für Catch-Track-Map-Match Therapiematerialien.
+Ein modulares LaTeX-Framework f√ºr Catch-Track-Map-Match Therapiematerialien.
 
 \\textbackslash{}hypertarget\\textbackslash{}{uxfcberblick\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
-\\textbackslash{}subsection\\textbackslash{}{Überblick\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{uxfcberblick\\textbackslash{}}\\textbackslash{}}
+\\textbackslash{}subsection\\textbackslash{}{√úberblick\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{uxfcberblick\\textbackslash{}}\\textbackslash{}}
 
-Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CTMM-Therapiedokumenten, einschließlich:
+Dieses Repository enth√§lt ein vollst√§ndiges LaTeX-System zur Erstellung von CTMM-Therapiedokumenten, einschlie√ülich:
 - Depression \\textbackslash{}\\textbackslash{}& Stimmungstief Module
 - Trigger-Management
 - Bindungsdynamik
-- Formularelemente für therapeutische Dokumentation
+- Formularelemente f√ºr therapeutische Dokumentation
 
 \\textbackslash{}hypertarget\\textbackslash{}{verwendung\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
 \\textbackslash{}subsection\\textbackslash{}{Verwendung\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{verwendung\\textbackslash{}}\\textbackslash{}}
@@ -54,7 +54,7 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 \\textbackslash{}item
   Kompiliere main.tex mit einem LaTeX-Editor
 \\textbackslash{}item
-  Oder öffne das Projekt in einem GitHub Codespace
+  Oder √∂ffne das Projekt in einem GitHub Codespace
 \\textbackslash{}end\\textbackslash{}{enumerate\\textbackslash{}}
 
 \\textbackslash{}hypertarget\\textbackslash{}{struktur\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
@@ -75,33 +75,33 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
     # Sample Safewords file with over-escaping
     safewords_content = """\\textbackslash{}hypertarget\\textbackslash{}{tool-22-safe-words-signalsysteme-ctmm-modul\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
-\\textbackslash{}section\\textbackslash{}{\\textbackslash{}texorpdfstring\\textbackslash{}{\\textbackslash{}textbf\\textbackslash{}{🛑 TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}{🛑 TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{tool-22-safe-words-signalsysteme-ctmm-modul\\textbackslash{}}\\textbackslash{}}
+\\textbackslash{}section\\textbackslash{}{\\textbackslash{}texorpdfstring\\textbackslash{}{\\textbackslash{}textbf\\textbackslash{}{üõë TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}{üõë TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{tool-22-safe-words-signalsysteme-ctmm-modul\\textbackslash{}}\\textbackslash{}}
 
 \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-🧠 \\textbackslash{}textbf\\textbackslash{}{\\textbackslash{}ul\\textbackslash{}{Worum geht's hier -- für Freunde?\\textbackslash{}}\\textbackslash{}}\\textbackslash{}\\textbackslash{}
+üß† \\textbackslash{}textbf\\textbackslash{}{\\textbackslash{}ul\\textbackslash{}{Worum geht's hier -- f√ºr Freunde?\\textbackslash{}}\\textbackslash{}}\\textbackslash{}\\textbackslash{}
 Safe-Words sind vereinbarte Codes oder Zeichen, die sofort signalisieren:
 \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 
 \\textbackslash{}begin\\textbackslash{}{itemize\\textbackslash{}}
 \\textbackslash{}item
   \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-  \\textbackslash{}textbf\\textbackslash{}{„Ich kann nicht mehr``\\textbackslash{}}
+  \\textbackslash{}textbf\\textbackslash{}{‚ÄûIch kann nicht mehr``\\textbackslash{}}
   \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 \\textbackslash{}item
   \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-  \\textbackslash{}textbf\\textbackslash{}{„Ich brauch Ruhe`` oder\\textbackslash{}}
+  \\textbackslash{}textbf\\textbackslash{}{‚ÄûIch brauch Ruhe`` oder\\textbackslash{}}
   \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 \\textbackslash{}item
   \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-  \\textbackslash{}textbf\\textbackslash{}{„Stopp -- das wird mir zu viel``\\textbackslash{}}
+  \\textbackslash{}textbf\\textbackslash{}{‚ÄûStopp -- das wird mir zu viel``\\textbackslash{}}
   \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 \\textbackslash{}end\\textbackslash{}{itemize\\textbackslash{}}
 
 \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-Sie schützen vor Eskalation, Überforderung, Rückzug oder Missverständnissen -- ohne viele Worte.
+Sie sch√ºtzen vor Eskalation, √úberforderung, R√ºckzug oder Missverst√§ndnissen -- ohne viele Worte.
 \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 
-🧩 \\textbackslash{}textbf\\textbackslash{}{Zentraler Bestandteil der Eskalationsprävention -- mit Symbol- und Notfallsystem\\textbackslash{}}
+üß© \\textbackslash{}textbf\\textbackslash{}{Zentraler Bestandteil der Eskalationspr√§vention -- mit Symbol- und Notfallsystem\\textbackslash{}}
 
 \\textbackslash{}hypertarget\\textbackslash{}{kapitelzuordnung-im-ctmm-system\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%"""
 
@@ -109,7 +109,7 @@ Sie schützen vor Eskalation, Überforderung, Rückzug oder Missverständnissen 
     with open(converted_dir / 'README.tex', 'w', encoding='utf-8') as f:
         f.write(readme_content)
     
-    with open(converted_dir / 'Tool 22 Safewords Signalsysteme CTMM.tex', 'w', encoding='utf-8') as f:
+    with open(converted_dir / 'Tool_22_Safewords_Signalsysteme_CTMM.tex', 'w', encoding='utf-8') as f:
         f.write(safewords_content)
     
     logger.info(f"Created sample over-escaped files in {converted_dir}")
@@ -140,7 +140,7 @@ def demonstrate_workflow():
     for i, line in enumerate(lines, 1):
         print(f"   {i:2d}: {line.rstrip()}")
     
-    print("\n   ❌ Problem: Excessive \\textbackslash{} escaping makes code unreadable")
+    print("\n   ‚ùå Problem: Excessive \\textbackslash{} escaping makes code unreadable")
     
     # Step 3: Apply the fix
     print("\n3. Applying de-escaping fixes...")
@@ -154,7 +154,7 @@ def demonstrate_workflow():
     for i, line in enumerate(lines, 1):
         print(f"   {i:2d}: {line.rstrip()}")
     
-    print("\n   ✅ Result: Clean, readable LaTeX code")
+    print("\n   ‚úÖ Result: Clean, readable LaTeX code")
     
     # Step 5: Summary
     print("\n5. Processing Summary:")
@@ -166,7 +166,7 @@ def demonstrate_workflow():
     print("\n6. Validation:")
     for tex_file in tex_files:
         issues = de_escaper.validate_latex_syntax(tex_file)
-        status = "✅ OK" if not issues else f"⚠️  {', '.join(issues)}"
+        status = "‚úÖ OK" if not issues else f"‚ö†Ô∏è  {', '.join(issues)}"
         print(f"   {tex_file.name}: {status}")
     
     print("\n" + "="*60)

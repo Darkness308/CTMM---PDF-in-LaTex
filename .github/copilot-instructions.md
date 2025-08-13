@@ -16,26 +16,26 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 ## Repository Structure
 
 ```
-├── main.tex                    # Main LaTeX document (entry point)
-├── style/                      # LaTeX style files (.sty)
-│   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── form-elements.sty      # Interactive form components  
-│   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
-├── modules/                    # Individual therapy modules (.tex)
-│   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
-│   ├── trigger*.tex           # Trigger management modules
-│   ├── depression.tex         # Depression-related content
-│   └── ...                    # Other therapeutic modules
-├── therapie-material/          # Additional therapy resources
-├── ctmm_build.py              # Automated build system (primary)
-├── build_system.py            # Detailed module analysis
-├── Makefile                   # Build commands
-└── .github/workflows/         # CI/CD for PDF generation
+â”œâ”€â”€ main.tex                    # Main LaTeX document (entry point)
+â”œâ”€â”€ style/                      # LaTeX style files (.sty)
+â”‚   â”œâ”€â”€ ctmm-design.sty        # CTMM color scheme and design elements
+â”‚   â”œâ”€â”€ form-elements.sty      # Interactive form components  
+â”‚   â””â”€â”€ ctmm-diagrams.sty      # Custom diagrams and visual elements
+â”œâ”€â”€ modules/                    # Individual therapy modules (.tex)
+â”‚   â”œâ”€â”€ arbeitsblatt-*.tex     # Worksheets (ArbeitsblÃ¤tter)
+â”‚   â”œâ”€â”€ trigger*.tex           # Trigger management modules
+â”‚   â”œâ”€â”€ depression.tex         # Depression-related content
+â”‚   â””â”€â”€ ...                    # Other therapeutic modules
+â”œâ”€â”€ therapie-material/          # Additional therapy resources
+â”œâ”€â”€ ctmm_build.py              # Automated build system (primary)
+â”œâ”€â”€ build_system.py            # Detailed module analysis
+â”œâ”€â”€ Makefile                   # Build commands
+â””â”€â”€ .github/workflows/         # CI/CD for PDF generation
 ```
 
 ## LaTeX Architecture & Conventions
 
-### 🔧 Build System Usage
+### ðŸ”§ Build System Usage
 
 **Primary Build Command:**
 ```bash
@@ -56,19 +56,19 @@ make analyze        # Detailed module testing
 python3 build_system.py --verbose  # Granular analysis
 ```
 
-### 📄 LaTeX Best Practices
+### ðŸ“„ LaTeX Best Practices
 
 #### Package Loading Rules
 - **CRITICAL**: All `\usepackage{...}` commands MUST be in the preamble of `main.tex`
 - **NEVER** load packages in modules or after `\begin{document}`
-- Error: `Can be used only in preamble` → Move package to preamble
+- Error: `Can be used only in preamble` â†’ Move package to preamble
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
 - **Checkbox Convention**: Use predefined macros only:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \checkbox        % Empty checkbox: â–¡
+  \checkedbox      % Filled checkbox: â– 
   ```
 - **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
 
@@ -77,7 +77,7 @@ python3 build_system.py --verbose  # Granular analysis
 - Use existing macros and commands defined in preamble/style files
 - Keep modules focused on single therapeutic concepts
 
-### 🎨 CTMM Design System
+### ðŸŽ¨ CTMM Design System
 
 **Color Scheme:**
 - `ctmmBlue` - Primary blue for headers and structure
@@ -114,9 +114,9 @@ python3 build_system.py --verbose  # Granular analysis
 ### Troubleshooting Common Issues
 
 **Build Errors:**
-- `Undefined control sequence` → Check if macro is defined in preamble
-- `Command already defined` → Remove duplicate macro definitions
-- Missing file errors → Run `ctmm_build.py` to auto-generate templates
+- `Undefined control sequence` â†’ Check if macro is defined in preamble
+- `Command already defined` â†’ Remove duplicate macro definitions
+- Missing file errors â†’ Run `ctmm_build.py` to auto-generate templates
 
 **Module Guidelines:**
 - Use semantic section structure: `\section{Title}`, `\subsection{}`
@@ -126,7 +126,7 @@ python3 build_system.py --verbose  # Granular analysis
 
 ## Content Guidelines
 
-### 🧠 Therapeutic Content
+### ðŸ§  Therapeutic Content
 
 **Sensitive Material**: This repository contains mental health resources. When contributing:
 
@@ -136,12 +136,12 @@ python3 build_system.py --verbose  # Granular analysis
 - **Professional tone**: Maintain therapeutic, non-judgmental language
 
 **Content Types:**
-- **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
+- **ArbeitsblÃ¤tter** (Worksheets): Interactive forms for self-reflection
 - **Trigger Management**: Coping strategies and identification tools
 - **Psychoeducation**: Information about mental health conditions
 - **Relationship Tools**: Communication and binding pattern resources
 
-### 🇩🇪 German Language Context
+### ðŸ‡©ðŸ‡ª German Language Context
 
 - Use formal therapeutic German (Sie-Form for clients)
 - Medical/psychological terminology should be accurate
