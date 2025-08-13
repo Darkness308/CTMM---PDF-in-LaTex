@@ -31,7 +31,13 @@ Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das
 
 ### Automatisierte Build-Prüfung
 ```bash
+# Standard Build-System Check
 python3 ctmm_build.py
+
+# Umfassende Build-Analyse (NEU!)
+python3 build_manager.py
+# oder
+make comprehensive
 ```
 
 Das Build-System:
@@ -41,18 +47,49 @@ Das Build-System:
 4. **Testet vollständigen Build** - mit allen Modulen
 5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
 
+### Neues Comprehensive Build Management
+
+Das neue `build_manager.py` bietet erweiterte Funktionen:
+
+**Incremental Testing Strategy:**
+- Tests basic framework (ohne Module)
+- Tests Module einzeln, um spezifische Fehler zu isolieren
+- Strukturierte Schritt-für-Schritt-Analyse
+- Automatische Backup/Restore Funktionalität
+
+**Sophisticated Error Detection:**
+- Konsistente `[INFO]` Log-Formatierung
+- Detaillierte Fehleranalyse und -kategorisierung
+- Automatische LaTeX-Installation-Hinweise
+- Umfassende Build-Reports (Markdown-Format)
+
+**Template Generation:**
+- Automatische Erstellung von `.sty` Style-Package Templates
+- Automatische Erstellung von `.tex` Modul Templates
+- TODO-Kommentare und Struktur-Hilfen
+- Integration mit vorhandenem Build-System
+
 ### Unit Tests
 
 Das Build-System enthält Unit Tests für kritische Funktionen:
 
 ```bash
-# Python-Unit-Tests ausführen
+# Alle Unit Tests ausführen
 make unit-test
-# oder direkt:
+
+# Nur ctmm_build.py Tests
 python3 test_ctmm_build.py
+
+# Nur build_manager.py Tests (NEU!)
+python3 test_build_manager.py
+# oder
+make test-manager
 ```
 
-Die Tests überprüfen die `filename_to_title()` Funktion mit verschiedenen Eingabeformaten (Unterstriche, Bindestriche, Groß-/Kleinschreibung, etc.).
+Die Tests überprüfen:
+- `filename_to_title()` Funktion mit verschiedenen Eingabeformaten
+- **Build Manager Funktionalität:** datetime import, konsistente Log-Formatierung, Template-Erstellung
+- **Integration Tests:** Schritt-Nummerierung, Backup/Restore, Incremental Testing
 
 ### Modulare Test-Strategie
 

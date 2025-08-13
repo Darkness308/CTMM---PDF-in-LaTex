@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit help
+.PHONY: build check clean test test-unit test-manager comprehensive help
 
 # Default target
 all: check build
@@ -9,6 +9,11 @@ all: check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Comprehensive build management analysis
+comprehensive:
+	@echo "Running comprehensive build analysis..."
+	python3 build_manager.py
 
 # Build PDF
 build:
@@ -28,15 +33,22 @@ test:
 	@echo "Running unit tests..."
 	python3 test_ctmm_build.py
 
-# Run only unit tests
+# Run only unit tests for ctmm_build.py
 test-unit:
 	@echo "Running unit tests for ctmm_build.py..."
 	python3 test_ctmm_build.py
 
+# Run tests for build manager
+test-manager:
+	@echo "Running unit tests for build_manager.py..."
+	python3 test_build_manager.py
+
 # Run unit tests
 unit-test:
-	@echo "Running unit tests..."
+	@echo "Running all unit tests..."
 	python3 test_ctmm_build.py
+	@echo "Running build manager tests..."
+	python3 test_build_manager.py
 
 # Clean build artifacts
 clean:
@@ -44,6 +56,7 @@ clean:
 	rm -f main_basic_test.*
 	rm -f *.temp.*
 	rm -f build_error_*.log
+	rm -f build_report.md
 	rm -f __pycache__/*.pyc
 	@echo "Cleaned build artifacts"
 
@@ -58,12 +71,15 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system + unit tests"
-	@echo "  test-unit - Run only unit tests for ctmm_build.py"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all           - Run check and build (default)"
+	@echo "  check         - Check dependencies and run basic build system"
+	@echo "  comprehensive - Run comprehensive build analysis with new build manager"
+	@echo "  build         - Build the PDF"
+	@echo "  analyze       - Run detailed module analysis"
+	@echo "  test          - Quick test of build system + unit tests"
+	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
+	@echo "  test-manager  - Run only unit tests for build_manager.py"
+	@echo "  unit-test     - Run all unit tests"
+	@echo "  clean         - Remove build artifacts"
+	@echo "  deps          - Install Python dependencies"
+	@echo "  help          - Show this help"
