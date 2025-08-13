@@ -25,6 +25,9 @@ main_basic_test.*
 main.pdf
 build/*.pdf
 
+## Source material files (binary formats not suitable for code review):
+therapie-material/
+
 ## Files that may cause Copilot review issues:
 # Exclude files with special characters or encoding issues
 *.backup.*
