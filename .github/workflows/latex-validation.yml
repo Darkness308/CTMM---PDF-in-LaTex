@@ -1,0 +1,40 @@
+name: LaTeX Validation
+
+"on":
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies  
+        run: |
+          pip install chardet
+
+      - name: Run LaTeX syntax validation
+        run: |
+          python3 validate_latex_syntax.py
+
+      - name: Run CTMM Build System Check
+        run: |
+          python3 ctmm_build.py
+
+      - name: Upload validation logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation_logs
+          path: |
+            *.log
+            build_error_*.log
