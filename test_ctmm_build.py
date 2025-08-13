@@ -115,10 +115,50 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertTrue(hasattr(ctmm_build, 'scan_references'))
         self.assertTrue(callable(ctmm_build.scan_references))
 
+    def test_scan_references_return_type(self):
+        """Test that scan_references returns a dictionary with correct keys."""
+        result = ctmm_build.scan_references()
+        self.assertIsInstance(result, dict)
+        self.assertIn('style_files', result)
+        self.assertIn('module_files', result)
+        self.assertIsInstance(result['style_files'], list)
+        self.assertIsInstance(result['module_files'], list)
+
     def test_check_missing_files_function_exists(self):
         """Test that check_missing_files function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'check_missing_files'))
         self.assertTrue(callable(ctmm_build.check_missing_files))
+
+    def test_check_missing_files_return_type(self):
+        """Test that check_missing_files returns a dictionary with correct keys."""
+        # Test with a mix of existing and non-existing files
+        test_files = ["test_ctmm_build.py", "nonexistent_file.txt", "ctmm_build.py"]
+        result = ctmm_build.check_missing_files(test_files)
+        self.assertIsInstance(result, dict)
+        self.assertIn('missing', result)
+        self.assertIn('existing', result)
+        self.assertIsInstance(result['missing'], list)
+        self.assertIsInstance(result['existing'], list)
+        # Verify the actual categorization
+        self.assertIn("nonexistent_file.txt", result['missing'])
+        self.assertIn("test_ctmm_build.py", result['existing'])
+        self.assertIn("ctmm_build.py", result['existing'])
+
+    def test_validate_latex_structure_function_exists(self):
+        """Test that validate_latex_structure function exists and is callable."""
+        self.assertTrue(hasattr(ctmm_build, 'validate_latex_structure'))
+        self.assertTrue(callable(ctmm_build.validate_latex_structure))
+
+    def test_validate_latex_structure_return_type(self):
+        """Test that validate_latex_structure returns a dictionary with correct keys."""
+        result = ctmm_build.validate_latex_structure()
+        self.assertIsInstance(result, dict)
+        self.assertIn('valid', result)
+        self.assertIn('errors', result)
+        self.assertIn('warnings', result)
+        self.assertIsInstance(result['valid'], bool)
+        self.assertIsInstance(result['errors'], list)
+        self.assertIsInstance(result['warnings'], list)
 
     def test_create_template_function_exists(self):
         """Test that create_template function exists and is callable."""

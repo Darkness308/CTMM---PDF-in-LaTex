@@ -23,13 +23,17 @@ def filename_to_title(filename):
 
 
 def scan_references(main_tex_path="main.tex"):
-    """Scan main.tex for style and module references."""
+    """Scan main.tex for style and module references.
+    
+    Returns:
+        dict: Dictionary with 'style_files' and 'module_files' keys containing lists of file paths.
+    """
     try:
         with open(main_tex_path, 'r', encoding='utf-8', errors='replace') as f:
             content = f.read()
     except Exception as e:
         logger.error("Error reading %s: %s", main_tex_path, e)
-        return [], []
+        return {"style_files": [], "module_files": []}
 
     # Find style and module references
     style_files = [f"style/{match}.sty" for match in
@@ -37,16 +41,75 @@ def scan_references(main_tex_path="main.tex"):
     module_files = [f"modules/{match}.tex" for match in
                     re.findall(r'\\input\{modules/([^}]+)\}', content)]
 
-    return style_files, module_files
+    return {"style_files": style_files, "module_files": module_files}
 
 
 def check_missing_files(files):
-    """Check which files are missing."""
+    """Check which files are missing.
+    
+    Args:
+        files (list): List of file paths to check
+        
+    Returns:
+        dict: Dictionary with 'missing' (list) and 'existing' (list) keys
+    """
     missing = []
+    existing = []
     for file_path in files:
         if not Path(file_path).exists():
             missing.append(file_path)
-    return missing
+        else:
+            existing.append(file_path)
+    return {"missing": missing, "existing": existing}
+
+
+def validate_latex_structure(main_tex_path="main.tex"):
+    """Validate basic LaTeX document structure and return analysis.
+    
+    Args:
+        main_tex_path (str): Path to main LaTeX file
+        
+    Returns:
+        dict: Dictionary with validation results including 'valid', 'errors', and 'warnings'
+    """
+    result = {"valid": True, "errors": [], "warnings": []}
+    
+    try:
+        with open(main_tex_path, 'r', encoding='utf-8', errors='replace') as f:
+            content = f.read()
+    except Exception as e:
+        result["valid"] = False
+        result["errors"].append(f"Cannot read {main_tex_path}: {e}")
+        return result
+    
+    # Check for required LaTeX document structure
+    if '\\documentclass' not in content:
+        result["errors"].append("Missing \\documentclass declaration")
+        result["valid"] = False
+    
+    if '\\begin{document}' not in content:
+        result["errors"].append("Missing \\begin{document}")
+        result["valid"] = False
+    
+    if '\\end{document}' not in content:
+        result["errors"].append("Missing \\end{document}")
+        result["valid"] = False
+    
+    # Check for potential issues
+    begin_count = content.count('\\begin{document}')
+    end_count = content.count('\\end{document}')
+    
+    if begin_count > 1:
+        result["warnings"].append(f"Multiple \\begin{{document}} found ({begin_count})")
+    
+    if end_count > 1:
+        result["warnings"].append(f"Multiple \\end{{document}} found ({end_count})")
+    
+    if begin_count != end_count:
+        result["errors"].append("Mismatched \\begin{document} and \\end{document}")
+        result["valid"] = False
+    
+    return result
 
 
 def create_template(file_path):
@@ -202,13 +265,16 @@ def main():
     logger.info("CTMM Build System - Starting check...")
 
     # Scan for references
-    style_files, module_files = scan_references()
+    references = scan_references()
+    style_files = references["style_files"]
+    module_files = references["module_files"]
     logger.info("Found %d style files and %d module files",
                 len(style_files), len(module_files))
 
     # Check for missing files
     all_files = style_files + module_files
-    missing_files = check_missing_files(all_files)
+    file_status = check_missing_files(all_files)
+    missing_files = file_status["missing"]
 
     if missing_files:
         logger.warning("Found %d missing files", len(missing_files))
