@@ -1,6 +1,6 @@
 name: Build LaTeX PDF
 
-on:
+"on":
   push:
     branches: [ main ]
   pull_request:
