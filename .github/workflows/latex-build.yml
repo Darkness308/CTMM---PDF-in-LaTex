@@ -35,11 +35,12 @@ jobs:
         with:
           root_file: main.tex
           args: -pdf -interaction=nonstopmode -halt-on-error
-          extra_packages: |
+          extra_system_packages: |
             babel-german
             hyphen-german
-            collection-fontsrecommended
-            collection-latexrecommended
+          extra_fonts: |
+            texlive-fonts-recommended
+            texlive-fonts-extra
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
