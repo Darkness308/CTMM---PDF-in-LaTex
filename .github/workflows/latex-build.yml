@@ -2,9 +2,9 @@ name: Build LaTeX PDF
 
 "on":
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Python dependencies  
+      - name: Install Python dependencies
         run: |
           pip install chardet
 
