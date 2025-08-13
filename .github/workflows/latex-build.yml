@@ -1,10 +1,11 @@
+---
 name: Build LaTeX PDF
 
 "on":
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -18,7 +19,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Python dependencies  
+      - name: Install Python dependencies
         run: |
           pip install chardet
 
@@ -34,12 +35,15 @@ jobs:
         uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
-          args: -pdf -interaction=nonstopmode -halt-on-error
+          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
             texlive-fonts-recommended
             texlive-latex-recommended
             texlive-fonts-extra
+            texlive-latex-extra
+            texlive-pictures
+            texlive-science
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
