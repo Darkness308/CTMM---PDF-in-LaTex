@@ -20,6 +20,17 @@ main_basic_test.*
 *.temp.*
 *.test_*.*
 
+## Large binary files that should not be reviewed by Copilot:
+# Exclude large generated PDFs (keep versioned PDFs under 100KB)
+main.pdf
+build/*.pdf
+
+## Files that may cause Copilot review issues:
+# Exclude files with special characters or encoding issues
+*.backup.*
+*~ 
+.DS_Store
+
 ## Python cache files:
 __pycache__/
 *.py[cod]

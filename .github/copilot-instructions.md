@@ -164,11 +164,14 @@ python3 build_system.py --verbose  # Granular analysis
 ## Contributing Best Practices
 
 ### Code Reviews
+- **Follow Copilot Review Guidelines**: See `.github/COPILOT_REVIEW_GUIDELINES.md`
 - Test builds before submitting PR
 - Verify PDF output renders correctly
 - Check for LaTeX compilation warnings
 - Ensure German text is properly encoded
 - Validate therapeutic content accuracy
+- Use proper file naming (no spaces in filenames)
+- Exclude large binary files from PRs
 
 ### Documentation Updates
 - Update README.md for new features or conventions
