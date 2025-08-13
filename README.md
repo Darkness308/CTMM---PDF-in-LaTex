@@ -123,5 +123,18 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 **README regelmäßig pflegen:**
 - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
 
+## Umgang mit binären Dateien
+
+**Wichtig**: Binäre Dateien (PDFs, DOCX, etc.) werden nicht in Git getrackt, um:
+- Die Repository-Größe klein zu halten
+- GitHub Copilot und andere AI-Tools nicht zu behindern
+- Die Versionskontrolle auf Quellcode zu fokussieren
+
+**Workflow:**
+- LaTeX-Quellcode wird in Git getrackt
+- PDFs werden lokal mit `python3 ctmm_build.py` generiert
+- Binäre Therapie-Materialien können lokal in `therapie-material/` gespeichert werden
+- Für Distribution: GitHub Releases oder externe Speicher nutzen
+
 **Tipp:**
 Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
