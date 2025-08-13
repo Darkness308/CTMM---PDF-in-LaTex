@@ -29,7 +29,7 @@ def scan_references(main_tex_path="main.tex"):
             content = f.read()
     except Exception as e:
         logger.error("Error reading %s: %s", main_tex_path, e)
-        return [], []
+        return {"style_files": [], "module_files": []}
 
     # Find style and module references
     style_files = [f"style/{match}.sty" for match in
@@ -37,7 +37,7 @@ def scan_references(main_tex_path="main.tex"):
     module_files = [f"modules/{match}.tex" for match in
                     re.findall(r'\\input\{modules/([^}]+)\}', content)]
 
-    return style_files, module_files
+    return {"style_files": style_files, "module_files": module_files}
 
 
 def check_missing_files(files):
@@ -202,7 +202,9 @@ def main():
     logger.info("CTMM Build System - Starting check...")
 
     # Scan for references
-    style_files, module_files = scan_references()
+    references = scan_references()
+    style_files = references["style_files"]
+    module_files = references["module_files"]
     logger.info("Found %d style files and %d module files",
                 len(style_files), len(module_files))
 
