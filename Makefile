@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit help comprehensive workflow
+.PHONY: build check clean test test-unit help comprehensive workflow unified status de-escape integration-test
 
 # Default target
 all: check build
@@ -63,19 +63,80 @@ workflow:
 	@echo "Running CTMM Comprehensive Workflow..."
 	python3 comprehensive_workflow.py
 
+# Unified tool commands
+unified:
+	@echo "CTMM Unified Tool - Available commands:"
+	python3 ctmm_unified_tool.py --help
+
+# Unified tool status
+status:
+	@echo "Checking CTMM system status..."
+	python3 ctmm_unified_tool.py status
+
+# Unified tool build
+unified-build:
+	@echo "Running unified build..."
+	python3 ctmm_unified_tool.py build
+
+# Unified tool validation
+unified-validate:
+	@echo "Running unified validation..."
+	python3 ctmm_unified_tool.py validate
+
+# Unified tool workflow
+unified-workflow:
+	@echo "Running unified workflow..."
+	python3 ctmm_unified_tool.py workflow
+
+# Unified tool tests
+unified-test:
+	@echo "Running unified tests..."
+	python3 ctmm_unified_tool.py test
+
+# De-escape LaTeX files
+de-escape:
+	@echo "Running LaTeX de-escaping..."
+	python3 ctmm_unified_tool.py de-escape converted
+
+# Integration tests
+integration-test:
+	@echo "Running CTMM integration tests..."
+	python3 test_integration.py
+
+# Quick integration tests
+integration-test-quick:
+	@echo "Running quick integration tests..."
+	python3 test_integration.py --quick
+
 # Help
 help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
 	@echo "==============================================="
 	@echo "Available targets:"
-	@echo "  all           - Run check and build (default)"
-	@echo "  comprehensive - Run complete workflow validation"
-	@echo "  workflow      - Alias for comprehensive"
-	@echo "  check         - Check dependencies and run build system"
-	@echo "  build         - Build the PDF"
-	@echo "  analyze       - Run detailed module analysis"
-	@echo "  test          - Quick test of build system + unit tests"
-	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
-	@echo "  clean         - Remove build artifacts"
-	@echo "  deps          - Install Python dependencies"
-	@echo "  help          - Show this help"
+	@echo "  all              - Run check and build (default)"
+	@echo "  comprehensive    - Run complete workflow validation"
+	@echo "  workflow         - Alias for comprehensive"
+	@echo ""
+	@echo "Classic Commands:"
+	@echo "  check            - Check dependencies and run build system"
+	@echo "  build            - Build the PDF"
+	@echo "  analyze          - Run detailed module analysis"
+	@echo "  test             - Quick test of build system + unit tests"
+	@echo "  test-unit        - Run only unit tests for ctmm_build.py"
+	@echo "  clean            - Remove build artifacts"
+	@echo "  deps             - Install Python dependencies"
+	@echo ""
+	@echo "Unified Tool Commands:"
+	@echo "  unified          - Show unified tool help"
+	@echo "  status           - Check system status"
+	@echo "  unified-build    - Run unified build"
+	@echo "  unified-validate - Run unified validation"
+	@echo "  unified-workflow - Run unified workflow"
+	@echo "  unified-test     - Run unified tests"
+	@echo "  de-escape        - Fix LaTeX over-escaping"
+	@echo ""
+	@echo "Testing:"
+	@echo "  integration-test - Run comprehensive integration tests"
+	@echo "  integration-test-quick - Run quick integration tests"
+	@echo ""
+	@echo "  help             - Show this help"

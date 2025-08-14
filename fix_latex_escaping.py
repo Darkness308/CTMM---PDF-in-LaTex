@@ -76,6 +76,70 @@ class LaTeXDeEscaper:
             
             # Percentage signs
             (r'\\textbackslash\{\}%', r'%'),
+            
+            # *** NEW ENHANCED PATTERNS (10+ additional recognitions) ***
+            
+            # Math mode patterns
+            (r'\\textbackslash\{\}\$', r'$'),
+            (r'\\textbackslash\{\}\\textbackslash\{\}\[', r'\\['),
+            (r'\\textbackslash\{\}\\textbackslash\{\}\]', r'\\]'),
+            (r'\\textbackslash\{\}\\textbackslash\{\}\(', r'\\('),
+            (r'\\textbackslash\{\}\\textbackslash\{\}\)', r'\\)'),
+            
+            # Color and formatting commands
+            (r'\\textbackslash\{\}textcolor\\textbackslash\{\}', r'\\textcolor'),
+            (r'\\textbackslash\{\}colorbox\\textbackslash\{\}', r'\\colorbox'),
+            (r'\\textbackslash\{\}fcolorbox\\textbackslash\{\}', r'\\fcolorbox'),
+            (r'\\textbackslash\{\}textsc\\textbackslash\{\}', r'\\textsc'),
+            (r'\\textbackslash\{\}textsf\\textbackslash\{\}', r'\\textsf'),
+            
+            # Font size commands
+            (r'\\textbackslash\{\}large\\textbackslash\{\}', r'\\large'),
+            (r'\\textbackslash\{\}Large\\textbackslash\{\}', r'\\Large'),
+            (r'\\textbackslash\{\}LARGE\\textbackslash\{\}', r'\\LARGE'),
+            (r'\\textbackslash\{\}huge\\textbackslash\{\}', r'\\huge'),
+            (r'\\textbackslash\{\}Huge\\textbackslash\{\}', r'\\Huge'),
+            (r'\\textbackslash\{\}small\\textbackslash\{\}', r'\\small'),
+            (r'\\textbackslash\{\}footnotesize\\textbackslash\{\}', r'\\footnotesize'),
+            (r'\\textbackslash\{\}scriptsize\\textbackslash\{\}', r'\\scriptsize'),
+            (r'\\textbackslash\{\}tiny\\textbackslash\{\}', r'\\tiny'),
+            
+            # Reference and citation patterns
+            (r'\\textbackslash\{\}ref\\textbackslash\{\}', r'\\ref'),
+            (r'\\textbackslash\{\}cite\\textbackslash\{\}', r'\\cite'),
+            (r'\\textbackslash\{\}pageref\\textbackslash\{\}', r'\\pageref'),
+            (r'\\textbackslash\{\}eqref\\textbackslash\{\}', r'\\eqref'),
+            (r'\\textbackslash\{\}autoref\\textbackslash\{\}', r'\\autoref'),
+            
+            # Table and figure patterns
+            (r'\\textbackslash\{\}caption\\textbackslash\{\}', r'\\caption'),
+            (r'\\textbackslash\{\}centering\\textbackslash\{\}', r'\\centering'),
+            (r'\\textbackslash\{\}includegraphics\\textbackslash\{\}', r'\\includegraphics'),
+            (r'\\textbackslash\{\}hline\\textbackslash\{\}', r'\\hline'),
+            
+            # Special characters and symbols
+            (r'\\textbackslash\{\}\&', r'\\&'),
+            (r'\\textbackslash\{\}\#', r'\\#'),
+            (r'\\textbackslash\{\}\^', r'\\^'),
+            (r'\\textbackslash\{\}\_', r'\\_'),
+            (r'\\textbackslash\{\}\~', r'\\~'),
+            
+            # Spacing commands
+            (r'\\textbackslash\{\}vspace\\textbackslash\{\}', r'\\vspace'),
+            (r'\\textbackslash\{\}hspace\\textbackslash\{\}', r'\\hspace'),
+            (r'\\textbackslash\{\}quad\\textbackslash\{\}', r'\\quad'),
+            (r'\\textbackslash\{\}qquad\\textbackslash\{\}', r'\\qquad'),
+            
+            # Sectioning commands
+            (r'\\textbackslash\{\}chapter\\textbackslash\{\}', r'\\chapter'),
+            (r'\\textbackslash\{\}part\\textbackslash\{\}', r'\\part'),
+            (r'\\textbackslash\{\}paragraph\\textbackslash\{\}', r'\\paragraph'),
+            (r'\\textbackslash\{\}subparagraph\\textbackslash\{\}', r'\\subparagraph'),
+            
+            # List environment fixes
+            (r'\\textbackslash\{\}enumerate\\textbackslash\{\}', r'\\enumerate'),
+            (r'\\textbackslash\{\}itemize\\textbackslash\{\}', r'\\itemize'),
+            (r'\\textbackslash\{\}description\\textbackslash\{\}', r'\\description'),
         ]
         
         # Additional cleanup patterns
