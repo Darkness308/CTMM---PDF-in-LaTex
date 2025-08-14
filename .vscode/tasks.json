@@ -76,7 +76,7 @@
             },
             "windows": {
                 "command": "cmd",
-                "args": ["/C", "if exist build (del /Q build\\*.* 2>nul) & if exist build (for /d %i in (build\\*) do rmdir /s /q \"%i\" 2>nul)"]
+                "args": ["/C", "rmdir /s /q build 2>nul & mkdir build"]
             },
             "group": "build"
         },
