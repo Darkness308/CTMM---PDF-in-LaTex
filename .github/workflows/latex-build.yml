@@ -32,10 +32,14 @@ jobs:
           python3 ctmm_build.py
 
       - name: Set up LaTeX
+copilot/fix-292
+        uses: dante-ev/latex-action@v2.0.0
+
 copilot/fix-290
         uses: dante-ev/latex-action@v2.0.0
 
         uses: dante-ev/latex-action@latest
+main
 main
         with:
           root_file: main.tex
