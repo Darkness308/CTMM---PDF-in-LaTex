@@ -32,7 +32,7 @@ jobs:
           python3 ctmm_build.py
 
       - name: Set up LaTeX
-        uses: dante-ev/latex-action@latest
+        uses: dante-ev/latex-action@edge
         with:
           root_file: main.tex
           args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
@@ -43,9 +43,13 @@ jobs:
             texlive-fonts-extra
             texlive-latex-extra
             texlive-science
+            texlive-luatex
+            ghostscript
+          tex_scheme: medium
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: CTMM_PDF
           path: main.pdf
@@ -57,5 +61,8 @@ jobs:
           name: build_logs
           path: |
             *.log
+            *.aux
+            *.fls
+            *.fdb_latexmk
             build_error_*.log
             build_system.log
