@@ -23,6 +23,24 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 - LaTeX-Installation mit TikZ und hyperref
 - Oder GitHub Codespace (vorkonfiguriert)
 
+## 🎯 CTMM Comprehensive Toolset - "es ist nicht mehr weit"
+
+**Status**: ✅ **COMPLETE AND OPERATIONAL**
+
+Das Projekt verfügt über ein **umfassendes Toolset** für professionelle Therapiematerial-Entwicklung. Siehe [COMPREHENSIVE_TOOLSET.md](COMPREHENSIVE_TOOLSET.md) für die vollständige Übersicht.
+
+### Schnellstart - Umfassendes Workflow
+```bash
+# Vollständige Validierung aller Komponenten
+python3 comprehensive_workflow.py
+
+# Mit De-escaping-Demonstration
+python3 comprehensive_workflow.py --full
+
+# Mit Bereinigung
+python3 comprehensive_workflow.py --cleanup
+```
+
 ## LaTeX-Hinweise für Entwickler
 
 **CTMM Build System:**
@@ -122,6 +140,19 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 
 **README regelmäßig pflegen:**
 - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
+
+## Umgang mit binären Dateien
+
+**Wichtig**: Binäre Dateien (PDFs, DOCX, etc.) werden nicht in Git getrackt, um:
+- Die Repository-Größe klein zu halten
+- GitHub Copilot und andere AI-Tools nicht zu behindern
+- Die Versionskontrolle auf Quellcode zu fokussieren
+
+**Workflow:**
+- LaTeX-Quellcode wird in Git getrackt
+- PDFs werden lokal mit `python3 ctmm_build.py` generiert
+- Binäre Therapie-Materialien können lokal in `therapie-material/` gespeichert werden
+- Für Distribution: GitHub Releases oder externe Speicher nutzen
 
 **Tipp:**
 Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.

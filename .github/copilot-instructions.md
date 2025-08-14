@@ -53,8 +53,16 @@ python3 ctmm_build.py
 make check          # Run build system check
 make build          # Build PDF with pdflatex
 make analyze        # Detailed module testing
+make unit-test      # Run Python unit tests
 python3 build_system.py --verbose  # Granular analysis
 ```
+
+**Unit Testing:**
+The build system includes comprehensive unit tests for core functions:
+```bash
+python3 test_ctmm_build.py -v
+```
+Tests cover filename-to-title conversion, German therapy terminology, and build system integration.
 
 ### 📄 LaTeX Best Practices
 
@@ -65,12 +73,14 @@ python3 build_system.py --verbose  # Granular analysis
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
-- **Checkbox Convention**: Use predefined macros only:
+- **Form Elements Convention**: Use CTMM form elements only:
   ```latex
-  \checkbox        % Empty checkbox: □
-  \checkedbox      % Filled checkbox: ■
+  \ctmmCheckBox[field_name]{Label}     % Interactive checkbox
+  \ctmmTextField[width]{label}{name}   % Text input field
+  \ctmmTextArea[width]{lines}{label}{name}  % Multi-line text area
+  \ctmmRadioButton{group}{value}{label}     % Radio button
   ```
-- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+- **NEVER** use `\Box`, `\blacksquare`, or basic LaTeX form elements directly
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -80,16 +90,23 @@ python3 build_system.py --verbose  # Granular analysis
 ### 🎨 CTMM Design System
 
 **Color Scheme:**
-- `ctmmBlue` - Primary blue for headers and structure
-- `ctmmOrange` - Accent orange for highlights  
-- `ctmmGreen` - Green for positive elements
-- `ctmmPurple` - Purple for special sections
+- `ctmmBlue` (#003087) - Primary blue for headers and structure
+- `ctmmOrange` (#FF6200) - Accent orange for highlights  
+- `ctmmGreen` (#4CAF50) - Green for positive elements and form borders
+- `ctmmPurple` (#7B1FA2) - Purple for special sections
+- `ctmmRed` (#D32F2F) - Red for warnings or important notes
+- `ctmmGray` (#757575) - Gray for secondary text
+- `ctmmYellow` (#FFC107) - Yellow for emphasis
 
 **Custom Elements:**
-- `\begin{ctmmBlueBox}{Title}` - Styled info boxes
-- Form elements from `form-elements.sty`
+- `\begin{ctmmBlueBox}{Title}` - Styled info boxes in CTMM blue
+- `\begin{ctmmGreenBox}{Title}` - Green boxes for positive content
+- `\ctmmCheckBox[field_name]{Label}` - Interactive checkboxes
+- `\ctmmTextField[width]{label}{name}` - Text input fields
+- `\ctmmTextArea[width]{lines}{label}{name}` - Multi-line text areas
 - Navigation system with `\faCompass` icons
-- Interactive PDF features with hyperref
+- Interactive PDF features with hyperref integration
+- Form elements automatically adapt for print vs. digital use
 
 ## Development Workflow
 
@@ -115,8 +132,11 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Build Errors:**
 - `Undefined control sequence` → Check if macro is defined in preamble
-- `Command already defined` → Remove duplicate macro definitions
+- `Command already defined` → Remove duplicate macro definitions  
 - Missing file errors → Run `ctmm_build.py` to auto-generate templates
+- `Can be used only in preamble` → Move `\usepackage` to main.tex preamble
+- `Package hyperref Error` → Ensure hyperref is loaded last in package list
+- LaTeX compilation fails → Check for special characters in German text, use proper UTF-8 encoding
 
 **Module Guidelines:**
 - Use semantic section structure: `\section{Title}`, `\subsection{}`
@@ -159,6 +179,10 @@ python3 build_system.py --verbose  # Granular analysis
 ### Development Environment
 - **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
 - **GitHub Codespace**: Pre-configured environment available
+- **VS Code Integration**: 
+  - `.vscode/tasks.json` provides "CTMM: Kompilieren" build task
+  - Recommended extension: GitHub Copilot Chat
+  - LaTeX Workshop extension for syntax highlighting and PDF preview
 - **CI/CD**: Automated PDF building via GitHub Actions
 
 ## Contributing Best Practices
@@ -198,7 +222,8 @@ python3 build_system.py --verbose  # Granular analysis
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-- `\checkbox` / `\checkedbox` - Form checkboxes
+- `\ctmmCheckBox[name]{label}` - Interactive form checkboxes
+- `\ctmmTextField[width]{label}{name}` - Text input fields
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
