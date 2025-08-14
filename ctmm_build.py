@@ -200,37 +200,54 @@ def test_full_build(main_tex_path="main.tex"):
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
-
-    # Scan for references
+    
+    step = 1
+    print(f"\n{step}. Scanning file references...")
     references = scan_references()
     style_files = references["style_files"]
     module_files = references["module_files"]
-    logger.info("Found %d style files and %d module files",
-                len(style_files), len(module_files))
-
-    # Check for missing files
+    print(f"Found {len(style_files)} style packages")
+    print(f"Found {len(module_files)} module inputs")
+    
+    step += 1
+    print(f"\n{step}. Checking file existence...")
     all_files = style_files + module_files
     missing_files = check_missing_files(all_files)
-
-    if missing_files:
-        logger.warning("Found %d missing files", len(missing_files))
+    total_missing = len(missing_files)
+    
+    if total_missing > 0:
+        print(f"Found {total_missing} missing files")
+        step += 1
+        print(f"\n{step}. Creating templates for missing files...")
         for file_path in missing_files:
             logger.info("Creating template: %s", file_path)
             create_template(file_path)
+        print(f"✓ Created {total_missing} template files")
     else:
-        logger.info("All referenced files exist")
-
-    # Test builds
+        print("✓ All referenced files exist")
+    
+    step += 1
+    print(f"\n{step}. Testing basic framework...")
     basic_ok = test_basic_build()
+    
+    if not basic_ok:
+        print("⚠️  Basic framework has issues. Please fix before testing modules.")
+        return 1
+    
+    step += 1
+    print(f"\n{step}. Testing modules incrementally...")
     full_ok = test_full_build()
-
+    
+    step += 1
+    print(f"\n{step}. Generating build report...")
+    
     # Summary
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
     print(f"Style files: {len(style_files)}")
     print(f"Module files: {len(module_files)}")
-    print(f"Missing files: {len(missing_files)} (templates created)")
+    print(f"Missing files: {total_missing} (templates created)")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
 
