@@ -146,6 +146,15 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         result = ctmm_build.filename_to_title("test_file")
         self.assertIsInstance(result, str)
 
+    def test_scan_references_returns_dict(self):
+        """Test that scan_references function returns a dictionary with correct keys."""
+        result = ctmm_build.scan_references("main.tex")
+        self.assertIsInstance(result, dict)
+        self.assertIn("style_files", result)
+        self.assertIn("module_files", result)
+        self.assertIsInstance(result["style_files"], list)
+        self.assertIsInstance(result["module_files"], list)
+
 
 if __name__ == '__main__':
     # Run the tests
