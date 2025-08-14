@@ -101,21 +101,21 @@ Created by CTMM Build System
 
 def test_basic_build(main_tex_path="main.tex"):
     """Test basic build without modules."""
-    logger.info("Testing basic build (without modules)...")
+    print_status("Testing basic build (without modules)", "info")
 
     # Check if pdflatex is available
     try:
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
     except (subprocess.CalledProcessError, FileNotFoundError):
-        logger.warning("pdflatex not found - skipping LaTeX compilation test")
-        logger.info("✓ Basic structure test passed (LaTeX not available)")
+        print_status("pdflatex not found - skipping LaTeX compilation test", "warning")
+        print_status("Basic structure test passed (LaTeX not available)", "success")
         return True
 
     try:
         with open(main_tex_path, 'r', encoding='utf-8', errors='replace') as f:
             content = f.read()
     except Exception as e:
-        logger.error("Error reading %s: %s", main_tex_path, e)
+        print_status(f"Error reading {main_tex_path}: {e}", "error")
         return False
 
     # Comment out all input{modules/...} lines
@@ -141,16 +141,15 @@ def test_basic_build(main_tex_path="main.tex"):
 
         success = result.returncode == 0
         if success:
-            logger.info("✓ Basic build successful")
+            print_status("Basic build successful", "success")
         else:
-            logger.error("✗ Basic build failed")
-            logger.error("LaTeX errors detected (check %s.log for details)",
-                         temp_file)
+            print_status("Basic build failed", "error")
+            print_status(f"LaTeX errors detected (check {temp_file}.log for details)", "error")
 
         return success
 
     except Exception as e:
-        logger.error("Build test failed: %s", e)
+        print_status(f"Build test failed: {e}", "error")
         return False
     finally:
         # Clean up
@@ -162,14 +161,14 @@ def test_basic_build(main_tex_path="main.tex"):
 
 def test_full_build(main_tex_path="main.tex"):
     """Test full build with all modules."""
-    logger.info("Testing full build (with all modules)...")
+    print_status("Testing full build (with all modules)", "info")
 
     # Check if pdflatex is available
     try:
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
     except (subprocess.CalledProcessError, FileNotFoundError):
-        logger.warning("pdflatex not found - skipping LaTeX compilation test")
-        logger.info("✓ Full structure test passed (LaTeX not available)")
+        print_status("pdflatex not found - skipping LaTeX compilation test", "warning")
+        print_status("Full structure test passed (LaTeX not available)", "success")
         return True
 
     try:
@@ -183,65 +182,101 @@ def test_full_build(main_tex_path="main.tex"):
 
         success = result.returncode == 0
         if success:
-            logger.info("✓ Full build successful")
+            print_status("Full build successful", "success")
             if Path('main.pdf').exists():
-                logger.info("✓ PDF generated successfully")
+                print_status("PDF generated successfully", "success")
         else:
-            logger.error("✗ Full build failed")
-            logger.error("Check main.log for detailed error information")
+            print_status("Full build failed", "error")
+            print_status("Check main.log for detailed error information", "error")
 
         return success
 
     except Exception as e:
-        logger.error("Full build test failed: %s", e)
+        print_status(f"Full build test failed: {e}", "error")
         return False
+
+
+def print_step(step_num, description):
+    """Print a formatted step with professional styling."""
+    print(f"\n{step_num}. {description}")
+    print("-" * 50)
+
+
+def print_status(message, status="info"):
+    """Print a status message with appropriate visual indicator."""
+    if status == "success":
+        print(f"✓ {message}")
+    elif status == "warning":
+        print(f"⚠️  {message}")
+    elif status == "error":
+        print(f"✗ {message}")
+    else:
+        print(f"  {message}")
 
 
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
     
-    step = 1
-    print(f"\n{step}. Scanning file references...")
+    # Initialize step counter for smart progression
+    current_step = 1
+    
+    # Step 1: Scan file references
+    print_step(current_step, "Scanning file references")
     references = scan_references()
     style_files = references["style_files"]
     module_files = references["module_files"]
-    print(f"Found {len(style_files)} style packages")
-    print(f"Found {len(module_files)} module inputs")
+    print_status(f"Found {len(style_files)} style packages", "info")
+    print_status(f"Found {len(module_files)} module inputs", "info")
+    current_step += 1
     
-    step += 1
-    print(f"\n{step}. Checking file existence...")
+    # Step 2: Check file existence  
+    print_step(current_step, "Checking file existence")
     all_files = style_files + module_files
     missing_files = check_missing_files(all_files)
     total_missing = len(missing_files)
     
     if total_missing > 0:
-        print(f"Found {total_missing} missing files")
-        step += 1
-        print(f"\n{step}. Creating templates for missing files...")
+        print_status(f"Found {total_missing} missing files", "warning")
+        current_step += 1
+        
+        # Dynamic step insertion: Create templates for missing files
+        print_step(current_step, "Creating templates for missing files")
         for file_path in missing_files:
             logger.info("Creating template: %s", file_path)
             create_template(file_path)
-        print(f"✓ Created {total_missing} template files")
+        print_status(f"Created {total_missing} template files", "success")
     else:
-        print("✓ All referenced files exist")
+        print_status("All referenced files exist", "success")
     
-    step += 1
-    print(f"\n{step}. Testing basic framework...")
+    current_step += 1
+    
+    # Step N: Test basic framework
+    print_step(current_step, "Testing basic framework")
     basic_ok = test_basic_build()
     
     if not basic_ok:
-        print("⚠️  Basic framework has issues. Please fix before testing modules.")
+        print_status("Basic framework has issues. Please fix before testing modules.", "error")
         return 1
     
-    step += 1
-    print(f"\n{step}. Testing modules incrementally...")
+    print_status("Basic framework validation completed", "success")
+    current_step += 1
+    
+    # Step N+1: Test full build with modules
+    print_step(current_step, "Testing full build with modules")
     full_ok = test_full_build()
     
-    step += 1
-    print(f"\n{step}. Generating build report...")
+    if full_ok:
+        print_status("Full build validation completed", "success")
+    else:
+        print_status("Full build encountered issues", "error")
     
-    # Summary
+    current_step += 1
+    
+    # Step N+2: Generate build report
+    print_step(current_step, "Generating build report")
+    
+    # Summary with enhanced formatting
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
@@ -256,6 +291,8 @@ def main():
         print("- Review and complete the created template files")
         print("- Remove TODO_*.md files when content is complete")
 
+    print_status("Build report generated", "success")
+    
     return 0 if (basic_ok and full_ok) else 1
 
 
