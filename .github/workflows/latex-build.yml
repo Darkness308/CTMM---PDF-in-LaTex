@@ -35,6 +35,15 @@ jobs:
         uses: dante-ev/latex-action@latest
         with:
           root_file: main.tex
+copilot/fix-403
+          args: -pdf -interaction=nonstopmode -halt-on-error
+          extra_system_packages: |
+            texlive-lang-german
+            hyphen-german
+          extra_fonts: |
+            texlive-fonts-recommended
+            texlive-fonts-extra
+
           args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
@@ -43,6 +52,7 @@ jobs:
             texlive-fonts-extra
             texlive-latex-extra
             texlive-science
+main
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
