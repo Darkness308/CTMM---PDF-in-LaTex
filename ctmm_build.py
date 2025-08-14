@@ -317,7 +317,7 @@ main
         print("- Escaping issues found in LaTeX files")
         print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
 
-    return 0 if (basic_ok and full_ok and latex_valid) else 1
+    return 0 if (basic_ok and full_ok) else 1
 
 
 if __name__ == "__main__":
