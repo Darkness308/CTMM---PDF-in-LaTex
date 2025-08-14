@@ -131,7 +131,7 @@ class LaTeXEscapingFixer:
             print(f"Error: Directory {dir_path} does not exist")
             return False
             
-        tex_files = list(dir_path.glob('**/*.tex')) + list(dir_path.glob('**/*.sty'))
+        tex_files = list(dir_path.glob('**/*.[ts][te][xy]'))
         
         if not tex_files:
             print(f"No LaTeX files found in {dir_path}")
