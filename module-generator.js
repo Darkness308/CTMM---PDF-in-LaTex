@@ -206,7 +206,7 @@ function generateModule(type, name) {
         FIELD_1: 'Ausgangssituation',
         FIELD_2: 'Angewendete Strategie', 
         FIELD_3: 'Wirksamkeit (1-10)',
-        TOOL_NUMBER: Math.floor(Math.random() * 50) + 20,
+        TOOL_NUMBER: getNextToolNumber(modulesDir),
         STEP_1: 'Situation erfassen und bewerten',
         STEP_2: 'Passende Intervention aus CTMM-System wählen', 
         STEP_3: 'Technik anwenden und beobachten',
