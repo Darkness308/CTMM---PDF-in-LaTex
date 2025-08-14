@@ -1,6 +1,10 @@
 # CTMM LaTeX Build System Makefile
 
+copilot/fix-526
 .PHONY: build check clean test test-unit help ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test
+
+.PHONY: build check clean test test-unit help comprehensive workflow
+main
 
 # Default target
 all: ctmm-check build
@@ -75,12 +79,28 @@ deps:
 	pip install chardet
 	@echo "LaTeX packages should be installed via your system package manager"
 
+# Comprehensive workflow
+comprehensive:
+	@echo "Running CTMM Comprehensive Workflow..."
+	python3 comprehensive_workflow.py
+
+# Comprehensive workflow (alias)
+workflow:
+	@echo "Running CTMM Comprehensive Workflow..."
+	python3 comprehensive_workflow.py
+
 # Help
 help:
-	@echo "CTMM LaTeX Build System"
-	@echo "======================="
+	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
+	@echo "==============================================="
 	@echo "Available targets:"
+copilot/fix-526
 	@echo "  all           - Run ctmm-check and build (default)"
+
+	@echo "  all           - Run check and build (default)"
+	@echo "  comprehensive - Run complete workflow validation"
+	@echo "  workflow      - Alias for comprehensive"
+main
 	@echo "  check         - Check dependencies and run build system"
 	@echo "  build         - Build the PDF"
 	@echo "  analyze       - Run detailed module analysis"
@@ -88,6 +108,7 @@ help:
 	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
 	@echo "  clean         - Remove build artifacts"
 	@echo "  deps          - Install Python dependencies"
+copilot/fix-526
 	@echo ""
 	@echo "CTMM Unified Tool Commands:"
 	@echo "  ctmm-check    - Run unified build system validation"
@@ -96,4 +117,6 @@ help:
 	@echo "  ctmm-workflow - Run complete integration workflow"
 	@echo "  integration-test - Run comprehensive integration tests"
 	@echo ""
+
+main
 	@echo "  help          - Show this help"
