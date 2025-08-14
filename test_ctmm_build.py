@@ -10,7 +10,7 @@ from pathlib import Path
 
 # Add current directory to path for importing ctmm_build
 sys.path.insert(0, str(Path(__file__).parent))
-import ctmm_build
+from ctmm_build import filename_to_title
 
 
 class TestFilenameToTitle(unittest.TestCase):
