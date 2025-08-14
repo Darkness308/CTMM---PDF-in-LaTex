@@ -109,7 +109,7 @@ Sie schützen vor Eskalation, Überforderung, Rückzug oder Missverständnissen 
     with open(converted_dir / 'README.tex', 'w', encoding='utf-8') as f:
         f.write(readme_content)
     
-    with open(converted_dir / 'Tool 22 Safewords Signalsysteme CTMM.tex', 'w', encoding='utf-8') as f:
+    with open(converted_dir / 'Tool_22_Safewords_Signalsysteme_CTMM.tex', 'w', encoding='utf-8') as f:
         f.write(safewords_content)
     
     logger.info(f"Created sample over-escaped files in {converted_dir}")

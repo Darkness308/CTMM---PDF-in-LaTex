@@ -45,9 +45,9 @@ The systematic over-escaping issue affects converted LaTeX files across the CTMM
 ## Files Affected in This Solution
 
 The solution successfully fixes these file types mentioned in the PR comments:
-- `Tool 23 Trigger Management.tex`
-- `Tool 22 Safewords Signalsysteme CTMM.tex`
-- `Matching Matrix Trigger Reaktion Intervention CTMM.tex`
+- `Tool_23_Trigger_Management.tex`
+- `Tool_22_Safewords_Signalsysteme_CTMM.tex`
+- `Matching_Matrix_Trigger_Reaktion_Intervention_CTMM.tex`
 - `README.tex`
 - Any other converted LaTeX files with over-escaping
 

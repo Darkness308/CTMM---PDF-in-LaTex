@@ -66,8 +66,8 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
 \\end{itemize}"""
 
     # Read our actual files
-    tool23_file = Path('converted/Tool 23 Trigger Management.tex')
-    matching_file = Path('converted/Matching Matrix Trigger Reaktion Intervention CTMM.tex')
+    tool23_file = Path('converted/Tool_23_Trigger_Management.tex')
+    matching_file = Path('converted/Matching_Matrix_Trigger_Reaktion_Intervention_CTMM.tex')
     
     print("\n1. Checking Tool 23 Trigger Management file...")
     if tool23_file.exists():
