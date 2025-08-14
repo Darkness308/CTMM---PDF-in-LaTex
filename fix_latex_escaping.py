@@ -33,12 +33,15 @@ class LaTeXDeEscaper:
     def __init__(self):
         # Define the systematic over-escaping patterns and their fixes
         self.escaping_patterns = [
-            # Main LaTeX command patterns
-            (r'\\textbackslash\{\}([a-zA-Z]+)\\textbackslash\{\}', r'\\\1'),
-            
-            # Section and subsection patterns
+            # Section and subsection patterns (more specific first)
             (r'\\textbackslash\{\}section\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\section{\\texorpdfstring'),
             (r'\\textbackslash\{\}subsection\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\subsection{\\texorpdfstring'),
+            (r'\\textbackslash\{\}subsubsection\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\subsubsection{\\texorpdfstring'),
+            (r'\\textbackslash\{\}paragraph\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\paragraph{\\texorpdfstring'),
+            (r'\\textbackslash\{\}section\\textbackslash\{\}', r'\\section'),
+            (r'\\textbackslash\{\}subsection\\textbackslash\{\}', r'\\subsection'),
+            (r'\\textbackslash\{\}subsubsection\\textbackslash\{\}', r'\\subsubsection'),
+            (r'\\textbackslash\{\}paragraph\\textbackslash\{\}', r'\\paragraph'),
             
             # Hypertarget patterns
             (r'\\textbackslash\{\}hypertarget\\textbackslash\{\}', r'\\hypertarget'),
@@ -47,8 +50,12 @@ class LaTeXDeEscaper:
             (r'\\textbackslash\{\}begin\\textbackslash\{\}', r'\\begin'),
             (r'\\textbackslash\{\}end\\textbackslash\{\}', r'\\end'),
             
-            # Label patterns
+            # Label and reference patterns
             (r'\\textbackslash\{\}label\\textbackslash\{\}', r'\\label'),
+            (r'\\textbackslash\{\}ref\\textbackslash\{\}', r'\\ref'),
+            (r'\\textbackslash\{\}pageref\\textbackslash\{\}', r'\\pageref'),
+            (r'\\textbackslash\{\}autoref\\textbackslash\{\}', r'\\autoref'),
+            (r'\\textbackslash\{\}nameref\\textbackslash\{\}', r'\\nameref'),
             
             # Text formatting patterns
             (r'\\textbackslash\{\}textbf\\textbackslash\{\}', r'\\textbf'),
@@ -56,13 +63,55 @@ class LaTeXDeEscaper:
             (r'\\textbackslash\{\}emph\\textbackslash\{\}', r'\\emph'),
             (r'\\textbackslash\{\}ul\\textbackslash\{\}', r'\\ul'),
             (r'\\textbackslash\{\}texttt\\textbackslash\{\}', r'\\texttt'),
+            (r'\\textbackslash\{\}underline\\textbackslash\{\}', r'\\underline'),
+            (r'\\textbackslash\{\}textsc\\textbackslash\{\}', r'\\textsc'),
+            (r'\\textbackslash\{\}textsf\\textbackslash\{\}', r'\\textsf'),
+            (r'\\textbackslash\{\}textrm\\textbackslash\{\}', r'\\textrm'),
             
-            # Item and list patterns
+            # Color and highlighting patterns
+            (r'\\textbackslash\{\}textcolor\\textbackslash\{\}', r'\\textcolor'),
+            (r'\\textbackslash\{\}colorbox\\textbackslash\{\}', r'\\colorbox'),
+            (r'\\textbackslash\{\}fcolorbox\\textbackslash\{\}', r'\\fcolorbox'),
+            (r'\\textbackslash\{\}highlight\\textbackslash\{\}', r'\\highlight'),
+            
+            # List and item patterns
             (r'\\textbackslash\{\}item', r'\\item'),
             (r'\\textbackslash\{\}tightlist', r'\\tightlist'),
+            (r'\\textbackslash\{\}itemize\\textbackslash\{\}', r'\\itemize'),
+            (r'\\textbackslash\{\}enumerate\\textbackslash\{\}', r'\\enumerate'),
+            (r'\\textbackslash\{\}description\\textbackslash\{\}', r'\\description'),
             
-            # Quote patterns  
+            # Math mode patterns
+            (r'\\textbackslash\{\}\$', r'$'),
+            (r'\\textbackslash\{\}\\$', r'\\$'),
+            (r'\\textbackslash\{\}\\textbackslash\{\}\[', r'\\['),
+            (r'\\textbackslash\{\}\\textbackslash\{\}\]', r'\\]'),
+            (r'\\textbackslash\{\}equation\\textbackslash\{\}', r'\\equation'),
+            (r'\\textbackslash\{\}align\\textbackslash\{\}', r'\\align'),
+            
+            # Table and figure patterns
+            (r'\\textbackslash\{\}table\\textbackslash\{\}', r'\\table'),
+            (r'\\textbackslash\{\}figure\\textbackslash\{\}', r'\\figure'),
+            (r'\\textbackslash\{\}caption\\textbackslash\{\}', r'\\caption'),
+            (r'\\textbackslash\{\}includegraphics\\textbackslash\{\}', r'\\includegraphics'),
+            (r'\\textbackslash\{\}tabular\\textbackslash\{\}', r'\\tabular'),
+            (r'\\textbackslash\{\}longtable\\textbackslash\{\}', r'\\longtable'),
+            
+            # Quote and citation patterns  
             (r'\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\texorpdfstring'),
+            (r'\\textbackslash\{\}cite\\textbackslash\{\}', r'\\cite'),
+            (r'\\textbackslash\{\}citep\\textbackslash\{\}', r'\\citep'),
+            (r'\\textbackslash\{\}citet\\textbackslash\{\}', r'\\citet'),
+            (r'\\textbackslash\{\}quote\\textbackslash\{\}', r'\\quote'),
+            (r'\\textbackslash\{\}quotation\\textbackslash\{\}', r'\\quotation'),
+            
+            # Special character patterns
+            (r'\\textbackslash\{\}\\&', r'\\&'),
+            (r'\\textbackslash\{\}\\#', r'\\#'),
+            (r'\\textbackslash\{\}\\_', r'\\_'),
+            (r'\\textbackslash\{\}\\%', r'\\%'),
+            (r'\\textbackslash\{\}\\\^', r'\\^'),
+            (r'\\textbackslash\{\}\\~', r'\\~'),
             
             # Parameter braces - fix excessive bracing patterns
             (r'\\textbackslash\{\}\{([^}]*?)\\textbackslash\{\}\}', r'{\1}'),
@@ -76,12 +125,28 @@ class LaTeXDeEscaper:
             
             # Percentage signs
             (r'\\textbackslash\{\}%', r'%'),
+            
+            # Additional CTMM-specific patterns
+            (r'\\textbackslash\{\}faCompass\\textbackslash\{\}', r'\\faCompass'),
+            (r'\\textbackslash\{\}checkbox\\textbackslash\{\}', r'\\checkbox'),
+            (r'\\textbackslash\{\}checkedbox\\textbackslash\{\}', r'\\checkedbox'),
+            (r'\\textbackslash\{\}ctmmBlueBox\\textbackslash\{\}', r'\\ctmmBlueBox'),
+            
+            # Additional cleanup patterns for remaining cases
+            (r'\\textbackslash\{\}', r''),
+            
+            # General LaTeX command patterns (must be last to catch remaining)
+            (r'\\textbackslash\{\}([a-zA-Z]+)\\textbackslash\{\}', r'\\\1'),
         ]
         
         # Additional cleanup patterns
         self.cleanup_patterns = [
             # Remove redundant braces around single arguments
             (r'\{\\textbackslash\{\}\}', r'{}'),
+            
+            # Fix escaping around braces
+            (r'\\textbackslash\{\}\\{', r'{'),
+            (r'\\}\\textbackslash\{\}', r'}'),
             
             # Fix texorpdfstring patterns with remaining issues
             (r'\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\texorpdfstring{\1}{\2}}\\label{\3}'),
@@ -119,8 +184,77 @@ class LaTeXDeEscaper:
         self.stats = {
             'files_processed': 0,
             'files_changed': 0,
-            'total_replacements': 0
+            'total_replacements': 0,
+            'validation_errors': 0,
+            'validation_warnings': 0
         }
+        
+        # Improved validation patterns to reduce false positives
+        self.validation_patterns = [
+            # Check for unbalanced braces
+            (r'(?<!\\)\{(?:[^{}]|\\[{}])*(?<!\\)\}', 'balanced_braces'),
+            # Check for valid LaTeX commands
+            (r'\\[a-zA-Z]+(?:\[[^\]]*\])?(?:\{[^}]*\})*', 'valid_commands'),
+            # Check for valid environment structure
+            (r'\\begin\{([^}]+)\}.*?\\end\{\1\}', 'environment_structure'),
+            # Check for proper section hierarchy
+            (r'\\(?:sub)?(?:sub)?section\{.*?\}', 'section_structure'),
+        ]
+    
+    def validate_latex_content(self, content: str, filename: str = "file") -> Tuple[bool, List[str]]:
+        """
+        Validate LaTeX content for common issues that could indicate problems.
+        
+        Args:
+            content: LaTeX content to validate
+            filename: Name of file being validated (for error reporting)
+            
+        Returns:
+            Tuple of (is_valid, list_of_issues)
+        """
+        issues = []
+        
+        # Check for unbalanced braces
+        brace_count = 0
+        escaped = False
+        for i, char in enumerate(content):
+            if escaped:
+                escaped = False
+                continue
+            if char == '\\':
+                escaped = True
+                continue
+            elif char == '{':
+                brace_count += 1
+            elif char == '}':
+                brace_count -= 1
+                if brace_count < 0:
+                    issues.append(f"Unmatched closing brace at position {i}")
+                    break
+        
+        if brace_count > 0:
+            issues.append(f"Unmatched opening braces: {brace_count} remaining")
+        
+        # Check for potentially problematic patterns that might indicate incomplete fixes
+        problematic_patterns = [
+            (r'\\textbackslash\{\}', "Still contains \\textbackslash{} patterns"),
+            (r'\{\{\{', "Contains triple opening braces"),
+            (r'\}\}\}', "Contains triple closing braces"),
+            (r'\\\\\\\\', "Contains quadruple backslashes"),
+            (r'\\begin\{[^}]*\}(?!.*\\end\{[^}]*\})', "Unmatched \\begin without \\end"),
+        ]
+        
+        for pattern, description in problematic_patterns:
+            matches = re.findall(pattern, content, re.DOTALL)
+            if matches:
+                issues.append(f"{description} ({len(matches)} occurrences)")
+        
+        # Update stats
+        if issues:
+            self.stats['validation_errors'] += len([i for i in issues if 'Unmatched' in i])
+            self.stats['validation_warnings'] += len([i for i in issues if 'Unmatched' not in i])
+        
+        return len(issues) == 0, issues
     
     def process_file(self, input_path: Path, output_path: Path = None) -> Tuple[bool, int]:
         """
@@ -162,6 +296,14 @@ class LaTeXDeEscaper:
             content_changed = content != original_content
             
             if content_changed:
+                # Validate the fixed content
+                is_valid, validation_issues = self.validate_latex_content(content, str(input_path))
+                
+                if validation_issues:
+                    logger.warning(f"Validation issues in {input_path}:")
+                    for issue in validation_issues:
+                        logger.warning(f"  - {issue}")
+                
                 # Write the fixed content
                 with open(output_path, 'w', encoding='utf-8') as f:
                     f.write(content)
@@ -294,16 +436,27 @@ Examples:
     print(f"Files changed: {stats['files_changed']}")
     print(f"Total replacements: {stats['total_replacements']}")
     
+    if 'validation_errors' in stats:
+        print(f"Validation errors: {stats['validation_errors']}")
+        print(f"Validation warnings: {stats['validation_warnings']}")
+    
     # Validate if requested
     if args.validate:
         print("\nVALIDATION RESULTS:")
         print("-" * 20)
+        validation_passed = 0
+        validation_failed = 0
+        
         for tex_file in output_dir.glob('*.tex'):
             issues = de_escaper.validate_latex_syntax(tex_file)
             if issues:
-                print(f"{tex_file.name}: {', '.join(issues)}")
+                print(f"❌ {tex_file.name}: {', '.join(issues)}")
+                validation_failed += 1
             else:
-                print(f"{tex_file.name}: OK")
+                print(f"✅ {tex_file.name}: OK")
+                validation_passed += 1
+        
+        print(f"\nValidation Summary: {validation_passed} passed, {validation_failed} failed")
     
     print(f"\nProcess completed. Files {'updated in-place' if output_dir == input_dir else f'saved to {output_dir}'}.")
 
