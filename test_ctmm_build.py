@@ -106,6 +106,78 @@ class TestFilenameToTitle(unittest.TestCase):
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
+    def test_file_extensions(self):
+        """Test filename with file extensions (dots)."""
+        test_cases = [
+            ("document.tex", "Document.tex"),
+            ("style_file.sty", "Style File.sty"),
+            ("module_name.txt", "Module Name.txt"),
+            ("test.file.name", "Test.file.name"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_unicode_characters(self):
+        """Test filename with Unicode characters (German umlauts and special chars)."""
+        test_cases = [
+            ("übung_test", "Übung Test"),
+            ("arbeitsblatt_ä_ö_ü", "Arbeitsblatt Ä Ö Ü"),
+            ("therapie_übung", "Therapie Übung"),
+            ("test_ß_character", "Test Ss Character"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_only_separators_input(self):
+        """Test input containing only separators."""
+        test_cases = [
+            ("___", ""),
+            ("---", ""),
+            ("_-_-_", ""),
+            ("_", ""),
+            ("-", ""),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_special_characters_preservation(self):
+        """Test that special characters other than underscores and hyphens are preserved."""
+        test_cases = [
+            ("file@name", "File@name"),
+            ("test#module", "Test#module"),
+            ("data.backup", "Data.backup"),
+            ("config$test", "Config$test"),
+            ("module%name", "Module%name"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_whitespace_normalization(self):
+        """Test that existing whitespace is handled correctly."""
+        test_cases = [
+            ("hello world", "Hello World"),
+            ("test file name", "Test File Name"),
+            ("  spaced  out  ", "Spaced Out"),
+            ("tab\tcharacter", "Tab Character"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
 
 class TestCTMMBuildSystemIntegration(unittest.TestCase):
     """Integration tests for CTMM Build System functions."""
