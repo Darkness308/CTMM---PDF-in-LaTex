@@ -83,6 +83,46 @@ python3 latex_validator.py modules/ --fix
 
 Siehe [LATEX_ESCAPING_PREVENTION.md](LATEX_ESCAPING_PREVENTION.md) für detaillierte Informationen.
 
+### LaTeX Escaping Fix Tool
+
+Das Projekt enthält ein spezielles Tool zur Behebung von übermäßig escapierten LaTeX-Befehlen, die durch Dokumentkonvertierungstools entstehen können:
+
+**Grundlegende Verwendung:**
+```bash
+# Dateien direkt reparieren (in-place)
+python3 fix_latex_escaping.py converted/
+
+# Reparierte Kopien in neuem Verzeichnis erstellen
+python3 fix_latex_escaping.py converted/ fixed/
+
+# Mit Backup-Erstellung für Sicherheit
+python3 fix_latex_escaping.py --backup converted/
+
+# Validierung nach der Reparatur
+python3 fix_latex_escaping.py --validate converted/
+
+# Detaillierte Ausgabe für Debugging
+python3 fix_latex_escaping.py --verbose converted/
+```
+
+**Behandelte Probleme:**
+- `\textbackslash{}` Sequenzen → saubere LaTeX-Befehle
+- Überkomplexe Hypertarget-Strukturen → vereinfachte Sektionen
+- Doppelt-escapierte Zeichen → korrekte LaTeX-Syntax
+- Auto-generierte Labels → lesbare Referenzen
+
+**Integration in den Workflow:**
+```bash
+# Nach Dokumentkonvertierung ausführen
+pandoc document.md -o converted/document.tex
+python3 fix_latex_escaping.py --backup converted/
+
+# In Build-Prozess integrieren
+python3 fix_latex_escaping.py converted/ && python3 ctmm_build.py
+```
+
+Siehe [README_DE_ESCAPING.md](README_DE_ESCAPING.md) für ausführliche Dokumentation und Beispiele.
+
 ### Unit Tests
 
 Das Build-System enthält Unit Tests für kritische Funktionen:
