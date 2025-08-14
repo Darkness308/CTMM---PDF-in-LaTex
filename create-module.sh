@@ -52,7 +52,6 @@ if [ $? -eq 0 ]; then
         "tool") prefix="tool-";;
         "notfallkarte") prefix="notfall-";;
     esac
-    
     echo "   \\input{modules/${prefix}${filename}}"
     echo "3. Kompilieren Sie das Dokument"
     echo ""
