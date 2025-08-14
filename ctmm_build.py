@@ -25,27 +25,57 @@ def filename_to_title(filename):
 def scan_references(main_tex_path="main.tex"):
     """Scan main.tex for style and module references."""
     try:
+        # Check if file exists first
+        if not Path(main_tex_path).exists():
+            logger.error("Main LaTeX file %s not found", main_tex_path)
+            logger.error("Current directory: %s", Path.cwd())
+            logger.error("Directory contents: %s", list(Path(".").glob("*")))
+            return {"style_files": [], "module_files": []}
+            
         with open(main_tex_path, 'r', encoding='utf-8', errors='replace') as f:
             content = f.read()
+            logger.debug("Successfully read %s (%d characters)", main_tex_path, len(content))
     except Exception as e:
         logger.error("Error reading %s: %s", main_tex_path, e)
+        # Try with encoding detection if UTF-8 fails
+        try:
+            import chardet
+            with open(main_tex_path, 'rb') as f:
+                raw_data = f.read()
+                detected = chardet.detect(raw_data)
+                logger.info("Detected encoding: %s", detected)
+        except Exception:
+            pass
         return {"style_files": [], "module_files": []}
 
-    # Find style and module references
-    style_files = [f"style/{match}.sty" for match in
-                   re.findall(r'\\usepackage\{style/([^}]+)\}', content)]
-    module_files = [f"modules/{match}.tex" for match in
-                    re.findall(r'\\input\{modules/([^}]+)\}', content)]
+    try:
+        # Find style and module references
+        style_files = [f"style/{match}.sty" for match in
+                       re.findall(r'\\usepackage\{style/([^}]+)\}', content)]
+        module_files = [f"modules/{match}.tex" for match in
+                        re.findall(r'\\input\{modules/([^}]+)\}', content)]
 
-    return {"style_files": style_files, "module_files": module_files}
+        logger.debug("Found style files: %s", style_files)
+        logger.debug("Found module files: %s", module_files)
+        
+        return {"style_files": style_files, "module_files": module_files}
+        
+    except Exception as e:
+        logger.error("Error parsing references from %s: %s", main_tex_path, e)
+        return {"style_files": [], "module_files": []}
 
 
 def check_missing_files(files):
     """Check which files are missing."""
     missing = []
     for file_path in files:
-        if not Path(file_path).exists():
-            missing.append(file_path)
+        try:
+            if not Path(file_path).exists():
+                missing.append(file_path)
+                logger.debug("Missing file: %s", file_path)
+        except Exception as e:
+            logger.error("Error checking file %s: %s", file_path, e)
+            missing.append(file_path)  # Treat as missing if we can't check
     return missing
 
 
@@ -199,48 +229,65 @@ def test_full_build(main_tex_path="main.tex"):
 
 def main():
     """Run the CTMM build system check."""
-    logger.info("CTMM Build System - Starting check...")
+    try:
+        # Add environment diagnostics for CI debugging
+        import sys
+        import os
+        logger.info("CTMM Build System - Starting check...")
+        logger.info("Python version: %s", sys.version.split()[0])
+        logger.info("Working directory: %s", os.getcwd())
+        
+        # Scan for references
+        references = scan_references()
+        style_files = references["style_files"]
+        module_files = references["module_files"]
+        logger.info("Found %d style files and %d module files",
+                    len(style_files), len(module_files))
 
-    # Scan for references
-    references = scan_references()
-    style_files = references["style_files"]
-    module_files = references["module_files"]
-    logger.info("Found %d style files and %d module files",
-                len(style_files), len(module_files))
+        # Check for missing files
+        all_files = style_files + module_files
+        missing_files = check_missing_files(all_files)
 
-    # Check for missing files
-    all_files = style_files + module_files
-    missing_files = check_missing_files(all_files)
+        if missing_files:
+            logger.warning("Found %d missing files", len(missing_files))
+            for file_path in missing_files:
+                logger.info("Creating template: %s", file_path)
+                create_template(file_path)
+        else:
+            logger.info("All referenced files exist")
 
-    if missing_files:
-        logger.warning("Found %d missing files", len(missing_files))
-        for file_path in missing_files:
-            logger.info("Creating template: %s", file_path)
-            create_template(file_path)
-    else:
-        logger.info("All referenced files exist")
+        # Test builds
+        basic_ok = test_basic_build()
+        full_ok = test_full_build()
 
-    # Test builds
-    basic_ok = test_basic_build()
-    full_ok = test_full_build()
+        # Summary
+        print("\n" + "="*50)
+        print("CTMM BUILD SYSTEM SUMMARY")
+        print("="*50)
+        print(f"Style files: {len(style_files)}")
+        print(f"Module files: {len(module_files)}")
+        print(f"Missing files: {len(missing_files)} (templates created)")
+        print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
+        print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
 
-    # Summary
-    print("\n" + "="*50)
-    print("CTMM BUILD SYSTEM SUMMARY")
-    print("="*50)
-    print(f"Style files: {len(style_files)}")
-    print(f"Module files: {len(module_files)}")
-    print(f"Missing files: {len(missing_files)} (templates created)")
-    print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
-    print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
+        if missing_files:
+            print("\nNEXT STEPS:")
+            print("- Review and complete the created template files")
+            print("- Remove TODO_*.md files when content is complete")
 
-    if missing_files:
-        print("\nNEXT STEPS:")
-        print("- Review and complete the created template files")
-        print("- Remove TODO_*.md files when content is complete")
-
-    return 0 if (basic_ok and full_ok) else 1
+        return 0 if (basic_ok and full_ok) else 1
+        
+    except Exception as e:
+        logger.error("FATAL ERROR in CTMM build system: %s", e)
+        import traceback
+        traceback.print_exc()
+        return 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        exit_code = main()
+        sys.exit(exit_code)
+    except Exception as e:
+        print(f"❌ CRITICAL ERROR: {e}")
+        sys.exit(1)
