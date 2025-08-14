@@ -23,6 +23,10 @@ jobs:
         run: |
           pip install chardet
 
+      - name: Run LaTeX package validation
+        run: |
+          python3 validate_latex_packages.py
+
       - name: Run LaTeX syntax validation
         run: |
           python3 validate_latex_syntax.py
@@ -43,6 +47,8 @@ jobs:
             texlive-fonts-extra
             texlive-latex-extra
             texlive-science
+            texlive-pictures
+            texlive-plain-generic
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4

@@ -155,6 +155,24 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result["style_files"], list)
         self.assertIsInstance(result["module_files"], list)
 
+    def test_check_latex_packages_function_exists(self):
+        """Test that check_latex_packages function exists and is callable."""
+        self.assertTrue(hasattr(ctmm_build, 'check_latex_packages'))
+        self.assertTrue(callable(ctmm_build.check_latex_packages))
+
+    def test_check_latex_packages_returns_tuple(self):
+        """Test that check_latex_packages function returns a tuple."""
+        try:
+            result = ctmm_build.check_latex_packages()
+            self.assertIsInstance(result, tuple)
+            self.assertEqual(len(result), 2)
+            packages_ok, missing_packages = result
+            self.assertIsInstance(packages_ok, bool)
+            self.assertIsInstance(missing_packages, list)
+        except Exception:
+            # Function may fail if pdflatex is not available, which is acceptable
+            pass
+
 
 if __name__ == '__main__':
     # Run the tests

@@ -99,6 +99,71 @@ Created by CTMM Build System
         f.write(todo_content)
 
 
+def check_latex_packages():
+    """Check if required LaTeX packages are available."""
+    logger.info("Checking LaTeX package dependencies...")
+    
+    # List of required packages from main.tex and style files
+    required_packages = [
+        'fontenc', 'inputenc', 'babel', 'geometry', 'hyperref', 
+        'xcolor', 'fontawesome5', 'tcolorbox', 'tabularx', 'amssymb',
+        'tikz', 'ifthen', 'calc', 'forloop', 'pifont'
+    ]
+    
+    missing_packages = []
+    
+    # Check if pdflatex is available first
+    try:
+        subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        logger.warning("pdflatex not available - cannot check package dependencies")
+        return True, []
+    
+    # Create a minimal test document to check each package
+    for package in required_packages:
+        test_content = f"""\\documentclass{{article}}
+\\usepackage{{{package}}}
+\\begin{{document}}
+Test
+\\end{{document}}"""
+        
+        try:
+            test_file = f"package_test_{package}.tex"
+            with open(test_file, 'w', encoding='utf-8') as f:
+                f.write(test_content)
+            
+            result = subprocess.run(
+                ["pdflatex", "-interaction=nonstopmode", test_file],
+                capture_output=True,
+                text=True,
+                timeout=30,
+                check=False
+            )
+            
+            # Clean up
+            for ext in ['.tex', '.aux', '.log', '.out', '.pdf']:
+                Path(test_file.replace('.tex', ext)).unlink(missing_ok=True)
+            
+            if result.returncode != 0:
+                if "! LaTeX Error: File" in result.stdout or "not found" in result.stdout:
+                    missing_packages.append(package)
+                    logger.warning("Package '%s' not found", package)
+                
+        except Exception as e:
+            logger.warning("Could not test package '%s': %s", package, e)
+    
+    if missing_packages:
+        logger.error("Missing LaTeX packages: %s", ", ".join(missing_packages))
+        logger.info("To install missing packages, you may need:")
+        logger.info("  - texlive-pictures (for tikz)")
+        logger.info("  - texlive-fonts-extra (for fontawesome5, pifont)")
+        logger.info("  - texlive-latex-extra (for tcolorbox)")
+        return False, missing_packages
+    else:
+        logger.info("✓ All required LaTeX packages are available")
+        return True, []
+
+
 def test_basic_build(main_tex_path="main.tex"):
     """Test basic build without modules."""
     logger.info("Testing basic build (without modules)...")
@@ -220,6 +285,9 @@ def main():
     else:
         logger.info("All referenced files exist")
 
+    # Check LaTeX package dependencies
+    packages_ok, missing_packages = check_latex_packages()
+
     # Test builds
     basic_ok = test_basic_build()
     full_ok = test_full_build()
@@ -231,6 +299,9 @@ def main():
     print(f"Style files: {len(style_files)}")
     print(f"Module files: {len(module_files)}")
     print(f"Missing files: {len(missing_files)} (templates created)")
+    print(f"LaTeX packages: {'✓ PASS' if packages_ok else '✗ MISSING'}")
+    if missing_packages:
+        print(f"Missing packages: {', '.join(missing_packages)}")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
 
@@ -238,8 +309,13 @@ def main():
         print("\nNEXT STEPS:")
         print("- Review and complete the created template files")
         print("- Remove TODO_*.md files when content is complete")
+    
+    if missing_packages:
+        print("\nLATEX PACKAGE ISSUES:")
+        print("- Install missing packages using your LaTeX distribution")
+        print("- For CI/CD, update workflow with required packages")
 
-    return 0 if (basic_ok and full_ok) else 1
+    return 0 if (basic_ok and full_ok and packages_ok) else 1
 
 
 if __name__ == "__main__":

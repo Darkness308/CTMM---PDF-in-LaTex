@@ -74,10 +74,27 @@ python3 build_system.py --verbose
 
 ### GitHub Workflow Integration
 
-Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigiert:
-- Referenziert nun korrekt `main.tex` (statt dem nicht existierenden `main_final.tex`)
-- Lädt `main.pdf` als Artefakt hoch
-- Kann durch das Build-System bei Fehlern erweitert werden
+Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde erweitert:
+- **LaTeX-Paket-Validierung**: Prüft verfügbare Pakete vor dem Build
+- **Verbesserte LaTeX-Abhängigkeiten**: Erweiterte Paketliste für vollständige Kompatibilität
+- **Umfassende Validierung**: Syntax, Pakete und Build-System
+- **Fehlerbehandlung**: Detaillierte Logs für missing packages
+- Referenziert korrekt `main.tex` und lädt `main.pdf` als Artefakt hoch
+
+**CI/CD Verbesserungen:**
+```bash
+# Lokale Validierung vor Push
+make validate                    # Umfassende Validierung
+make validate-packages          # Nur LaTeX-Pakete prüfen
+python3 validate_latex_packages.py  # Detaillierte Paketanalyse
+```
+
+**CI-Paket-Abhängigkeiten** (in workflows definiert):
+- `texlive-lang-german` - Deutsche Sprachunterstützung
+- `texlive-fonts-extra` - FontAwesome5, pifont 
+- `texlive-latex-extra` - tcolorbox, erweiterte Pakete
+- `texlive-pictures` - TikZ und Grafik-Pakete
+- `texlive-plain-generic` - Basis-Utilities
 
 **Typische Fehlerquellen und Best Practices:**
 
