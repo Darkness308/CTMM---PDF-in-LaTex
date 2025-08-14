@@ -1,9 +1,13 @@
 # CTMM LaTeX Build System Makefile
 
+copilot/fix-235
+.PHONY: build check clean test help unit-test validate validate-fix
+
 copilot/fix-526
 .PHONY: build check clean test test-unit help ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test
 
 .PHONY: build check clean test test-unit help comprehensive workflow
+main
 main
 
 # Default target
@@ -13,6 +17,17 @@ all: ctmm-check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+copilot/fix-235
+# Validate LaTeX files for escaping issues
+validate:
+	@echo "Validating LaTeX files for escaping issues..."
+	python3 latex_validator.py modules/
+
+# Fix LaTeX escaping issues (creates backups)
+validate-fix:
+	@echo "Fixing LaTeX escaping issues..."
+	python3 latex_validator.py modules/ --fix
 
 # CTMM Unified Tool Commands
 ctmm-check:
@@ -35,6 +50,7 @@ ctmm-workflow:
 integration-test:
 	@echo "Running CTMM integration test suite..."
 	python3 test_integration.py
+main
 
 # Build PDF
 build:
@@ -63,6 +79,7 @@ test-unit:
 unit-test:
 	@echo "Running unit tests..."
 	python3 test_ctmm_build.py
+	python3 test_latex_validator.py
 
 # Clean build artifacts
 clean:
@@ -94,6 +111,19 @@ help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
 	@echo "==============================================="
 	@echo "Available targets:"
+copilot/fix-235
+	@echo "  all          - Run check and build (default)"
+	@echo "  check        - Check dependencies and run build system"
+	@echo "  validate     - Validate LaTeX files for escaping issues"
+	@echo "  validate-fix - Fix LaTeX escaping issues (creates backups)"
+	@echo "  build        - Build the PDF"
+	@echo "  analyze      - Run detailed module analysis"
+	@echo "  test         - Quick test of build system"
+	@echo "  unit-test    - Run unit tests for Python functions"
+	@echo "  clean        - Remove build artifacts"
+	@echo "  deps         - Install Python dependencies"
+	@echo "  help         - Show this help"
+
 copilot/fix-526
 	@echo "  all           - Run ctmm-check and build (default)"
 
@@ -120,3 +150,4 @@ copilot/fix-526
 
 main
 	@echo "  help          - Show this help"
+main

@@ -53,11 +53,35 @@ python3 ctmm_build.py
 ```
 
 Das Build-System:
-1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
-2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
-3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
-4. **Testet vollständigen Build** - mit allen Modulen
-5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+1. **Validiert LaTeX-Dateien** - prüft auf übermäßige Escapierung und Formatierungsprobleme
+2. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
+3. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
+4. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
+5. **Testet vollständigen Build** - mit allen Modulen
+6. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+
+### LaTeX-Validierung und Escaping-Prävention
+
+Das System enthält einen integrierten LaTeX-Validator zur Erkennung und Behebung von Problemen mit übermäßig escapierten LaTeX-Befehlen:
+
+```bash
+# LaTeX-Dateien validieren
+make validate
+python3 latex_validator.py modules/
+
+# Probleme automatisch beheben (erstellt Backups)
+make validate-fix
+python3 latex_validator.py modules/ --fix
+```
+
+**Erkannte Probleme:**
+- `\textbackslash{}` Sequenzen
+- Überkomplexe `\hypertarget` Verwendung
+- Übermäßige `\texorpdfstring` Umhüllung
+- Auto-generierte Labels
+- Doppelt-escapierte Zeichen
+
+Siehe [LATEX_ESCAPING_PREVENTION.md](LATEX_ESCAPING_PREVENTION.md) für detaillierte Informationen.
 
 ### Unit Tests
 
@@ -68,9 +92,13 @@ Das Build-System enthält Unit Tests für kritische Funktionen:
 make unit-test
 # oder direkt:
 python3 test_ctmm_build.py
+python3 test_latex_validator.py
 ```
 
-Die Tests überprüfen die `filename_to_title()` Funktion mit verschiedenen Eingabeformaten (Unterstriche, Bindestriche, Groß-/Kleinschreibung, etc.).
+Die Tests überprüfen:
+- `filename_to_title()` Funktion mit verschiedenen Eingabeformaten
+- LaTeX-Validator Funktionalität
+- Escaping-Problem Erkennung und Behebung
 
 ### Modulare Test-Strategie
 
