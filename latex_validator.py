@@ -71,6 +71,8 @@ class LaTeXValidator:
                 # Generate clean label
                 label = re.sub(r'[^a-zA-Z0-9-]', '-', title.lower())
                 label = re.sub(r'-+', '-', label).strip('-')
+                if not label:
+                    label = "untitled"
                 
                 return f'\\section{{{title}}}\\label{{sec:{label}}}'
             
