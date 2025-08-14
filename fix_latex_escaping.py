@@ -76,6 +76,29 @@ class LaTeXDeEscaper:
             
             # Percentage signs
             (r'\\textbackslash\{\}%', r'%'),
+            
+            # Enhanced pattern recognition - 12 additional patterns
+            # Math and symbol patterns
+            (r'\\textbackslash\{\}\$', r'$'),
+            (r'\\textbackslash\{\}amp', r'\\&'),
+            (r'\\textbackslash\{\}ldots\\textbackslash\{\}', r'\\ldots'),
+            
+            # Font and size commands
+            (r'\\textbackslash\{\}textsc\\textbackslash\{\}', r'\\textsc'),
+            (r'\\textbackslash\{\}Large\\textbackslash\{\}', r'\\Large'),
+            (r'\\textbackslash\{\}small\\textbackslash\{\}', r'\\small'),
+            
+            # Citation and reference patterns
+            (r'\\textbackslash\{\}cite\\textbackslash\{\}', r'\\cite'),
+            (r'\\textbackslash\{\}ref\\textbackslash\{\}', r'\\ref'),
+            (r'\\textbackslash\{\}pageref\\textbackslash\{\}', r'\\pageref'),
+            
+            # CTMM-specific patterns for therapeutic documents
+            (r'\\textbackslash\{\}checkbox\\textbackslash\{\}', r'\\checkbox'),
+            (r'\\textbackslash\{\}checkedbox\\textbackslash\{\}', r'\\checkedbox'),
+            
+            # Advanced formatting patterns
+            (r'\\textbackslash\{\}vspace\\textbackslash\{\}', r'\\vspace'),
         ]
         
         # Additional cleanup patterns
@@ -114,6 +137,23 @@ class LaTeXDeEscaper:
             # Fix broken section commands
             (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\section{\\texorpdfstring{\1}{\2}}'),
             (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\subsection{\\texorpdfstring{\1}{\2}}'),
+            
+            # Enhanced cleanup patterns - additional validation and fixes
+            # Fix CTMM-specific command issues
+            (r'\\textcolor\{ctmm([A-Z][a-z]+)\}\\textbackslash\{\}', r'\\textcolor{ctmm\1}'),
+            (r'\\ctmm([A-Z][a-z]+)Box\\textbackslash\{\}', r'\\ctmm\1Box'),
+            
+            # Fix table and figure patterns
+            (r'\\textbackslash\{\}tabular\\textbackslash\{\}', r'\\tabular'),
+            (r'\\textbackslash\{\}includegraphics\\textbackslash\{\}', r'\\includegraphics'),
+            
+            # Fix German-specific LaTeX patterns
+            (r'\\textbackslash\{\}"([aouAOU])\\textbackslash\{\}', r'\\"\1'),
+            (r'\\textbackslash\{\}ss\\textbackslash\{\}', r'\\ss'),
+            
+            # Remove excessive spacing patterns
+            (r'\\textbackslash\{\}\\ ', r'\\ '),
+            (r'\\textbackslash\{\}~', r'~'),
         ]
         
         self.stats = {
@@ -144,19 +184,37 @@ class LaTeXDeEscaper:
             original_content = content
             replacements_made = 0
             
-            # Apply all escaping pattern fixes
-            for pattern, replacement in self.escaping_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Pattern '{pattern}' replaced {count} times")
+            # Apply escaping pattern fixes (multiple passes for complex patterns)
+            for pass_num in range(3):  # Up to 3 passes for complex nested patterns
+                pass_replacements = 0
+                
+                for pattern, replacement in self.escaping_patterns:
+                    content, count = re.subn(pattern, replacement, content)
+                    pass_replacements += count
+                    if count > 0:
+                        logger.debug(f"Pass {pass_num+1}: Pattern '{pattern}' replaced {count} times")
+                
+                replacements_made += pass_replacements
+                
+                # If no replacements in this pass, we're done
+                if pass_replacements == 0:
+                    break
             
-            # Apply cleanup patterns
-            for pattern, replacement in self.cleanup_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Cleanup pattern '{pattern}' replaced {count} times")
+            # Apply cleanup patterns (multiple passes)
+            for pass_num in range(2):  # Up to 2 passes for cleanup
+                pass_replacements = 0
+                
+                for pattern, replacement in self.cleanup_patterns:
+                    content, count = re.subn(pattern, replacement, content)
+                    pass_replacements += count
+                    if count > 0:
+                        logger.debug(f"Cleanup pass {pass_num+1}: Pattern '{pattern}' replaced {count} times")
+                
+                replacements_made += pass_replacements
+                
+                # If no replacements in this pass, we're done
+                if pass_replacements == 0:
+                    break
             
             # Check if content changed
             content_changed = content != original_content
@@ -210,7 +268,7 @@ class LaTeXDeEscaper:
     
     def validate_latex_syntax(self, file_path: Path) -> List[str]:
         """
-        Basic validation of LaTeX syntax in the fixed file.
+        Enhanced validation of LaTeX syntax with reduced false positives.
         
         Args:
             file_path: Path to the LaTeX file
@@ -224,22 +282,65 @@ class LaTeXDeEscaper:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Check for common LaTeX syntax issues
+            # Check for remaining over-escaped commands
             if '\\textbackslash{}' in content:
-                issues.append("Still contains over-escaped commands")
+                remaining_count = content.count('\\textbackslash{}')
+                issues.append(f"Still contains {remaining_count} over-escaped commands")
             
-            # Check for unmatched braces
+            # Enhanced brace matching with better precision
             brace_count = content.count('{') - content.count('}')
             if brace_count != 0:
                 issues.append(f"Unmatched braces (difference: {brace_count})")
             
-            # Check for malformed commands
-            malformed_commands = re.findall(r'\\[a-zA-Z]*\\', content)
+            # Check for malformed commands with improved pattern detection
+            malformed_commands = re.findall(r'\\[a-zA-Z]+\\(?![a-zA-Z])', content)
             if malformed_commands:
-                issues.append(f"Potential malformed commands: {set(malformed_commands)}")
+                # Filter out valid double-backslash line breaks
+                filtered_malformed = [cmd for cmd in malformed_commands if not cmd.startswith('\\\\')]
+                if filtered_malformed:
+                    issues.append(f"Potential malformed commands: {set(filtered_malformed)}")
+            
+            # Check for incomplete environment patterns
+            incomplete_env = re.findall(r'\\begin\{[^}]*$|\\end\{[^}]*$', content, re.MULTILINE)
+            if incomplete_env:
+                issues.append(f"Incomplete environment commands: {incomplete_env}")
+            
+            # Check for missing parameters in common commands
+            missing_params = []
+            param_commands = ['textcolor', 'textbf', 'emph', 'section', 'subsection']
+            for cmd in param_commands:
+                pattern = f'\\\\{cmd}\\s*$'
+                if re.search(pattern, content, re.MULTILINE):
+                    missing_params.append(cmd)
+            
+            if missing_params:
+                issues.append(f"Commands missing parameters: {missing_params}")
+            
+            # Validate CTMM-specific patterns
+            ctmm_issues = self._validate_ctmm_patterns(content)
+            issues.extend(ctmm_issues)
             
         except Exception as e:
             issues.append(f"Error reading file: {e}")
+        
+        return issues
+    
+    def _validate_ctmm_patterns(self, content: str) -> List[str]:
+        """Validate CTMM-specific LaTeX patterns."""
+        issues = []
+        
+        # Check for proper CTMM color usage
+        ctmm_colors = ['ctmmBlue', 'ctmmOrange', 'ctmmGreen', 'ctmmPurple']
+        for color in ctmm_colors:
+            if f'\\textcolor{{{color}}}{{}}' in content:
+                issues.append(f"Empty textcolor command for {color}")
+        
+        # Check for proper checkbox usage
+        if '\\Box' in content and '\\checkbox' not in content:
+            issues.append("Using \\Box instead of \\checkbox (CTMM convention)")
+        
+        if '\\blacksquare' in content and '\\checkedbox' not in content:
+            issues.append("Using \\blacksquare instead of \\checkedbox (CTMM convention)")
         
         return issues
 
