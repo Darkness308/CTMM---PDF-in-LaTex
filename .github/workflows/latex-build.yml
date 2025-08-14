@@ -54,7 +54,10 @@ main
             texlive-latex-recommended
             texlive-fonts-extra
             texlive-latex-extra
+copilot/fix-440
+
             texlive-science
+main
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
