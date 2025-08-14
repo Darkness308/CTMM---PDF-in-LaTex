@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit help
+.PHONY: build check clean test test-unit help comprehensive workflow
 
 # Default target
 all: check build
@@ -53,17 +53,29 @@ deps:
 	pip install chardet
 	@echo "LaTeX packages should be installed via your system package manager"
 
+# Comprehensive workflow
+comprehensive:
+	@echo "Running CTMM Comprehensive Workflow..."
+	python3 comprehensive_workflow.py
+
+# Comprehensive workflow (alias)
+workflow:
+	@echo "Running CTMM Comprehensive Workflow..."
+	python3 comprehensive_workflow.py
+
 # Help
 help:
-	@echo "CTMM LaTeX Build System"
-	@echo "======================="
+	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
+	@echo "==============================================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system + unit tests"
-	@echo "  test-unit - Run only unit tests for ctmm_build.py"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all           - Run check and build (default)"
+	@echo "  comprehensive - Run complete workflow validation"
+	@echo "  workflow      - Alias for comprehensive"
+	@echo "  check         - Check dependencies and run build system"
+	@echo "  build         - Build the PDF"
+	@echo "  analyze       - Run detailed module analysis"
+	@echo "  test          - Quick test of build system + unit tests"
+	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
+	@echo "  clean         - Remove build artifacts"
+	@echo "  deps          - Install Python dependencies"
+	@echo "  help          - Show this help"
