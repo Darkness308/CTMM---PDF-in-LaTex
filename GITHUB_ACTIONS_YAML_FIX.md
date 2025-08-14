@@ -1,4 +1,4 @@
-# GitHub Actions YAML Syntax Fix - Issue #458
+# GitHub Actions YAML Syntax Fix - Issues #458 & #532
 
 ## Summary
 
@@ -60,21 +60,23 @@ yaml.safe_load('"on":\n  push:\n    branches: [main]')
 # Success: Key is string "on" as expected by GitHub Actions
 ```
 
-## Testing
-
-Two validation scripts were created to verify the fix:
-
-1. **`validate_workflow_syntax.py`**: Comprehensive validation of all workflow files
-2. **`test_workflow_structure.py`**: Tests GitHub Actions workflow structure compliance
-
-Both scripts confirm that all workflow files have correct syntax and structure.
-
 ## Conclusion
 
-The YAML syntax issue has been successfully resolved. All GitHub Actions workflow files now use the quoted `"on":` syntax, ensuring:
+The YAML syntax issue has been successfully resolved for both issues #458 and #532. All GitHub Actions workflow files now use the quoted `"on":` syntax, ensuring:
 
 - Proper YAML parsing with string keys
 - Correct GitHub Actions trigger recognition  
 - Reliable workflow execution on push and pull request events
 
 The fix ensures workflows will trigger correctly and prevents YAML boolean interpretation issues.
+
+## Validation Scripts
+
+Multiple validation scripts confirm the fix is working correctly:
+
+1. **`validate_workflow_syntax.py`**: Comprehensive validation of all workflow files
+2. **`test_workflow_structure.py`**: Tests GitHub Actions workflow structure compliance  
+3. **`final_verification.py`**: Demonstrates the fix by comparing incorrect vs correct syntax
+4. **`validate_issue_532.py`**: Specific validation for Issue #532 resolution
+
+All validation scripts confirm that the GitHub Actions YAML syntax issue is fully resolved.
