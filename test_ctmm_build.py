@@ -156,6 +156,116 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result["module_files"], list)
 
 
+class TestCIEnhancedFeatures(unittest.TestCase):
+    """Test CI-specific enhancements and error handling."""
+    
+    def test_check_latex_availability(self):
+        """Test LaTeX availability detection."""
+        result = ctmm_build.check_latex_availability()
+        self.assertIsInstance(result, bool)
+    
+    def test_detect_ci_environment(self):
+        """Test CI environment detection."""
+        result = ctmm_build.detect_ci_environment()
+        self.assertIsInstance(result, dict)
+        self.assertIn('is_ci', result)
+        self.assertIn('environments', result)
+        self.assertIn('github_actions', result)
+        self.assertIsInstance(result['is_ci'], bool)
+        self.assertIsInstance(result['environments'], list)
+        self.assertIsInstance(result['github_actions'], bool)
+    
+    def test_analyze_latex_error_empty(self):
+        """Test LaTeX error analysis with empty content."""
+        result = ctmm_build.analyze_latex_error("")
+        self.assertIsInstance(result, dict)
+        self.assertIn('errors', result)
+        self.assertIn('warnings', result)
+        self.assertIn('summary', result)
+        self.assertEqual(result['total_errors'], 0)
+        self.assertEqual(result['total_warnings'], 0)
+    
+    def test_analyze_latex_error_with_content(self):
+        """Test LaTeX error analysis with sample error content."""
+        sample_log = """This is pdfTeX, Version 3.14159265-2.6-1.40.20
+! Undefined control sequence.
+l.123 \\textcolo
+                {red}{Hello}
+Package hyperref Warning: Token not allowed in a PDF string
+Warning: Citation 'unknown' on page 1 undefined"""
+        
+        result = ctmm_build.analyze_latex_error(sample_log)
+        self.assertGreater(result['total_errors'], 0)
+        self.assertGreater(result['total_warnings'], 0)
+        self.assertIn('Undefined control sequence', str(result['errors']))
+    
+    def test_save_build_artifacts(self):
+        """Test build artifact saving functionality."""
+        import tempfile
+        import os
+        
+        # Use temporary directory to avoid polluting repo
+        with tempfile.TemporaryDirectory() as temp_dir:
+            os.chdir(temp_dir)
+            
+            artifact_file = ctmm_build.save_build_artifacts(
+                "test", 
+                True, 
+                "Sample log content", 
+                "Sample error output"
+            )
+            
+            self.assertTrue(os.path.exists(artifact_file))
+            
+            # Verify content
+            with open(artifact_file, 'r') as f:
+                content = f.read()
+                self.assertIn("Build Type: test", content)
+                self.assertIn("Success: True", content)
+                self.assertIn("Sample log content", content)
+
+
+class TestEdgeCasesAndErrorHandling(unittest.TestCase):
+    """Test edge cases and error handling scenarios."""
+    
+    def test_scan_references_missing_file(self):
+        """Test scan_references with non-existent file."""
+        result = ctmm_build.scan_references("nonexistent_file.tex")
+        self.assertIsInstance(result, dict)
+        self.assertEqual(result["style_files"], [])
+        self.assertEqual(result["module_files"], [])
+    
+    def test_check_missing_files_empty_list(self):
+        """Test check_missing_files with empty list."""
+        result = ctmm_build.check_missing_files([])
+        self.assertEqual(result, [])
+    
+    def test_check_missing_files_nonexistent(self):
+        """Test check_missing_files with non-existent files."""
+        result = ctmm_build.check_missing_files(["nonexistent1.tex", "nonexistent2.tex"])
+        self.assertEqual(len(result), 2)
+    
+    def test_filename_to_title_edge_cases(self):
+        """Test filename_to_title with edge cases."""
+        test_cases = [
+            ("", ""),
+            ("single", "Single"),
+            ("_leading_underscore", "Leading Underscore"),
+            ("trailing_underscore_", "Trailing Underscore"),
+            ("--double-hyphen--", "Double Hyphen"),
+            ("mixed_-_separators", "Mixed Separators"),
+            ("ALLCAPS", "Allcaps"),
+            ("mixedCASE", "Mixedcase"),
+            ("123numbers456", "123numbers456"),  # Numbers don't get capitalized
+            ("special@chars#here", "Special@chars#here")  # Only alphanumeric words get capitalized
+        ]
+        
+        for input_val, expected in test_cases:
+            with self.subTest(input=input_val):
+                result = ctmm_build.filename_to_title(input_val)
+                self.assertEqual(result, expected)
+
+
 if __name__ == '__main__':
     # Run the tests
     unittest.main(verbosity=2)

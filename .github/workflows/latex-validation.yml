@@ -31,6 +31,17 @@ jobs:
         run: |
           python3 ctmm_build.py
 
+      - name: Run CI Build Analysis
+        run: |
+          python3 ci_build_analyzer.py
+
+      - name: Upload CI Analysis Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci_validation_report  
+          path: ci_analysis_report.json
+
       - name: Upload validation logs (on failure)
         if: failure()
         uses: actions/upload-artifact@v4

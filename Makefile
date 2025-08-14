@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit help
+.PHONY: build check clean test test-unit help ci-analysis
 
 # Default target
 all: check build
@@ -38,12 +38,20 @@ unit-test:
 	@echo "Running unit tests..."
 	python3 test_ctmm_build.py
 
+# CI-specific analysis and testing
+ci-analysis:
+	@echo "Running comprehensive CI build analysis..."
+	python3 ci_build_analyzer.py
+
 # Clean build artifacts
 clean:
 	rm -f *.aux *.log *.out *.toc *.pdf
 	rm -f main_basic_test.*
 	rm -f *.temp.*
 	rm -f build_error_*.log
+	rm -f build_*_latest.log
+	rm -f ci_analysis_report.json
+	rm -f package_test.*
 	rm -f __pycache__/*.pyc
 	@echo "Cleaned build artifacts"
 
@@ -58,12 +66,13 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system + unit tests"
-	@echo "  test-unit - Run only unit tests for ctmm_build.py"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all        - Run check and build (default)"
+	@echo "  check      - Check dependencies and run build system"
+	@echo "  build      - Build the PDF"
+	@echo "  analyze    - Run detailed module analysis"
+	@echo "  test       - Quick test of build system + unit tests"
+	@echo "  test-unit  - Run only unit tests for ctmm_build.py"
+	@echo "  ci-analysis- Run comprehensive CI build analysis"
+	@echo "  clean      - Remove build artifacts"
+	@echo "  deps       - Install Python dependencies"
+	@echo "  help       - Show this help"

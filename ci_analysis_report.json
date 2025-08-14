@@ -1,0 +1,76 @@
+{
+  "timestamp": "2025-08-14T01:32:44.749626",
+  "environment": {
+    "is_ci": true,
+    "environments": [
+      "GitHub Actions",
+      "Generic CI"
+    ],
+    "github_actions": true
+  },
+  "latex_available": false,
+  "tests": {
+    "python_dependencies": {
+      "required_missing": [],
+      "optional_missing": [],
+      "status": "PASS"
+    },
+    "latex_packages": {
+      "status": "SKIPPED",
+      "reason": "LaTeX not available"
+    },
+    "build_system": {
+      "style_files": 3,
+      "module_files": 14,
+      "missing_files": 0,
+      "basic_build": "PASS",
+      "full_build": "PASS",
+      "status": "PASS"
+    },
+    "file_integrity": {
+      "files": {
+        "main.tex": {
+          "exists": true,
+          "readable": true,
+          "size": 2541,
+          "status": "OK"
+        },
+        "ctmm_build.py": {
+          "exists": true,
+          "readable": true,
+          "size": 13877,
+          "status": "OK"
+        },
+        "test_ctmm_build.py": {
+          "exists": true,
+          "readable": true,
+          "size": 11387,
+          "status": "OK"
+        },
+        ".github/workflows/latex-build.yml": {
+          "exists": true,
+          "readable": true,
+          "size": 1706,
+          "status": "OK"
+        },
+        ".github/workflows/latex-validation.yml": {
+          "exists": true,
+          "readable": true,
+          "size": 1135,
+          "status": "OK"
+        }
+      },
+      "failed": [],
+      "status": "PASS"
+    }
+  },
+  "summary": {
+    "total_tests": 4,
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "success_rate": 75.0,
+    "overall_status": "PASS"
+  }
+}
