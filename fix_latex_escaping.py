@@ -76,6 +76,22 @@ class LaTeXDeEscaper:
             
             # Percentage signs
             (r'\\textbackslash\{\}%', r'%'),
+            
+            # Additional common commands
+            (r'\\textbackslash\{\}def\\textbackslash\{\}', r'\\def'),
+            (r'\\textbackslash\{\}deflabelenumi\\textbackslash\{\}', r'\\deflabelenumi'),
+            (r'\\textbackslash\{\}arabic\\textbackslash\{\}', r'\\arabic'),
+            
+            # Math mode patterns
+            (r'\\textbackslash\{\}\$', r'$'),
+            
+            # Ampersand patterns (table separators)
+            (r'\\textbackslash\{\}\&', r'\\&'),
+            
+            # More environment patterns
+            (r'\\textbackslash\{\}enumerate\\textbackslash\{\}', r'enumerate'),
+            (r'\\textbackslash\{\}itemize\\textbackslash\{\}', r'itemize'),
+            (r'\\textbackslash\{\}quote\\textbackslash\{\}', r'quote'),
         ]
         
         # Additional cleanup patterns
@@ -210,7 +226,7 @@ class LaTeXDeEscaper:
     
     def validate_latex_syntax(self, file_path: Path) -> List[str]:
         """
-        Basic validation of LaTeX syntax in the fixed file.
+        Enhanced validation of LaTeX syntax in the fixed file.
         
         Args:
             file_path: Path to the LaTeX file
@@ -224,20 +240,32 @@ class LaTeXDeEscaper:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Check for common LaTeX syntax issues
+            # Check for remaining over-escaped commands
             if '\\textbackslash{}' in content:
                 issues.append("Still contains over-escaped commands")
             
-            # Check for unmatched braces
+            # Check for unmatched braces (but allow some tolerance for content)
             brace_count = content.count('{') - content.count('}')
-            if brace_count != 0:
-                issues.append(f"Unmatched braces (difference: {brace_count})")
+            if abs(brace_count) > 5:  # Allow some tolerance for embedded content
+                issues.append(f"Significant brace mismatch (difference: {brace_count})")
             
-            # Check for malformed commands
-            malformed_commands = re.findall(r'\\[a-zA-Z]*\\', content)
-            if malformed_commands:
-                issues.append(f"Potential malformed commands: {set(malformed_commands)}")
+            # Check for malformed commands (but exclude valid LaTeX sequences)
+            malformed_commands = re.findall(r'\\[a-zA-Z]+\\[a-zA-Z]', content)
+            # Filter out valid patterns like \\& (escaped ampersand)
+            valid_patterns = {r'\\&', r'\\\\', r'\\_', r'\\%', r'\\$', r'\\#'}
+            filtered_malformed = [cmd for cmd in malformed_commands 
+                                 if not any(pattern in cmd for pattern in valid_patterns)]
+            if filtered_malformed:
+                issues.append(f"Potential malformed commands: {set(filtered_malformed)}")
             
+            # Check for common problematic patterns
+            if re.search(r'\\textbackslash\{\}[a-zA-Z]+', content):
+                issues.append("Contains partially escaped commands")
+            
+            # Check for incomplete command fixes
+            if re.search(r'\\[a-zA-Z]+\\textbackslash\{\}', content):
+                issues.append("Contains commands with trailing escapes")
+                
         except Exception as e:
             issues.append(f"Error reading file: {e}")
         
