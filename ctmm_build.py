@@ -181,8 +181,9 @@ def test_full_build(main_tex_path="main.tex"):
         return True
 
     try:
+        # Enhanced LaTeX compilation with detailed error logging
         result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', main_tex_path],
+            ['pdflatex', '-interaction=nonstopmode', '-file-line-error', main_tex_path],
             capture_output=True,
             text=True,
             errors='replace',
@@ -194,14 +195,72 @@ def test_full_build(main_tex_path="main.tex"):
             logger.info("✓ Full build successful")
             if Path('main.pdf').exists():
                 logger.info("✓ PDF generated successfully")
+                pdf_size = Path('main.pdf').stat().st_size
+                logger.info("✓ PDF size: %d bytes", pdf_size)
         else:
-            logger.error("✗ Full build failed")
-            logger.error("Check main.log for detailed error information")
+            logger.error("✗ Full build failed (return code: %d)", result.returncode)
+            
+            # Enhanced error logging with detailed analysis
+            log_file = main_tex_path.replace('.tex', '.log')
+            if Path(log_file).exists():
+                logger.error("Analyzing LaTeX compilation errors...")
+                with open(log_file, 'r', encoding='utf-8', errors='ignore') as f:
+                    log_content = f.read()
+                    
+                # Extract and categorize errors
+                error_categories = {
+                    'undefined_commands': [],
+                    'missing_files': [],
+                    'package_errors': [],
+                    'syntax_errors': [],
+                    'other_errors': []
+                }
+                
+                for line in log_content.split('\n'):
+                    line_lower = line.lower()
+                    if any(keyword in line_lower for keyword in ['error', 'fatal', '!']) and line.strip():
+                        if 'undefined' in line_lower:
+                            error_categories['undefined_commands'].append(line.strip())
+                        elif 'file not found' in line_lower or 'no such file' in line_lower:
+                            error_categories['missing_files'].append(line.strip())
+                        elif 'package' in line_lower:
+                            error_categories['package_errors'].append(line.strip())
+                        elif any(syntax in line_lower for syntax in ['missing', 'runaway', 'paragraph ended']):
+                            error_categories['syntax_errors'].append(line.strip())
+                        else:
+                            error_categories['other_errors'].append(line.strip())
+                
+                # Report categorized errors
+                for category, errors in error_categories.items():
+                    if errors:
+                        logger.error("=== %s ===", category.replace('_', ' ').title())
+                        for i, error in enumerate(errors[:3]):  # Show first 3 of each category
+                            logger.error("  %d: %s", i+1, error[:100] + ('...' if len(error) > 100 else ''))
+                        if len(errors) > 3:
+                            logger.error("  ... and %d more %s", len(errors) - 3, category.replace('_', ' '))
+                
+                # Provide guidance
+                if error_categories['missing_files']:
+                    logger.error("GUIDANCE: Check file paths and ensure all referenced files exist")
+                if error_categories['undefined_commands']:
+                    logger.error("GUIDANCE: Check for typos in LaTeX commands or missing packages")
+                if error_categories['package_errors']:
+                    logger.error("GUIDANCE: Verify package installation and compatibility")
+                    
+                logger.error("For complete error log, check: %s", log_file)
+            else:
+                logger.error("No log file found at %s", log_file)
+            
+            if result.stdout:
+                logger.debug("LaTeX stdout (first 500 chars): %s", result.stdout[:500])
+            if result.stderr:
+                logger.error("LaTeX stderr: %s", result.stderr)
 
         return success
 
     except Exception as e:
         logger.error("Full build test failed: %s", e)
+        logger.error("This may indicate a system-level issue with LaTeX installation")
         return False
 
 
