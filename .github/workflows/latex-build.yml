@@ -33,7 +33,7 @@ jobs:
 
       - name: Build LaTeX PDF
         run: |
-          pdflatex -interaction=nonstopmode main.tex
+          pdflatex -halt-on-error main.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
