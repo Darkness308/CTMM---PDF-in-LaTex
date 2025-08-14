@@ -242,7 +242,6 @@ def validate_latex_files():
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
-copilot/fix-235
 
     # Validate LaTeX files for escaping issues
     latex_valid = validate_latex_files()
@@ -265,7 +264,6 @@ copilot/fix-235
     
     step += 1
     print(f"\n{step}. Checking file existence...")
-main
     all_files = style_files + module_files
     missing_files = check_missing_files(all_files)
     total_missing = len(missing_files)
