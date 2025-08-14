@@ -182,6 +182,12 @@ python3 build_system.py --verbose  # Granular analysis
 - Keep commits focused on single changes
 - Test thoroughly before pushing
 
+### GitHub Copilot Review Optimization
+- **Follow naming conventions**: Use underscores instead of spaces in filenames
+- **Check compatibility**: Run `python3 check_copilot_compatibility.py` before creating PRs
+- **Avoid binary files**: Keep PDFs and Word docs out of git tracking
+- **Read guidelines**: See `.github/COPILOT_REVIEW_GUIDELINES.md` for detailed guidance
+
 ---
 
 ## Quick Reference

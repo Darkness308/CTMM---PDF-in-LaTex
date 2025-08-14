@@ -299,6 +299,9 @@ TSWLatexianTemp*
 *.ppt
 *.pptx
 
+## Therapy material directory (binary files excluded from review):
+therapie-material/
+
 ## Editors:
 # WinEdt
 *.bak
