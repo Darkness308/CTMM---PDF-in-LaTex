@@ -88,7 +88,7 @@ class LaTeXEscapingFixer:
             print(f"Error: File {file_path} does not exist")
             return False
             
-        if file_path.suffix.lower() not in ['.tex', '.sty']:
+        if file_path.suffix.lower() not in self.LATEX_EXTENSIONS:
             print(f"Skipping non-LaTeX file: {file_path}")
             return True
             
