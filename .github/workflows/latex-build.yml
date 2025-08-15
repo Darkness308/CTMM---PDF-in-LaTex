@@ -1,10 +1,11 @@
+---
 name: Build LaTeX PDF
 
-on:
+"on":
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -18,7 +19,7 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Python dependencies  
+      - name: Install Python dependencies
         run: |
           pip install chardet
 
@@ -31,9 +32,32 @@ jobs:
           python3 ctmm_build.py
 
       - name: Set up LaTeX
+copilot/fix-288
+        uses: dante-ev/latex-action@v2.0.0
+
+copilot/fix-292
+        uses: dante-ev/latex-action@v2.0.0
+
+copilot/fix-290
+        uses: dante-ev/latex-action@v2.0.0
+
         uses: dante-ev/latex-action@latest
+main
+main
+main
         with:
           root_file: main.tex
+          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-fonts-extra
+            texlive-latex-extra
+copilot/fix-440
+
+            texlive-science
+main
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
