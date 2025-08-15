@@ -1,10 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-copilot/fix-409
-.PHONY: build check clean test test-unit validate-pr help
-
-.PHONY: build check clean test test-unit help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow
-main
+.PHONY: build check clean test test-unit help unit-test validate validate-pr validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow
 
 # Default target
 all: ctmm-check build
@@ -14,7 +10,6 @@ check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
 
- copilot/fix-409
 # Validate PR content (for contributors)
 validate-pr:
 	@echo "Validating PR content for Copilot review..."
@@ -51,7 +46,6 @@ ctmm-workflow:
 integration-test:
 	@echo "Running CTMM integration test suite..."
 	python3 test_integration.py
-main
 
 # Build PDF
 build:
@@ -112,21 +106,10 @@ help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
 	@echo "==============================================="
 	@echo "Available targets:"
-copilot/fix-409
-	@echo "  all        - Run check and build (default)"
-	@echo "  check      - Check dependencies and run build system"
-	@echo "  validate-pr- Validate PR content for Copilot review"
-	@echo "  build      - Build the PDF"
-	@echo "  analyze    - Run detailed module analysis"
-	@echo "  test       - Quick test of build system + unit tests"
-	@echo "  test-unit  - Run only unit tests for ctmm_build.py"
-	@echo "  clean      - Remove build artifacts"
-	@echo "  deps       - Install Python dependencies"
-	@echo "  help       - Show this help"
-
 	@echo "  all           - Run check and build (default)"
 	@echo "  check         - Check dependencies and run build system"
 	@echo "  validate      - Validate LaTeX files for escaping issues"
+	@echo "  validate-pr   - Validate PR content for Copilot review"
 	@echo "  validate-fix  - Fix LaTeX escaping issues (creates backups)"
 	@echo "  build         - Build the PDF"
 	@echo "  analyze       - Run detailed module analysis"
@@ -146,4 +129,3 @@ copilot/fix-409
 	@echo "  integration-test - Run comprehensive integration tests"
 	@echo ""
 	@echo "  help          - Show this help"
-main
