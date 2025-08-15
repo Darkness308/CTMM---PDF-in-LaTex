@@ -147,6 +147,10 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
   - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
   - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
   - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
+  - `File 'fontawesome5.sty' not found`: LaTeX-Paket fehlt – installiere `texlive-fonts-extra`:
+    ```bash
+    sudo apt-get install -y texlive-fonts-extra
+    ```
 
 ### Vorgehen bei neuen Modulen
 

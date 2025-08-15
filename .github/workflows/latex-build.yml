@@ -23,6 +23,16 @@ jobs:
         run: |
           pip install chardet
 
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-lang-german \
+            texlive-fonts-extra
+
       - name: Run LaTeX syntax validation
         run: |
           python3 validate_latex_syntax.py
@@ -31,33 +41,9 @@ jobs:
         run: |
           python3 ctmm_build.py
 
-      - name: Set up LaTeX
-copilot/fix-288
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-292
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-290
-        uses: dante-ev/latex-action@v2.0.0
-
-        uses: dante-ev/latex-action@latest
-main
-main
-main
-        with:
-          root_file: main.tex
-          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
-          extra_system_packages: |
-            texlive-lang-german
-            texlive-fonts-recommended
-            texlive-latex-recommended
-            texlive-fonts-extra
-            texlive-latex-extra
-copilot/fix-440
-
-            texlive-science
-main
+      - name: Build LaTeX PDF
+        run: |
+          pdflatex -halt-on-error main.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
