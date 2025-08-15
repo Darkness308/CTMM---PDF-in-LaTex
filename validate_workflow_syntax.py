@@ -51,7 +51,7 @@ def validate_workflow_syntax():
         for i, line in enumerate(lines, 1):
             if '"on":' in line:
                 on_lines.append((i, line.strip(), 'quoted'))
-            elif line.strip() == 'on:' or line.strip().startswith('on:'):
+            elif line.strip().startswith('on:'):
                 on_lines.append((i, line.strip(), 'unquoted'))
         
         if not on_lines:
