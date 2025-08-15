@@ -247,18 +247,13 @@ def main():
     latex_valid = validate_latex_files()
 
     # Scan for references
-    style_files, module_files = scan_references()
-    logger.info("Found %d style files and %d module files",
-                len(style_files), len(module_files))
-
-    # Check for missing files
-
-    
     step = 1
     print(f"\n{step}. Scanning file references...")
     references = scan_references()
     style_files = references["style_files"]
     module_files = references["module_files"]
+    logger.info("Found %d style files and %d module files",
+                len(style_files), len(module_files))
     print(f"Found {len(style_files)} style packages")
     print(f"Found {len(module_files)} module inputs")
     
