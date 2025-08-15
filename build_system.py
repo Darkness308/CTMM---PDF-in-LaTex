@@ -21,7 +21,6 @@ import shutil
 import chardet
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
-from datetime import datetime
 import argparse
 import logging
 
