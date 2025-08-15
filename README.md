@@ -11,8 +11,28 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## Verwendung
 1. Klone das Repository
-2. Kompiliere main.tex mit einem LaTeX-Editor
-3. Oder öffne das Projekt in einem GitHub Codespace
+2. Führe `python3 ctmm_build.py` aus um das Projekt zu validieren
+3. Kompiliere main.tex mit einem LaTeX-Editor
+4. Oder öffne das Projekt in einem GitHub Codespace
+
+## Pull Request Guidelines
+
+**Wichtig für Copilot Code Review:** PRs müssen substantielle Änderungen enthalten, damit Copilot sie überprüfen kann.
+
+### Vor dem Erstellen eines PR:
+```bash
+# Validiere deine Änderungen
+python3 validate_pr.py
+
+# Führe das Build-System aus
+python3 ctmm_build.py
+```
+
+### PR-Anforderungen:
+- ✅ Mindestens eine Datei mit Änderungen
+- ✅ Substantielle Inhaltsänderungen (nicht nur Leerzeichen)
+- ✅ Erfolgreicher Build-System-Test
+- ✅ Verwendung der PR-Vorlage
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
