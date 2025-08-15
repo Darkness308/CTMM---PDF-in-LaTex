@@ -73,6 +73,17 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
+copilot/fix-65
+- **Checkbox Convention**: Use the CTMM form system:
+  ```latex
+  \ctmmCheckBox[fieldname]{label}  % Interactive checkbox with label
+  ```
+- **Form Elements**: Available from `form-elements.sty`:
+  - `\ctmmTextField[width]{default}{fieldname}` - Text input fields
+  - `\ctmmTextArea[width]{height}{fieldname}{}` - Multi-line text areas
+  - `\ctmmRadioButton{group}{value}{label}` - Radio buttons
+- **NEVER** use `\Box` or `\blacksquare` directly (causes undefined control sequence errors)
+
 - **Form Elements Convention**: Use CTMM form elements only:
   ```latex
   \ctmmCheckBox[field_name]{Label}     % Interactive checkbox
@@ -81,6 +92,7 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
   \ctmmRadioButton{group}{value}{label}     % Radio button
   ```
 - **NEVER** use `\Box`, `\blacksquare`, or basic LaTeX form elements directly
+main
 
 #### Module Development
 - Modules should contain ONLY content, not package definitions
@@ -171,7 +183,7 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb, geometry, pifont, ifthen, calc, forloop
 - **Font encoding**: T1 with UTF-8 input
 - **Language**: ngerman babel
 - **PDF features**: Interactive forms, bookmarks, metadata
@@ -222,8 +234,13 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
+copilot/fix-65
+- `\ctmmCheckBox[fieldname]{label}` - Interactive form checkboxes
+- `\ctmmTextField[width]{default}{fieldname}` - Text input fields
+
 - `\ctmmCheckBox[name]{label}` - Interactive form checkboxes
 - `\ctmmTextField[width]{label}{name}` - Text input fields
+main
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
