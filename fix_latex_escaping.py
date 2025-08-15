@@ -254,8 +254,7 @@ class LaTeXDeEscaper:
             # Filter out valid patterns like \\& (escaped ampersand)
             valid_patterns = {r'\\&', r'\\\\', r'\\_', r'\\%', r'\\$', r'\\#'}
             filtered_malformed = [cmd for cmd in malformed_commands 
-            filtered_malformed = [cmd for cmd in malformed_commands 
-                                 if not any(pattern in cmd for pattern in self.VALID_PATTERNS)]
+                                 if not any(pattern in cmd for pattern in valid_patterns)]
             if filtered_malformed:
                 issues.append(f"Potential malformed commands: {set(filtered_malformed)}")
             
