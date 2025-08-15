@@ -23,7 +23,7 @@ def run_command(cmd, capture_output=True):
 
 def check_git_status():
     """Check if there are uncommitted changes."""
-    success, stdout, stderr = run_command(["git", "status", "--porcelain"])
+    success, stdout, stderr = run_command("git status --porcelain")
     if not success:
         print(f"❌ Error checking git status: {stderr}")
         return False
