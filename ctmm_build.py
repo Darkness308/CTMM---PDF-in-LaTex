@@ -185,7 +185,7 @@ def test_basic_build(main_tex_path="main.tex"):
 def test_basic_framework(main_tex_path="main.tex"):
     """Test basic build without modules."""
 
-
+    pass
 def test_modules_incrementally():
     """Test modules incrementally to identify problematic ones."""
     # Simple implementation - just test full build for now
