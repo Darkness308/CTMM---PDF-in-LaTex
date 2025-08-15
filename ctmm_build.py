@@ -184,7 +184,6 @@ def test_basic_build(main_tex_path="main.tex"):
 
 def test_basic_framework(main_tex_path="main.tex"):
     """Test basic build without modules."""
-    return test_basic_build(main_tex_path)
 
 
 def test_modules_incrementally():
