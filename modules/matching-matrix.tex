@@ -1,0 +1,120 @@
+% Matching-Matrix - CTMM Modul für Trigger-Reaktion-Intervention Mapping
+
+\newpage
+\section*{\textcolor{ctmmPurple}{\faProjectDiagram~Matching-Matrix}}
+\label{sec:matching-matrix}
+\addcontentsline{toc}{section}{Matching-Matrix}
+
+\begin{quote}
+\textit{\textcolor{ctmmPurple}{Muster erkennen, verstehen und durchbrechen -- der Weg zu bewussten Reaktionen.}}\\
+\textbf{\textcolor{ctmmPurple}{Was ist die Matching-Matrix?}}\\
+Die Matching-Matrix ist ein strukturiertes Werkzeug zur Analyse von Trigger-Reaktion-Mustern in Beziehungen. Sie hilft dabei, automatische Reaktionen zu erkennen und bewusste Interventionen zu entwickeln.
+\end{quote}
+
+\subsection*{\textcolor{ctmmPurple}{1. Grundlagen der Matrix}}
+
+\begin{ctmmPurpleBox}{Die vier Säulen der Matching-Matrix}
+\begin{itemize}
+    \item \textbf{Trigger}: Was löst die Reaktion aus? (Situation, Wort, Verhalten)
+    \item \textbf{Reaktion}: Wie reagiere ich automatisch? (Gefühl, Gedanke, Verhalten)
+    \item \textbf{Muster}: Welche Wiederholung erkenne ich? (Häufigkeit, Kontext)
+    \item \textbf{Intervention}: Was kann ich anders machen? (Alternative Reaktion)
+\end{itemize}
+\end{ctmmPurpleBox}
+
+\subsection*{\textcolor{ctmmPurple}{2. Persönliche Matrix-Analyse}}
+
+\begin{ctmmBlueBox}{Matrix-Arbeitsbereich: Trigger-Reaktion-Mapping}
+
+\textbf{Schritt 1: Trigger identifizieren}\\
+\ctmmTextField[12cm]{Beschreibe den konkreten Auslöser (Was passiert genau?)}{matrix_trigger}
+
+\vspace{0.5cm}
+\textbf{Schritt 2: Automatische Reaktion dokumentieren}\\
+\textbf{Körperlich:} \ctmmTextField[10cm]{Wie reagiert mein Körper?}{matrix_reaktion_koerper}\\[0.3cm]
+\textbf{Emotional:} \ctmmTextField[10cm]{Welche Gefühle entstehen?}{matrix_reaktion_emotion}\\[0.3cm]
+\textbf{Gedanklich:} \ctmmTextField[10cm]{Welche Gedanken gehen mir durch den Kopf?}{matrix_reaktion_gedanken}\\[0.3cm]
+\textbf{Verhalten:} \ctmmTextField[10cm]{Wie verhalte ich mich?}{matrix_reaktion_verhalten}
+
+\vspace{0.5cm}
+\textbf{Schritt 3: Muster erkennen}\\
+\textbf{Häufigkeit:} \ctmmCheckBox[muster_taeglich]{Täglich} \quad \ctmmCheckBox[muster_woechentlich]{Wöchentlich} \quad \ctmmCheckBox[muster_situativ]{Situativ} \quad \ctmmCheckBox[muster_selten]{Selten}\\[0.3cm]
+\textbf{Kontext:} \ctmmTextField[10cm]{In welchen Situationen tritt das Muster auf?}{matrix_muster_kontext}
+
+\vspace{0.5cm}
+\textbf{Schritt 4: Intervention planen}\\
+\textbf{Sofort-Intervention:} \ctmmTextField[10cm]{Was kann ich in dem Moment tun?}{matrix_intervention_sofort}\\[0.3cm]
+\textbf{Präventiv:} \ctmmTextField[10cm]{Wie kann ich vorbeugen?}{matrix_intervention_praeventiv}\\[0.3cm]
+\textbf{Nachbearbeitung:} \ctmmTextField[10cm]{Wie reflektiere ich danach?}{matrix_intervention_nachher}
+
+\end{ctmmBlueBox}
+
+\subsection*{\textcolor{ctmmPurple}{3. Partner-Matrix für Paare}}
+
+\begin{ctmmGreenBox}{Gemeinsame Muster-Analyse}
+\begin{tabularx}{\textwidth}{|X|c|c|X|}
+\hline
+\textbf{Matrix-Element} & \textbf{Partner A} & \textbf{Partner B} & \textbf{Gemeinsame Intervention} \\
+\hline
+Häufigster Trigger & \ctmmTextField[2.5cm]{}{matrix_pa_trigger} & \ctmmTextField[2.5cm]{}{matrix_pb_trigger} & \ctmmTextField[4cm]{}{matrix_gemeinsam_trigger} \\
+\hline
+Typische Reaktion & \ctmmTextField[2.5cm]{}{matrix_pa_reaktion} & \ctmmTextField[2.5cm]{}{matrix_pb_reaktion} & \ctmmTextField[4cm]{}{matrix_gemeinsam_reaktion} \\
+\hline
+Erkanntes Muster & \ctmmTextField[2.5cm]{}{matrix_pa_muster} & \ctmmTextField[2.5cm]{}{matrix_pb_muster} & \ctmmTextField[4cm]{}{matrix_gemeinsam_muster} \\
+\hline
+Geplante Intervention & \ctmmTextField[2.5cm]{}{matrix_pa_intervention} & \ctmmTextField[2.5cm]{}{matrix_pb_intervention} & \ctmmTextField[4cm]{}{matrix_gemeinsam_intervention} \\
+\hline
+\end{tabularx}
+\end{ctmmGreenBox}
+
+\subsection*{\textcolor{ctmmPurple}{4. Matrix-Erfolgsmessung}}
+
+\begin{ctmmOrangeBox}{Fortschritts-Tracking}
+\textbf{Bewertung der Matrix-Arbeit (1-10)}\\
+
+\begin{tabular}{|p{5cm}|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Bereich} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} \\
+\hline
+Trigger erkennen & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\hline
+Muster verstehen & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\hline
+Intervention anwenden & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\hline
+Nachhaltigkeit & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ & $\square$ \\
+\hline
+\end{tabular}
+
+\vspace{0.5cm}
+\textbf{Erfolgsreflexion}\\
+\ctmmTextArea[12cm]{3}{matrix_erfolg_reflexion}{Was hat besonders gut funktioniert? Welche Herausforderungen gab es?}
+
+\vspace{0.5cm}
+\textbf{Nächste Schritte}\\
+\ctmmTextArea[12cm]{2}{matrix_naechste_schritte}{Welche Matrix-Elemente möchte ich als nächstes bearbeiten?}
+\end{ctmmOrangeBox}
+
+\subsection*{\textcolor{ctmmPurple}{5. Matrix-Tools für den Alltag}}
+
+\begin{ctmmYellowBox}{Schnelle Matrix-Checks}
+\textbf{3-Minuten-Check:}
+\begin{itemize}
+    \item Trigger erkannt? \ctmmCheckBox[quick_trigger]{Ja}
+    \item Reaktion bewusst? \ctmmCheckBox[quick_reaktion]{Ja}
+    \item Intervention möglich? \ctmmCheckBox[quick_intervention]{Ja}
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{Tägliche Matrix-Frage:}\\
+\ctmmTextField[10cm]{Was war heute mein stärkstes Trigger-Reaktion-Muster?}{matrix_taeglich}
+
+\vspace{0.5cm}
+\textbf{Wöchentliche Matrix-Reflexion:}\\
+\ctmmTextArea[12cm]{2}{matrix_woechentlich}{Welche Muster haben sich diese Woche wiederholt? Was konnte ich erfolgreich durchbrechen?}
+\end{ctmmYellowBox}
+
+\vspace{1cm}
+\begin{center}
+\textit{\textcolor{ctmmGreen}{\faChevronRight~Weiter zu} \ctmmRef{sec:interactive}{Interaktive Tools} | \textcolor{ctmmRed}{\faChevronLeft~Zurück zu} \ctmmRef{sec:triggermanagement}{Triggermanagement}}
+\end{center}
