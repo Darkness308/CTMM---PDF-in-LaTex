@@ -147,13 +147,26 @@ def test_basic_build(main_tex_path="main.tex"):
             check=False
         )
 
-        success = result.returncode == 0
+        # Enhanced PDF validation: check both return code and file existence/size
+        temp_pdf = Path(temp_file).with_suffix('.pdf')
+        pdf_exists = temp_pdf.exists()
+        pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
+        
+        # Validate PDF generation success by file existence and size rather than just return codes
+        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+        
         if success:
             logger.info("✓ Basic build successful")
+            logger.info("✓ Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
         else:
             logger.error("✗ Basic build failed")
-            logger.error("LaTeX errors detected (check %s.log for details)",
-                         temp_file)
+            if result.returncode != 0:
+                logger.error("LaTeX compilation returned error code: %d", result.returncode)
+            if not pdf_exists:
+                logger.error("Test PDF file was not generated")
+            elif pdf_size <= 1024:
+                logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
+            logger.error("LaTeX errors detected (check %s.log for details)", temp_file)
 
         return success
 
@@ -189,13 +202,25 @@ def test_full_build(main_tex_path="main.tex"):
             check=False
         )
 
-        success = result.returncode == 0
+        # Enhanced PDF validation: check both return code and file existence/size
+        pdf_path = Path('main.pdf')
+        pdf_exists = pdf_path.exists()
+        pdf_size = pdf_path.stat().st_size if pdf_exists else 0
+        
+        # Validate PDF generation success by file existence and size rather than just return codes
+        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+        
         if success:
             logger.info("✓ Full build successful")
-            if Path('main.pdf').exists():
-                logger.info("✓ PDF generated successfully")
+            logger.info("✓ PDF generated successfully (%.2f KB)", pdf_size / 1024)
         else:
             logger.error("✗ Full build failed")
+            if result.returncode != 0:
+                logger.error("LaTeX compilation returned error code: %d", result.returncode)
+            if not pdf_exists:
+                logger.error("PDF file was not generated")
+            elif pdf_size <= 1024:
+                logger.error("PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
             logger.error("Check main.log for detailed error information")
 
         return success
