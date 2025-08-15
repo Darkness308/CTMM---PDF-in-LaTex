@@ -25,7 +25,194 @@
                     "line": 2,
                     "message": 3
                 }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
             }
+        },
+        {
+            "label": "CTMM: Build System Check",
+            "type": "shell",
+            "command": "python3",
+            "args": ["ctmm_build.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Create Module (Interactive)",
+            "type": "shell",
+            "command": "${workspaceFolder}/create-module.sh",
+            "args": [],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "windows": {
+                "command": "bash",
+                "args": ["${workspaceFolder}/create-module.sh"]
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Generate Arbeitsblatt",
+            "type": "shell",
+            "command": "node",
+            "args": ["module-generator.js", "arbeitsblatt", "arbeitsblatt-${input:moduleName}"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Generate Tool",
+            "type": "shell",
+            "command": "node",
+            "args": ["module-generator.js", "tool", "tool-${input:moduleName}"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Generate Notfallkarte",
+            "type": "shell",
+            "command": "node",
+            "args": ["module-generator.js", "notfallkarte", "notfall-${input:moduleName}"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Run Unit Tests",
+            "type": "shell",
+            "command": "make",
+            "args": ["unit-test"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "windows": {
+                "command": "python3",
+                "args": ["test_ctmm_build.py"]
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Validate LaTeX",
+            "type": "shell",
+            "command": "make",
+            "args": ["validate"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "windows": {
+                "command": "python3",
+                "args": ["latex_validator.py", "modules/"]
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "CTMM: Clean Build Artifacts",
+            "type": "shell",
+            "command": "make",
+            "args": ["clean"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "if exist build rmdir /s /q build && if exist *.aux del *.aux && if exist *.log del *.log && if exist *.out del *.out && if exist *.toc del *.toc"]
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "moduleName",
+            "description": "Name des Moduls (ohne Präfix und .tex)",
+            "default": "beispiel",
+            "type": "promptString"
         }
     ]
 }
