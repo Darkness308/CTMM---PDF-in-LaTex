@@ -15,7 +15,7 @@ def validate_pr_suggestions():
     print("="*60)
     
     # Expected content from PR comments
-    expected_tool23_start = """\hypertarget{tool-23-trigger-management}{%
+    expected_tool23_start = r"""\hypertarget{tool-23-trigger-management}{%
 \section{\texorpdfstring{📄 \\textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}}\\label{tool-23-trigger-management}
 
 🧩 \\emph{\\textbf{Modul zur Selbsthilfe \\\\& Co-Regulation -- Klartextversion für beide Partner}}
@@ -33,7 +33,7 @@ def validate_pr_suggestions():
 \hypertarget{quickguide-farbsystem}{%
 \subsection{\texorpdfstring{🧭 \\textbf{\\ul{QUICKGUIDE FARBSYSTEM}}}{🧭 QUICKGUIDE FARBSYSTEM}}\\label{quickguide-farbsystem}"""
 
-    expected_matching_start = """\hypertarget{matching-matrix}{%
+    expected_matching_start = r"""\hypertarget{matching-matrix}{%
 \section{\texorpdfstring{🧩 \\textbf{MATCHING-MATRIX}}{🧩 MATCHING-MATRIX}}\\label{matching-matrix}
 
 \hypertarget{trigger-reaktion-intervention-ctmm-modul}{%
