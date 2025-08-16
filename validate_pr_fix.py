@@ -104,12 +104,12 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
         if r'\textbackslash{}' in actual_content:
             issues.append("Still contains over-escaped commands")
         
-        if '\\hypertarget{matching-matrix}{%' in actual_content:
+        if r'\hypertarget{matching-matrix}{%' in actual_content:
             print("   ✅ Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed")
         
-        if '\\texttt{Kap.\\ ' in actual_content:
+        if r'\texttt{Kap.\ ' in actual_content:
             print("   ✅ Texttt commands cleaned")
         else:
             issues.append("Texttt commands not fixed")

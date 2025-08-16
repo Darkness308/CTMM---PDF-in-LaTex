@@ -121,44 +121,44 @@ class CTMMBuildSystem:
             
             if file_path.endswith('.sty'):
                 # Create style file template
-                template_content = f"""% {path.name} - CTMM Style Package
+                template_content = rf"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 % Created automatically by CTMM Build System
 
-\\NeedsTeXFormat{{LaTeX2e}}[1995/12/01]
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
+\NeedsTeXFormat{{LaTeX2e}}[1995/12/01]
+\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
 
 % TODO: Add package dependencies here
-% \\RequirePackage{{xcolor}}
-% \\RequirePackage{{tikz}}
+% \RequirePackage{{xcolor}}
+% \RequirePackage{{tikz}}
 
 % TODO: Add color definitions here
-% \\definecolor{{ctmmBlue}}{{RGB}}{{52, 152, 219}}
+% \definecolor{{ctmmBlue}}{{RGB}}{{52, 152, 219}}
 
 % TODO: Add commands and environments here
-% \\newcommand{{\\exampleCommand}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
+% \newcommand{{\exampleCommand}}[1]{{\textcolor{{ctmmBlue}}{{#1}}}}
 
 % End of package - TODO: Complete implementation
 """
             else:
                 # Create module file template  
-                template_content = f"""% {path.name} - CTMM Module
+                template_content = rf"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
-\\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
+\section{{TODO: {filename_to_title(path.stem)}}}
+\label{{sec:{path.stem}}}
 
 % TODO: Add module content here
-\\begin{{center}}
-\\textit{{This module is under development. Content will be added soon.}}
-\\end{{center}}
+\begin{{center}}
+\textit{{This module is under development. Content will be added soon.}}
+\end{{center}}
 
 % TODO: Add subsections, content, and functionality
 % Example:
-% \\subsection{{Introduction}}
-% \\subsection{{Instructions}}
-% \\subsection{{Exercises}}
+% \subsection{{Introduction}}
+% \subsection{{Instructions}}
+% \subsection{{Exercises}}
 
 % End of module - TODO: Complete implementation
 """
@@ -264,7 +264,7 @@ This file was automatically created by the CTMM Build System because it was refe
                 else:
                     # Comment out this module
                     modified_content = re.sub(
-                        '(\\\\input\\{%s\\})' % module_pattern,
+                        r'(\\input\{%s\})' % module_pattern,
                         r'% \1  % Disabled for incremental testing',
                         modified_content
                     )
