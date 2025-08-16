@@ -158,27 +158,27 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
     """Integration tests for CTMM Build System functions."""
 
     def test_scan_references_function_exists(self):
-        """Test that scan_references function exists and is callable."""
+        """Test that the scan_references function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'scan_references'))
         self.assertTrue(callable(ctmm_build.scan_references))
 
     def test_check_missing_files_function_exists(self):
-        """Test that check_missing_files function exists and is callable."""
+        """Test that the check_missing_files function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'check_missing_files'))
         self.assertTrue(callable(ctmm_build.check_missing_files))
 
     def test_create_template_function_exists(self):
-        """Test that create_template function exists and is callable."""
+        """Test that the create_template function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'create_template'))
         self.assertTrue(callable(ctmm_build.create_template))
 
     def test_test_basic_build_function_exists(self):
-        """Test that test_basic_build function exists and is callable."""
+        """Test that the test_basic_build function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'test_basic_build'))
         self.assertTrue(callable(ctmm_build.test_basic_build))
 
     def test_test_full_build_function_exists(self):
-        """Test that test_full_build function exists and is callable."""
+        """Test that the test_full_build function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'test_full_build'))
         self.assertTrue(callable(ctmm_build.test_full_build))
 
@@ -194,7 +194,7 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result, str)
 
     def test_scan_references_returns_dict(self):
-        """Test that scan_references function returns a dictionary with correct keys."""
+        """Test that the scan_references function returns a dictionary with correct keys."""
         result = ctmm_build.scan_references("main.tex")
         self.assertIsInstance(result, dict)
         self.assertIn("style_files", result)
@@ -203,7 +203,7 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result["module_files"], list)
 
     def test_structured_data_returns(self):
-        """Test that build system functions return properly structured data."""
+        """Test that the build system functions return properly structured data."""
         # Test scan_references returns structured data
         references = ctmm_build.scan_references("main.tex")
         self.assertIsInstance(references, dict)
