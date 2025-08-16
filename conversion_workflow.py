@@ -140,7 +140,7 @@ def demonstrate_workflow():
     for i, line in enumerate(lines, 1):
         print(f"   {i:2d}: {line.rstrip()}")
     
-    print(r"\n   ❌ Problem: Excessive \textbackslash{} escaping makes code unreadable")
+    print("\n   ❌ Problem: Excessive \\textbackslash{} escaping makes code unreadable")
     
     # Step 3: Apply the fix
     print("\n3. Applying de-escaping fixes...")
