@@ -49,11 +49,20 @@ def scan_references(main_tex_path="main.tex"):
 
 
 def check_missing_files(files):
-    """Check which files are missing."""
+    """Enhanced file existence checking with better error reporting."""
     missing = []
     for file_path in files:
         if not Path(file_path).exists():
             missing.append(file_path)
+            logger.warning(f"Missing file detected: {file_path}")
+        else:
+            logger.debug(f"File exists: {file_path}")
+    
+    if missing:
+        logger.info(f"Total missing files: {len(missing)}")
+    else:
+        logger.info("All referenced files exist")
+    
     return missing
 
 
