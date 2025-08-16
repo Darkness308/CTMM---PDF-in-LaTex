@@ -31,18 +31,22 @@ jobs:
         run: |
           python3 ctmm_build.py
 
-      - name: Set up LaTeX
-        uses: dante-ev/latex-action@v0.2
-        with:
-          root_file: main.tex
-          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
-          extra_system_packages: |
-            texlive-lang-german
-            texlive-fonts-recommended
-            texlive-latex-recommended
-            texlive-fonts-extra
-            texlive-latex-extra
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            texlive-lang-german \
+            texlive-fonts-extra \
+            texlive-latex-extra \
             texlive-science
+
+      - name: Compile LaTeX document
+        run: |
+          pdflatex -pdf -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          pdflatex -pdf -interaction=nonstopmode -halt-on-error -shell-escape main.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
