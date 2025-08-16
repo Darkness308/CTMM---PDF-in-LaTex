@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-**Issue**: GitHub Actions "Build LaTeX PDF" workflow was failing during LaTeX compilation with commit SHA d897bf68, causing the CI pipeline to be marked as "Broken" in Mergify CI insights.
+**Issue**: GitHub Actions "Build LaTeX PDF" workflow was failing during LaTeX compilation, causing the CI pipeline to be marked as "Broken" in Mergify CI insights.
 
 ## Root Cause Analysis
 
