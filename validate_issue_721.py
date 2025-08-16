@@ -281,7 +281,7 @@ def validate_issue_721_resolution():
         print("✅ CTMM methodology integration validated")
         print("✅ Infrastructure compatibility confirmed")
         print("✅ Three-phase timeline structure implemented")
-        print("\\n📈 The CTMM system now has clear strategic direction for continued development")
+        print("\n📈 The CTMM system now has clear strategic direction for continued development")
         print("🎯 Future development uncertainty has been transformed into actionable priorities")
     else:
         print("⚠️  ISSUE #721 RESOLUTION: NEEDS REFINEMENT")
