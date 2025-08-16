@@ -15,6 +15,42 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
+def sanitize_pkg_name(name):
+    """
+    Sanitize package names to proper CamelCase format.
+    
+    Converts names with numbers, hyphens, and underscores to proper CamelCase:
+    - '123-package' → 'pkg123Package'
+    - '1-package' → 'pkg1Package'  
+    - '2_test' → 'pkg2Test'
+    - '999-name' → 'pkg999Name'
+    
+    Args:
+        name (str): The input package name to sanitize
+        
+    Returns:
+        str: The sanitized package name in CamelCase format
+    """
+    if not name:
+        return 'pkg'
+        
+    # Split on hyphens and underscores
+    parts = re.split(r'[-_]', name)
+    sanitized = 'pkg'
+    
+    for i, part in enumerate(parts):
+        if not part:  # Skip empty parts
+            continue
+        if part.isdigit():
+            # If part is purely numeric, add as-is
+            sanitized += part
+        else:
+            # Capitalize the first letter of non-numeric parts
+            sanitized += part.capitalize()
+    
+    return sanitized
+
+
 class LaTeXValidator:
     """Validates and cleans LaTeX files from excessive escaping."""
     
