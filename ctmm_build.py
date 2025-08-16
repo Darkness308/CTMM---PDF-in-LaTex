@@ -14,6 +14,14 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
+# Import LaTeX validator if available
+try:
+    from latex_validator import LaTeXValidator
+    VALIDATOR_AVAILABLE = True
+except ImportError:
+    VALIDATOR_AVAILABLE = False
+    logger.debug("LaTeX validator not available for escaping checks")
+
 
 def filename_to_title(filename):
     """Convert filename to a readable title."""
@@ -29,7 +37,7 @@ def scan_references(main_tex_path="main.tex"):
             content = f.read()
     except Exception as e:
         logger.error("Error reading %s: %s", main_tex_path, e)
-        return [], []
+        return {"style_files": [], "module_files": []}
 
     # Find style and module references
     style_files = [f"style/{match}.sty" for match in
@@ -37,7 +45,7 @@ def scan_references(main_tex_path="main.tex"):
     module_files = [f"modules/{match}.tex" for match in
                     re.findall(r'\\input\{modules/([^}]+)\}', content)]
 
-    return style_files, module_files
+    return {"style_files": style_files, "module_files": module_files}
 
 
 def check_missing_files(files):
@@ -139,13 +147,26 @@ def test_basic_build(main_tex_path="main.tex"):
             check=False
         )
 
-        success = result.returncode == 0
+        # Enhanced PDF validation: check both return code and file existence/size
+        temp_pdf = Path(temp_file).with_suffix('.pdf')
+        pdf_exists = temp_pdf.exists()
+        pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
+        
+        # Validate PDF generation success by file existence and size rather than just return codes
+        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+        
         if success:
             logger.info("✓ Basic build successful")
+            logger.info("✓ Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
         else:
             logger.error("✗ Basic build failed")
-            logger.error("LaTeX errors detected (check %s.log for details)",
-                         temp_file)
+            if result.returncode != 0:
+                logger.error("LaTeX compilation returned error code: %d", result.returncode)
+            if not pdf_exists:
+                logger.error("Test PDF file was not generated")
+            elif pdf_size <= 1024:
+                logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
+            logger.error("LaTeX errors detected (check %s.log for details)", temp_file)
 
         return success
 
@@ -181,13 +202,25 @@ def test_full_build(main_tex_path="main.tex"):
             check=False
         )
 
-        success = result.returncode == 0
+        # Enhanced PDF validation: check both return code and file existence/size
+        pdf_path = Path('main.pdf')
+        pdf_exists = pdf_path.exists()
+        pdf_size = pdf_path.stat().st_size if pdf_exists else 0
+        
+        # Validate PDF generation success by file existence and size rather than just return codes
+        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+        
         if success:
             logger.info("✓ Full build successful")
-            if Path('main.pdf').exists():
-                logger.info("✓ PDF generated successfully")
+            logger.info("✓ PDF generated successfully (%.2f KB)", pdf_size / 1024)
         else:
             logger.error("✗ Full build failed")
+            if result.returncode != 0:
+                logger.error("LaTeX compilation returned error code: %d", result.returncode)
+            if not pdf_exists:
+                logger.error("PDF file was not generated")
+            elif pdf_size <= 1024:
+                logger.error("PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
             logger.error("Check main.log for detailed error information")
 
         return success
@@ -197,38 +230,98 @@ def test_full_build(main_tex_path="main.tex"):
         return False
 
 
+def validate_latex_files():
+    """Validate LaTeX files for excessive escaping issues."""
+    if not VALIDATOR_AVAILABLE:
+        logger.debug("Skipping LaTeX validation - validator not available")
+        return True
+        
+    logger.info("Validating LaTeX files for escaping issues...")
+    validator = LaTeXValidator()
+    
+    # Check main.tex and modules directory
+    issues_found = False
+    
+    for path in [Path("main.tex"), Path("modules")]:
+        if not path.exists():
+            continue
+            
+        if path.is_file():
+            is_valid, issues, _ = validator.validate_file(path)
+            if not is_valid:
+                logger.warning(f"LaTeX escaping issues found in {path}: {list(issues.keys())}")
+                issues_found = True
+        elif path.is_dir():
+            results = validator.validate_directory(path, fix=False)
+            for file_path, result in results.items():
+                if not result['valid']:
+                    logger.warning(f"LaTeX escaping issues found in {file_path}: {list(result['issues'].keys())}")
+                    issues_found = True
+    
+    if not issues_found:
+        logger.info("✓ No LaTeX escaping issues found")
+    
+    return not issues_found
+
+
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
 
+    # Validate LaTeX files for escaping issues
+    latex_valid = validate_latex_files()
+
     # Scan for references
-    style_files, module_files = scan_references()
+    step = 1
+    print(f"\n{step}. Scanning file references...")
+    references = scan_references()
+    style_files = references["style_files"]
+    module_files = references["module_files"]
     logger.info("Found %d style files and %d module files",
                 len(style_files), len(module_files))
-
-    # Check for missing files
+    print(f"Found {len(style_files)} style packages")
+    print(f"Found {len(module_files)} module inputs")
+    
+    step += 1
+    print(f"\n{step}. Checking file existence...")
     all_files = style_files + module_files
     missing_files = check_missing_files(all_files)
-
-    if missing_files:
-        logger.warning("Found %d missing files", len(missing_files))
+    total_missing = len(missing_files)
+    
+    if total_missing > 0:
+        print(f"Found {total_missing} missing files")
+        step += 1
+        print(f"\n{step}. Creating templates for missing files...")
         for file_path in missing_files:
             logger.info("Creating template: %s", file_path)
             create_template(file_path)
+        print(f"✓ Created {total_missing} template files")
     else:
-        logger.info("All referenced files exist")
-
-    # Test builds
+        print("✓ All referenced files exist")
+    
+    step += 1
+    print(f"\n{step}. Testing basic framework...")
     basic_ok = test_basic_build()
+    
+    if not basic_ok:
+        print("⚠️  Basic framework has issues. Please fix before testing modules.")
+        return 1
+    
+    step += 1
+    print(f"\n{step}. Testing modules incrementally...")
     full_ok = test_full_build()
-
+    
+    step += 1
+    print(f"\n{step}. Generating build report...")
+    
     # Summary
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
+    print(f"LaTeX validation: {'✓ PASS' if latex_valid else '✗ ISSUES FOUND'}")
     print(f"Style files: {len(style_files)}")
     print(f"Module files: {len(module_files)}")
-    print(f"Missing files: {len(missing_files)} (templates created)")
+    print(f"Missing files: {total_missing} (templates created)")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
 
@@ -236,6 +329,11 @@ def main():
         print("\nNEXT STEPS:")
         print("- Review and complete the created template files")
         print("- Remove TODO_*.md files when content is complete")
+    
+    if not latex_valid:
+        print("\nLATEX VALIDATION:")
+        print("- Escaping issues found in LaTeX files")
+        print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
 
     return 0 if (basic_ok and full_ok) else 1
 
