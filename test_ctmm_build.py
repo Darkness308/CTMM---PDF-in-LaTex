@@ -21,7 +21,6 @@ main
 sys.path.insert(0, str(Path(__file__).parent))
 import ctmm_build
 
-copilot/fix-407
 from ctmm_build import filename_to_title
 
 
