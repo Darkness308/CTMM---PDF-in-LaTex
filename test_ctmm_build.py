@@ -143,7 +143,7 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
 
     def test_return_type(self):
         """Test that the filename_to_title function returns a string."""
-        result = ctmm_build.filename_to_title("test_file")
+        result = filename_to_title("test_file")
         self.assertIsInstance(result, str)
 
 
