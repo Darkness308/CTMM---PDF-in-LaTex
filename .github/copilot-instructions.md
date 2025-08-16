@@ -60,12 +60,8 @@ The CTMM system is particularly effective for:
 │   ├── notfallkarten.tex      # Emergency intervention cards
 │   ├── safewords.tex          # Safe word systems
 │   └── ...                    # Other therapeutic modules
-copilot/fix-69
-├── therapie-material/          # Reference therapy documents (Word format)
-
 ├── converted/                  # Converted documents (for de-escaping fixes)
 ├── therapie-material/          # Additional therapy resources and templates
-main
 ├── ctmm_build.py              # Automated build system (primary)
 ├── build_system.py            # Detailed module analysis and testing
 ├── ctmm_unified_tool.py       # Unified tool interface
@@ -87,12 +83,6 @@ python3 ctmm_build.py
 ```
 
 **What the build system does:**
-copilot/fix-69
-1. Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
-2. Auto-generates missing template files with proper structure
-3. Tests basic build (without modules) and full build (requires pdflatex)
-4. Creates TODO files for new templates with completion guidelines
-
 1. **LaTeX Validation**: Checks for over-escaping issues and syntax problems
 2. **Reference Scanning**: Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
 3. **Template Generation**: Auto-generates missing template files with proper structure
@@ -112,7 +102,6 @@ copilot/fix-69
 - **Syntax Validation**: Checks LaTeX file structure and command usage
 - **Module Dependencies**: Ensures all referenced files exist or creates templates
 - **Form Element Validation**: Verifies proper use of CTMM form components
-main
 
 **Note**: Build tests will show FAIL if pdflatex is not installed, but dependency checking and file generation still work correctly.
 
@@ -297,13 +286,8 @@ CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing tr
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-copilot/fix-65
-- `\ctmmCheckBox[fieldname]{label}` - Interactive form checkboxes
-- `\ctmmTextField[width]{default}{fieldname}` - Text input fields
-
 - `\ctmmCheckBox[name]{label}` - Interactive form checkboxes
 - `\ctmmTextField[width]{label}{name}` - Text input fields
-main
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
