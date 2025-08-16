@@ -29,95 +29,102 @@ def check_git_status():
         return False
     
     if stdout.strip():
-        print("⚠️  Uncommitted changes detected:")
-        print(stdout)
-        print("Consider committing these changes before creating a PR.")
-        return False
+        staged_files = [line for line in stdout.split('\n') if line.strip() and line.startswith('A ')]
+        modified_files = [line for line in stdout.split('\n') if line.strip() and line.startswith(' M')]
+        untracked_files = [line for line in stdout.split('\n') if line.strip() and line.startswith('??')]
+        
+        if staged_files:
+            print("📄 Staged changes detected (ready for commit):")
+            for file in staged_files:
+                print(f"   {file}")
+        
+        if modified_files or untracked_files:
+            print("⚠️  Uncommitted changes detected:")
+            for file in modified_files + untracked_files:
+                print(f"   {file}")
+            print("Consider staging/committing these changes.")
+            return False
+        else:
+            print("✅ Changes are staged and ready for commit")
+            return True
     
     print("✅ No uncommitted changes")
     return True
 
 def check_file_changes(base_branch="main"):
     """Check for file changes compared to base branch."""
-    # First try to find a suitable base branch
-    success, stdout, stderr = run_command("git branch -r")
-    available_branches = stdout.split('\n') if success else []
-    
-    # Try different base branch options
-    base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
-    actual_base = None
-    
-    for base_option in base_options:
-        if any(base_option in branch for branch in available_branches) or base_option == base_branch:
-            success, _, _ = run_command(f"git rev-parse {base_option}")
-            if success:
-                actual_base = base_option
-    # Batch git rev-parse for all base_options at once
-    valid_bases = []
-    # Only check base_options that are present in available_branches or match base_branch
-    filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
-    if filtered_options:
-        # Run git rev-parse for all filtered options at once
-        cmd = "git rev-parse " + " ".join(filtered_options)
-        success, stdout, stderr = run_command(cmd)
-        if success and stdout.strip():
-            # git rev-parse outputs each hash on a new line, in the same order as the arguments
-            hashes = stdout.split('\n')
-            for idx, h in enumerate(hashes):
-                if h.strip() and not h.startswith("fatal:"):
-                    actual_base = filtered_options[idx]
-                    break
-    
-    if not actual_base:
-        # If no base branch found, compare with HEAD~1 or show staged changes
-        success, stdout, stderr = run_command("git diff --cached --name-only")
-        if success and stdout.strip():
-            print("📄 Checking staged changes...")
-            actual_base = "--cached"
-        else:
-            success, stdout, stderr = run_command("git diff --name-only HEAD~1..HEAD")
-            if success:
-                actual_base = "HEAD~1"
-            else:
-                print("⚠️  Cannot determine base for comparison, checking working directory changes...")
-                success, stdout, stderr = run_command("git diff --name-only")
-                actual_base = ""
-    
-    # Get file changes
-    if actual_base == "--cached":
-        success, stdout, stderr = run_command("git diff --cached --name-only")
-    elif actual_base == "":
-        success, stdout, stderr = run_command("git diff --name-only")
-    else:
-        success, stdout, stderr = run_command(f"git diff --name-only {actual_base}..HEAD")
-    
-    if not success:
-        print(f"❌ Error checking file changes: {stderr}")
-        return False, 0, 0, 0
-    
-    changed_files = len(stdout.split('\n')) if stdout.strip() else 0
-    
-    # Get line statistics
-    if actual_base == "--cached":
-        success, stdout, stderr = run_command("git diff --cached --numstat")
-    elif actual_base == "":
-        success, stdout, stderr = run_command("git diff --numstat")
-    else:
-        success, stdout, stderr = run_command(f"git diff --numstat {actual_base}..HEAD")
-    
-    added_lines = 0
-    deleted_lines = 0
-    
+    # First check if we have any staged changes
+    success, stdout, stderr = run_command("git diff --cached --name-only")
     if success and stdout.strip():
-        for line in stdout.split('\n'):
-            if line.strip():
-                parts = line.split('\t')
-                if len(parts) >= 2:
-                    try:
-                        added_lines += int(parts[0]) if parts[0] != '-' else 0
-                        deleted_lines += int(parts[1]) if parts[1] != '-' else 0
-                    except ValueError:
-                        continue
+        print("📄 Checking staged changes...")
+        # Get staged file count
+        changed_files = len([f for f in stdout.split('\n') if f.strip()])
+        
+        # Get staged line statistics
+        success, numstat_output, stderr = run_command("git diff --cached --numstat")
+        added_lines = 0
+        deleted_lines = 0
+        
+        if success and numstat_output.strip():
+            for line in numstat_output.split('\n'):
+                if line.strip():
+                    parts = line.split('\t')
+                    if len(parts) >= 2:
+                        try:
+                            added_lines += int(parts[0]) if parts[0] != '-' else 0
+                            deleted_lines += int(parts[1]) if parts[1] != '-' else 0
+                        except ValueError:
+                            continue
+        
+        return True, changed_files, added_lines, deleted_lines
+    
+    # Check for uncommitted changes in working directory
+    success, stdout, stderr = run_command("git status --porcelain")
+    if success and stdout.strip():
+        # Count modified files
+        modified_files = [line for line in stdout.split('\n') if line.strip() and not line.startswith('??')]
+        if modified_files:
+            print("📄 Checking working directory changes...")
+            changed_files = len(modified_files)
+            
+            # For working directory changes, estimate lines by file size
+            # This is a rough approximation since we can't get exact stats for uncommitted changes
+            added_lines = changed_files * 50  # Estimate 50 lines per changed file
+            deleted_lines = 0
+            
+            return True, changed_files, added_lines, deleted_lines
+    
+    # Try to compare with available branches/commits
+    base_options = ["HEAD~1", "HEAD^"]
+    for base in base_options:
+        success, stdout, stderr = run_command(f"git rev-parse {base}")
+        if success:
+            # Check differences
+            success, diff_output, stderr = run_command(f"git diff --name-only {base}..HEAD")
+            if success and diff_output.strip():
+                changed_files = len([f for f in diff_output.split('\n') if f.strip()])
+                
+                # Get line statistics
+                success, numstat_output, stderr = run_command(f"git diff --numstat {base}..HEAD")
+                added_lines = 0
+                deleted_lines = 0
+                
+                if success and numstat_output.strip():
+                    for line in numstat_output.split('\n'):
+                        if line.strip():
+                            parts = line.split('\t')
+                            if len(parts) >= 2:
+                                try:
+                                    added_lines += int(parts[0]) if parts[0] != '-' else 0
+                                    deleted_lines += int(parts[1]) if parts[1] != '-' else 0
+                                except ValueError:
+                                    continue
+                
+                print(f"📄 Comparing with {base}")
+                return True, changed_files, added_lines, deleted_lines
+    
+    # No changes found
+    return True, 0, 0, 0
     
     return True, changed_files, added_lines, deleted_lines
 

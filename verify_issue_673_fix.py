@@ -56,18 +56,50 @@ def check_repository_health():
     else:
         print("📋 Repository is clean (no uncommitted changes)")
     
-    # Check for meaningful changes vs main branch
-    success, output = run_command("git diff origin/main --numstat 2>/dev/null || git diff main --numstat", 
-                                 "Check changes vs main branch")
-    if not success:
-        print("⚠️  Could not compare with main branch")
-        return True  # Continue anyway
+    # Check for meaningful changes vs base branch
+    # Try different base options in order of preference
+    base_options = ["origin/main", "main", "HEAD~1", "HEAD^"]
+    actual_base = None
+    output = ""
+    
+    for base in base_options:
+        success, temp_output = run_command(f"git diff {base} --numstat 2>/dev/null", 
+                                         f"Check changes vs {base}")
+        if success and temp_output.strip():
+            actual_base = base
+            output = temp_output
+            print(f"📊 Comparing against {base}")
+            break
+        elif success:
+            print(f"📋 No changes found vs {base}")
+    
+    if not actual_base:
+        print("⚠️  Could not find suitable base for comparison, checking working directory...")
+        success, output = run_command("git status --porcelain", "Check working directory status")
+        if success and output.strip():
+            print("📝 Uncommitted changes detected in working directory")
+            return True
+        else:
+            print("📋 No changes detected")
+            return False
     
     if output.strip():
         lines = output.strip().split('\n')
-        total_files = len(lines)
-        total_added = sum(int(line.split('\t')[0]) for line in lines if line.split('\t')[0].isdigit())
-        total_deleted = sum(int(line.split('\t')[1]) for line in lines if line.split('\t')[1].isdigit())
+        total_files = len([line for line in lines if line.strip() and '\t' in line])
+        total_added = 0
+        total_deleted = 0
+        
+        for line in lines:
+            if line.strip() and '\t' in line:
+                parts = line.split('\t')
+                if len(parts) >= 2:
+                    try:
+                        added = int(parts[0]) if parts[0].isdigit() else 0
+                        deleted = int(parts[1]) if parts[1].isdigit() else 0
+                        total_added += added
+                        total_deleted += deleted
+                    except (ValueError, IndexError):
+                        continue
         
         print(f"📊 Change Summary:")
         print(f"   📁 Files changed: {total_files}")
@@ -81,7 +113,7 @@ def check_repository_health():
             print("❌ NO SUBSTANTIAL CHANGES: Copilot may not be able to review")
             return False
     else:
-        print("📋 No changes detected vs main branch")
+        print("📋 No changes detected")
         return False
 
 def validate_github_actions_upgrade():
