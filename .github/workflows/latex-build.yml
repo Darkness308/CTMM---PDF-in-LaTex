@@ -32,7 +32,7 @@ jobs:
           python3 ctmm_build.py
 
       - name: Set up LaTeX
-        uses: dante-ev/latex-action@latest
+        uses: dante-ev/latex-action@v0.2
         with:
           root_file: main.tex
           args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
