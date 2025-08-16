@@ -139,9 +139,16 @@ python3 test_latex_validator.py
 ```
 
 Die Tests überprüfen:
-- `filename_to_title()` Funktion mit verschiedenen Eingabeformaten
+- `filename_to_title()` Funktion mit 29 umfassenden Testfällen:
+  - Grundlegende Separator-Konvertierung (Unterstriche, Bindestriche)
+  - Deutsche Umlaute und Sonderzeichen
+  - Numerische Präfixe und realistische Therapie-Dateinamen
+  - Edge Cases (lange Dateinamen, mehrfache Separatoren, Leerzeichen)
+  - Robustheit und Fehlerbehandlung
 - LaTeX-Validator Funktionalität
 - Escaping-Problem Erkennung und Behebung
+- Build-System Integration und strukturierte Datenrückgabe
+- Nummerierte Schritte und erweiterte Fehlerbehandlung
 
 ### Modulare Test-Strategie
 
