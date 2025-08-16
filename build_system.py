@@ -16,7 +16,6 @@ import re
 import subprocess
 import sys
 import chardet
-copilot/fix-407
 from datetime import datetime
 from pathlib import Path
 from typing import List, Set
