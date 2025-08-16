@@ -8,6 +8,9 @@ import re
 import sys
 from pathlib import Path
 
+# Tolerance for brace mismatch (allows minor discrepancies in LaTeX)
+BRACE_TOLERANCE = 5
+
 
 def validate_latex_syntax(main_tex_path="main.tex"):
     """Validate LaTeX syntax without compilation."""
