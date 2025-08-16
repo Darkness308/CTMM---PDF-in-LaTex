@@ -31,6 +31,10 @@ jobs:
         run: |
           python3 ctmm_build.py
 
+      - name: Run comprehensive CI validation
+        run: |
+          python3 test_issue_743_validation.py
+
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
         with:
