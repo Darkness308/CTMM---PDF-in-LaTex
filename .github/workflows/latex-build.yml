@@ -1,7 +1,7 @@
 ---
 name: Build LaTeX PDF
 
-'on':
+"on":
   push:
     branches: [main]
   pull_request:
@@ -31,11 +31,15 @@ jobs:
         run: |
           python3 ctmm_build.py
 
+      - name: Run comprehensive CI validation
+        run: |
+          python3 test_issue_743_validation.py
+
       - name: Set up LaTeX
-        uses: dante-ev/latex-action@latest
+        uses: dante-ev/latex-action@v2
         with:
           root_file: main.tex
-          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
+          args: -interaction=nonstopmode -halt-on-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
             texlive-fonts-recommended
@@ -43,6 +47,7 @@ jobs:
             texlive-fonts-extra
             texlive-latex-extra
             texlive-science
+            texlive-pstricks
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4

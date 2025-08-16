@@ -12,9 +12,10 @@
 \makeatletter
 % Check if hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
-    \RequirePackage{hyperref}%
+    % hyperref is already loaded - just set interactive mode
     \newcommand{\@ctmmInteractive}{true}%
 }{%
+    % hyperref is not loaded - load it and set interactive mode
     \RequirePackage{hyperref}%
     \newcommand{\@ctmmInteractive}{true}%
 }

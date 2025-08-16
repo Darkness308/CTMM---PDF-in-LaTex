@@ -11,8 +11,28 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## Verwendung
 1. Klone das Repository
-2. Kompiliere main.tex mit einem LaTeX-Editor
-3. Oder öffne das Projekt in einem GitHub Codespace
+2. Führe `python3 ctmm_build.py` aus um das Projekt zu validieren
+3. Kompiliere main.tex mit einem LaTeX-Editor
+4. Oder öffne das Projekt in einem GitHub Codespace
+
+## Pull Request Guidelines
+
+**Wichtig für Copilot Code Review:** PRs müssen substantielle Änderungen enthalten, damit Copilot sie überprüfen kann.
+
+### Vor dem Erstellen eines PR:
+```bash
+# Validiere deine Änderungen
+python3 validate_pr.py
+
+# Führe das Build-System aus
+python3 ctmm_build.py
+```
+
+### PR-Anforderungen:
+- ✅ Mindestens eine Datei mit Änderungen
+- ✅ Substantielle Inhaltsänderungen (nicht nur Leerzeichen)
+- ✅ Erfolgreicher Build-System-Test
+- ✅ Verwendung der PR-Vorlage
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
@@ -22,6 +42,24 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 ## Anforderungen
 - LaTeX-Installation mit TikZ und hyperref
 - Oder GitHub Codespace (vorkonfiguriert)
+
+## 🎯 CTMM Comprehensive Toolset - "es ist nicht mehr weit"
+
+**Status**: ✅ **COMPLETE AND OPERATIONAL**
+
+Das Projekt verfügt über ein **umfassendes Toolset** für professionelle Therapiematerial-Entwicklung. Siehe [COMPREHENSIVE_TOOLSET.md](COMPREHENSIVE_TOOLSET.md) für die vollständige Übersicht.
+
+### Schnellstart - Umfassendes Workflow
+```bash
+# Vollständige Validierung aller Komponenten
+python3 comprehensive_workflow.py
+
+# Mit De-escaping-Demonstration
+python3 comprehensive_workflow.py --full
+
+# Mit Bereinigung
+python3 comprehensive_workflow.py --cleanup
+```
 
 ## LaTeX-Hinweise für Entwickler
 
@@ -35,11 +73,58 @@ python3 ctmm_build.py
 ```
 
 Das Build-System:
-1. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
-2. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
-3. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
-4. **Testet vollständigen Build** - mit allen Modulen
-5. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+1. **Validiert LaTeX-Dateien** - prüft auf übermäßige Escapierung und Formatierungsprobleme
+2. **Scannt main.tex** nach allen `\usepackage{style/...}` und `\input{modules/...}` Befehlen
+3. **Prüft Dateiexistenz** - erstellt minimale Templates für fehlende Dateien
+4. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
+5. **Testet vollständigen Build** - mit allen Modulen
+6. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+
+### LaTeX Escaping Fix Tool
+
+Das Repository enthält ein spezielles Tool zur Behebung von über-escapeten LaTeX-Dateien:
+
+```bash
+# LaTeX Escaping-Probleme automatisch beheben
+python3 fix_latex_escaping.py input_dir/ output_dir/
+
+# In-place Fixing (überschreibt die ursprünglichen Dateien)
+python3 fix_latex_escaping.py converted/
+
+# Hilfe und Optionen anzeigen
+python3 fix_latex_escaping.py --help
+```
+
+**Das Tool behebt systematische Über-Escaping-Probleme wie:**
+- `\textbackslash{}hypertarget\textbackslash{}` → `\hypertarget`
+- `\textbackslash{}\{content\textbackslash{}\}` → `{content}`
+- `\textbackslash{}\textbackslash{}` → `\\`
+- `\textbackslash{}textbf\textbackslash{}` → `\textbf`
+
+Siehe [README_DE_ESCAPING.md](README_DE_ESCAPING.md) für detaillierte Informationen und Beispiele.
+
+### LaTeX-Validierung und Escaping-Prävention
+
+Das System enthält einen integrierten LaTeX-Validator zur Erkennung und Behebung von Problemen mit übermäßig escapierten LaTeX-Befehlen:
+
+```bash
+# LaTeX-Dateien validieren
+make validate
+python3 latex_validator.py modules/
+
+# Probleme automatisch beheben (erstellt Backups)
+make validate-fix
+python3 latex_validator.py modules/ --fix
+```
+
+**Erkannte Probleme:**
+- `\textbackslash{}` Sequenzen
+- Überkomplexe `\hypertarget` Verwendung
+- Übermäßige `\texorpdfstring` Umhüllung
+- Auto-generierte Labels
+- Doppelt-escapierte Zeichen
+
+Siehe [LATEX_ESCAPING_PREVENTION.md](LATEX_ESCAPING_PREVENTION.md) für detaillierte Informationen.
 
 ### Unit Tests
 
@@ -50,9 +135,20 @@ Das Build-System enthält Unit Tests für kritische Funktionen:
 make unit-test
 # oder direkt:
 python3 test_ctmm_build.py
+python3 test_latex_validator.py
 ```
 
-Die Tests überprüfen die `filename_to_title()` Funktion mit verschiedenen Eingabeformaten (Unterstriche, Bindestriche, Groß-/Kleinschreibung, etc.).
+Die Tests überprüfen:
+- `filename_to_title()` Funktion mit 29 umfassenden Testfällen:
+  - Grundlegende Separator-Konvertierung (Unterstriche, Bindestriche)
+  - Deutsche Umlaute und Sonderzeichen
+  - Numerische Präfixe und realistische Therapie-Dateinamen
+  - Edge Cases (lange Dateinamen, mehrfache Separatoren, Leerzeichen)
+  - Robustheit und Fehlerbehandlung
+- LaTeX-Validator Funktionalität
+- Escaping-Problem Erkennung und Behebung
+- Build-System Integration und strukturierte Datenrückgabe
+- Nummerierte Schritte und erweiterte Fehlerbehandlung
 
 ### Modulare Test-Strategie
 

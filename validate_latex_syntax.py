@@ -8,6 +8,9 @@ import re
 import sys
 from pathlib import Path
 
+# Tolerance for brace mismatch (allows minor discrepancies in LaTeX)
+BRACE_TOLERANCE = 5
+
 
 def validate_latex_syntax(main_tex_path="main.tex"):
     """Validate LaTeX syntax without compilation."""
@@ -72,7 +75,7 @@ def validate_latex_syntax(main_tex_path="main.tex"):
     # Basic brace matching (simplified)
     open_braces = content.count('{')
     close_braces = content.count('}')
-    if abs(open_braces - close_braces) > 10:  # Allow some tolerance
+    if abs(open_braces - close_braces) > BRACE_TOLERANCE:  # Allow some tolerance
         print(f'⚠️  Potential brace mismatch: {open_braces} open, {close_braces} close')
     
     print('✅ Basic LaTeX syntax validation passed')

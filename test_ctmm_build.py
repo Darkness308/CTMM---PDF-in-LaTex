@@ -106,32 +106,79 @@ class TestFilenameToTitle(unittest.TestCase):
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
+    def test_very_long_filename(self):
+        """Test very long filename to ensure performance and correctness."""
+        long_filename = "very_long_module_name_with_many_words_that_should_still_work_correctly"
+        expected = "Very Long Module Name With Many Words That Should Still Work Correctly"
+        result = ctmm_build.filename_to_title(long_filename)
+        self.assertEqual(result, expected)
+
+    def test_german_umlauts_preserved(self):
+        """Test that German umlauts and special characters are preserved."""
+        test_cases = [
+            ("übung_für_patienten", "Übung Für Patienten"),
+            ("ängste_bewältigen", "Ängste Bewältigen"),
+            ("selbst-fürsorge", "Selbst Fürsorge"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_numeric_prefixes(self):
+        """Test filenames with numeric prefixes (common in therapy modules)."""
+        test_cases = [
+            ("01_einführung", "01 Einführung"),
+            ("2_advanced_techniques", "2 Advanced Techniques"),
+            ("session_10_review", "Session 10 Review"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_whitespace_edge_cases(self):
+        """Test various whitespace scenarios."""
+        test_cases = [
+            ("  hello_world  ", "Hello World"),  # Leading/trailing spaces
+            ("hello___world", "Hello World"),    # Multiple underscores
+            ("hello---world", "Hello World"),    # Multiple hyphens
+            ("hello_-_world", "Hello World"),    # Mixed separators
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
 
 class TestCTMMBuildSystemIntegration(unittest.TestCase):
     """Integration tests for CTMM Build System functions."""
 
     def test_scan_references_function_exists(self):
-        """Test that scan_references function exists and is callable."""
+        """Test that the scan_references function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'scan_references'))
         self.assertTrue(callable(ctmm_build.scan_references))
 
     def test_check_missing_files_function_exists(self):
-        """Test that check_missing_files function exists and is callable."""
+        """Test that the check_missing_files function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'check_missing_files'))
         self.assertTrue(callable(ctmm_build.check_missing_files))
 
     def test_create_template_function_exists(self):
-        """Test that create_template function exists and is callable."""
+        """Test that the create_template function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'create_template'))
         self.assertTrue(callable(ctmm_build.create_template))
 
     def test_test_basic_build_function_exists(self):
-        """Test that test_basic_build function exists and is callable."""
+        """Test that the test_basic_build function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'test_basic_build'))
         self.assertTrue(callable(ctmm_build.test_basic_build))
 
     def test_test_full_build_function_exists(self):
-        """Test that test_full_build function exists and is callable."""
+        """Test that the test_full_build function exists and is callable."""
         self.assertTrue(hasattr(ctmm_build, 'test_full_build'))
         self.assertTrue(callable(ctmm_build.test_full_build))
 
@@ -147,13 +194,56 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result, str)
 
     def test_scan_references_returns_dict(self):
-        """Test that scan_references function returns a dictionary with correct keys."""
+        """Test that the scan_references function returns a dictionary with correct keys."""
         result = ctmm_build.scan_references("main.tex")
         self.assertIsInstance(result, dict)
         self.assertIn("style_files", result)
         self.assertIn("module_files", result)
         self.assertIsInstance(result["style_files"], list)
         self.assertIsInstance(result["module_files"], list)
+
+    def test_structured_data_returns(self):
+        """Test that the build system functions return properly structured data."""
+        # Test scan_references returns structured data
+        references = ctmm_build.scan_references("main.tex")
+        self.assertIsInstance(references, dict)
+        
+        # Verify required keys exist
+        required_keys = ["style_files", "module_files"]
+        for key in required_keys:
+            self.assertIn(key, references, f"Missing required key: {key}")
+            self.assertIsInstance(references[key], list, f"Key {key} should be a list")
+        
+        # Test check_missing_files returns list
+        all_files = references["style_files"] + references["module_files"]
+        missing_files = ctmm_build.check_missing_files(all_files)
+        self.assertIsInstance(missing_files, list)
+
+    def test_error_handling_robustness(self):
+        """Test error handling in build system functions."""
+        # Test scan_references with non-existent file
+        result = ctmm_build.scan_references("non_existent_file.tex")
+        self.assertIsInstance(result, dict)
+        self.assertEqual(result["style_files"], [])
+        self.assertEqual(result["module_files"], [])
+        
+        # Test check_missing_files with empty list
+        result = ctmm_build.check_missing_files([])
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 0)
+
+    def test_build_system_numbered_steps(self):
+        """Test that the build system implements numbered steps as described in PR."""
+        # This test verifies the main function structure without actually running it
+        import inspect
+        
+        # Get the source code of the main function
+        source = inspect.getsource(ctmm_build.main)
+        
+        # Check that numbered steps are implemented
+        self.assertIn("step = 1", source, "Build system should use numbered steps")
+        self.assertIn("step += 1", source, "Build system should increment step numbers")
+        self.assertIn("print(f\"\\n{step}.", source, "Build system should print numbered steps")
 
 
 if __name__ == '__main__':
