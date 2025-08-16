@@ -17,7 +17,7 @@ Create a new commit with a different SHA to allow Mergify to distinguish between
 ## Resolution Status
 ✅ **RESOLVED** - New commit created to resolve SHA conflict
 - Previous conflicting SHA: `350eb3cd4d2e6ed744c816017dc9ddec77a03be0`
-- New unique SHA: Will be generated with this commit
+- New unique SHA: `e2fafb18ba4412d8185bbef9c72b918b89f64090`
 - Mergify can now evaluate rules for this PR independently
 
 ## Impact
