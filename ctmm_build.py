@@ -39,11 +39,31 @@ def scan_references(main_tex_path="main.tex"):
         logger.error("Error reading %s: %s", main_tex_path, e)
         return {"style_files": [], "module_files": []}
 
-    # Find style and module references
+    # Split content into lines and filter out commented lines
+    lines = content.split('\n')
+    active_lines = []
+    
+    for line in lines:
+        # Find the first % not preceded by \ (to handle \% which is escaped)
+        comment_pos = -1
+        for i, char in enumerate(line):
+            if char == '%' and (i == 0 or line[i-1] != '\\'):
+                comment_pos = i
+                break
+        
+        # If comment found, only keep part before comment
+        if comment_pos >= 0:
+            active_lines.append(line[:comment_pos])
+        else:
+            active_lines.append(line)
+    
+    active_content = '\n'.join(active_lines)
+
+    # Find style and module references in non-commented content
     style_files = [f"style/{match}.sty" for match in
-                   re.findall(r'\\usepackage\{style/([^}]+)\}', content)]
+                   re.findall(r'\\usepackage\{style/([^}]+)\}', active_content)]
     module_files = [f"modules/{match}.tex" for match in
-                    re.findall(r'\\input\{modules/([^}]+)\}', content)]
+                    re.findall(r'\\input\{modules/([^}]+)\}', active_content)]
 
     return {"style_files": style_files, "module_files": module_files}
 
@@ -268,59 +288,128 @@ def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
 
-    # Validate LaTeX files for escaping issues
-    latex_valid = validate_latex_files()
+    # Initialize data structures for structured returns
+    build_data = {
+        "latex_validation": {"passed": False, "errors": []},
+        "file_scanning": {"style_files": [], "module_files": []},
+        "file_existence": {"missing_files": [], "total_missing": 0},
+        "template_creation": {"created_count": 0, "created_files": []},
+        "build_testing": {"basic_passed": False, "full_passed": False}
+    }
 
-    # Scan for references
+    # Step 1: Validate LaTeX files for escaping issues
     step = 1
+    print(f"\n{step}. Validating LaTeX files...")
+    try:
+        latex_valid = validate_latex_files()
+        build_data["latex_validation"]["passed"] = latex_valid
+        print(f"✓ LaTeX validation: {'PASS' if latex_valid else 'ISSUES FOUND'}")
+    except Exception as e:
+        logger.error("LaTeX validation failed: %s", e)
+        build_data["latex_validation"]["errors"].append(str(e))
+        latex_valid = False
+
+    # Step 2: Scan for references
+    step += 1
     print(f"\n{step}. Scanning file references...")
-    references = scan_references()
-    style_files = references["style_files"]
-    module_files = references["module_files"]
-    logger.info("Found %d style files and %d module files",
-                len(style_files), len(module_files))
-    print(f"Found {len(style_files)} style packages")
-    print(f"Found {len(module_files)} module inputs")
+    try:
+        references = scan_references()
+        style_files = references["style_files"]
+        module_files = references["module_files"]
+        
+        build_data["file_scanning"]["style_files"] = style_files
+        build_data["file_scanning"]["module_files"] = module_files
+        
+        logger.info("Found %d style files and %d module files",
+                    len(style_files), len(module_files))
+        print(f"Found {len(style_files)} style packages")
+        print(f"Found {len(module_files)} module inputs")
+    except Exception as e:
+        logger.error("File scanning failed: %s", e)
+        style_files = []
+        module_files = []
     
+    # Step 3: Check file existence
     step += 1
     print(f"\n{step}. Checking file existence...")
-    all_files = style_files + module_files
-    missing_files = check_missing_files(all_files)
-    total_missing = len(missing_files)
+    try:
+        all_files = style_files + module_files
+        missing_files = check_missing_files(all_files)
+        total_missing = len(missing_files)
+        
+        build_data["file_existence"]["missing_files"] = missing_files
+        build_data["file_existence"]["total_missing"] = total_missing
+        
+        if total_missing > 0:
+            print(f"Found {total_missing} missing files")
+        else:
+            print("✓ All referenced files exist")
+    except Exception as e:
+        logger.error("File existence check failed: %s", e)
+        missing_files = []
+        total_missing = 0
     
+    # Step 4: Create templates for missing files (if any)
     if total_missing > 0:
-        print(f"Found {total_missing} missing files")
         step += 1
         print(f"\n{step}. Creating templates for missing files...")
-        for file_path in missing_files:
-            logger.info("Creating template: %s", file_path)
-            create_template(file_path)
-        print(f"✓ Created {total_missing} template files")
-    else:
-        print("✓ All referenced files exist")
+        try:
+            created_count = 0
+            for file_path in missing_files:
+                logger.info("Creating template: %s", file_path)
+                create_template(file_path)
+                created_count += 1
+                build_data["template_creation"]["created_files"].append(file_path)
+            
+            build_data["template_creation"]["created_count"] = created_count
+            print(f"✓ Created {created_count} template files")
+        except Exception as e:
+            logger.error("Template creation failed: %s", e)
     
+    # Step 5: Test basic framework
     step += 1
     print(f"\n{step}. Testing basic framework...")
-    basic_ok = test_basic_build()
+    try:
+        basic_ok = test_basic_build()
+        build_data["build_testing"]["basic_passed"] = basic_ok
+        
+        if not basic_ok:
+            print("⚠️  Basic framework has issues. Please fix before testing modules.")
+            return _generate_exit_code(build_data)
+    except Exception as e:
+        logger.error("Basic build test failed: %s", e)
+        basic_ok = False
+        build_data["build_testing"]["basic_passed"] = False
     
-    if not basic_ok:
-        print("⚠️  Basic framework has issues. Please fix before testing modules.")
-        return 1
-    
+    # Step 6: Test modules incrementally
     step += 1
     print(f"\n{step}. Testing modules incrementally...")
-    full_ok = test_full_build()
+    try:
+        full_ok = test_full_build()
+        build_data["build_testing"]["full_passed"] = full_ok
+    except Exception as e:
+        logger.error("Full build test failed: %s", e)
+        full_ok = False
+        build_data["build_testing"]["full_passed"] = False
     
+    # Step 7: Generate build report
     step += 1
     print(f"\n{step}. Generating build report...")
-    
-    # Summary
+    _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
+                           len(style_files), len(module_files), total_missing, missing_files)
+
+    return _generate_exit_code(build_data)
+
+
+def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
+                           style_count, module_count, total_missing, missing_files):
+    """Generate and display the build summary."""
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
     print(f"LaTeX validation: {'✓ PASS' if latex_valid else '✗ ISSUES FOUND'}")
-    print(f"Style files: {len(style_files)}")
-    print(f"Module files: {len(module_files)}")
+    print(f"Style files: {style_count}")
+    print(f"Module files: {module_count}")
     print(f"Missing files: {total_missing} (templates created)")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
@@ -335,7 +424,18 @@ def main():
         print("- Escaping issues found in LaTeX files")
         print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
 
-    return 0 if (basic_ok and full_ok) else 1
+
+def _generate_exit_code(build_data):
+    """Generate appropriate exit code based on build results."""
+    basic_passed = build_data["build_testing"]["basic_passed"]
+    full_passed = build_data["build_testing"]["full_passed"]
+    latex_passed = build_data["latex_validation"]["passed"]
+    
+    # Return 0 only if all critical tests pass
+    if basic_passed and full_passed and latex_passed:
+        return 0
+    else:
+        return 1
 
 
 if __name__ == "__main__":

@@ -138,17 +138,30 @@ python3 test_ctmm_build.py
 python3 test_latex_validator.py
 ```
 
+**Umfassende Testabdeckung (51+ Tests):**
+
 Die Tests überprüfen:
-- `filename_to_title()` Funktion mit 29 umfassenden Testfällen:
+- **`filename_to_title()` Funktion** mit 29 umfassenden Testfällen:
   - Grundlegende Separator-Konvertierung (Unterstriche, Bindestriche)
   - Deutsche Umlaute und Sonderzeichen
   - Numerische Präfixe und realistische Therapie-Dateinamen
   - Edge Cases (lange Dateinamen, mehrfache Separatoren, Leerzeichen)
   - Robustheit und Fehlerbehandlung
-- LaTeX-Validator Funktionalität
-- Escaping-Problem Erkennung und Behebung
-- Build-System Integration und strukturierte Datenrückgabe
-- Nummerierte Schritte und erweiterte Fehlerbehandlung
+
+- **Build-System Kernfunktionen** mit 15+ Testfällen:
+  - `scan_references()` - LaTeX-Referenzen scannen mit Kommentar-Filterung
+  - `check_missing_files()` - Dateien-Existenz-Prüfung
+  - `create_template()` - Template-Erstellung für fehlende Dateien
+  - LaTeX-Validator Integration
+  - Strukturierte Datenrückgabe und erweiterte Fehlerbehandlung
+
+- **Erweiterte Integration Tests**:
+  - Nummerierte Schritte-Implementierung
+  - Strukturierte Build-Daten und Fehlerbehandlung
+  - Modulare Helper-Funktionen
+  - End-to-End Build-System Workflow
+  - Kommentar-Filterung in LaTeX-Dateien (neu)
+  - Escaped-Prozent-Zeichen Behandlung (neu)
 
 ### Modulare Test-Strategie
 
