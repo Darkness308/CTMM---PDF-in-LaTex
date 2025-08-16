@@ -22,15 +22,12 @@ jobs:
       - name: Install Python dependencies  
         run: |
           pip install chardet
-
       - name: Run LaTeX syntax validation
         run: |
           python3 validate_latex_syntax.py
-
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
-
       - name: Upload validation logs (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
