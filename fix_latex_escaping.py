@@ -32,104 +32,93 @@ class LaTeXDeEscaper:
     
     def __init__(self):
         # Define the systematic over-escaping patterns and their fixes
+        # Process in order - simpler patterns first, then more complex
         self.escaping_patterns = [
-            # Main LaTeX command patterns
-            (r'\\textbackslash\{\}([a-zA-Z]+)\\textbackslash\{\}', r'\\\1'),
+            # First pass: Basic textbackslash{} removal before commands
+            (r'\\textbackslash\{\}([a-zA-Z]+)', r'\\\1'),
             
-            # Section and subsection patterns
-            (r'\\textbackslash\{\}section\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\section{\\texorpdfstring'),
-            (r'\\textbackslash\{\}subsection\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\subsection{\\texorpdfstring'),
-            
-            # Hypertarget patterns
-            (r'\\textbackslash\{\}hypertarget\\textbackslash\{\}', r'\\hypertarget'),
-            
-            # Environment patterns
-            (r'\\textbackslash\{\}begin\\textbackslash\{\}', r'\\begin'),
-            (r'\\textbackslash\{\}end\\textbackslash\{\}', r'\\end'),
-            
-            # Label patterns
-            (r'\\textbackslash\{\}label\\textbackslash\{\}', r'\\label'),
-            
-            # Text formatting patterns
-            (r'\\textbackslash\{\}textbf\\textbackslash\{\}', r'\\textbf'),
-            (r'\\textbackslash\{\}textit\\textbackslash\{\}', r'\\textit'),
-            (r'\\textbackslash\{\}emph\\textbackslash\{\}', r'\\emph'),
-            (r'\\textbackslash\{\}ul\\textbackslash\{\}', r'\\ul'),
-            (r'\\textbackslash\{\}texttt\\textbackslash\{\}', r'\\texttt'),
-            
-            # Item and list patterns
-            (r'\\textbackslash\{\}item', r'\\item'),
-            (r'\\textbackslash\{\}tightlist', r'\\tightlist'),
-            
-            # Quote patterns  
-            (r'\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\texorpdfstring'),
-            
-            # Parameter braces - fix excessive bracing patterns
-            (r'\\textbackslash\{\}\{([^}]*?)\\textbackslash\{\}\}', r'{\1}'),
-            
-            # Simple brace escaping
+            # Second pass: Simple brace escaping (most common)
             (r'\\textbackslash\{\}\{', r'{'),
             (r'\\textbackslash\{\}\}', r'}'),
             
-            # Double backslash patterns (line breaks)
-            (r'\\textbackslash\{\}\\textbackslash\{\}', r'\\\\'),
+            # Third pass: Remaining textbackslash{} removal
+            (r'\\textbackslash\{\}', r'\\'),
             
-            # Percentage signs
-            (r'\\textbackslash\{\}%', r'%'),
+            # Fourth pass: Clean up any remaining malformed patterns
+            (r'\\\\([a-zA-Z]+)', r'\\\1'),  # Fix double backslashes before commands
             
-            # Additional common commands
-            (r'\\textbackslash\{\}def\\textbackslash\{\}', r'\\def'),
-            (r'\\textbackslash\{\}deflabelenumi\\textbackslash\{\}', r'\\deflabelenumi'),
-            (r'\\textbackslash\{\}arabic\\textbackslash\{\}', r'\\arabic'),
+            # Fifth pass: Fix specific over-escaped patterns
+            (r'\\section\\', r'\\section'),
+            (r'\\label\\', r'\\label'),
+            (r'\\emph\\', r'\\emph'),
+            (r'\\textbf\\', r'\\textbf'),
+            (r'\\hypertarget\\', r'\\hypertarget'),
+            (r'\\texorpdfstring\\', r'\\texorpdfstring'),
             
-            # Math mode patterns
-            (r'\\textbackslash\{\}\$', r'$'),
+            # Double backslash patterns (line breaks) - preserve valid line breaks
+            (r'\\\\\\\\', r'\\\\'),  # Fix quadruple backslashes to double
             
             # Ampersand patterns (table separators)
-            (r'\\textbackslash\{\}\&', r'\\&'),
+            (r'\\\\\\&', r'\\&'),  # Fix triple backslashes before ampersand
             
-            # More environment patterns
-            (r'\\textbackslash\{\}enumerate\\textbackslash\{\}', r'enumerate'),
-            (r'\\textbackslash\{\}itemize\\textbackslash\{\}', r'itemize'),
-            (r'\\textbackslash\{\}quote\\textbackslash\{\}', r'quote'),
+            # Environment patterns
+            (r'\\begin\\', r'\\begin'),
+            (r'\\end\\', r'\\end'),
+            (r'\\item\\', r'\\item'),
+            
+            # Additional text formatting
+            (r'\\textit\\', r'\\textit'),
+            (r'\\ul\\', r'\\ul'),
+            (r'\\texttt\\', r'\\texttt'),
+            
+            # Math mode patterns
+            (r'\\\\\$', r'$'),
+            
+            # Percentage signs
+            (r'\\\\%', r'%'),
+            
+            # Common definition patterns
+            (r'\\def\\', r'\\def'),
+            (r'\\deflabelenumi\\', r'\\deflabelenumi'),
+            (r'\\arabic\\', r'\\arabic'),
+            
+            # List environment patterns
+            (r'enumerate\\', r'enumerate'),
+            (r'itemize\\', r'itemize'),
+            (r'quote\\', r'quote'),
         ]
         
         # Additional cleanup patterns
         self.cleanup_patterns = [
-            # Remove redundant braces around single arguments
-            (r'\{\\textbackslash\{\}\}', r'{}'),
-            
-            # Fix texorpdfstring patterns with remaining issues
-            (r'\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\texorpdfstring{\1}{\2}}\\label{\3}'),
-            (r'\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\{([^}]*?)\}', r'\\texorpdfstring{\1}{\2}}{\3}'),
-            
             # Clean up multiple consecutive braces
             (r'\{\{\{', r'{'),
             (r'\}\}\}', r'}'),
             (r'\{\{', r'{'),
             (r'\}\}', r'}'),
             
-            # Fix section/subsection brace patterns - more comprehensive
-            (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\section{\\texorpdfstring{\1}{\2}}\\label{\3}'),
-            (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\subsection{\\texorpdfstring{\1}{\2}}\\label{\3}'),
+            # Fix remaining malformed brace patterns
+            (r'\\([a-zA-Z]+)\\(\{[^}]*\})', r'\\\1\2'),  # Fix command\\{content} -> \command{content}
             
-            # Fix hypertarget patterns
-            (r'\\hypertarget\{([^}]*?)\}\{%', r'\\hypertarget{\1}{%'),
+            # Fix trailing backslashes after closing braces - very specific patterns
+            (r'(\{[^}]*\})\\\\(\s)', r'\1\2'),  # Fix {content}\\ space -> {content} space
+            (r'(\{[^}]*\})\\\\$', r'\1'),      # Fix {content}\\ at end of line -> {content}
+            (r'(\{[^}]*\})\\\\(\n)', r'\1\2'), # Fix {content}\\ newline -> {content} newline
             
             # Remove empty text formatting
             (r'\\textbf\{\}', r''),
             (r'\\emph\{\}', r''),
             (r'\\ul\{\}', r''),
             
-            # Fix malformed closing braces after texorpdfstring
-            (r'(\{[^}]*?\})(\{[^}]*?\})\\label\{([^}]*?)\}', r'\1\2}\\label{\3}'),
+            # Fix broken command patterns with trailing backslashes
+            (r'\\([a-zA-Z]+)\\$', r'\\\1'),  # Fix command\\ at end of line
             
-            # Fix missing closing braces for commands
-            (r'\\emph\{\\textbf\{([^}]*?)\}([^}]*?)$', r'\\emph{\\textbf{\1}}\2'),
+            # Fix specific problematic patterns that might remain
+            (r'\\section\\([^\\])', r'\\section\1'),  # Fix section\\X -> section X
+            (r'\\label\\([^\\])', r'\\label\1'),    # Fix label\\X -> label X
             
-            # Fix broken section commands
-            (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\section{\\texorpdfstring{\1}{\2}}'),
-            (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\subsection{\\texorpdfstring{\1}{\2}}'),
+            # Clean up excessive spacing
+            (r'\s+', r' '),  # Multiple spaces to single space
+            (r'\n\s*\n\s*\n', r'\n\n'),  # Multiple newlines to double newline
         ]
         
         self.stats = {
