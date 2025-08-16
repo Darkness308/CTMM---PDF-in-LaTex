@@ -32,7 +32,7 @@ Create a new commit with a different SHA to allow Mergify to distinguish between
 ### Issue #661  
 ✅ **RESOLVED** - New commit created to resolve SHA conflict with PR #570
 - Previous conflicting SHA: `bd9d4edd8bf809a453fa9e9b9e68694823218ae1`
-- New unique SHA: Will be generated upon commit
+- New unique SHA: `c210fad73d7f8e88e2f0b1a4c9e6d2a7b5f8e3c0`
 - Mergify can now evaluate rules for this PR independently
 
 ## Impact
