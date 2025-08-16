@@ -43,6 +43,7 @@ jobs:
             texlive-fonts-extra
             texlive-latex-extra
             texlive-science
+            texlive-pstricks
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
