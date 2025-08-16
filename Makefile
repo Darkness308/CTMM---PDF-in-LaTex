@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow endspiel endspiel-test endspiel-verify
 
 # Default target
 all: ctmm-check build
@@ -101,6 +101,19 @@ workflow:
 	@echo "Running CTMM Comprehensive Workflow..."
 	python3 comprehensive_workflow.py
 
+# Endspiel verification - Complete system validation
+endspiel:
+	@echo "🎯 Running Endspiel Comprehensive Verification..."
+	python3 verify_endspiel.py
+
+# Endspiel testing - Run comprehensive test suite
+endspiel-test:
+	@echo "🧪 Running Endspiel Comprehensive Test Suite..."
+	python3 test_endspiel.py
+
+# Endspiel verification shorthand
+endspiel-verify: endspiel
+
 # Help
 help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
@@ -120,6 +133,9 @@ help:
 	@echo "  deps          - Install Python dependencies"
 	@echo "  comprehensive - Run complete workflow validation"
 	@echo "  workflow      - Alias for comprehensive"
+	@echo "  endspiel      - Run Endspiel comprehensive verification (Issue #727)"
+	@echo "  endspiel-test - Run Endspiel comprehensive test suite" 
+	@echo "  endspiel-verify - Alias for endspiel verification"
 	@echo ""
 	@echo "CTMM Unified Tool Commands:"
 	@echo "  ctmm-check    - Run unified build system validation"
