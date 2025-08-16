@@ -67,8 +67,7 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: |
-              ## ⚠️ PR Content Validation Failed
+            body: `## ⚠️ PR Content Validation Failed
 
               This pull request appears to have no reviewable content:
               - Changed files: ${{ steps.changes.outputs.changed_files }}
@@ -84,5 +83,5 @@ jobs:
               ### Need help?
               - Review the [contributing guidelines](README.md)
               - Check the [CTMM build system documentation](.github/copilot-instructions.md)
-              - Run \`python3 ctmm_build.py\` locally to test your changes
+              - Run \\\`python3 ctmm_build.py\\\` locally to test your changes`
           })
