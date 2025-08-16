@@ -243,7 +243,7 @@ def validate_issue_721_resolution():
         all_checks_passed = False
     
     # 3. Validate development roadmap comprehensiveness
-    print("\\n🗺️  Development Roadmap Analysis:")
+    print("\n🗺️  Development Roadmap Analysis:")
     try:
         with open("DEVELOPMENT_ROADMAP.md", 'r', encoding='utf-8') as f:
             roadmap_content = f.read()
