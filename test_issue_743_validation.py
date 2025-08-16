@@ -125,10 +125,17 @@ def validate_latex_packages():
         return False
     
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
+    if not extra_packages:
+        # Try the new 'packages' parameter used by xu-cheng/latex-action@v3
+        extra_packages = latex_step.get('with', {}).get('packages', '')
+    
     print(f"📋 Found LaTeX packages configuration:")
-    for line in extra_packages.strip().split('\n'):
-        if line.strip():
-            print(f"   - {line.strip()}")
+    if extra_packages:
+        for line in extra_packages.strip().split('\n'):
+            if line.strip():
+                print(f"   - {line.strip()}")
+    else:
+        print("   (No packages found)")
     
     # Essential package validation
     required_packages = [
