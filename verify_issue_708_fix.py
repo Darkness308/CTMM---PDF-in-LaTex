@@ -46,18 +46,27 @@ def validate_issue_708_resolution():
     
     # 2. Verify meaningful changes for Copilot review
     print("\n📊 Change Analysis:")
-    success, stdout, stderr = run_command("git diff --name-only main..HEAD", "Checking file changes")
-    if success and stdout.strip():
-        changed_files = stdout.strip().split('\n')
-        print(f"✅ Files changed: {len(changed_files)}")
-        for file in changed_files:
-            print(f"   - {file}")
-    else:
-        print("❌ No file changes detected")
+    # Try different base comparison options
+    base_options = ["main..HEAD", "origin/main..HEAD", "HEAD~2..HEAD"]
+    comparison_base = None
+    
+    for base_option in base_options:
+        success, stdout, stderr = run_command(f"git diff --name-only {base_option}", f"Checking file changes ({base_option})")
+        if success and stdout.strip():
+            comparison_base = base_option
+            changed_files = stdout.strip().split('\n')
+            print(f"✅ Files changed: {len(changed_files)} (compared to {base_option})")
+            for file in changed_files:
+                print(f"   - {file}")
+            break
+    
+    if not comparison_base:
+        print("❌ No file changes detected in any comparison")
         all_checks_passed = False
     
     # 3. Check line statistics
-    success, stdout, stderr = run_command("git diff --numstat main..HEAD", "Analyzing change volume")
+    if comparison_base:
+        success, stdout, stderr = run_command(f"git diff --numstat {comparison_base}", "Analyzing change volume")
     if success and stdout.strip():
         lines = stdout.strip().split('\n')
         total_added = 0
@@ -137,15 +146,18 @@ def validate_copilot_readiness():
     print("Copilot Review Readiness Check")
     print("=" * 70)
     
-    # Check for reviewable content
-    success, stdout, stderr = run_command("git diff --stat main..HEAD", "Change statistics")
-    if success and stdout.strip():
-        print("✅ Diff statistics available:")
-        print(stdout.strip())
-        return True
-    else:
-        print("❌ No diff statistics available")
-        return False
+    # Check for reviewable content with multiple base options
+    base_options = ["main..HEAD", "origin/main..HEAD", "HEAD~2..HEAD"]
+    
+    for base_option in base_options:
+        success, stdout, stderr = run_command(f"git diff --stat {base_option}", f"Change statistics ({base_option})")
+        if success and stdout.strip():
+            print(f"✅ Diff statistics available ({base_option}):")
+            print(stdout.strip())
+            return True
+    
+    print("❌ No diff statistics available")
+    return False
 
 def main():
     """Main verification function."""
