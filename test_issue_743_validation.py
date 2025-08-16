@@ -100,7 +100,7 @@ def test_action_versions():
         if version == 'latest':
             print(f"❌ FAIL: Action {action} uses @latest tag")
             return False
-        if version.startswith('v') or version.startswith('v'):
+        if version.startswith('v'):
             print(f"✅ PASS: Action {action}@{version} properly version-pinned")
         else:
             print(f"⚠️  WARNING: Action {action}@{version} has unusual version format")
