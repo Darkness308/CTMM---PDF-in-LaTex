@@ -76,8 +76,6 @@ This pull request appears to have no reviewable content:
 - Added lines: ${{ steps.changes.outputs.added_lines }}
 - Deleted lines: ${{ steps.changes.outputs.deleted_lines }}
 
-**Why this matters:** Copilot cannot review pull requests that contain no file changes or content modifications.
-
 ### To fix this issue:
 1. Ensure you have committed and pushed actual changes to files
 2. Check that your changes are included in this PR branch

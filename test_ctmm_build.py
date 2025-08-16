@@ -2,16 +2,29 @@
 """
 Unit tests for CTMM Build System functions.
 Tests the ctmm_build.py module functions for correctness.
+copilot/fix-407
+
+Unit tests for CTMM Build System functions
+Tests the filename_to_title() function with various input formats.
+
+main
 """
 
 import unittest
 import sys
 from pathlib import Path
+copilot/fix-407
 
+
+main
 # Add current directory to path for importing ctmm_build
 sys.path.insert(0, str(Path(__file__).parent))
 import ctmm_build
 
+from ctmm_build import filename_to_title
+
+
+main
 
 class TestFilenameToTitle(unittest.TestCase):
     """Test cases for the filename_to_title function."""
@@ -37,7 +50,7 @@ class TestFilenameToTitle(unittest.TestCase):
         self.assertEqual(result, "Module")
 
     def test_already_capitalized(self):
-        """Test filename that's already properly formatted."""
+        """Test filename that is already properly formatted."""
         result = ctmm_build.filename_to_title("Test_Module")
         self.assertEqual(result, "Test Module")
 
