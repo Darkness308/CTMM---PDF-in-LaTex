@@ -35,7 +35,7 @@ jobs:
         uses: dante-ev/latex-action@v2
         with:
           root_file: main.tex
-          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
+          args: -interaction=nonstopmode -halt-on-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
             texlive-fonts-recommended
