@@ -153,6 +153,33 @@ class TestFilenameToTitle(unittest.TestCase):
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
+    def test_type_validation(self):
+        """Test that filename_to_title properly validates input types."""
+        # Test invalid input types raise TypeError
+        with self.assertRaises(TypeError):
+            ctmm_build.filename_to_title(None)
+        
+        with self.assertRaises(TypeError):
+            ctmm_build.filename_to_title(123)
+        
+        with self.assertRaises(TypeError):
+            ctmm_build.filename_to_title(['list', 'input'])
+
+    def test_edge_case_robustness(self):
+        """Test filename_to_title handles various edge cases robustly."""
+        test_cases = [
+            ("", ""),  # Empty string
+            ("   ", ""),  # Only whitespace
+            ("_", ""),  # Only separator
+            ("--", ""),  # Only separators
+            ("___---___", ""),  # Multiple separators only
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
 
 class TestCTMMBuildSystemIntegration(unittest.TestCase):
     """Integration tests for CTMM Build System functions."""
@@ -227,10 +254,28 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertEqual(result["style_files"], [])
         self.assertEqual(result["module_files"], [])
         
+        # Test scan_references with invalid input type
+        result = ctmm_build.scan_references(123)
+        self.assertIsInstance(result, dict)
+        self.assertEqual(result["style_files"], [])
+        self.assertEqual(result["module_files"], [])
+        
         # Test check_missing_files with empty list
         result = ctmm_build.check_missing_files([])
         self.assertIsInstance(result, list)
         self.assertEqual(len(result), 0)
+        
+        # Test check_missing_files with invalid input type
+        with self.assertRaises(TypeError):
+            ctmm_build.check_missing_files("not_a_list")
+        
+        # Test check_missing_files with mixed data types
+        mixed_files = ["valid_string.tex", 123, None, "another_string.tex"]
+        result = ctmm_build.check_missing_files(mixed_files)
+        self.assertIsInstance(result, list)
+        # Should contain the string files that don't exist, ignoring invalid types
+        self.assertIn("valid_string.tex", result)
+        self.assertIn("another_string.tex", result)
 
     def test_build_system_numbered_steps(self):
         """Test that the build system implements numbered steps as described in PR."""
@@ -244,6 +289,88 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIn("step = 1", source, "Build system should use numbered steps")
         self.assertIn("step += 1", source, "Build system should increment step numbers")
         self.assertIn("print(f\"\\n{step}.", source, "Build system should print numbered steps")
+
+
+class TestCTMMBuildSystemPerformance(unittest.TestCase):
+    """Performance tests for CTMM Build System functions."""
+
+    def test_filename_to_title_performance(self):
+        """Test that filename_to_title performs well with large inputs."""
+        import time
+        
+        # Test with a very long filename
+        long_filename = "_".join([f"word{i}" for i in range(100)])
+        
+        start_time = time.time()
+        result = ctmm_build.filename_to_title(long_filename)
+        end_time = time.time()
+        
+        # Should complete within reasonable time (< 1 second)
+        self.assertLess(end_time - start_time, 1.0, "filename_to_title should complete quickly")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_scan_references_performance(self):
+        """Test that scan_references performs well with main.tex."""
+        import time
+        
+        start_time = time.time()
+        result = ctmm_build.scan_references("main.tex")
+        end_time = time.time()
+        
+        # Should complete within reasonable time (< 5 seconds)
+        self.assertLess(end_time - start_time, 5.0, "scan_references should complete quickly")
+        self.assertIsInstance(result, dict)
+        self.assertIn("style_files", result)
+        self.assertIn("module_files", result)
+
+    def test_check_missing_files_performance(self):
+        """Test that check_missing_files performs well with many files."""
+        import time
+        
+        # Create a list of many file paths
+        test_files = [f"modules/test_file_{i}.tex" for i in range(1000)]
+        
+        start_time = time.time()
+        result = ctmm_build.check_missing_files(test_files)
+        end_time = time.time()
+        
+        # Should complete within reasonable time (< 10 seconds)
+        self.assertLess(end_time - start_time, 10.0, "check_missing_files should handle many files efficiently")
+        self.assertIsInstance(result, list)
+
+
+class TestCTMMBuildSystemDocumentation(unittest.TestCase):
+    """Tests for documentation and docstring completeness."""
+
+    def test_all_functions_have_docstrings(self):
+        """Test that all main functions have proper docstrings."""
+        functions_to_check = [
+            'filename_to_title',
+            'scan_references', 
+            'check_missing_files',
+            'create_template',
+            'test_basic_build',
+            'test_full_build',
+            'validate_latex_files'
+        ]
+        
+        for func_name in functions_to_check:
+            with self.subTest(function=func_name):
+                self.assertTrue(hasattr(ctmm_build, func_name), f"Function {func_name} should exist")
+                func = getattr(ctmm_build, func_name)
+                self.assertIsNotNone(func.__doc__, f"Function {func_name} should have a docstring")
+                self.assertGreater(len(func.__doc__), 10, f"Function {func_name} should have a meaningful docstring")
+
+    def test_filename_to_title_docstring_examples(self):
+        """Test that filename_to_title docstring examples work correctly."""
+        # Extract and test docstring examples
+        func = ctmm_build.filename_to_title
+        docstring = func.__doc__
+        
+        self.assertIn("Examples:", docstring, "filename_to_title should have examples in docstring")
+        self.assertIn("test_module_name", docstring, "docstring should contain example input")
+        self.assertIn("Test Module Name", docstring, "docstring should contain example output")
 
 
 if __name__ == '__main__':

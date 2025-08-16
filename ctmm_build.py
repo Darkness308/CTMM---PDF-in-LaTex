@@ -24,36 +24,104 @@ except ImportError:
 
 
 def filename_to_title(filename):
-    """Convert filename to a readable title."""
+    """Convert filename to a readable title.
+    
+    Args:
+        filename (str): The filename to convert to a title
+        
+    Returns:
+        str: A human-readable title with proper capitalization
+        
+    Examples:
+        >>> filename_to_title("test_module_name")
+        'Test Module Name'
+        >>> filename_to_title("arbeitsblatt-depression")
+        'Arbeitsblatt Depression'
+    """
+    if not isinstance(filename, str):
+        raise TypeError(f"Expected string, got {type(filename).__name__}")
+    
     # Replace underscores and hyphens with spaces, capitalize words
     title = filename.replace('_', ' ').replace('-', ' ')
-    return ' '.join(word.capitalize() for word in title.split())
+    # Handle multiple consecutive spaces by normalizing to single spaces
+    normalized_title = ' '.join(word.capitalize() for word in title.split() if word)
+    return normalized_title
 
 
 def scan_references(main_tex_path="main.tex"):
-    """Scan main.tex for style and module references."""
+    """Scan main.tex for style and module references.
+    
+    Args:
+        main_tex_path (str): Path to the main LaTeX file
+        
+    Returns:
+        dict: Dictionary with 'style_files' and 'module_files' lists
+        
+    Raises:
+        None: Returns empty lists if file cannot be read
+    """
+    if not isinstance(main_tex_path, str):
+        logger.error("Invalid main_tex_path type: expected str, got %s", type(main_tex_path).__name__)
+        return {"style_files": [], "module_files": []}
+    
     try:
+        file_path = Path(main_tex_path)
+        if not file_path.exists():
+            logger.error("File does not exist: %s", main_tex_path)
+            return {"style_files": [], "module_files": []}
+            
         with open(main_tex_path, 'r', encoding='utf-8', errors='replace') as f:
             content = f.read()
     except Exception as e:
         logger.error("Error reading %s: %s", main_tex_path, e)
         return {"style_files": [], "module_files": []}
 
-    # Find style and module references
-    style_files = [f"style/{match}.sty" for match in
-                   re.findall(r'\\usepackage\{style/([^}]+)\}', content)]
-    module_files = [f"modules/{match}.tex" for match in
-                    re.findall(r'\\input\{modules/([^}]+)\}', content)]
+    # Find style and module references with improved regex patterns
+    try:
+        style_files = [f"style/{match}.sty" for match in
+                       re.findall(r'\\usepackage\{style/([^}]+)\}', content)]
+        module_files = [f"modules/{match}.tex" for match in
+                        re.findall(r'\\input\{modules/([^}]+)\}', content)]
+    except Exception as e:
+        logger.error("Error parsing references in %s: %s", main_tex_path, e)
+        return {"style_files": [], "module_files": []}
 
+    logger.debug("Found %d style files and %d module files in %s", 
+                 len(style_files), len(module_files), main_tex_path)
+    
     return {"style_files": style_files, "module_files": module_files}
 
 
 def check_missing_files(files):
-    """Check which files are missing."""
+    """Check which files are missing.
+    
+    Args:
+        files (list): List of file paths to check
+        
+    Returns:
+        list: List of missing file paths
+        
+    Raises:
+        TypeError: If files is not a list or iterable
+    """
+    if not isinstance(files, (list, tuple, set)):
+        raise TypeError(f"Expected list, tuple, or set, got {type(files).__name__}")
+    
     missing = []
     for file_path in files:
-        if not Path(file_path).exists():
+        if not isinstance(file_path, str):
+            logger.warning("Skipping non-string file path: %s (%s)", file_path, type(file_path).__name__)
+            continue
+            
+        try:
+            if not Path(file_path).exists():
+                missing.append(file_path)
+                logger.debug("Missing file: %s", file_path)
+        except Exception as e:
+            logger.error("Error checking file existence for %s: %s", file_path, e)
+            # Assume file is missing if we can't check it
             missing.append(file_path)
+    
     return missing
 
 
