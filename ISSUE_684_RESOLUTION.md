@@ -1,4 +1,4 @@
-# Issue #684 Resolution: LaTeX Hyperref Package Loading Conflict Fix
+# Issue #692 Resolution: LaTeX Hyperref Package Loading Conflict Fix
 
 ## Problem Statement
 
