@@ -49,6 +49,20 @@ python3 ctmm_build.py
 
 Das Projekt verfügt über ein **umfassendes Toolset** für professionelle Therapiematerial-Entwicklung. Siehe [COMPREHENSIVE_TOOLSET.md](COMPREHENSIVE_TOOLSET.md) für die vollständige Übersicht.
 
+### 🔍 System Health Monitoring
+
+Das CTMM-System verfügt über umfassende Gesundheitsüberwachung:
+
+```bash
+# Schneller Status-Check
+make status
+
+# Detaillierter Status-Bericht
+make status-report
+```
+
+Siehe [SYSTEM_HEALTH.md](SYSTEM_HEALTH.md) für vollständige Dokumentation des Gesundheitssystems.
+
 ### Schnellstart - Umfassendes Workflow
 ```bash
 # Vollständige Validierung aller Komponenten

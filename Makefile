@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow status status-report
 
 # Default target
 all: ctmm-check build
@@ -9,6 +9,16 @@ all: ctmm-check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Comprehensive system status check
+status:
+	@echo "Running comprehensive CTMM system status check..."
+	python3 ctmm_status_check.py
+
+# Generate detailed status report
+status-report:
+	@echo "Generating detailed CTMM status report..."
+	python3 ctmm_status_check.py --save-report
 
 # Validate PR content (for contributors)
 validate-pr:
@@ -108,6 +118,8 @@ help:
 	@echo "Available targets:"
 	@echo "  all           - Run check and build (default)"
 	@echo "  check         - Check dependencies and run build system"
+	@echo "  status        - Run comprehensive system status check"
+	@echo "  status-report - Generate detailed status report (saved to file)"
 	@echo "  validate-pr   - Validate PR content for Copilot review"
 	@echo "  validate      - Validate LaTeX files for escaping issues"
 	@echo "  validate-fix  - Fix LaTeX escaping issues (creates backups)"
