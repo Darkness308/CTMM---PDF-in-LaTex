@@ -212,7 +212,12 @@ def validate_issue_721_resolution():
     all_checks_passed = True
     
     # 1. Check that resolution documentation exists
-    print("\\n📄 Resolution Documentation Check:")
+    print("and strategic direction resolution for CTMM system.\n")
+    
+    all_checks_passed = True
+    
+    # 1. Check that resolution documentation exists
+    print("\n📄 Resolution Documentation Check:")
     if not check_file_exists("ISSUE_721_RESOLUTION.md", "Issue #721 specific documentation"):
         all_checks_passed = False
         return False
