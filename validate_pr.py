@@ -65,7 +65,9 @@ def check_file_changes(base_branch="main"):
             hashes = stdout.split('\n')
             for idx, h in enumerate(hashes):
                 if h.strip() and not h.startswith("fatal:"):
-                    actual_base = filtered_options[idx]
+            for h, base_opt in zip(hashes, filtered_options):
+                if h.strip() and not h.startswith("fatal:"):
+                    actual_base = base_opt
                     break
     
     if not actual_base:
