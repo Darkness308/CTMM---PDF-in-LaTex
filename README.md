@@ -34,6 +34,9 @@ python3 ctmm_build.py
 - ✅ Erfolgreicher Build-System-Test
 - ✅ Verwendung der PR-Vorlage
 
+### Fehlerbehebung bei Copilot-Review-Problemen:
+Bei "Copilot wasn't able to review any files in this pull request" siehe [ISSUE_663_RESOLUTION.md](ISSUE_663_RESOLUTION.md) für detaillierte Lösungsschritte.
+
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
 - `/modules/` - Individuelle CTMM-Module als separate .tex-Dateien

@@ -209,12 +209,18 @@ def main():
         
         if changed_files == 0:
             print("❌ No file changes detected - Copilot cannot review empty PRs")
+            print("   💡 This means your PR has no modified files compared to the base branch.")
+            print("   🔧 To fix: Ensure you have committed and pushed actual changes to files.")
+            print("   📖 See ISSUE_663_RESOLUTION.md for detailed guidance.")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
             print("❌ No content changes detected - PR appears to be empty")
+            print("   💡 Files may have changed but with no net content modifications.")
+            print("   🔧 To fix: Ensure your changes include meaningful additions or modifications.")
+            print("   📖 Review git diff output to verify your intended changes are present.")
             all_checks_passed = False
         else:
-            print("✅ Meaningful changes detected")
+            print("✅ Meaningful changes detected - Copilot should be able to review this PR")
     
     # Validate LaTeX files
     if not validate_latex_files():
@@ -233,6 +239,13 @@ def main():
     else:
         print("❌ Some validation checks failed")
         print("Please address the issues above before creating/updating the PR.")
+        print("")
+        print("🔍 Common solutions:")
+        print("  1. Check git status: git status")
+        print("  2. Verify changes: git diff --name-only origin/main") 
+        print("  3. Ensure commits are pushed: git log --oneline origin/main..HEAD")
+        print("  4. Review ISSUE_663_RESOLUTION.md for detailed guidance")
+        print("  5. Test locally: python3 ctmm_build.py")
         sys.exit(1)
 
 if __name__ == "__main__":
