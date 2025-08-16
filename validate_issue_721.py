@@ -227,7 +227,7 @@ def validate_issue_721_resolution():
         return False
     
     # 2. Validate resolution documentation quality
-    print("\\n📋 Resolution Quality Analysis:")
+    print("\n📋 Resolution Quality Analysis:")
     try:
         with open("ISSUE_721_RESOLUTION.md", 'r', encoding='utf-8') as f:
             resolution_content = f.read()
