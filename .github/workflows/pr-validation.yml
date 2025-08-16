@@ -80,7 +80,6 @@ jobs:
               1. Ensure you have committed and pushed actual changes to files
               2. Check that your changes are included in this PR branch
               3. Verify the PR is comparing the correct base and head branches
-
               ### Need help?
               - Review the [contributing guidelines](README.md)
               - Check the [CTMM build system documentation](.github/copilot-instructions.md)
