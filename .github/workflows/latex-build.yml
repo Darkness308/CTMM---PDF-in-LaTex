@@ -30,6 +30,11 @@ jobs:
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
+      
+      - name: Validate CI configuration
+        run: |
+          echo "🔍 Running CI configuration validation..."
+          python3 test_issue_743_validation.py
 
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
