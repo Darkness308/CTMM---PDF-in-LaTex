@@ -14,13 +14,30 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
-# Import LaTeX validator if available
+# Import LaTeX validator and sanitize function if available
 try:
-    from latex_validator import LaTeXValidator
+    from latex_validator import LaTeXValidator, sanitize_pkg_name
     VALIDATOR_AVAILABLE = True
 except ImportError:
     VALIDATOR_AVAILABLE = False
     logger.debug("LaTeX validator not available for escaping checks")
+    
+    # Fallback sanitize function if import fails
+    def sanitize_pkg_name(name):
+        """Fallback sanitize function if latex_validator is not available."""
+        if not name:
+            return 'pkg'
+        # Simple fallback: replace hyphens and underscores with nothing and capitalize
+        import re
+        parts = re.split(r'[-_]', name)
+        sanitized = 'pkg'
+        for part in parts:
+            if part:
+                if part.isdigit():
+                    sanitized += part
+                else:
+                    sanitized += part.capitalize()
+        return sanitized
 
 
 def filename_to_title(filename):
@@ -63,11 +80,13 @@ def create_template(file_path):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
+        # Sanitize package name for LaTeX compatibility
+        sanitized_name = sanitize_pkg_name(path.stem)
         content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
 \\NeedsTeXFormat{{LaTeX2e}}
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
+\\ProvidesPackage{{{sanitized_name}}}[2024/01/01 CTMM {path.stem} package]
 
 % TODO: Add package dependencies and commands here
 
