@@ -4,7 +4,7 @@
 The repository was using `@latest` tag for `dante-ev/latex-action` in the LaTeX build workflow, which can cause unexpected build failures when the action updates without notice.
 
 ## Solution Applied
-- **Fixed**: Replaced `dante-ev/latex-action@latest` with `dante-ev/latex-action@v0.2` in `.github/workflows/latex-build.yml`
+- **Updated**: Upgraded `dante-ev/latex-action@v0.2` to `dante-ev/latex-action@v2.3.0` in `.github/workflows/latex-build.yml` for improved stability and features
 - **Added**: `validate_workflow_versions.py` script to check for @latest usage
 - **Added**: Unit tests in `test_workflow_versions.py` to validate the version checking logic
 
@@ -17,7 +17,7 @@ The repository was using `@latest` tag for `dante-ev/latex-action` in the LaTeX 
 All GitHub Actions workflows now use specific version tags:
 - ✅ `actions/checkout@v4`
 - ✅ `actions/setup-python@v4` 
-- ✅ `dante-ev/latex-action@v0.2` (fixed)
+- ✅ `dante-ev/latex-action@v2.3.0` (updated)
 - ✅ `actions/upload-artifact@v4`
 - ✅ `actions/github-script@v7`
 - ✅ `actions/configure-pages@v5`

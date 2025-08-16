@@ -84,7 +84,7 @@ def validate_workflow_versions():
     else:
         print("\n⚠️  SOME ACTIONS USE @latest TAGS")
         print("Replace @latest with specific version tags for reproducible builds.")
-        print("Example: dante-ev/latex-action@latest → dante-ev/latex-action@v0.2")
+        print("Example: dante-ev/latex-action@latest → dante-ev/latex-action@v2.3.0")
     
     print(f"\nStatus: {'SUCCESS' if all_pinned else 'NEEDS_FIXES'}")
     return all_pinned
