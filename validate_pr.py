@@ -63,8 +63,6 @@ def check_file_changes(base_branch="main"):
         if success and stdout.strip():
             # git rev-parse outputs each hash on a new line, in the same order as the arguments
             hashes = stdout.split('\n')
-            for idx, h in enumerate(hashes):
-                if h.strip() and not h.startswith("fatal:"):
             for h, base_opt in zip(hashes, filtered_options):
                 if h.strip() and not h.startswith("fatal:"):
                     actual_base = base_opt
