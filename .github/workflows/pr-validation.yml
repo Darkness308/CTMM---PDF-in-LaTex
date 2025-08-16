@@ -1,5 +1,6 @@
 name: PR Content Validation
-on:
+
+"on":
   pull_request:
     types: [opened, synchronize, reopened]
 
