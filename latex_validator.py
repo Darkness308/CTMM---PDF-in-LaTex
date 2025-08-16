@@ -46,7 +46,7 @@ def sanitize_pkg_name(name):
             sanitized += part
         else:
             # Capitalize the first letter of non-numeric parts
-        sanitized += part.capitalize()
+            sanitized += part.capitalize()
     
     return sanitized
 
