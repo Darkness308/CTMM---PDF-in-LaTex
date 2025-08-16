@@ -209,12 +209,16 @@ def main():
         
         if changed_files == 0:
             print("❌ No file changes detected - Copilot cannot review empty PRs")
+            print("   💡 To fix: Add meaningful changes to files (documentation, code, etc.)")
+            print("   📚 See existing ISSUE_*_RESOLUTION.md files for examples")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
             print("❌ No content changes detected - PR appears to be empty")
+            print("   💡 To fix: Ensure your changes add or modify actual content")
+            print("   ⚠️  Whitespace-only changes won't enable Copilot review")
             all_checks_passed = False
         else:
-            print("✅ Meaningful changes detected")
+            print("✅ Meaningful changes detected - Copilot should be able to review")
     
     # Validate LaTeX files
     if not validate_latex_files():
@@ -233,6 +237,11 @@ def main():
     else:
         print("❌ Some validation checks failed")
         print("Please address the issues above before creating/updating the PR.")
+        print()
+        print("🔗 Helpful Resources:")
+        print("   📖 Repository: See existing ISSUE_*_RESOLUTION.md for examples")
+        print("   🛠️  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
+        print("   📝 Validation: Run 'python3 validate_pr.py --verbose' for details")
         sys.exit(1)
 
 if __name__ == "__main__":
