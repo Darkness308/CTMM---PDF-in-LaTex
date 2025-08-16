@@ -207,7 +207,7 @@ def validate_issue_721_resolution():
     print("Issue #721 Resolution Validation - \"Wie geht es weiter?\"")
     print("=" * 80)
     print("Validating comprehensive development roadmap implementation")
-    print("and strategic direction resolution for CTMM system.\\n")
+    print("and strategic direction resolution for CTMM system.\n")
     
     all_checks_passed = True
     
