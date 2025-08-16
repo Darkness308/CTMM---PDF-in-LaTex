@@ -32,31 +32,7 @@ jobs:
           python3 ctmm_build.py
 
       - name: Set up LaTeX
-copilot/fix-69
-copilot/fix-69
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-65
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-288
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-292
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-290
-        uses: dante-ev/latex-action@v2.0.0
-
-        uses: dante-ev/latex-action@latest
-main
-main
-main
-main
-main
-
-        uses: dante-ev/latex-action@latest
-main
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
