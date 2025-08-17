@@ -1,9 +1,18 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing
 
 # Default target
 all: ctmm-check build
+
+# Enhanced build management targets
+enhanced-build:
+	@echo "Running enhanced CTMM build management..."
+	python3 ctmm_build.py --enhanced
+
+enhanced-testing:
+	@echo "Running enhanced incremental testing..."
+	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()"
 
 # Check build system and dependencies
 check:
@@ -120,6 +129,8 @@ help:
 	@echo "  deps          - Install Python dependencies"
 	@echo "  comprehensive - Run complete workflow validation"
 	@echo "  workflow      - Alias for comprehensive"
+	@echo "  enhanced-build  - Run enhanced CTMM build management"
+	@echo "  enhanced-testing - Run enhanced incremental testing"
 	@echo ""
 	@echo "CTMM Unified Tool Commands:"
 	@echo "  ctmm-check    - Run unified build system validation"
