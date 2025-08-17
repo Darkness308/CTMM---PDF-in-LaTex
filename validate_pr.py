@@ -211,11 +211,13 @@ def main():
             print("❌ No file changes detected - Copilot cannot review empty PRs")
             print("   💡 To fix: Add meaningful changes to files (documentation, code, etc.)")
             print("   📚 See existing ISSUE_*_RESOLUTION.md files for examples")
+            print("   🎯 This is similar to issues #409, #476, #673, #708, #731, #817")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
             print("❌ No content changes detected - PR appears to be empty")
             print("   💡 To fix: Ensure your changes add or modify actual content")
             print("   ⚠️  Whitespace-only changes won't enable Copilot review")
+            print("   📝 Consider creating documentation or making small code improvements")
             all_checks_passed = False
         else:
             print("✅ Meaningful changes detected - Copilot should be able to review")
@@ -242,6 +244,7 @@ def main():
         print("   📖 Repository: See existing ISSUE_*_RESOLUTION.md for examples")
         print("   🛠️  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
         print("   📝 Validation: Run 'python3 validate_pr.py --verbose' for details")
+        print("   🎯 Recent fix: See ISSUE_817_RESOLUTION.md for empty PR resolution example")
         sys.exit(1)
 
 if __name__ == "__main__":
