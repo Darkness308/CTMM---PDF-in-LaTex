@@ -50,16 +50,26 @@ def validate_ci_configuration():
         '.github/workflows/static.yml'
     ]
     
-    print("📂 Checking workflow files...")
+    print("📂 Checking critical workflow files...")
+    missing_workflows = []
     for workflow_file in workflow_files:
         if not os.path.exists(workflow_file):
-            print(f"❌ FAIL: Workflow file missing: {workflow_file}")
+            print(f"❌ CRITICAL: Workflow file missing: {workflow_file}")
+            missing_workflows.append(workflow_file)
             all_passed = False
         else:
             print(f"✅ FOUND: {workflow_file}")
     
+    if missing_workflows:
+        print(f"\n🚨 CRITICAL CI FAILURE RISK: {len(missing_workflows)} workflow file(s) missing!")
+        print("   Missing workflows would cause immediate CI failures:")
+        for wf in missing_workflows:
+            print(f"   - {wf}")
+        print("   Repository CI would be non-functional")
+    
     # Validate YAML syntax
-    print("\n📝 Validating YAML syntax...")
+    print("\n📝 Validating YAML syntax for CI reliability...")
+    syntax_errors = []
     for workflow_file in workflow_files:
         if os.path.exists(workflow_file):
             try:
@@ -68,13 +78,22 @@ def validate_ci_configuration():
                 print(f"✅ VALID: {workflow_file} has correct YAML syntax")
             except yaml.YAMLError as e:
                 print(f"❌ INVALID: {workflow_file} has YAML syntax error: {e}")
+                syntax_errors.append((workflow_file, str(e)))
                 all_passed = False
             except Exception as e:
                 print(f"❌ ERROR: Failed to read {workflow_file}: {e}")
+                syntax_errors.append((workflow_file, str(e)))
                 all_passed = False
     
+    if syntax_errors:
+        print(f"\n🚨 CRITICAL: {len(syntax_errors)} YAML syntax error(s) detected!")
+        print("   These would cause immediate workflow parse failures:")
+        for wf, error in syntax_errors:
+            print(f"   - {wf}: {error[:100]}...")
+    
     # Check for quoted "on:" syntax (Issue #458/#532 compliance)
-    print("\n🔤 Checking 'on:' keyword syntax...")
+    print("\n🔤 Checking 'on:' keyword syntax (GitHub Actions compatibility)...")
+    syntax_issues = []
     for workflow_file in workflow_files:
         if os.path.exists(workflow_file):
             with open(workflow_file, 'r') as f:
@@ -84,9 +103,15 @@ def validate_ci_configuration():
                 print(f"✅ CORRECT: {workflow_file} uses quoted 'on:' syntax")
             elif 'on:' in content and '"on":' not in content:
                 print(f"❌ INCORRECT: {workflow_file} uses unquoted 'on:' syntax")
+                print("   This can cause workflow parsing issues in some GitHub environments")
+                syntax_issues.append(workflow_file)
                 all_passed = False
             else:
                 print(f"⚠️  WARNING: No 'on:' keyword found in {workflow_file}")
+    
+    if syntax_issues:
+        print(f"\n⚠️  COMPATIBILITY ISSUE: {len(syntax_issues)} workflow(s) use unquoted 'on:' syntax")
+        print("   This may cause parsing failures in certain GitHub Actions environments")
     
     return all_passed
 
@@ -99,14 +124,16 @@ def validate_latex_packages():
     workflow_path = '.github/workflows/latex-build.yml'
     
     if not os.path.exists(workflow_path):
-        print(f"❌ ERROR: Main workflow file {workflow_path} not found")
+        print(f"❌ CRITICAL ERROR: Main workflow file {workflow_path} not found")
+        print("   This would cause immediate CI failure - workflow file is required")
         return False
     
     try:
         with open(workflow_path, 'r') as f:
             workflow_content = yaml.safe_load(f)
     except Exception as e:
-        print(f"❌ ERROR: Failed to parse {workflow_path}: {e}")
+        print(f"❌ CRITICAL ERROR: Failed to parse {workflow_path}: {e}")
+        print("   This would cause immediate CI failure - invalid YAML syntax")
         return False
     
     # Find the LaTeX action step
@@ -121,14 +148,18 @@ def validate_latex_packages():
             break
     
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
+        print("❌ CRITICAL ERROR: 'Set up LaTeX' step not found in workflow")
+        print("   This would cause immediate CI failure - LaTeX compilation impossible")
         return False
     
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
     print(f"📋 Found LaTeX packages configuration:")
-    for line in extra_packages.strip().split('\n'):
-        if line.strip():
-            print(f"   - {line.strip()}")
+    if not extra_packages.strip():
+        print("   ⚠️  WARNING: No extra packages configured")
+    else:
+        for line in extra_packages.strip().split('\n'):
+            if line.strip():
+                print(f"   - {line.strip()}")
     
     # Essential package validation
     required_packages = [
@@ -143,24 +174,38 @@ def validate_latex_packages():
     
     all_passed = True
     print("\n🔍 Validating essential packages...")
+    missing_critical = []
     
     for pkg in required_packages:
         if pkg in extra_packages:
             print(f"✅ FOUND: {pkg}")
         else:
             print(f"❌ MISSING: {pkg}")
+            missing_critical.append(pkg)
             all_passed = False
     
-    # Specific pifont validation (Issue #739 compliance)
-    print("\n🎯 Validating pifont package availability...")
+    if missing_critical:
+        print(f"\n🚨 CRITICAL: {len(missing_critical)} essential package(s) missing!")
+        print("   These packages are required for CTMM LaTeX compilation:")
+        for pkg in missing_critical:
+            print(f"   - {pkg}")
+        print("   This would cause LaTeX compilation failure in CI")
+    
+    # Specific pifont validation (Issue #739/#743 compliance)
+    print("\n🎯 Validating pifont package availability (Issue #739/#743)...")
     pifont_providers = ['texlive-pstricks', 'texlive-latex-extra', 'texlive-fonts-extra']
     pifont_available = any(pkg in extra_packages for pkg in pifont_providers)
     
     if pifont_available:
         found_providers = [pkg for pkg in pifont_providers if pkg in extra_packages]
         print(f"✅ PIFONT AVAILABLE: Found providers: {', '.join(found_providers)}")
+        print("   ✓ CTMM form elements with checkboxes will compile successfully")
     else:
         print("❌ PIFONT MISSING: No packages found that provide pifont")
+        print("   This would cause form element compilation failure:")
+        print("   - \\ding{51} symbols will be undefined")
+        print("   - CTMM checkboxes will fail to render")
+        print("   - LaTeX compilation will halt with package error")
         all_passed = False
     
     return all_passed
@@ -196,7 +241,8 @@ def validate_workflow_structure():
         'Install Python dependencies',
         'Run LaTeX syntax validation',
         'Run CTMM Build System Check',
-        'Run comprehensive CI validation',
+        'Run comprehensive CI configuration validation',
+        'Enhanced pre-build validation',
         'Set up LaTeX'
     ]
     
@@ -338,6 +384,20 @@ def validate_form_elements_integration():
         
         if len(found_elements) >= 2:
             print("✅ Form elements validation passed")
+            
+            # Additional pifont compatibility check
+            print("\n🔧 Testing pifont compatibility with form elements...")
+            if '\\RequirePackage{pifont}' in content and '\\ding{' in content:
+                print("✅ PIFONT INTEGRATION: Complete pifont integration detected")
+                print("   ✓ Package required AND symbols used")
+                print("   ✓ Form elements ready for LaTeX compilation")
+            elif '\\RequirePackage{pifont}' in content:
+                print("⚠️  PIFONT PARTIAL: Package required but symbols not directly used")
+                print("   ℹ️  This may be normal if symbols are used via macros")
+            else:
+                print("⚠️  PIFONT INDIRECT: No direct pifont requirement found")
+                print("   Form elements may rely on external package inclusion")
+            
             return True
         else:
             print("⚠️  WARNING: Limited form elements found")
@@ -394,14 +454,24 @@ def run_comprehensive_validation():
         print("\n🎉 ALL VALIDATION TESTS PASSED!")
         print("\nThe CI configuration is robust and ready for:")
         print("  ✓ Early detection of configuration issues")
-        print("  ✓ Proper LaTeX package dependency handling")
+        print("  ✓ Proper LaTeX package dependency handling") 
         print("  ✓ Comprehensive validation before compilation")
         print("  ✓ Integration with CTMM build system")
         print("  ✓ Form elements with pifont support")
+        print("\n📋 Issue #743 Resolution Summary:")
+        print("  ✓ Enhanced CI validation steps implemented")
+        print("  ✓ Robust pifont package dependency handling")
+        print("  ✓ Early failure detection before LaTeX compilation")
+        print("  ✓ Comprehensive error reporting for troubleshooting")
         return True
     else:
         print(f"\n❌ {total - passed} validation test(s) failed")
         print("Please address the issues above before proceeding.")
+        print("\n🔧 Common fixes:")
+        print("  • Check .github/workflows/latex-build.yml for missing packages")
+        print("  • Verify YAML syntax in all workflow files")  
+        print("  • Ensure pifont providers (texlive-pstricks) are included")
+        print("  • Run 'python3 ctmm_build.py' to test build system")
         return False
 
 

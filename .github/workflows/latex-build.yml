@@ -31,13 +31,15 @@ jobs:
         run: |
           python3 ctmm_build.py
           
-      - name: Run comprehensive CI validation
+      - name: Run comprehensive CI configuration validation
         run: |
+          echo "🔍 Running comprehensive CI configuration validation..."
+          echo "This validates CI setup, LaTeX packages, and pifont dependencies"
           python3 test_issue_743_validation.py
           
       - name: Enhanced pre-build validation
         run: |
-          echo "🔍 Running enhanced pre-build validation..."
+          echo "🔍 Running enhanced pre-build robustness checks..."
           # Check for critical files and dependencies
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
 
