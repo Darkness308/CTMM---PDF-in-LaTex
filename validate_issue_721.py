@@ -258,7 +258,7 @@ def validate_issue_721_resolution():
         all_checks_passed = False
     
     # 4. Validate infrastructure integration
-    print("\\n🔧 Infrastructure Integration Check:")
+    print("\n🔧 Infrastructure Integration Check:")
     if not validate_integration_compatibility():
         all_checks_passed = False
     
