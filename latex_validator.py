@@ -180,10 +180,14 @@ class LaTeXValidator:
             logger.info(f"Validating {tex_file}")
             is_valid, issues, cleaned_content = self.validate_file(tex_file)
             
+            # Get original file size with proper context manager
+            with open(tex_file, 'r', encoding='utf-8', errors='replace') as f:
+                original_size = len(f.read())
+            
             results[str(tex_file)] = {
                 'valid': is_valid,
                 'issues': issues,
-                'original_size': len(open(tex_file, 'r', encoding='utf-8', errors='replace').read()),
+                'original_size': original_size,
                 'cleaned_size': len(cleaned_content)
             }
             

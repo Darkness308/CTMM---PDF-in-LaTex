@@ -18,14 +18,35 @@ jobs:
     - name: Check for file changes
       id: changes
       run: |
-        # Get the base and head commits
+        # Get the base and head commits with error handling
         BASE_SHA="${{ github.event.pull_request.base.sha }}"
         HEAD_SHA="${{ github.event.pull_request.head.sha }}"
         
-        # Count changed files
-        CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA | wc -l)
-        ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}')
-        DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}')
+        echo "🔍 Checking commits: $BASE_SHA..$HEAD_SHA"
+        
+        # Validate that we have both SHAs
+        if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
+          echo "❌ Error: Missing base or head SHA"
+          echo "Base SHA: $BASE_SHA"
+          echo "Head SHA: $HEAD_SHA"
+          exit 1
+        fi
+        
+        # Count changed files with error handling
+        if ! CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA 2>/dev/null | wc -l); then
+          echo "⚠️ Warning: Could not determine changed files, using fallback method"
+          CHANGED_FILES=$(git diff --name-only HEAD~1..HEAD 2>/dev/null | wc -l || echo "0")
+        fi
+        
+        if ! ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA 2>/dev/null | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}'); then
+          echo "⚠️ Warning: Could not determine added lines, using fallback"
+          ADDED_LINES=0
+        fi
+        
+        if ! DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA 2>/dev/null | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}'); then
+          echo "⚠️ Warning: Could not determine deleted lines, using fallback"
+          DELETED_LINES=0
+        fi
         
         echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
         echo "added_lines=$ADDED_LINES" >> $GITHUB_OUTPUT
@@ -57,7 +78,20 @@ jobs:
         echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added"
     - name: Run CTMM build check
       run: |
-        python3 ctmm_build.py
+        echo "🔧 Running CTMM build system check..."
+        if ! python3 ctmm_build.py; then
+          echo "❌ CTMM build check failed"
+          echo "📋 Debug information:"
+          echo "- Python version: $(python3 --version)"
+          echo "- Working directory: $(pwd)"
+          echo "- Available files:"
+          ls -la main.tex 2>/dev/null || echo "  main.tex not found"
+          ls -la ctmm_build.py 2>/dev/null || echo "  ctmm_build.py not found"
+          echo "- Python path:"
+          python3 -c "import sys; print('\n'.join(sys.path))" 2>/dev/null || echo "  Could not determine Python path"
+          exit 1
+        fi
+        echo "✅ CTMM build check completed successfully"
     - name: Comment on PR if validation fails
       if: failure()
       uses: actions/github-script@v7

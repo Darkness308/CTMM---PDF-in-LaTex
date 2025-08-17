@@ -39,7 +39,26 @@ jobs:
         run: |
           echo "🔍 Running enhanced pre-build validation..."
           # Check for critical files and dependencies
-          python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          echo "📋 Checking critical files:"
+          if [ ! -f "main.tex" ]; then
+            echo "❌ Error: main.tex not found"
+            exit 1
+          fi
+          echo "✅ main.tex found"
+          
+          if [ ! -f "ctmm_build.py" ]; then
+            echo "❌ Error: ctmm_build.py not found"
+            exit 1
+          fi
+          echo "✅ ctmm_build.py found"
+          
+          echo "🔧 Running robustness checks..."
+          if python3 test_issue_761_fix.py; then
+            echo "✅ Robustness checks passed"
+          else
+            echo "⚠️ Warning: Some robustness checks failed but continuing..."
+            echo "This may indicate potential CI environment issues but should not block the build."
+          fi
 
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
@@ -57,13 +76,37 @@ jobs:
             
       - name: Verify PDF generation
         run: |
+          echo "🔍 Verifying PDF generation..."
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
+            PDF_SIZE=$(stat -c%s "main.pdf" 2>/dev/null || echo "unknown")
+            echo "📄 PDF file size: $PDF_SIZE bytes"
             ls -la main.pdf
+            
+            # Basic PDF validation
+            if command -v file >/dev/null 2>&1; then
+              FILE_TYPE=$(file main.pdf)
+              echo "📋 File type: $FILE_TYPE"
+              if echo "$FILE_TYPE" | grep -q "PDF"; then
+                echo "✅ PDF format validation passed"
+              else
+                echo "⚠️ Warning: File may not be a valid PDF"
+              fi
+            fi
           else
             echo "❌ PDF generation failed"
-            echo "Checking for LaTeX log files..."
-            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            echo "📋 Checking for LaTeX log files and debugging info..."
+            echo "Working directory contents:"
+            ls -la
+            echo ""
+            echo "Looking for log files:"
+            find . -name "*.log" -type f | head -10
+            echo ""
+            echo "Checking recent files:"
+            find . -type f -newer main.tex 2>/dev/null | head -10 || echo "Could not check recent files"
+            echo ""
+            echo "LaTeX log files content:"
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec head -50 {} \; 2>/dev/null || echo "No log files found"
             exit 1
           fi
 
