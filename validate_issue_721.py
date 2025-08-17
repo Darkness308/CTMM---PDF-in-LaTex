@@ -212,7 +212,6 @@ def validate_issue_721_resolution():
     all_checks_passed = True
     
     # 1. Check that resolution documentation exists
-    print("and strategic direction resolution for CTMM system.\n")
     
     all_checks_passed = True
     
