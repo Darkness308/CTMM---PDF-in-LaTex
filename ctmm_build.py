@@ -286,20 +286,25 @@ def validate_latex_files():
 
 def main():
     """Run the CTMM build system check."""
+    import time
+    overall_start_time = time.time()
+    
     logger.info("CTMM Build System - Starting check...")
 
     # Initialize data structures for structured returns
     build_data = {
-        "latex_validation": {"passed": False, "errors": []},
-        "file_scanning": {"style_files": [], "module_files": []},
-        "file_existence": {"missing_files": [], "total_missing": 0},
-        "template_creation": {"created_count": 0, "created_files": []},
-        "build_testing": {"basic_passed": False, "full_passed": False}
+        "latex_validation": {"passed": False, "errors": [], "duration": 0},
+        "file_scanning": {"style_files": [], "module_files": [], "duration": 0},
+        "file_existence": {"missing_files": [], "total_missing": 0, "duration": 0},
+        "template_creation": {"created_count": 0, "created_files": [], "duration": 0},
+        "build_testing": {"basic_passed": False, "full_passed": False, "duration": 0},
+        "total_duration": 0
     }
 
     # Step 1: Validate LaTeX files for escaping issues
     step = 1
     print(f"\n{step}. Validating LaTeX files...")
+    step_start = time.time()
     try:
         latex_valid = validate_latex_files()
         build_data["latex_validation"]["passed"] = latex_valid
@@ -308,10 +313,13 @@ def main():
         logger.error("LaTeX validation failed: %s", e)
         build_data["latex_validation"]["errors"].append(str(e))
         latex_valid = False
+    finally:
+        build_data["latex_validation"]["duration"] = time.time() - step_start
 
     # Step 2: Scan for references
     step += 1
     print(f"\n{step}. Scanning file references...")
+    step_start = time.time()
     try:
         references = scan_references()
         style_files = references["style_files"]
@@ -328,10 +336,13 @@ def main():
         logger.error("File scanning failed: %s", e)
         style_files = []
         module_files = []
+    finally:
+        build_data["file_scanning"]["duration"] = time.time() - step_start
     
     # Step 3: Check file existence
     step += 1
     print(f"\n{step}. Checking file existence...")
+    step_start = time.time()
     try:
         all_files = style_files + module_files
         missing_files = check_missing_files(all_files)
@@ -348,11 +359,14 @@ def main():
         logger.error("File existence check failed: %s", e)
         missing_files = []
         total_missing = 0
+    finally:
+        build_data["file_existence"]["duration"] = time.time() - step_start
     
     # Step 4: Create templates for missing files (if any)
     if total_missing > 0:
         step += 1
         print(f"\n{step}. Creating templates for missing files...")
+        step_start = time.time()
         try:
             created_count = 0
             for file_path in missing_files:
@@ -365,16 +379,20 @@ def main():
             print(f"✓ Created {created_count} template files")
         except Exception as e:
             logger.error("Template creation failed: %s", e)
+        finally:
+            build_data["template_creation"]["duration"] = time.time() - step_start
     
     # Step 5: Test basic framework
     step += 1
     print(f"\n{step}. Testing basic framework...")
+    step_start = time.time()
     try:
         basic_ok = test_basic_build()
         build_data["build_testing"]["basic_passed"] = basic_ok
         
         if not basic_ok:
             print("⚠️  Basic framework has issues. Please fix before testing modules.")
+            build_data["total_duration"] = time.time() - overall_start_time
             return _generate_exit_code(build_data)
     except Exception as e:
         logger.error("Basic build test failed: %s", e)
@@ -391,10 +409,13 @@ def main():
         logger.error("Full build test failed: %s", e)
         full_ok = False
         build_data["build_testing"]["full_passed"] = False
+    finally:
+        build_data["build_testing"]["duration"] = time.time() - step_start
     
     # Step 7: Generate build report
     step += 1
     print(f"\n{step}. Generating build report...")
+    build_data["total_duration"] = time.time() - overall_start_time
     _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
                            len(style_files), len(module_files), total_missing, missing_files)
 
@@ -413,6 +434,19 @@ def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok,
     print(f"Missing files: {total_missing} (templates created)")
     print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
     print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
+    
+    # Add timing information
+    total_duration = build_data.get("total_duration", 0)
+    print(f"\nPerformance Metrics:")
+    print(f"Total execution time: {total_duration:.3f}s")
+    if "latex_validation" in build_data and "duration" in build_data["latex_validation"]:
+        print(f"LaTeX validation: {build_data['latex_validation']['duration']:.3f}s")
+    if "file_scanning" in build_data and "duration" in build_data["file_scanning"]:
+        print(f"File scanning: {build_data['file_scanning']['duration']:.3f}s")
+    if "file_existence" in build_data and "duration" in build_data["file_existence"]:
+        print(f"File existence check: {build_data['file_existence']['duration']:.3f}s")
+    if "build_testing" in build_data and "duration" in build_data["build_testing"]:
+        print(f"Build testing: {build_data['build_testing']['duration']:.3f}s")
 
     if missing_files:
         print("\nNEXT STEPS:")

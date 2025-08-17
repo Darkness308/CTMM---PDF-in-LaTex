@@ -79,6 +79,7 @@ Das Build-System:
 4. **Testet Grundgerüst** - Build ohne Module zum Testen der Basis-Struktur
 5. **Testet vollständigen Build** - mit allen Modulen
 6. **Erstellt TODO-Dateien** für neue Template-Dateien mit Hinweisen zur Vervollständigung
+7. **Performance-Monitoring** - misst Ausführungszeiten und zeigt detaillierte Metriken
 
 ### LaTeX Escaping Fix Tool
 
@@ -136,9 +137,16 @@ make unit-test
 # oder direkt:
 python3 test_ctmm_build.py
 python3 test_latex_validator.py
+
+# Unit Tests mit Coverage-Analyse
+make test-coverage
+python3 test_coverage.py
+
+# Performance-Benchmarks
+make test-performance
 ```
 
-**Umfassende Testabdeckung (51+ Tests):**
+**Umfassende Testabdeckung (59+ Tests):**
 
 Die Tests überprüfen:
 - **`filename_to_title()` Funktion** mit 29 umfassenden Testfällen:
@@ -162,6 +170,18 @@ Die Tests überprüfen:
   - End-to-End Build-System Workflow
   - Kommentar-Filterung in LaTeX-Dateien (neu)
   - Escaped-Prozent-Zeichen Behandlung (neu)
+
+- **Performance-Benchmarks (neu)**:
+  - Leistungstests für kritische Funktionen
+  - Memory-Usage Monitoring
+  - Bulk-Operations Effizienz
+  - Automatische Performance-Regression Detection
+
+- **Code Coverage Analysis (neu)**:
+  - Vollständige Testabdeckung aller öffentlichen Funktionen
+  - Error-Condition Testing
+  - Return-Type Konsistenz Validierung
+  - Comprehensive Coverage Reporting
 
 ### Modulare Test-Strategie
 

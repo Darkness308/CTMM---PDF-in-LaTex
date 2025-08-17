@@ -72,9 +72,19 @@ test-unit:
 
 # Run unit tests
 unit-test:
-	@echo "Running unit tests..."
+	@echo "Running comprehensive unit tests..."
 	python3 test_ctmm_build.py
 	python3 test_latex_validator.py
+
+# Run unit tests with coverage analysis
+test-coverage:
+	@echo "Running unit tests with coverage analysis..."
+	python3 test_coverage.py
+
+# Run performance benchmarks
+test-performance:
+	@echo "Running performance benchmarks..."
+	python3 -c "import test_ctmm_build; import unittest; suite = unittest.TestLoader().loadTestsFromTestCase(test_ctmm_build.TestPerformanceBenchmarks); unittest.TextTestRunner(verbosity=2).run(suite)"
 
 # Clean build artifacts
 clean:
@@ -115,7 +125,9 @@ help:
 	@echo "  analyze       - Run detailed module analysis"
 	@echo "  test          - Quick test of build system + unit tests"
 	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
-	@echo "  unit-test     - Run unit tests for Python functions"
+	@echo "  unit-test     - Run comprehensive unit tests for Python functions"
+	@echo "  test-coverage - Run unit tests with coverage analysis"
+	@echo "  test-performance - Run performance benchmarks"
 	@echo "  clean         - Remove build artifacts"
 	@echo "  deps          - Install Python dependencies"
 	@echo "  comprehensive - Run complete workflow validation"
