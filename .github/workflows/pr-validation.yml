@@ -17,15 +17,24 @@ jobs:
         
     - name: Check for file changes
       id: changes
+      timeout-minutes: 5
       run: |
         # Get the base and head commits
         BASE_SHA="${{ github.event.pull_request.base.sha }}"
         HEAD_SHA="${{ github.event.pull_request.head.sha }}"
         
-        # Count changed files
-        CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA | wc -l)
-        ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}')
-        DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}')
+        # Validate that we have valid SHAs
+        if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
+          echo "❌ Error: Unable to get base or head SHA"
+          echo "BASE_SHA: $BASE_SHA"
+          echo "HEAD_SHA: $HEAD_SHA"
+          exit 1
+        fi
+        
+        # Count changed files with error handling
+        CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA 2>/dev/null | wc -l || echo "0")
+        ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA 2>/dev/null | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}' || echo "0")
+        DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA 2>/dev/null | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}' || echo "0")
         
         echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
         echo "added_lines=$ADDED_LINES" >> $GITHUB_OUTPUT
@@ -37,9 +46,21 @@ jobs:
         echo "- Deleted lines: $DELETED_LINES"
         
     - name: Validate PR has content
+      timeout-minutes: 5
       run: |
         CHANGED_FILES="${{ steps.changes.outputs.changed_files }}"
         ADDED_LINES="${{ steps.changes.outputs.added_lines }}"
+        DELETED_LINES="${{ steps.changes.outputs.deleted_lines }}"
+        
+        # Convert to numbers with fallback
+        CHANGED_FILES=${CHANGED_FILES:-0}
+        ADDED_LINES=${ADDED_LINES:-0}
+        DELETED_LINES=${DELETED_LINES:-0}
+        
+        echo "🔍 Validating PR content..."
+        echo "- Changed files: $CHANGED_FILES"
+        echo "- Added lines: $ADDED_LINES"
+        echo "- Deleted lines: $DELETED_LINES"
         
         if [ "$CHANGED_FILES" -eq 0 ]; then
           echo "❌ Error: This PR has no file changes."
@@ -48,16 +69,25 @@ jobs:
           exit 1
         fi
         
-        if [ "$ADDED_LINES" -eq 0 ] && [ "${{ steps.changes.outputs.deleted_lines }}" -eq 0 ]; then
+        if [ "$ADDED_LINES" -eq 0 ] && [ "$DELETED_LINES" -eq 0 ]; then
           echo "❌ Error: This PR has no content changes (0 additions, 0 deletions)."
           echo "Please include meaningful changes for Copilot to review."
           exit 1
         fi
         
-        echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added"
+        echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added, $DELETED_LINES line(s) deleted"
+        
     - name: Run CTMM build check
+      timeout-minutes: 10
       run: |
-        python3 ctmm_build.py
+        echo "🛠️  Running CTMM build validation with enhanced error handling..."
+        ./ci_robustness_helper.sh run-build-system
+        
+    - name: Enhanced PR validation
+      timeout-minutes: 5
+      run: |
+        echo "🔍 Running enhanced PR validation..."
+        ./ci_robustness_helper.sh validate-pr
     - name: Comment on PR if validation fails
       if: failure()
       uses: actions/github-script@v7

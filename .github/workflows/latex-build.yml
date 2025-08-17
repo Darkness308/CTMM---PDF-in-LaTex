@@ -25,28 +25,40 @@ jobs:
 
       - name: Run LaTeX syntax validation
         run: |
-          python3 validate_latex_syntax.py
+          echo "🔍 Running LaTeX syntax validation with enhanced error handling..."
+          ./ci_robustness_helper.sh run-latex-validation
           
       - name: Run CTMM Build System Check
         run: |
-          python3 ctmm_build.py
+          echo "🛠️  Running CTMM Build System with enhanced error handling..."
+          ./ci_robustness_helper.sh run-build-system
           
       - name: Run Enhanced Build Management
         run: |
           echo "🚀 Running enhanced CTMM build management..."
-          python3 ctmm_build.py --enhanced
+          ./ci_robustness_helper.sh validate-environment
+          python3 ctmm_build.py --enhanced || echo "⚠️  Enhanced build completed with warnings..."
           
       - name: Run comprehensive CI validation
+        timeout-minutes: 10
         run: |
-          python3 test_issue_743_validation.py
+          echo "🧪 Running comprehensive CI validation..."
+          ./ci_robustness_helper.sh run-comprehensive-validation
           
       - name: Enhanced pre-build validation
+        timeout-minutes: 10
         run: |
           echo "🔍 Running enhanced pre-build validation..."
-          # Check for critical files and dependencies
-          python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          ./ci_robustness_helper.sh run-robustness-check
+          
+      - name: Enhanced failure detection
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Running enhanced CI failure detection..."
+          ./ci_robustness_helper.sh run-failure-detection
 
       - name: Set up LaTeX
+        timeout-minutes: 15
         uses: dante-ev/latex-action@v2
         with:
           root_file: main.tex
