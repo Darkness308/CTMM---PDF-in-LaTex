@@ -55,7 +55,21 @@ def check_file_changes(base_branch="main"):
     # Batch git rev-parse for all base_options at once
     valid_bases = []
     # Only check base_options that are present in available_branches or match base_branch
-    filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
+    available_branches_set = set(available_branches)
+    
+    # Try different base branch options
+    base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
+    actual_base = None
+    
+    for base_option in base_options:
+        if base_option in available_branches_set or any(base_option in branch for branch in available_branches) or base_option == base_branch:
+            success, _, _ = run_command(f"git rev-parse {base_option}")
+            if success:
+                actual_base = base_option
+    # Batch git rev-parse for all base_options at once
+    valid_bases = []
+    # Only check base_options that are present in available_branches or match base_branch
+    filtered_options = [opt for opt in base_options if opt in available_branches_set or any(opt in branch for branch in available_branches) or opt == base_branch]
     if filtered_options:
         # Run git rev-parse for all filtered options at once
         cmd = "git rev-parse " + " ".join(filtered_options)
