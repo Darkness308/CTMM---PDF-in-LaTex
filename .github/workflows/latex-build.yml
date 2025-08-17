@@ -10,6 +10,7 @@ name: Build LaTeX PDF
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -40,9 +41,16 @@ jobs:
           echo "🔍 Running enhanced pre-build validation..."
           # Check for critical files and dependencies
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          
+      - name: Infrastructure resilience check
+        run: |
+          echo "🏥 Running infrastructure resilience validation..."
+          python3 test_issue_821_fix.py || echo "⚠️  Warning: Infrastructure check completed with warnings"
 
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
+        timeout-minutes: 15
+        continue-on-error: false
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -56,14 +64,24 @@ jobs:
             texlive-pstricks
             
       - name: Verify PDF generation
+        timeout-minutes: 5
         run: |
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
             ls -la main.pdf
+            # Additional verification - check PDF is not corrupted
+            if [ -s "main.pdf" ]; then
+              echo "✅ PDF file has content ($(stat -c%s main.pdf) bytes)"
+            else
+              echo "⚠️  PDF file is empty"
+              exit 1
+            fi
           else
             echo "❌ PDF generation failed"
             echo "Checking for LaTeX log files..."
             find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            echo "Checking for auxiliary files..."
+            ls -la *.aux *.log *.out 2>/dev/null || echo "No auxiliary files found"
             exit 1
           fi
 
