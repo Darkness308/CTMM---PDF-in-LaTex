@@ -211,6 +211,8 @@ def main():
             print("❌ No file changes detected - Copilot cannot review empty PRs")
             print("   💡 To fix: Add meaningful changes to files (documentation, code, etc.)")
             print("   📚 See existing ISSUE_*_RESOLUTION.md files for examples")
+            print("   🔍 Pattern: This issue follows the same pattern as #409, #673, #708, #731, #759")
+            print("   📝 Resolution: Create ISSUE_[number]_RESOLUTION.md and document the solution")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
             print("❌ No content changes detected - PR appears to be empty")
