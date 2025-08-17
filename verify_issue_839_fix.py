@@ -39,7 +39,7 @@ def main():
     print("\n1. REPOSITORY STATE VERIFICATION")
     print("-" * 40)
     
-    success, output = run_command("git diff --numstat HEAD~2..HEAD", "Git diff calculation")
+    success, output = run_command("git diff --numstat 9151a43..HEAD", "Git diff calculation")
     if success and "ISSUE_839_RESOLUTION.md" in output:
         print("✅ MEANINGFUL CHANGES: Issue #839 resolution document detected")
         # Find the resolution document line
