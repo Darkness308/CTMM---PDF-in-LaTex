@@ -66,7 +66,12 @@ def check_file_changes(base_branch="main"):
             for h, base_opt in zip(hashes, filtered_options):
                 if h.strip() and not h.startswith("fatal:"):
                     actual_base = base_opt
-                    break
+        # Check if base_option exists in available_branches or matches base_branch
+        if any(base_option in branch for branch in available_branches) or base_option == base_branch:
+            success, _, _ = run_command(f"git rev-parse {base_option}")
+            if success:
+                actual_base = base_option
+                break
     
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
