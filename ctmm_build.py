@@ -83,46 +83,43 @@ def create_template(file_path):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
-        content = f"""% {path.name} - CTMM Style Package
-% TODO: Add content for this style package
-
-\\NeedsTeXFormat{{LaTeX2e}}
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
-
-% TODO: Add package dependencies and commands here
-
-% End of package
-"""
+        content = ("% " + path.name + " - CTMM Style Package\n"
+                  "% TODO: Add content for this style package\n"
+                  "\n"
+                  "\\NeedsTeXFormat{LaTeX2e}\n"
+                  "\\ProvidesPackage{" + path.stem + "}[2024/01/01 CTMM " + path.stem + " package]\n"
+                  "\n"
+                  "% TODO: Add package dependencies and commands here\n"
+                  "\n"
+                  "% End of package\n")
     else:
-        content = f"""% {path.name} - CTMM Module
-% TODO: Add content for this module
-
-\\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
-
-\\begin{{center}}
-\\textit{{This module is under development. Content will be added soon.}}
-\\end{{center}}
-
-% TODO: Complete implementation
-"""
+        content = ("% " + path.name + " - CTMM Module\n"
+                  "% TODO: Add content for this module\n"
+                  "\n"
+                  "\\section{TODO: " + filename_to_title(path.stem) + "}\n"
+                  "\\label{sec:" + path.stem + "}\n"
+                  "\n"
+                  "\\begin{center}\n"
+                  "\\textit{This module is under development. Content will be added soon.}\n"
+                  "\\end{center}\n"
+                  "\n"
+                  "% TODO: Complete implementation\n")
 
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
     # Create TODO file
-    todo_path = path.parent / f"TODO_{path.stem}.md"
-    todo_content = f"""# TODO: Complete {path.name}
-
-**Status:** Template created, needs content
-
-## Tasks
-- [ ] Add proper content
-- [ ] Review and test functionality
-- [ ] Update documentation
-
-Created by CTMM Build System
-"""
+    todo_path = path.parent / ("TODO_" + path.stem + ".md")
+    todo_content = ("# TODO: Complete " + path.name + "\n"
+                   "\n"
+                   "**Status:** Template created, needs content\n"
+                   "\n"
+                   "## Tasks\n"
+                   "- [ ] Add proper content\n"
+                   "- [ ] Review and test functionality\n"
+                   "- [ ] Update documentation\n"
+                   "\n"
+                   "Created by CTMM Build System\n")
     with open(todo_path, 'w', encoding='utf-8') as f:
         f.write(todo_content)
 
