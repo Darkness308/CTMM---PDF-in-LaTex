@@ -296,7 +296,10 @@ def main():
         print("\\n❌ Validation failed - Issue #721 resolution needs refinement")
         sys.exit(1)
     else:
-        print("\\n✅ Validation successful - Issue #721 comprehensively resolved")
+        print("\n❌ Validation failed - Issue #721 resolution needs refinement")
+        sys.exit(1)
+    else:
+        print("\n✅ Validation successful - Issue #721 comprehensively resolved")
         sys.exit(0)
 
 if __name__ == "__main__":
