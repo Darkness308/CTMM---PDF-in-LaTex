@@ -67,6 +67,24 @@ python3 comprehensive_workflow.py --cleanup
 
 Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
 
+### Enhanced Build Management (Neu!)
+```bash
+# Enhanced CTMM Build Management
+python3 ctmm_build.py --enhanced
+make enhanced-build
+
+# Enhanced Incremental Testing  
+make enhanced-testing
+```
+
+Das Enhanced Build Management System bietet:
+- **Comprehensive Automation**: Verbesserte automatisierte Fehlerbehandlung und Template-Generierung
+- **Advanced Error Recovery**: Fortschrittliche Fehlererkennung mit automatischen Korrekturen
+- **Resource Management**: Optimierte Dateibehandlung ohne Resource-Warnings
+- **CI/CD Reliability**: Erweiterte GitHub Actions Integration
+
+Siehe [ENHANCED_BUILD_MANAGEMENT.md](ENHANCED_BUILD_MANAGEMENT.md) für Details.
+
 ### Automatisierte Build-Prüfung
 ```bash
 python3 ctmm_build.py

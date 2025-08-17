@@ -180,10 +180,19 @@ class LaTeXValidator:
             logger.info(f"Validating {tex_file}")
             is_valid, issues, cleaned_content = self.validate_file(tex_file)
             
+            # Properly handle file reading to avoid resource warnings
+            try:
+                with open(tex_file, 'r', encoding='utf-8', errors='replace') as f:
+                    original_content = f.read()
+                original_size = len(original_content)
+            except Exception as e:
+                logger.warning(f"Could not read file size for {tex_file}: {e}")
+                original_size = 0
+            
             results[str(tex_file)] = {
                 'valid': is_valid,
                 'issues': issues,
-                'original_size': len(open(tex_file, 'r', encoding='utf-8', errors='replace').read()),
+                'original_size': original_size,
                 'cleaned_size': len(cleaned_content)
             }
             
