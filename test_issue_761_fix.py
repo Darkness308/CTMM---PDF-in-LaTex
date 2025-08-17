@@ -252,20 +252,27 @@ def main():
         ("Build System Error Recovery", test_build_system_error_recovery)
     ]
     
-    passed_tests = 0
-    total_tests = len(tests)
+    test_results = []
     
     for test_name, test_func in tests:
         try:
-            if test_func():
-                passed_tests += 1
+            result = test_func()
+            test_results.append(result)
         except Exception as e:
             print(f"❌ {test_name}: Exception occurred: {e}")
+            test_results.append(False)
     
     print("\n" + "=" * 70)
     print("VALIDATION SUMMARY")
     print("=" * 70)
-    print(f"Tests passed: {passed_tests}/{total_tests}")
+    
+    for (test_name, _), result in zip(tests, test_results):
+        status = "✅ PASS" if result else "❌ FAIL"
+        print(f"{status} {test_name}")
+    
+    passed_tests = sum(test_results)
+    total_tests = len(test_results)
+    print(f"\nTests passed: {passed_tests}/{total_tests}")
     
     if passed_tests == total_tests:
         print("🎉 ALL TESTS PASSED! CI pipeline robustness validated.")
