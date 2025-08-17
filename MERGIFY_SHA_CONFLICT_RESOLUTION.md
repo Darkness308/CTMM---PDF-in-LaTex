@@ -1,7 +1,7 @@
-# Mergify SHA Conflict Resolution - Issues #650 & #661
+# Mergify SHA Conflict Resolution - Issues #650, #661 & #829
 
 ## Problem
-This document records the resolution of Mergify SHA conflicts reported in issues #650 and #661.
+This document records the resolution of Mergify SHA conflicts reported in issues #650, #661, and #829.
 
 ### Issue #650 (Previous Conflict)
 **Conflict Details:**
@@ -9,10 +9,17 @@ This document records the resolution of Mergify SHA conflicts reported in issues
 - Mergify cannot evaluate rules when multiple PRs share the same head commit SHA
 - Both PRs have `mergeable_state="dirty"` and `mergeable=false`
 
-### Issue #661 (Current Conflict)
+### Issue #661 (Previous Conflict)
 **Conflict Details:**
 - This PR conflicts with PR #570 with the same head commit SHA
 - Mergify cannot evaluate rules on this PR due to SHA conflict
+- Need to create unique SHA to resolve conflict
+
+### Issue #829 (Current Conflict)
+**Conflict Details:**
+- This PR conflicts with PR #570 ("jetzt") both have head commit SHA: `67ecd0ee372fed5a53d00b4358c3bd5dc9d5f298`
+- Mergify cannot evaluate rules when multiple PRs share the same head commit SHA
+- Both PRs point to the same main branch commit, creating ambiguity for rule evaluation
 - Need to create unique SHA to resolve conflict
 
 ## Root Cause
@@ -35,14 +42,21 @@ Create a new commit with a different SHA to allow Mergify to distinguish between
 - New unique SHA: `c210fad73d7f8e88e2f0b1a4c9e6d2a7b5f8e3c0`
 - Mergify can now evaluate rules for this PR independently
 
+### Issue #829
+🔄 **IN PROGRESS** - Creating new commit to resolve SHA conflict with PR #570
+- Current conflicting SHA: `67ecd0ee372fed5a53d00b4358c3bd5dc9d5f298`
+- New unique SHA: (to be updated after commit)
+- Solution: Create unique commit to allow Mergify rule evaluation
+
 ## Impact
 - Mergify can now process rules for both resolved PRs
-- Conflicting PRs (#381, #570) remain unaffected
+- Conflicting PRs (#381, #570) remain unaffected 
 - All existing functionality preserved
 - Build system continues to work correctly
 - Issue #661 SHA conflict resolved
+- Issue #829 SHA conflict in progress
 
 ---
-**Issue References:** #650, #661  
-**Resolution Dates:** #650 - 2025-08-15, #661 - 2025-08-16  
+**Issue References:** #650, #661, #829  
+**Resolution Dates:** #650 - 2025-08-15, #661 - 2025-08-16, #829 - 2025-08-17  
 **Resolution Method:** SHA differentiation through new commits
