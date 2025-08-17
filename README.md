@@ -138,17 +138,19 @@ python3 test_ctmm_build.py
 python3 test_latex_validator.py
 ```
 
-**Umfassende Testabdeckung (51+ Tests):**
+**Umfassende Testabdeckung (54+ Tests):**
 
 Die Tests überprüfen:
-- **`filename_to_title()` Funktion** mit 29 umfassenden Testfällen:
+- **`filename_to_title()` Funktion** mit 31 umfassenden Testfällen:
   - Grundlegende Separator-Konvertierung (Unterstriche, Bindestriche)
   - Deutsche Umlaute und Sonderzeichen
   - Numerische Präfixe und realistische Therapie-Dateinamen
   - Edge Cases (lange Dateinamen, mehrfache Separatoren, Leerzeichen)
+  - **Therapie-spezifische Edge Cases** (BPD, PTSD, ADHD Abkürzungen, Versionsnummern)
+  - **Robustheitstests** (sehr lange Namen, gemischte Groß-/Kleinschreibung)
   - Robustheit und Fehlerbehandlung
 
-- **Build-System Kernfunktionen** mit 15+ Testfällen:
+- **Build-System Kernfunktionen** mit 16+ Testfällen:
   - `scan_references()` - LaTeX-Referenzen scannen mit Kommentar-Filterung
   - `check_missing_files()` - Dateien-Existenz-Prüfung
   - `create_template()` - Template-Erstellung für fehlende Dateien

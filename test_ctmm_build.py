@@ -155,6 +155,39 @@ class TestFilenameToTitle(unittest.TestCase):
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
+    def test_therapy_specific_edge_cases(self):
+        """Test edge cases specific to CTMM therapeutic module naming."""
+        test_cases = [
+            ("ctmm_module_v2", "Ctmm Module V2"),                    # Version numbers
+            ("bpd_worksheet_revised", "Bpd Worksheet Revised"),      # Mental health abbreviations  
+            ("trauma_ptsd_coping", "Trauma Ptsd Coping"),            # PTSD abbreviation
+            ("adhd_focus_training", "Adhd Focus Training"),          # ADHD abbreviation
+            ("couples_therapy_101", "Couples Therapy 101"),          # Course numbers
+            ("self_care_checklist", "Self Care Checklist"),          # Hyphenated concepts
+            ("trigger_warning_info", "Trigger Warning Info"),        # Important therapeutic terms
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
+    def test_robustness_edge_cases(self):
+        """Test robustness with unusual but valid filenames."""
+        test_cases = [
+            ("single", "Single"),                                    # Single word
+            ("a_b_c_d_e", "A B C D E"),                             # Many short words
+            ("very_long_descriptive_therapeutic_module_name_for_comprehensive_testing", 
+             "Very Long Descriptive Therapeutic Module Name For Comprehensive Testing"),  # Very long name
+            ("123_numbered_session", "123 Numbered Session"),       # Leading numbers
+            ("mixed_Case_Input", "Mixed Case Input"),               # Mixed case input
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
 
 class TestCTMMBuildSystemIntegration(unittest.TestCase):
     """Integration tests for CTMM Build System functions."""
@@ -651,6 +684,36 @@ class TestBuildSystemIntegration(unittest.TestCase):
         # Test validate_latex_files return type
         result = ctmm_build.validate_latex_files()
         self.assertIsInstance(result, bool)
+
+    def test_get_build_summary_function(self):
+        """Test the get_build_summary function for structured reporting."""
+        # Create sample build_data
+        sample_build_data = {
+            "latex_validation": {"passed": True, "errors": []},
+            "file_scanning": {"style_files": ["style1.sty"], "module_files": ["mod1.tex", "mod2.tex"]},
+            "file_existence": {"missing_files": [], "total_missing": 0},
+            "template_creation": {"created_count": 0, "created_files": []},
+            "build_testing": {"basic_passed": True, "full_passed": True}
+        }
+        
+        summary = ctmm_build.get_build_summary(sample_build_data)
+        
+        # Test structure and content
+        self.assertIsInstance(summary, dict)
+        self.assertIn("status", summary)
+        self.assertIn("latex_validation", summary)
+        self.assertIn("files_scanned", summary)
+        self.assertIn("missing_files", summary)
+        self.assertIn("templates_created", summary)
+        self.assertIn("basic_build", summary)
+        self.assertIn("full_build", summary)
+        self.assertIn("error_count", summary)
+        
+        # Test values
+        self.assertEqual(summary["status"], "SUCCESS")
+        self.assertEqual(summary["files_scanned"], 3)  # 1 style + 2 modules
+        self.assertEqual(summary["missing_files"], 0)
+        self.assertEqual(summary["error_count"], 0)
 
     def test_error_resilience(self):
         """Test that functions handle errors gracefully."""

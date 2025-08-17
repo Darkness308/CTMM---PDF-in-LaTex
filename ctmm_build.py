@@ -425,6 +425,20 @@ def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok,
         print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
 
 
+def get_build_summary(build_data):
+    """Generate a structured build summary for external tools."""
+    return {
+        "status": "SUCCESS" if _generate_exit_code(build_data) == 0 else "FAILURE",
+        "latex_validation": build_data["latex_validation"]["passed"],
+        "files_scanned": len(build_data["file_scanning"]["style_files"]) + len(build_data["file_scanning"]["module_files"]),
+        "missing_files": build_data["file_existence"]["total_missing"],
+        "templates_created": build_data["template_creation"]["created_count"],
+        "basic_build": build_data["build_testing"]["basic_passed"],
+        "full_build": build_data["build_testing"]["full_passed"],
+        "error_count": len(build_data["latex_validation"]["errors"])
+    }
+
+
 def _generate_exit_code(build_data):
     """Generate appropriate exit code based on build results."""
     basic_passed = build_data["build_testing"]["basic_passed"]
