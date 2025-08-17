@@ -121,47 +121,45 @@ class CTMMBuildSystem:
             
             if file_path.endswith('.sty'):
                 # Create style file template
-                template_content = f"""% {path.name} - CTMM Style Package
-% TODO: Add content for this style package
-% Created automatically by CTMM Build System
-
-\\NeedsTeXFormat{{LaTeX2e}}[1995/12/01]
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
-
-% TODO: Add package dependencies here
-% \\RequirePackage{{xcolor}}
-% \\RequirePackage{{tikz}}
-
-% TODO: Add color definitions here
-% \\definecolor{{ctmmBlue}}{{RGB}}{{52, 152, 219}}
-
-% TODO: Add commands and environments here
-% \\newcommand{{\\exampleCommand}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
-
-% End of package - TODO: Complete implementation
-"""
+                template_content = ("% " + path.name + " - CTMM Style Package\n"
+                                   "% TODO: Add content for this style package\n"
+                                   "% Created automatically by CTMM Build System\n"
+                                   "\n"
+                                   "\\NeedsTeXFormat{LaTeX2e}[1995/12/01]\n"
+                                   "\\ProvidesPackage{" + path.stem + "}[2024/01/01 CTMM " + path.stem + " package - TODO: Add content]\n"
+                                   "\n"
+                                   "% TODO: Add package dependencies here\n"
+                                   "% \\RequirePackage{xcolor}\n"
+                                   "% \\RequirePackage{tikz}\n"
+                                   "\n"
+                                   "% TODO: Add color definitions here\n"
+                                   "% \\definecolor{ctmmBlue}{RGB}{52, 152, 219}\n"
+                                   "\n"
+                                   "% TODO: Add commands and environments here\n"
+                                   "% \\newcommand{\\exampleCommand}[1]{\\textcolor{ctmmBlue}{#1}}\n"
+                                   "\n"
+                                   "% End of package - TODO: Complete implementation\n")
             else:
                 # Create module file template  
-                template_content = f"""% {path.name} - CTMM Module
-% TODO: Add content for this module
-% Created automatically by CTMM Build System
-
-\\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
-
-% TODO: Add module content here
-\\begin{{center}}
-\\textit{{This module is under development. Content will be added soon.}}
-\\end{{center}}
-
-% TODO: Add subsections, content, and functionality
-% Example:
-% \\subsection{{Introduction}}
-% \\subsection{{Instructions}}
-% \\subsection{{Exercises}}
-
-% End of module - TODO: Complete implementation
-"""
+                template_content = ("% " + path.name + " - CTMM Module\n"
+                                   "% TODO: Add content for this module\n"
+                                   "% Created automatically by CTMM Build System\n"
+                                   "\n"
+                                   "\\section{TODO: " + filename_to_title(path.stem) + "}\n"
+                                   "\\label{sec:" + path.stem + "}\n"
+                                   "\n"
+                                   "% TODO: Add module content here\n"
+                                   "\\begin{center}\n"
+                                   "\\textit{This module is under development. Content will be added soon.}\n"
+                                   "\\end{center}\n"
+                                   "\n"
+                                   "% TODO: Add subsections, content, and functionality\n"
+                                   "% Example:\n"
+                                   "% \\subsection{Introduction}\n"
+                                   "% \\subsection{Instructions}\n"
+                                   "% \\subsection{Exercises}\n"
+                                   "\n"
+                                   "% End of module - TODO: Complete implementation\n")
             
             with open(path, 'w', encoding='utf-8') as f:
                 f.write(template_content)
@@ -169,24 +167,24 @@ class CTMMBuildSystem:
             logger.info("Created template: %s", file_path)
             
             # Create TODO file
-            todo_path = path.parent / f"TODO_{path.stem}.md"
-            todo_content = f"""# TODO: Complete {path.name}
+            todo_path = path.parent / ("TODO_" + path.stem + ".md")
+            todo_content = ("# TODO: Complete " + path.name + "\n"
+                           "\n"
+                           "## File: " + file_path + "\n"
+                           "**Status:** Template created, needs content\n"
+                           "\n"
+                           "## Description\n"
+                           "This file was automatically created by the CTMM Build System because it was referenced in main.tex but missing.\n"
+                           "\n"
+                           "## Tasks\n"
+                           "- [ ] Add proper content for this " + ('style package' if path.suffix == '.sty' else 'module') + "\n"
+                           "- [ ] Review and test functionality\n"
+                           "- [ ] Update documentation\n"
+                           "- [ ] Remove this TODO file when complete\n"
+                           "\n"
+                           "## Created\n"
+                           + (datetime.fromtimestamp(path.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S') if path.exists() else 'Just now') + " by CTMM Build System\n")
 
-## File: {file_path}
-**Status:** Template created, needs content
-
-## Description
-This file was automatically created by the CTMM Build System because it was referenced in main.tex but missing.
-
-## Tasks
-- [ ] Add proper content for this {'style package' if path.suffix == '.sty' else 'module'}
-- [ ] Review and test functionality  
-- [ ] Update documentation
-- [ ] Remove this TODO file when complete
-
-## Created
-{datetime.fromtimestamp(path.stat().st_mtime).strftime('%Y-%m-%d %H:%M:%S') if path.exists() else 'Just now'} by CTMM Build System
-"""
             with open(todo_path, 'w', encoding='utf-8') as f:
                 f.write(todo_content)
                 
