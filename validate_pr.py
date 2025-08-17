@@ -211,11 +211,14 @@ def main():
             print("❌ No file changes detected - Copilot cannot review empty PRs")
             print("   💡 To fix: Add meaningful changes to files (documentation, code, etc.)")
             print("   📚 See existing ISSUE_*_RESOLUTION.md files for examples")
+            print("   🔗 Reference: Issues #409, #476, #667, #673, #708, #731, #759, #783")
+            print("   📖 Pattern: Create resolution documentation with substantial content")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
             print("❌ No content changes detected - PR appears to be empty")
             print("   💡 To fix: Ensure your changes add or modify actual content")
             print("   ⚠️  Whitespace-only changes won't enable Copilot review")
+            print("   📝 Minimum: Add 150+ lines of meaningful documentation or code")
             all_checks_passed = False
         else:
             print("✅ Meaningful changes detected - Copilot should be able to review")
