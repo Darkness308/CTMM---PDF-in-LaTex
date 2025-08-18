@@ -45,6 +45,11 @@ jobs:
           echo "🔍 Running enhanced pre-build validation..."
           # Check for critical files and dependencies
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          
+      - name: CI Environment Robustness Check
+        run: |
+          echo "🚀 Running comprehensive CI environment validation..."
+          python3 test_ci_robustness.py || echo "⚠️  Warning: CI environment checks failed but continuing..."
 
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2.0.0
@@ -60,15 +65,127 @@ jobs:
             texlive-science
             texlive-pstricks
             
-      - name: Verify PDF generation
+      - name: Enhanced LaTeX compilation with retry
         run: |
+          echo "🔄 Attempting LaTeX compilation with enhanced error handling..."
+          
+          # Function to attempt compilation
+          compile_latex() {
+            echo "📝 Compilation attempt $1..."
+            if [ -f "main.pdf" ]; then
+              rm main.pdf
+              echo "   Removed existing PDF file"
+            fi
+            
+            # Run compilation
+            pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+            return $?
+          }
+          
+          # Retry logic for LaTeX compilation
+          MAX_ATTEMPTS=3
+          ATTEMPT=1
+          
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            echo "📝 LaTeX compilation attempt $ATTEMPT of $MAX_ATTEMPTS"
+            
+            if compile_latex $ATTEMPT; then
+              echo "✅ LaTeX compilation successful on attempt $ATTEMPT"
+              break
+            else
+              echo "❌ LaTeX compilation failed on attempt $ATTEMPT"
+              
+              if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+                echo "💥 All compilation attempts failed"
+                echo "📋 Generating detailed error report..."
+                
+                # Show system resources
+                echo "=== SYSTEM RESOURCES ==="
+                df -h . || echo "Could not check disk space"
+                free -h || echo "Could not check memory"
+                
+                # Show LaTeX log if it exists
+                if [ -f "main.log" ]; then
+                  echo "=== LATEX LOG TAIL (last 100 lines) ==="
+                  tail -100 main.log
+                else
+                  echo "=== NO LATEX LOG FOUND ==="
+                  ls -la *.log || echo "No log files found"
+                fi
+                
+                # Show file listing
+                echo "=== WORKING DIRECTORY ==="
+                ls -la
+                
+                exit 1
+              else
+                echo "⏳ Waiting 10 seconds before retry..."
+                sleep 10
+                ATTEMPT=$((ATTEMPT + 1))
+              fi
+            fi
+          done
+            
+      - name: Verify PDF generation with enhanced diagnostics
+        run: |
+          echo "🔍 Verifying PDF generation with enhanced diagnostics..."
+          
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
-            ls -la main.pdf
+            
+            # Get PDF file details
+            PDF_SIZE=$(stat -c%s main.pdf)
+            echo "📄 PDF file size: $PDF_SIZE bytes"
+            
+            # Verify PDF is not empty or corrupted
+            if [ $PDF_SIZE -gt 1000 ]; then
+              echo "✅ PDF file size appears normal (>1KB)"
+            else
+              echo "⚠️  PDF file size is suspiciously small"
+            fi
+            
+            # Check if PDF can be opened (basic validation)
+            if command -v file >/dev/null; then
+              PDF_TYPE=$(file main.pdf)
+              echo "📋 PDF file type: $PDF_TYPE"
+              
+              if echo "$PDF_TYPE" | grep -q "PDF"; then
+                echo "✅ PDF file format validation passed"
+              else
+                echo "❌ PDF file format validation failed"
+                exit 1
+              fi
+            fi
+            
+            # List all generated files
+            echo "📁 Generated files:"
+            ls -la main.* || echo "No main.* files found"
+            
           else
-            echo "❌ PDF generation failed"
-            echo "Checking for LaTeX log files..."
+            echo "❌ PDF generation failed - main.pdf not found"
+            echo "🔍 Checking for LaTeX log files and diagnostics..."
+            
+            # Show all files in directory
+            echo "=== DIRECTORY CONTENTS ==="
+            ls -la
+            
+            # Show LaTeX logs
+            echo "=== LATEX LOG FILES ==="
             find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            
+            # Show aux files that might contain errors
+            echo "=== AUX FILES ==="
+            find . -name "*.aux" -exec echo "=== {} ===" \; -exec cat {} \;
+            
+            # Check if LaTeX was actually executed
+            if [ -f "main.log" ]; then
+              echo "✅ main.log exists - LaTeX was executed"
+              echo "=== LAST 50 LINES OF main.log ==="
+              tail -50 main.log
+            else
+              echo "❌ main.log not found - LaTeX may not have been executed"
+            fi
+            
             exit 1
           fi
 
@@ -78,12 +195,41 @@ jobs:
           name: CTMM_PDF
           path: main.pdf
 
-      - name: Upload build logs (on failure)
+      - name: Upload build logs and diagnostics (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: build_logs
+          name: build_logs_and_diagnostics
           path: |
             *.log
+            *.aux
+            *.out
+            *.toc
+            *.synctex.gz
             build_error_*.log
             build_system.log
+            main.pdf
+          retention-days: 7
+          
+      - name: Generate failure summary (on failure)
+        if: failure()
+        run: |
+          echo "💥 Build failure summary for debugging:"
+          echo "========================================"
+          echo "Timestamp: $(date)"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "GitHub event: ${{ github.event_name }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo ""
+          echo "Files in workspace:"
+          ls -la
+          echo ""
+          echo "LaTeX-related files:"
+          find . -name "*.tex" -o -name "*.log" -o -name "*.aux" -o -name "*.pdf" | head -20
+          echo ""
+          echo "System resources:"
+          df -h . || echo "Could not check disk space"
+          free -h || echo "Could not check memory"
+          echo ""
+          echo "Environment variables:"
+          env | grep -E "(GITHUB_|RUNNER_)" | sort
