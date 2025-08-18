@@ -189,7 +189,6 @@ def main():
     print("TEST SUMMARY")
     print("=" * 60)
     
-    for i, (test_name, _) in enumerate(tests):
     for (test_name, _), result in zip(tests, test_results):
         status = "✅ PASS" if result else "❌ FAIL"
         print(f"{status} {test_name}")
