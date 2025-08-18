@@ -103,7 +103,7 @@ class TestFilenameToTitle(unittest.TestCase):
         
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
-                result = ctmm_build.filename_to_title(input_name)
+                result = filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
 
