@@ -4,6 +4,26 @@
 
 The **Automated PR Merge and Build Testing** workflow provides a comprehensive solution for testing the integration of all open pull requests without affecting the main branch. This workflow creates a temporary test branch, merges all open PRs sequentially, and runs build validation after each merge.
 
+## Robustness and Reliability
+
+### 🛡️ **Enhanced Error Handling**
+- **HTTP Response Validation**: All GitHub API calls include HTTP status code checking
+- **Tool Validation**: Verifies that required tools (git, jq, curl) are available before execution
+- **Rate Limiting Protection**: Includes delays between API calls to prevent rate limiting
+- **Detailed Error Logging**: All operations include timestamps and comprehensive error details
+- **Graceful Failure Handling**: Continues processing other PRs even when individual PRs fail
+
+### 🔧 **Dependency Management**
+- **Explicit Dependencies**: Automatically installs jq and curl to ensure availability
+- **Python Dependencies**: Installs required Python packages (chardet, requests)
+- **Tool Verification**: Validates all required command-line tools before proceeding
+
+### 📊 **Enhanced Logging**
+- **Timestamped Logs**: All log entries include timestamps for better debugging
+- **Structured Output**: Separate log files for fetch, merge, build, and conflict operations
+- **Error Context**: Detailed context information for all failures
+- **Progress Tracking**: Clear progress indicators throughout the workflow
+
 ## Features
 
 ### 🔄 **Automated PR Processing**
@@ -17,6 +37,8 @@ The **Automated PR Merge and Build Testing** workflow provides a comprehensive s
 - Executes LaTeX syntax validation
 - Performs enhanced build management checks
 - Attempts full PDF generation for final validation
+- Includes robust error handling and timeout protection
+- Detailed logging with timestamps for all operations
 
 ### 📊 **Detailed Reporting**
 - Generates comprehensive test result summaries
@@ -29,6 +51,9 @@ The **Automated PR Merge and Build Testing** workflow provides a comprehensive s
 - Works only on temporary test branches
 - Includes automatic cleanup after completion
 - Handles external repository PRs safely
+- Validates all required tools before execution
+- Includes rate limiting protection for API calls
+- Enhanced error handling with detailed logging and timestamps
 
 ## Usage
 
@@ -214,21 +239,41 @@ test_results/
 - Check if there are actually open PRs in the repository
 - Verify the `max_prs` parameter isn't set too low
 - Ensure GitHub token has repository read permissions
+- Check workflow logs for HTTP response codes from GitHub API
+
+**API Request Failures**
+- Review HTTP status codes in the workflow logs
+- Check GitHub API rate limits and status
+- Verify GitHub token has appropriate permissions
+- Look for network connectivity issues in runner logs
+
+**Tool Dependency Issues**
+- The workflow now automatically installs jq and curl
+- Check the "Configure git and validate tools" step for tool validation results
+- Verify the Ubuntu runner has package manager access
 
 **Merge Conflicts**
 - Review individual PR merge logs for conflict details
 - Consider rebasing conflicting PRs manually
 - Check if PRs are based on outdated branches
+- Use the enhanced conflict logs with git status information
 
 **Build Failures**
 - Review individual PR build logs for error details
+- Check timestamps to understand when failures occurred
 - Verify PRs don't introduce LaTeX syntax errors
 - Check if PRs break CTMM build system requirements
+- Look for timeout issues in long-running builds
 
 **External Repository PRs**
 - External PRs are automatically skipped for security
 - This is expected behavior, not an error
 - Manual testing required for external contributions
+
+**Rate Limiting**
+- The workflow includes automatic rate limiting protection
+- Check for GitHub API rate limit headers in logs
+- Consider reducing `max_prs` for repositories with many open PRs
 
 ### Log Analysis
 

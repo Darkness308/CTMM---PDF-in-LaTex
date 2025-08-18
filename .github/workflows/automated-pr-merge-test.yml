@@ -43,11 +43,21 @@ jobs:
     - name: Install dependencies
       run: |
         pip install chardet requests
+        # Install jq for JSON parsing (in case it's not available)
+        sudo apt-get update -qq
+        sudo apt-get install -y jq curl
         
-    - name: Configure git
+    - name: Configure git and validate tools
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
+        
+        # Validate required tools are available
+        echo "🔧 Validating required tools..."
+        command -v git >/dev/null 2>&1 || { echo "❌ git is required but not installed"; exit 1; }
+        command -v jq >/dev/null 2>&1 || { echo "❌ jq is required but not installed"; exit 1; }
+        command -v curl >/dev/null 2>&1 || { echo "❌ curl is required but not installed"; exit 1; }
+        echo "✅ All required tools are available"
         
     - name: Create test branch
       id: create_branch
@@ -72,10 +82,25 @@ jobs:
       run: |
         echo "🔍 Fetching open pull requests..."
         
-        # Get open PRs using GitHub API
-        OPEN_PRS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | \
-          jq -r '.[].number' | head -n ${{ inputs.max_prs || 10 }})
+        # Get open PRs using GitHub API with error handling
+        API_RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/pulls?state=open")
+        
+        HTTP_CODE="${API_RESPONSE: -3}"
+        API_BODY="${API_RESPONSE%???}"
+        
+        if [ "$HTTP_CODE" -ne 200 ]; then
+          echo "❌ GitHub API request failed with HTTP code: $HTTP_CODE"
+          echo "Response: $API_BODY"
+          exit 1
+        fi
+        
+        OPEN_PRS=$(echo "$API_BODY" | jq -r '.[].number' | head -n ${{ inputs.max_prs || 10 }})
+        
+        if [ $? -ne 0 ]; then
+          echo "❌ Failed to parse API response"
+          exit 1
+        fi
         
         echo "Found open PRs: $OPEN_PRS"
         
@@ -122,14 +147,28 @@ jobs:
           echo "🔄 Testing PR #$PR_NUMBER"
           echo "============================================"
           
-          # Get PR details
-          PR_INFO=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          # Rate limiting protection - small delay between API calls
+          sleep 1
+          
+          # Get PR details with error handling
+          echo "📥 Fetching details for PR #$PR_NUMBER..."
+          PR_RESPONSE=$(curl -s -w "%{http_code}" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
           
-          PR_TITLE=$(echo "$PR_INFO" | jq -r '.title')
-          PR_HEAD_SHA=$(echo "$PR_INFO" | jq -r '.head.sha')
-          PR_HEAD_REF=$(echo "$PR_INFO" | jq -r '.head.ref')
-          PR_HEAD_REPO=$(echo "$PR_INFO" | jq -r '.head.repo.full_name')
+          HTTP_CODE="${PR_RESPONSE: -3}"
+          PR_INFO="${PR_RESPONSE%???}"
+          
+          if [ "$HTTP_CODE" -ne 200 ]; then
+            echo "❌ Failed to fetch PR #$PR_NUMBER details (HTTP $HTTP_CODE)"
+            echo "- **Merge Status:** ❌ FAILED (API error)" >> test_results/summary.md
+            echo "" >> test_results/summary.md
+            continue
+          fi
+          
+          PR_TITLE=$(echo "$PR_INFO" | jq -r '.title // "Unknown"')
+          PR_HEAD_SHA=$(echo "$PR_INFO" | jq -r '.head.sha // "unknown"')
+          PR_HEAD_REF=$(echo "$PR_INFO" | jq -r '.head.ref // "unknown"')
+          PR_HEAD_REPO=$(echo "$PR_INFO" | jq -r '.head.repo.full_name // "unknown"')
           
           echo "📋 PR #$PR_NUMBER: $PR_TITLE"
           echo "🎯 Head: $PR_HEAD_SHA ($PR_HEAD_REF)"
@@ -149,8 +188,13 @@ jobs:
             # Same repository - can merge directly
             echo "🔀 Attempting to merge PR #$PR_NUMBER (same repository)..."
             
-            if git fetch origin pull/$PR_NUMBER/head:pr-$PR_NUMBER 2>test_results/pr_${PR_NUMBER}_fetch.log; then
-              if git merge pr-$PR_NUMBER --no-edit -m "Test merge PR #$PR_NUMBER: $PR_TITLE" 2>test_results/pr_${PR_NUMBER}_merge.log; then
+            # Initialize log files
+            echo "Fetch attempt for PR #$PR_NUMBER at $(date)" > test_results/pr_${PR_NUMBER}_fetch.log
+            echo "Merge attempt for PR #$PR_NUMBER at $(date)" > test_results/pr_${PR_NUMBER}_merge.log
+            
+            if git fetch origin pull/$PR_NUMBER/head:pr-$PR_NUMBER 2>>test_results/pr_${PR_NUMBER}_fetch.log; then
+              echo "✅ Successfully fetched PR #$PR_NUMBER"
+              if git merge pr-$PR_NUMBER --no-edit -m "Test merge PR #$PR_NUMBER: $PR_TITLE" 2>>test_results/pr_${PR_NUMBER}_merge.log; then
                 echo "✅ Successfully merged PR #$PR_NUMBER"
                 MERGE_SUCCESS=true
                 echo "- **Merge Status:** ✅ SUCCESS" >> test_results/summary.md
@@ -162,10 +206,17 @@ jobs:
                 echo "❌ Failed to merge PR #$PR_NUMBER - merge conflicts"
                 echo "- **Merge Status:** ❌ FAILED (merge conflicts)" >> test_results/summary.md
                 
-                # Log merge conflict details
-                echo "Merge conflict details:" >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
-                git status >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
-                git reset --hard HEAD >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
+                # Log merge conflict details with more information
+                {
+                  echo "Merge conflict details for PR #$PR_NUMBER:"
+                  echo "Attempted merge at $(date)"
+                  echo "Git status:"
+                  git status
+                  echo "Conflicted files:"
+                  git diff --name-only --diff-filter=U 2>/dev/null || echo "Could not determine conflicted files"
+                  echo "Reset to clean state:"
+                  git reset --hard HEAD
+                } >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
                 
                 # Increment failed merge counter  
                 FAILED_MERGES=$(cat test_results/failed_merges.count)
@@ -174,6 +225,9 @@ jobs:
             else
               echo "❌ Failed to fetch PR #$PR_NUMBER"
               echo "- **Merge Status:** ❌ FAILED (fetch error)" >> test_results/summary.md
+              
+              # Add fetch error details
+              echo "Fetch failed at $(date)" >> test_results/pr_${PR_NUMBER}_fetch.log
               
               # Increment failed merge counter
               FAILED_MERGES=$(cat test_results/failed_merges.count)
@@ -189,11 +243,16 @@ jobs:
             echo ""
             echo "🔨 Testing build for PR #$PR_NUMBER..."
             
+            # Initialize build log
+            echo "Build testing for PR #$PR_NUMBER started at $(date)" > test_results/pr_${PR_NUMBER}_build.log
+            
             # Run CTMM build system check
-            if python3 ctmm_build.py > test_results/pr_${PR_NUMBER}_build.log 2>&1; then
+            echo "Running CTMM build system check..." >> test_results/pr_${PR_NUMBER}_build.log
+            if python3 ctmm_build.py >> test_results/pr_${PR_NUMBER}_build.log 2>&1; then
               echo "✅ CTMM build system check passed for PR #$PR_NUMBER"
               
               # Run LaTeX syntax validation
+              echo "Running LaTeX syntax validation..." >> test_results/pr_${PR_NUMBER}_build.log
               if python3 validate_latex_syntax.py >> test_results/pr_${PR_NUMBER}_build.log 2>&1; then
                 echo "✅ LaTeX syntax validation passed for PR #$PR_NUMBER"
                 BUILD_SUCCESS=true
@@ -205,6 +264,7 @@ jobs:
               else
                 echo "❌ LaTeX syntax validation failed for PR #$PR_NUMBER"
                 echo "- **Build Status:** ❌ FAILED (LaTeX validation)" >> test_results/summary.md
+                echo "LaTeX validation failed at $(date)" >> test_results/pr_${PR_NUMBER}_build.log
                 
                 # Increment failed build counter
                 FAILED_BUILDS=$(cat test_results/failed_builds.count)
@@ -213,6 +273,7 @@ jobs:
             else
               echo "❌ CTMM build system check failed for PR #$PR_NUMBER"
               echo "- **Build Status:** ❌ FAILED (CTMM build)" >> test_results/summary.md
+              echo "CTMM build system check failed at $(date)" >> test_results/pr_${PR_NUMBER}_build.log
               
               # Increment failed build counter
               FAILED_BUILDS=$(cat test_results/failed_builds.count)

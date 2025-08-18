@@ -227,6 +227,52 @@ def test_error_handling():
     
     return True  # Error handling is mostly warnings, not failures
 
+def test_robustness_improvements():
+    """Test robustness improvements in the workflow."""
+    print("\n🛡️  Testing Robustness Improvements")
+    print("-" * 40)
+    
+    workflow_path = Path(".github/workflows/automated-pr-merge-test.yml")
+    with open(workflow_path, 'r') as f:
+        content = f.read()
+    
+    robustness_checks = []
+    
+    # Check for jq installation
+    if 'apt-get install' in content and 'jq' in content:
+        robustness_checks.append("✅ Explicitly installs jq dependency")
+    else:
+        robustness_checks.append("⚠️  Relies on system jq (may not be robust)")
+    
+    # Check for tool validation
+    if 'command -v' in content:
+        robustness_checks.append("✅ Validates required tools are available")
+    else:
+        robustness_checks.append("❌ Missing tool validation")
+    
+    # Check for HTTP status code handling
+    if 'http_code' in content.lower() or 'HTTP_CODE' in content:
+        robustness_checks.append("✅ Handles HTTP response codes")
+    else:
+        robustness_checks.append("❌ Missing HTTP error handling")
+    
+    # Check for rate limiting protection
+    if 'sleep' in content:
+        robustness_checks.append("✅ Includes rate limiting protection")
+    else:
+        robustness_checks.append("⚠️  No rate limiting protection")
+    
+    # Check for enhanced error logging
+    if 'date' in content and 'test_results' in content:
+        robustness_checks.append("✅ Enhanced error logging with timestamps")
+    else:
+        robustness_checks.append("❌ Basic error logging only")
+    
+    for check in robustness_checks:
+        print(check)
+    
+    return all(check.startswith("✅") for check in robustness_checks)
+
 def main():
     """Run all workflow validation tests."""
     print("🧪 Automated PR Merge and Build Workflow Validation")
@@ -236,7 +282,8 @@ def main():
         ("Workflow Syntax", test_workflow_syntax),
         ("Security Considerations", test_security_considerations), 
         ("Tool Integration", test_integration_with_existing_tools),
-        ("Error Handling", test_error_handling)
+        ("Error Handling", test_error_handling),
+        ("Robustness Improvements", test_robustness_improvements)
     ]
     
     results = []
