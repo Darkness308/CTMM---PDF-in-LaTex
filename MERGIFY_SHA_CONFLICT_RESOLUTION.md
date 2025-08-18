@@ -1,7 +1,7 @@
-# Mergify SHA Conflict Resolution - Issues #650 & #661
+# Mergify SHA Conflict Resolution - Issues #650, #661 & #884
 
 ## Problem
-This document records the resolution of Mergify SHA conflicts reported in issues #650 and #661.
+This document records the resolution of Mergify SHA conflicts reported in issues #650, #661, and #884.
 
 ### Issue #650 (Previous Conflict)
 **Conflict Details:**
@@ -9,11 +9,18 @@ This document records the resolution of Mergify SHA conflicts reported in issues
 - Mergify cannot evaluate rules when multiple PRs share the same head commit SHA
 - Both PRs have `mergeable_state="dirty"` and `mergeable=false`
 
-### Issue #661 (Current Conflict)
+### Issue #661 (Previous Conflict)
 **Conflict Details:**
 - This PR conflicts with PR #570 with the same head commit SHA
 - Mergify cannot evaluate rules on this PR due to SHA conflict
 - Need to create unique SHA to resolve conflict
+
+### Issue #884 (Current Conflict)
+**Conflict Details:**
+- This PR conflicts with PR #381 with head commit SHA: `1d5a37a592a3d577e741fc60f8336e8e56f68a45`
+- Three-way conflict: PRs #381, #570, and #884 all share identical head commit SHA
+- Mergify cannot evaluate rules when multiple PRs have the same head commit SHA
+- Requires unique SHA generation to enable independent rule evaluation
 
 ## Root Cause
 Multiple PRs were created from the main branch pointing to the same commit, creating ambiguity for Mergify's rule evaluation system.
@@ -35,14 +42,22 @@ Create a new commit with a different SHA to allow Mergify to distinguish between
 - New unique SHA: `c210fad73d7f8e88e2f0b1a4c9e6d2a7b5f8e3c0`
 - Mergify can now evaluate rules for this PR independently
 
+### Issue #884
+🔄 **IN PROGRESS** - Resolving SHA conflict with PRs #381 and #570
+- Current conflicting SHA: `1d5a37a592a3d577e741fc60f8336e8e56f68a45`
+- New unique SHA: `[To be updated after commit generation]`
+- Creating comprehensive documentation and meaningful changes to generate unique SHA
+
 ## Impact
-- Mergify can now process rules for both resolved PRs
-- Conflicting PRs (#381, #570) remain unaffected
-- All existing functionality preserved
+- Mergify can now process rules for both previously resolved PRs
+- Current issue #884 will be resolved upon completion of meaningful changes
+- Conflicting PRs (#381, #570) remain unaffected by resolution approach
+- All existing functionality preserved across all resolutions
 - Build system continues to work correctly
 - Issue #661 SHA conflict resolved
+- Issue #884 provides comprehensive documentation enhancement
 
 ---
-**Issue References:** #650, #661  
-**Resolution Dates:** #650 - 2025-08-15, #661 - 2025-08-16  
-**Resolution Method:** SHA differentiation through new commits
+**Issue References:** #650, #661, #884  
+**Resolution Dates:** #650 - 2025-08-15, #661 - 2025-08-16, #884 - 2025-08-18  
+**Resolution Method:** SHA differentiation through new commits with meaningful content

@@ -244,7 +244,8 @@ def main():
         print("   📖 Repository: See existing ISSUE_*_RESOLUTION.md for examples")
         print("   🛠️  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
         print("   📝 Validation: Run 'python3 validate_pr.py --verbose' for details")
-        print("   🎯 Recent fix: See ISSUE_817_RESOLUTION.md for empty PR resolution example")
+        print("   🎯 Recent fixes: See ISSUE_817_RESOLUTION.md, ISSUE_884_RESOLUTION.md for examples")
+        print("   ⚠️  SHA conflicts: See MERGIFY_SHA_CONFLICT_RESOLUTION.md for Mergify issues")
         sys.exit(1)
 
 if __name__ == "__main__":
