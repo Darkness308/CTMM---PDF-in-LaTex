@@ -13,6 +13,37 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 
 **Language**: Primary content is in German (Deutsch)
 
+## CTMM Methodology
+
+**CTMM** stands for **Catch-Track-Map-Match** - a structured therapeutic approach designed specifically for neurodiverse couples and individuals:
+
+### 🔍 **Catch** (Erkennen)
+- **Early Detection**: Identifying triggers, emotional states, and behavioral patterns before they escalate
+- **Mindfulness Techniques**: Developing awareness of internal and external cues
+- **Signal Recognition**: Learning to recognize warning signs in oneself and partner
+
+### 📊 **Track** (Verfolgen) 
+- **Documentation**: Systematic recording of patterns, triggers, and responses
+- **Progress Monitoring**: Tracking therapeutic goals and intervention effectiveness
+- **Data Collection**: Using worksheets (Arbeitsblätter) for structured self-reflection
+
+### 🗺️ **Map** (Zuordnen)
+- **Pattern Analysis**: Connecting triggers to responses and identifying recurring themes
+- **Relationship Mapping**: Understanding how individual patterns affect couple dynamics
+- **Resource Mapping**: Identifying available coping strategies and support systems
+
+### 🤝 **Match** (Anpassen)
+- **Personalized Interventions**: Tailoring therapeutic strategies to individual needs
+- **Couple Coordination**: Synchronizing approaches between partners
+- **Adaptive Responses**: Developing flexible coping mechanisms for different situations
+
+### 🎯 **Therapeutic Applications**
+The CTMM system is particularly effective for:
+- **Co-Regulation**: Partners learning to support each other's emotional regulation
+- **Trigger Management**: Proactive identification and response to emotional triggers
+- **Communication**: Structured approaches to difficult conversations
+- **Crisis Prevention**: Early intervention strategies to prevent escalation
+
 ## Repository Structure
 
 ```
@@ -25,12 +56,21 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
 │   ├── trigger*.tex           # Trigger management modules
 │   ├── depression.tex         # Depression-related content
+│   ├── bindungsleitfaden.tex  # Relationship binding guide
+│   ├── notfallkarten.tex      # Emergency intervention cards
+│   ├── safewords.tex          # Safe word systems
 │   └── ...                    # Other therapeutic modules
-├── therapie-material/          # Additional therapy resources
+├── converted/                  # Converted documents (for de-escaping fixes)
+├── therapie-material/          # Additional therapy resources and templates
 ├── ctmm_build.py              # Automated build system (primary)
-├── build_system.py            # Detailed module analysis
-├── Makefile                   # Build commands
-└── .github/workflows/         # CI/CD for PDF generation
+├── build_system.py            # Detailed module analysis and testing
+├── ctmm_unified_tool.py       # Unified tool interface
+├── latex_validator.py         # LaTeX syntax and escaping validation
+├── fix_latex_escaping.py      # Over-escaping repair utilities
+├── validate_*.py              # Various validation scripts
+├── test_*.py                  # Comprehensive test suites
+├── Makefile                   # Build commands and shortcuts
+└── .github/workflows/         # CI/CD for PDF generation and validation
 ```
 
 ## LaTeX Architecture & Conventions
@@ -43,10 +83,27 @@ python3 ctmm_build.py
 ```
 
 **What the build system does:**
-1. Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
-2. Auto-generates missing template files with proper structure
-3. Tests basic build (without modules) and full build
-4. Creates TODO files for new templates with completion guidelines
+1. **LaTeX Validation**: Checks for over-escaping issues and syntax problems
+2. **Reference Scanning**: Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
+3. **Template Generation**: Auto-generates missing template files with proper structure
+4. **Incremental Testing**: Tests basic build (without modules) and full build separately
+5. **Documentation**: Creates TODO files for new templates with completion guidelines
+6. **Error Recovery**: Gracefully handles missing LaTeX installation for CI environments
+
+**Build System Requirements:**
+- **Python 3.x** (required) - Core build system functionality
+- **LaTeX Distribution** (optional) - For PDF compilation (TeX Live, MiKTeX)
+  - If LaTeX is not available, the system validates structure without compilation
+  - GitHub Actions workflow includes full LaTeX environment setup
+- **Required Python packages**: `chardet` for encoding detection
+
+**Validation Capabilities:**
+- **Over-escaping Detection**: Identifies and can fix excessive `\textbackslash{}` usage
+- **Syntax Validation**: Checks LaTeX file structure and command usage
+- **Module Dependencies**: Ensures all referenced files exist or creates templates
+- **Form Element Validation**: Verifies proper use of CTMM form components
+
+**Note**: Build tests will show FAIL if pdflatex is not installed, but dependency checking and file generation still work correctly.
 
 **Alternative Commands:**
 ```bash
@@ -155,6 +212,13 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 - **Cultural sensitivity**: Content is designed for German-speaking therapy contexts
 - **Professional tone**: Maintain therapeutic, non-judgmental language
 
+**CTMM Methodology:**
+CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing triggers and relationship challenges:
+- **Catch:** Recognize triggers and emotional states
+- **Track:** Monitor feelings and situational patterns  
+- **Map:** Understand underlying patterns and dynamics
+- **Match:** Adapt responses and interventions appropriately
+
 **Content Types:**
 - **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
 - **Trigger Management**: Coping strategies and identification tools
@@ -171,7 +235,7 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 ## Technical Requirements
 
 ### LaTeX Dependencies
-- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb
+- **Required packages**: TikZ, hyperref, xcolor, fontawesome5, tcolorbox, tabularx, amssymb, geometry, pifont, ifthen, calc, forloop
 - **Font encoding**: T1 with UTF-8 input
 - **Language**: ngerman babel
 - **PDF features**: Interactive forms, bookmarks, metadata

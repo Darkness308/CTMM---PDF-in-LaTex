@@ -26,38 +26,51 @@ jobs:
       - name: Run LaTeX syntax validation
         run: |
           python3 validate_latex_syntax.py
-
+          
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
+          
+      - name: Run Enhanced Build Management
+        run: |
+          echo "🚀 Running enhanced CTMM build management..."
+          python3 ctmm_build.py --enhanced
+          
+      - name: Run comprehensive CI validation
+        run: |
+          python3 test_issue_743_validation.py
+          
+      - name: Enhanced pre-build validation
+        run: |
+          echo "🔍 Running enhanced pre-build validation..."
+          # Check for critical files and dependencies
+          python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
 
       - name: Set up LaTeX
-copilot/fix-288
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-292
-        uses: dante-ev/latex-action@v2.0.0
-
-copilot/fix-290
-        uses: dante-ev/latex-action@v2.0.0
-
-        uses: dante-ev/latex-action@latest
-main
-main
-main
+        uses: dante-ev/latex-action@v2
         with:
           root_file: main.tex
-          args: -pdf -interaction=nonstopmode -halt-on-error -shell-escape
+          args: -interaction=nonstopmode -halt-on-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
             texlive-fonts-recommended
             texlive-latex-recommended
             texlive-fonts-extra
             texlive-latex-extra
-copilot/fix-440
-
             texlive-science
-main
+            texlive-pstricks
+            
+      - name: Verify PDF generation
+        run: |
+          if [ -f "main.pdf" ]; then
+            echo "✅ PDF successfully generated"
+            ls -la main.pdf
+          else
+            echo "❌ PDF generation failed"
+            echo "Checking for LaTeX log files..."
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            exit 1
+          fi
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4

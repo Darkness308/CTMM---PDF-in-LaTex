@@ -1,24 +1,29 @@
 # CTMM LaTeX Build System Makefile
 
-copilot/fix-235
-.PHONY: build check clean test help unit-test validate validate-fix
-
-copilot/fix-526
-.PHONY: build check clean test test-unit help ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test
-
-.PHONY: build check clean test test-unit help comprehensive workflow
-main
-main
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing
 
 # Default target
 all: ctmm-check build
+
+# Enhanced build management targets
+enhanced-build:
+	@echo "Running enhanced CTMM build management..."
+	python3 ctmm_build.py --enhanced
+
+enhanced-testing:
+	@echo "Running enhanced incremental testing..."
+	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()"
 
 # Check build system and dependencies
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
 
-copilot/fix-235
+# Validate PR content (for contributors)
+validate-pr:
+	@echo "Validating PR content for Copilot review..."
+	python3 validate_pr.py
+
 # Validate LaTeX files for escaping issues
 validate:
 	@echo "Validating LaTeX files for escaping issues..."
@@ -50,7 +55,6 @@ ctmm-workflow:
 integration-test:
 	@echo "Running CTMM integration test suite..."
 	python3 test_integration.py
-main
 
 # Build PDF
 build:
@@ -111,34 +115,22 @@ help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
 	@echo "==============================================="
 	@echo "Available targets:"
-copilot/fix-235
-	@echo "  all          - Run check and build (default)"
-	@echo "  check        - Check dependencies and run build system"
-	@echo "  validate     - Validate LaTeX files for escaping issues"
-	@echo "  validate-fix - Fix LaTeX escaping issues (creates backups)"
-	@echo "  build        - Build the PDF"
-	@echo "  analyze      - Run detailed module analysis"
-	@echo "  test         - Quick test of build system"
-	@echo "  unit-test    - Run unit tests for Python functions"
-	@echo "  clean        - Remove build artifacts"
-	@echo "  deps         - Install Python dependencies"
-	@echo "  help         - Show this help"
-
-copilot/fix-526
-	@echo "  all           - Run ctmm-check and build (default)"
-
 	@echo "  all           - Run check and build (default)"
-	@echo "  comprehensive - Run complete workflow validation"
-	@echo "  workflow      - Alias for comprehensive"
-main
 	@echo "  check         - Check dependencies and run build system"
+	@echo "  validate-pr   - Validate PR content for Copilot review"
+	@echo "  validate      - Validate LaTeX files for escaping issues"
+	@echo "  validate-fix  - Fix LaTeX escaping issues (creates backups)"
 	@echo "  build         - Build the PDF"
 	@echo "  analyze       - Run detailed module analysis"
 	@echo "  test          - Quick test of build system + unit tests"
 	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
+	@echo "  unit-test     - Run unit tests for Python functions"
 	@echo "  clean         - Remove build artifacts"
 	@echo "  deps          - Install Python dependencies"
-copilot/fix-526
+	@echo "  comprehensive - Run complete workflow validation"
+	@echo "  workflow      - Alias for comprehensive"
+	@echo "  enhanced-build  - Run enhanced CTMM build management"
+	@echo "  enhanced-testing - Run enhanced incremental testing"
 	@echo ""
 	@echo "CTMM Unified Tool Commands:"
 	@echo "  ctmm-check    - Run unified build system validation"
@@ -147,7 +139,4 @@ copilot/fix-526
 	@echo "  ctmm-workflow - Run complete integration workflow"
 	@echo "  integration-test - Run comprehensive integration tests"
 	@echo ""
-
-main
 	@echo "  help          - Show this help"
-main

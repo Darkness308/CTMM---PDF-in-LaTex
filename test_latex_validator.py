@@ -7,7 +7,7 @@ import unittest
 import tempfile
 import os
 from pathlib import Path
-from latex_validator import LaTeXValidator
+from latex_validator import LaTeXValidator, sanitize_pkg_name
 
 
 class TestLaTeXValidator(unittest.TestCase):
@@ -176,6 +176,138 @@ class TestLaTeXValidatorIntegration(unittest.TestCase):
         
         for pattern in expected_patterns:
             self.assertIn(pattern, validator.problematic_patterns)
+
+
+class TestSanitizePkgName(unittest.TestCase):
+    """Test cases for the sanitize_pkg_name function."""
+
+    def test_problem_statement_cases(self):
+        """Test the specific cases mentioned in the problem statement."""
+        test_cases = [
+            ('123-package', 'pkg123Package'),
+            ('1-package', 'pkg1Package'),
+            ('2_test', 'pkg2Test'),
+            ('999-name', 'pkg999Name'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected, 
+                               f"Expected '{expected}' but got '{result}' for input '{input_name}'")
+
+    def test_basic_functionality(self):
+        """Test basic package name sanitization."""
+        test_cases = [
+            ('test', 'pkgTest'),
+            ('my-package', 'pkgMyPackage'),
+            ('my_package', 'pkgMyPackage'),
+            ('test-name', 'pkgTestName'),
+            ('test_name', 'pkgTestName'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_mixed_separators(self):
+        """Test names with mixed hyphens and underscores."""
+        test_cases = [
+            ('test-name_package', 'pkgTestNamePackage'),
+            ('my_test-package', 'pkgMyTestPackage'),
+            ('complex-test_name-package', 'pkgComplexTestNamePackage'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_numbers_in_middle(self):
+        """Test names with numbers in the middle."""
+        test_cases = [
+            ('test-2-package', 'pkgTest2Package'),
+            ('name_123_test', 'pkgName123Test'),
+            ('v1-test-v2', 'pkgV1TestV2'),
+            ('package-42-name', 'pkgPackage42Name'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_numbers_only(self):
+        """Test names that are only numbers."""
+        test_cases = [
+            ('123', 'pkg123'),
+            ('42', 'pkg42'),
+            ('999', 'pkg999'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_consecutive_separators(self):
+        """Test names with consecutive separators."""
+        test_cases = [
+            ('test--package', 'pkgTestPackage'),
+            ('test__package', 'pkgTestPackage'),
+            ('test-_package', 'pkgTestPackage'),
+            ('test_-package', 'pkgTestPackage'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_edge_cases(self):
+        """Test edge cases."""
+        test_cases = [
+            ('', 'pkg'),  # Empty string
+            ('-', 'pkg'),  # Only separator
+            ('_', 'pkg'),  # Only separator
+            ('--', 'pkg'),  # Multiple separators
+            ('123-', 'pkg123'),  # Trailing separator
+            ('-123', 'pkg123'),  # Leading separator
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_case_preservation(self):
+        """Test that the function properly handles case."""
+        test_cases = [
+            ('Test-Package', 'pkgTestPackage'),
+            ('TEST-PACKAGE', 'pkgTestPackage'),
+            ('test-PACKAGE', 'pkgTestPackage'),
+            ('MyGreat_Package', 'pkgMygreatPackage'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
+
+    def test_complex_realistic_names(self):
+        """Test complex, realistic package names."""
+        test_cases = [
+            ('latex-utils-v2', 'pkgLatexUtilsV2'),
+            ('math-symbols_1-0', 'pkgMathSymbols10'),
+            ('document-style_2024', 'pkgDocumentStyle2024'),
+            ('ctmm-design-1_2_3', 'pkgCtmmDesign123'),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = sanitize_pkg_name(input_name)
+                self.assertEqual(result, expected)
 
 
 if __name__ == '__main__':
