@@ -212,7 +212,6 @@ def validate_issue_721_resolution():
     all_checks_passed = True
     
     # 1. Check that resolution documentation exists
-    print("and strategic direction resolution for CTMM system.\n")
     
     all_checks_passed = True
     
@@ -296,7 +295,10 @@ def main():
         print("\\n❌ Validation failed - Issue #721 resolution needs refinement")
         sys.exit(1)
     else:
-        print("\\n✅ Validation successful - Issue #721 comprehensively resolved")
+        print("\n❌ Validation failed - Issue #721 resolution needs refinement")
+        sys.exit(1)
+    else:
+        print("\n✅ Validation successful - Issue #721 comprehensively resolved")
         sys.exit(0)
 
 if __name__ == "__main__":
