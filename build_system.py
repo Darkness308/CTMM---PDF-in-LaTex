@@ -121,44 +121,44 @@ class CTMMBuildSystem:
             
             if file_path.endswith('.sty'):
                 # Create style file template
-                template_content = f"""% {path.name} - CTMM Style Package
+                template_content = """% """ + path.name + """ - CTMM Style Package
 % TODO: Add content for this style package
 % Created automatically by CTMM Build System
 
-\\NeedsTeXFormat{{LaTeX2e}}[1995/12/01]
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
+\\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\\ProvidesPackage{""" + path.stem + """}[2024/01/01 CTMM """ + path.stem + """ package - TODO: Add content]
 
 % TODO: Add package dependencies here
-% \\RequirePackage{{xcolor}}
-% \\RequirePackage{{tikz}}
+% \\RequirePackage{xcolor}
+% \\RequirePackage{tikz}
 
 % TODO: Add color definitions here
-% \\definecolor{{ctmmBlue}}{{RGB}}{{52, 152, 219}}
+% \\definecolor{ctmmBlue}{RGB}{52, 152, 219}
 
 % TODO: Add commands and environments here
-% \\newcommand{{\\exampleCommand}}[1]{{\\textcolor{{ctmmBlue}}{{#1}}}}
+% \\newcommand{\\exampleCommand}[1]{\\textcolor{ctmmBlue}{#1}}
 
 % End of package - TODO: Complete implementation
 """
             else:
                 # Create module file template  
-                template_content = f"""% {path.name} - CTMM Module
+                template_content = """% """ + path.name + """ - CTMM Module
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
-\\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
+\\section{TODO: """ + filename_to_title(path.stem) + """}
+\\label{sec:""" + path.stem + """}
 
 % TODO: Add module content here
-\\begin{{center}}
-\\textit{{This module is under development. Content will be added soon.}}
-\\end{{center}}
+\\begin{center}
+\\textit{This module is under development. Content will be added soon.}
+\\end{center}
 
 % TODO: Add subsections, content, and functionality
 % Example:
-% \\subsection{{Introduction}}
-% \\subsection{{Instructions}}
-% \\subsection{{Exercises}}
+% \\subsection{Introduction}
+% \\subsection{Instructions}
+% \\subsection{Exercises}
 
 % End of module - TODO: Complete implementation
 """
@@ -169,10 +169,10 @@ class CTMMBuildSystem:
             logger.info("Created template: %s", file_path)
             
             # Create TODO file
-            todo_path = path.parent / f"TODO_{path.stem}.md"
-            todo_content = f"""# TODO: Complete {path.name}
+            todo_path = path.parent / ("TODO_" + path.stem + ".md")
+            todo_content = """# TODO: Complete """ + path.name + """
 
-## File: {file_path}
+## File: """ + file_path + """
 **Status:** Template created, needs content
 
 ## Description
