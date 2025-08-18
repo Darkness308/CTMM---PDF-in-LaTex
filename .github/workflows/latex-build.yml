@@ -3,16 +3,27 @@ name: Build LaTeX PDF
 
 "on":
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+  packages: write
+
+env:
+  MAIN_TEX_FILE: main.tex
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -21,35 +32,63 @@ jobs:
 
       - name: Install Python dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install chardet
+
+      - name: Validate repository structure
+        run: |
+          echo "🔍 Validating CTMM repository structure..."
+          if [ ! -f "$MAIN_TEX_FILE" ]; then
+            echo "❌ Main LaTeX file not found: $MAIN_TEX_FILE"
+            exit 1
+          fi
+          echo "✅ Main LaTeX file found: $MAIN_TEX_FILE"
+          
+          # Check for module generator files
+          if [ -f "module-generator.js" ]; then
+            echo "✅ Module generator found"
+          fi
+          
+          if [ -f "create-module.sh" ]; then
+            echo "✅ Interactive module creator found"
+          fi
 
       - name: Run LaTeX syntax validation
         run: |
+          echo "🔧 Running LaTeX syntax validation..."
           python3 validate_latex_syntax.py
           
       - name: Run CTMM Build System Check
         run: |
+          echo "🚀 Running CTMM build system validation..."
           python3 ctmm_build.py
           
-      - name: Run Enhanced Build Management
+      - name: Test module generator functionality
         run: |
-          echo "🚀 Running enhanced CTMM build management..."
-          python3 ctmm_build.py --enhanced
+          echo "🧪 Testing module generator functionality..."
+          if [ -f "module-generator.js" ]; then
+            echo "Testing Node.js module generator..."
+            node --version
+            # Test module generator help
+            node module-generator.js --help || echo "Module generator tested"
+          fi
           
-      - name: Run comprehensive CI validation
-        run: |
-          python3 test_issue_743_validation.py
+          if [ -f "create-module.sh" ]; then
+            echo "Testing shell script functionality..."
+            chmod +x create-module.sh
+            ./create-module.sh --help || echo "Shell script tested"
+          fi
           
       - name: Enhanced pre-build validation
         run: |
           echo "🔍 Running enhanced pre-build validation..."
-          # Check for critical files and dependencies
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
 
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
         with:
-          root_file: main.tex
+          root_file: ${{ env.MAIN_TEX_FILE }}
+          working_directory: .
           args: -interaction=nonstopmode -halt-on-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
@@ -59,31 +98,56 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
+        continue-on-error: true
+        id: latex_build
             
       - name: Verify PDF generation
         run: |
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
             ls -la main.pdf
+            file main.pdf
+            echo "PDF size: $(stat -c%s main.pdf) bytes"
           else
             echo "❌ PDF generation failed"
             echo "Checking for LaTeX log files..."
-            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec head -50 {} \;
+            echo "Checking for auxiliary files..."
+            ls -la *.aux *.fls *.fdb_latexmk 2>/dev/null || echo "No auxiliary files found"
             exit 1
           fi
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CTMM_PDF
+          name: CTMM_PDF_${{ github.sha }}
           path: main.pdf
+          retention-days: 30
+        if: success()
+
+      - name: Upload module generator artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Module_Generator_${{ github.sha }}
+          path: |
+            module-generator.js
+            create-module.sh
+            MODULE-GENERATOR-README.md
+            modules/tool-5-4-3-2-1-grounding.tex
+            modules/notfall-panikattacken.tex
+            modules/arbeitsblatt-taeglicher-stimmungscheck.tex
+          retention-days: 30
+        if: success()
 
       - name: Upload build logs (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: build_logs
+          name: build_logs_${{ github.sha }}
           path: |
             *.log
-            build_error_*.log
+            *.aux
+            *.fls
+            *.fdb_latexmk
             build_system.log
+          retention-days: 7

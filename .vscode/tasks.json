@@ -2,7 +2,99 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CTMM: Kompilieren",
+            "label": "CTMM: Complete Build",
+            "type": "shell",
+            "command": "python3",
+            "args": ["ctmm_build.py"],
+            "windows": {
+                "command": "python",
+                "options": {
+                    "shell": {
+                        "executable": "powershell.exe"
+                    }
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true
+            },
+            "problemMatcher": {
+                "owner": "ctmm",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": [
+                    {
+                        "regexp": "^(ERROR|WARNING|INFO):\\s+(.*)$",
+                        "severity": 1,
+                        "message": 2
+                    },
+                    {
+                        "regexp": "^(ERROR|WARNING):\\s+(.*)\\s+in\\s+(.*):(\\d+)$",
+                        "severity": 1,
+                        "message": 2,
+                        "file": 3,
+                        "line": 4
+                    }
+                ],
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^INFO: CTMM Build System - Starting",
+                    "endsPattern": "^CTMM BUILD SYSTEM SUMMARY"
+                }
+            }
+        },
+        {
+            "label": "CTMM: Create Module",
+            "type": "shell",
+            "command": "./create-module.sh",
+            "windows": {
+                "command": "wsl",
+                "args": ["./create-module.sh"]
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
+            },
+            "dependsOn": "CTMM: Check Prerequisites"
+        },
+        {
+            "label": "CTMM: Quick Validation",
+            "type": "shell",
+            "command": "python3",
+            "args": ["validate_pr.py"],
+            "windows": {
+                "command": "python"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "ctmm-validation",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^❌\\s+(.*)$",
+                    "message": 1
+                }
+            }
+        },
+        {
+            "label": "CTMM: Compile LaTeX",
             "type": "shell",
             "command": "pdflatex",
             "args": [
@@ -12,19 +104,176 @@
                 "-output-directory=build",
                 "main.tex"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
+            "windows": {
+                "command": "pdflatex.exe"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
             },
             "problemMatcher": {
                 "owner": "latex",
                 "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(\\d+):\\s+(.*)",
+                        "file": 1,
+                        "line": 2,
+                        "message": 3
+                    },
+                    {
+                        "regexp": "^l\\.(\\d+)\\s+(.*)",
+                        "line": 1,
+                        "message": 2
+                    }
+                ]
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": "CTMM: Create Build Directory"
+        },
+        {
+            "label": "CTMM: Debug Build",
+            "type": "shell",
+            "command": "python3",
+            "args": ["ctmm_build.py", "--verbose"],
+            "windows": {
+                "command": "python"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
+            },
+            "problemMatcher": {
+                "owner": "ctmm-debug",
+                "fileLocation": ["relative", "${workspaceRoot}"],
                 "pattern": {
-                    "regexp": "^(.*):(\\d+):\\s+(.*)",
+                    "regexp": "^(DEBUG|ERROR|WARNING):\\s+(.*)$",
+                    "severity": 1,
+                    "message": 2
+                }
+            }
+        },
+        {
+            "label": "CTMM: Integration Test",
+            "type": "shell",
+            "command": "python3",
+            "args": ["-m", "pytest", "test_integration.py", "-v"],
+            "windows": {
+                "command": "python",
+                "args": ["-m", "pytest", "test_integration.py", "-v"]
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "pytest",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):\\s+(.*)$",
                     "file": 1,
                     "line": 2,
                     "message": 3
                 }
+            }
+        },
+        {
+            "label": "CTMM: List Modules",
+            "type": "shell",
+            "command": "./create-module.sh",
+            "args": ["--list"],
+            "windows": {
+                "command": "wsl",
+                "args": ["./create-module.sh", "--list"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CTMM: Check Prerequisites",
+            "type": "shell",
+            "command": "./create-module.sh",
+            "args": ["--validate"],
+            "windows": {
+                "command": "wsl",
+                "args": ["./create-module.sh", "--validate"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
+        {
+            "label": "CTMM: Create Build Directory",
+            "type": "shell",
+            "command": "mkdir",
+            "args": ["-p", "build"],
+            "windows": {
+                "command": "powershell",
+                "args": ["-Command", "New-Item -ItemType Directory -Force -Path build"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": false,
+                "reveal": "never"
+            }
+        },
+        {
+            "label": "CTMM: Clean Build",
+            "type": "shell", 
+            "command": "rm",
+            "args": ["-rf", "build/*"],
+            "windows": {
+                "command": "powershell",
+                "args": ["-Command", "Remove-Item -Recurse -Force build/*"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CTMM: Open PDF",
+            "type": "shell",
+            "command": "xdg-open",
+            "args": ["build/main.pdf"],
+            "linux": {
+                "command": "xdg-open"
+            },
+            "osx": {
+                "command": "open"
+            },
+            "windows": {
+                "command": "explorer",
+                "args": ["build\\main.pdf"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": false,
+                "reveal": "never"
             }
         }
     ]
