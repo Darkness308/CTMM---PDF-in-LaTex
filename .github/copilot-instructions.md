@@ -119,7 +119,7 @@ The build system includes comprehensive unit tests for core functions:
 ```bash
 python3 test_ctmm_build.py -v
 ```
-Tests cover filename-to-title conversion, German therapy terminology, and build system integration.
+Tests cover filename-to-title conversion (23 test cases), German therapy terminology, and build system integration (56 total tests).
 
 ### 📄 LaTeX Best Practices
 
