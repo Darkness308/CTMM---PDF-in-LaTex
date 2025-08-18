@@ -13,7 +13,9 @@ def test_workflow_files():
     workflow_files = [
         '.github/workflows/latex-build.yml',
         '.github/workflows/latex-validation.yml', 
-        '.github/workflows/static.yml'
+        '.github/workflows/static.yml',
+        '.github/workflows/pr-validation.yml',
+        '.github/workflows/automated-pr-merge-test.yml'
     ]
     
     print("Testing GitHub Actions workflow file structure...")
