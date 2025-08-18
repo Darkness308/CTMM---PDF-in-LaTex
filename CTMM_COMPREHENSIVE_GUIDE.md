@@ -282,7 +282,7 @@ While the current toolset is production-ready, potential future enhancements inc
 - **This document**: Comprehensive toolset guide
 
 ### Testing
-- **Unit Tests**: `test_ctmm_build.py` - 29 comprehensive tests for `filename_to_title()` function and build system integration
+- **Unit Tests**: `test_ctmm_build.py` - 23 comprehensive tests for `filename_to_title()` function and 56 total tests for build system integration
 - **Integration Tests**: `test_integration.py`
 - **Workflow Tests**: Built into unified tool
 
