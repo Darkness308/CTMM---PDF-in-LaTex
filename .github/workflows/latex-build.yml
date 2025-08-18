@@ -59,6 +59,7 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
+            fonts-fork-awesome
             
       - name: Verify PDF generation
         run: |
