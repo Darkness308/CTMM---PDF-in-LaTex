@@ -76,16 +76,16 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
         
         # Check key patterns are fixed
         issues = []
-        if '\\textbackslash{}' in actual_content:
+        if r'\textbackslash{}' in actual_content:
             issues.append("Still contains over-escaped commands")
         
         # Check specific improvements
-        if '\\hypertarget{tool-23-trigger-management}{%' in actual_content:
+        if r'\hypertarget{tool-23-trigger-management}{%' in actual_content:
             print("   ✅ Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed properly")
         
-        if '\\section{\\texorpdfstring{' in actual_content:
+        if r'\section{\texorpdfstring{' in actual_content:
             print("   ✅ Section commands cleaned")
         else:
             issues.append("Section commands not fixed")
@@ -101,15 +101,15 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
             actual_content = f.read()
         
         issues = []
-        if '\\textbackslash{}' in actual_content:
+        if r'\textbackslash{}' in actual_content:
             issues.append("Still contains over-escaped commands")
         
-        if '\\hypertarget{matching-matrix}{%' in actual_content:
+        if r'\hypertarget{matching-matrix}{%' in actual_content:
             print("   ✅ Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed")
         
-        if '\\texttt{Kap.\\ ' in actual_content:
+        if r'\texttt{Kap.\ ' in actual_content:
             print("   ✅ Texttt commands cleaned")
         else:
             issues.append("Texttt commands not fixed")
@@ -120,7 +120,7 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
             print("   ✅ File looks good!")
     
     print("\n3. Summary of improvements:")
-    print("   ✅ Removed excessive \\textbackslash{} escaping")
+    print(r"   ✅ Removed excessive \textbackslash{} escaping")
     print("   ✅ Fixed hypertarget commands")
     print("   ✅ Cleaned section/subsection commands")  
     print("   ✅ Fixed text formatting commands")
