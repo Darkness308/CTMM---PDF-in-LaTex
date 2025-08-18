@@ -108,7 +108,6 @@ class TestFilenameToTitle(unittest.TestCase):
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
-copilot/fix-588
     def test_file_extensions(self):
         """Test filename with file extensions (dots)."""
         test_cases = [
@@ -145,6 +144,12 @@ copilot/fix-588
             ("_-_-_", ""),
             ("_", ""),
             ("-", ""),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
 
     def test_very_long_filename(self):
         """Test very long filename to ensure performance and correctness."""
@@ -159,7 +164,6 @@ copilot/fix-588
             ("übung_für_patienten", "Übung Für Patienten"),
             ("ängste_bewältigen", "Ängste Bewältigen"),
             ("selbst-fürsorge", "Selbst Fürsorge"),
-main
         ]
         
         for input_name, expected in test_cases:
@@ -167,7 +171,6 @@ main
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
-copilot/fix-588
     def test_special_characters_preservation(self):
         """Test that special characters other than underscores and hyphens are preserved."""
         test_cases = [
@@ -176,14 +179,6 @@ copilot/fix-588
             ("data.backup", "Data.backup"),
             ("config$test", "Config$test"),
             ("module%name", "Module%name"),
-
-    def test_numeric_prefixes(self):
-        """Test filenames with numeric prefixes (common in therapy modules)."""
-        test_cases = [
-            ("01_einführung", "01 Einführung"),
-            ("2_advanced_techniques", "2 Advanced Techniques"),
-            ("session_10_review", "Session 10 Review"),
-main
         ]
         
         for input_name, expected in test_cases:
@@ -191,7 +186,19 @@ main
                 result = ctmm_build.filename_to_title(input_name)
                 self.assertEqual(result, expected)
 
-copilot/fix-588
+    def test_numeric_prefixes(self):
+        """Test filenames with numeric prefixes (common in therapy modules)."""
+        test_cases = [
+            ("01_einführung", "01 Einführung"),
+            ("2_advanced_techniques", "2 Advanced Techniques"),
+            ("session_10_review", "Session 10 Review"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
+
     def test_whitespace_normalization(self):
         """Test that existing whitespace is handled correctly."""
         test_cases = [
@@ -199,6 +206,12 @@ copilot/fix-588
             ("test file name", "Test File Name"),
             ("  spaced  out  ", "Spaced Out"),
             ("tab\tcharacter", "Tab Character"),
+        ]
+        
+        for input_name, expected in test_cases:
+            with self.subTest(input_name=input_name):
+                result = ctmm_build.filename_to_title(input_name)
+                self.assertEqual(result, expected)
 
     def test_whitespace_edge_cases(self):
         """Test various whitespace scenarios."""
@@ -207,7 +220,6 @@ copilot/fix-588
             ("hello___world", "Hello World"),    # Multiple underscores
             ("hello---world", "Hello World"),    # Multiple hyphens
             ("hello_-_world", "Hello World"),    # Mixed separators
-main
         ]
         
         for input_name, expected in test_cases:
