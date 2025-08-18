@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing verify-all verify-suite test-cicd
 
 # Default target
 all: ctmm-check build
@@ -110,6 +110,19 @@ workflow:
 	@echo "Running CTMM Comprehensive Workflow..."
 	python3 comprehensive_workflow.py
 
+# Verification Commands (Issue #878 Enhancement)
+verify-all:
+	@echo "Running all verification scripts..."
+	python3 run_verification_suite.py
+
+verify-suite:
+	@echo "Running comprehensive verification suite..."
+	python3 run_verification_suite.py
+
+test-cicd:
+	@echo "Testing CI/CD pipeline functionality..."
+	python3 test_cicd_pipeline.py
+
 # Help
 help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
@@ -138,5 +151,10 @@ help:
 	@echo "  ctmm-validate - Complete project validation"
 	@echo "  ctmm-workflow - Run complete integration workflow"
 	@echo "  integration-test - Run comprehensive integration tests"
+	@echo ""
+	@echo "Verification Commands (Issue #878):"
+	@echo "  verify-all    - Run all verification scripts"
+	@echo "  verify-suite  - Run comprehensive verification suite"
+	@echo "  test-cicd     - Test CI/CD pipeline functionality"
 	@echo ""
 	@echo "  help          - Show this help"
