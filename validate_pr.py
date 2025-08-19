@@ -85,7 +85,7 @@ def check_file_changes(base_branch="main"):
             success, _, _ = run_command(f"git rev-parse {base_option}")
             if success:
                 actual_base = base_option
-                break
+        # (Redundant branch removed: already handled above)
     
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
