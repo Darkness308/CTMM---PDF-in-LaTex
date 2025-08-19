@@ -12,6 +12,7 @@ import sys
 import subprocess
 import argparse
 from pathlib import Path
+from git_cache_utils import run_command_cached, find_valid_base_branch, get_file_changes_cached
 
 def run_command(cmd, capture_output=True):
     """Run a shell command and return the result."""
@@ -38,86 +39,15 @@ def check_git_status():
     return True
 
 def check_file_changes(base_branch="main"):
-    """Check for file changes compared to base branch."""
-    # First try to find a suitable base branch
-    success, stdout, stderr = run_command("git branch -r")
-    available_branches = stdout.split('\n') if success else []
-    
-    # Try different base branch options
-    base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
-    actual_base = None
-    
-    for base_option in base_options:
-        if any(base_option in branch for branch in available_branches) or base_option == base_branch:
-            success, _, _ = run_command(f"git rev-parse {base_option}")
-            if success:
-                actual_base = base_option
-    # Batch git rev-parse for all base_options at once
-    valid_bases = []
-    # Only check base_options that are present in available_branches or match base_branch
-    filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
-    if filtered_options:
-        # Run git rev-parse for all filtered options at once
-        cmd = "git rev-parse " + " ".join(filtered_options)
-        success, stdout, stderr = run_command(cmd)
-        if success and stdout.strip():
-            # git rev-parse outputs each hash on a new line, in the same order as the arguments
-            hashes = stdout.split('\n')
-            for h, base_opt in zip(hashes, filtered_options):
-                if h.strip() and not h.startswith("fatal:"):
-                    actual_base = base_opt
-                    break
-    
-    if not actual_base:
-        # If no base branch found, compare with HEAD~1 or show staged changes
-        success, stdout, stderr = run_command("git diff --cached --name-only")
-        if success and stdout.strip():
-            print("📄 Checking staged changes...")
-            actual_base = "--cached"
-        else:
-            success, stdout, stderr = run_command("git diff --name-only HEAD~1..HEAD")
-            if success:
-                actual_base = "HEAD~1"
-            else:
-                print("⚠️  Cannot determine base for comparison, checking working directory changes...")
-                success, stdout, stderr = run_command("git diff --name-only")
-                actual_base = ""
-    
-    # Get file changes
-    if actual_base == "--cached":
-        success, stdout, stderr = run_command("git diff --cached --name-only")
-    elif actual_base == "":
-        success, stdout, stderr = run_command("git diff --name-only")
-    else:
-        success, stdout, stderr = run_command(f"git diff --name-only {actual_base}..HEAD")
+    """Check for file changes compared to base branch - OPTIMIZED with caching."""
+    # Use the cached and optimized approach
+    success, changed_files, added_lines, deleted_lines = get_file_changes_cached()
     
     if not success:
-        print(f"❌ Error checking file changes: {stderr}")
+        print("❌ Error checking file changes with optimized method")
         return False, 0, 0, 0
     
-    changed_files = len(stdout.split('\n')) if stdout.strip() else 0
-    
-    # Get line statistics
-    if actual_base == "--cached":
-        success, stdout, stderr = run_command("git diff --cached --numstat")
-    elif actual_base == "":
-        success, stdout, stderr = run_command("git diff --numstat")
-    else:
-        success, stdout, stderr = run_command(f"git diff --numstat {actual_base}..HEAD")
-    
-    added_lines = 0
-    deleted_lines = 0
-    
-    if success and stdout.strip():
-        for line in stdout.split('\n'):
-            if line.strip():
-                parts = line.split('\t')
-                if len(parts) >= 2:
-                    try:
-                        added_lines += int(parts[0]) if parts[0] != '-' else 0
-                        deleted_lines += int(parts[1]) if parts[1] != '-' else 0
-                    except ValueError:
-                        continue
+    return True, changed_files, added_lines, deleted_lines
     
     return True, changed_files, added_lines, deleted_lines
 

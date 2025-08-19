@@ -13,6 +13,7 @@ import subprocess
 import sys
 import os
 from pathlib import Path
+from git_cache_utils import run_command_cached, find_valid_base_branch, get_file_changes_cached
 
 def run_command(cmd, description=""):
     """Run a command and return success status and output."""
@@ -44,51 +45,25 @@ def validate_issue_708_resolution():
     if not check_file_exists("ISSUE_708_RESOLUTION.md", "Issue #708 specific documentation"):
         all_checks_passed = False
     
-    # 2. Verify meaningful changes for Copilot review
+    # 2. Verify meaningful changes for Copilot review - OPTIMIZED: use cached Git operations
     print("\n📊 Change Analysis:")
-    # Try different base comparison options
-    base_options = ["main..HEAD", "origin/main..HEAD", "HEAD~2..HEAD"]
-    comparison_base = None
     
-    for base_option in base_options:
-        success, stdout, stderr = run_command(f"git diff --name-only {base_option}", f"Checking file changes ({base_option})")
-        if success and stdout.strip():
-            comparison_base = base_option
-            changed_files = stdout.strip().split('\n')
-            print(f"✅ Files changed: {len(changed_files)} (compared to {base_option})")
-            for file in changed_files:
-                print(f"   - {file}")
-            break
+    # Use the optimized cached approach
+    success, changed_files_count, added_lines, deleted_lines = get_file_changes_cached()
     
-    if not comparison_base:
-        print("❌ No file changes detected in any comparison")
-        all_checks_passed = False
-    
-    # 3. Check line statistics
-    if comparison_base:
-        success, stdout, stderr = run_command(f"git diff --numstat {comparison_base}", "Analyzing change volume")
-    if success and stdout.strip():
-        lines = stdout.strip().split('\n')
-        total_added = 0
-        total_deleted = 0
-        for line in lines:
-            parts = line.split('\t')
-            if len(parts) >= 2:
-                try:
-                    added = int(parts[0]) if parts[0] != '-' else 0
-                    deleted = int(parts[1]) if parts[1] != '-' else 0
-                    total_added += added
-                    total_deleted += deleted
-                except ValueError:
-                    pass
-        print(f"✅ Lines added: {total_added}")
-        print(f"✅ Lines deleted: {total_deleted}")
+    if success and changed_files_count > 0:
+        print(f"✅ Files changed: {changed_files_count}")
+        print(f"✅ Lines added: {added_lines}")
+        print(f"✅ Lines deleted: {deleted_lines}")
         
-        if total_added > 0 or total_deleted > 0:
+        if added_lines > 0 or deleted_lines > 0:
             print("✅ Meaningful changes detected for Copilot review")
         else:
             print("❌ No meaningful content changes")
             all_checks_passed = False
+    else:
+        print("❌ No file changes detected")
+        all_checks_passed = False
     
     # 4. Validate existing infrastructure still works
     print("\n🔧 Infrastructure Validation:")
@@ -146,15 +121,15 @@ def validate_copilot_readiness():
     print("Copilot Review Readiness Check")
     print("=" * 70)
     
-    # Check for reviewable content with multiple base options
-    base_options = ["main..HEAD", "origin/main..HEAD", "HEAD~2..HEAD"]
+    # Use optimized cached approach for better performance
+    success, changed_files, added_lines, deleted_lines = get_file_changes_cached()
     
-    for base_option in base_options:
-        success, stdout, stderr = run_command(f"git diff --stat {base_option}", f"Change statistics ({base_option})")
-        if success and stdout.strip():
-            print(f"✅ Diff statistics available ({base_option}):")
-            print(stdout.strip())
-            return True
+    if success and (changed_files > 0 or added_lines > 0 or deleted_lines > 0):
+        print("✅ Diff statistics available:")
+        print(f"   Files changed: {changed_files}")
+        print(f"   Lines added: {added_lines}")
+        print(f"   Lines deleted: {deleted_lines}")
+        return True
     
     print("❌ No diff statistics available")
     return False
