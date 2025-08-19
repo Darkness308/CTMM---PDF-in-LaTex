@@ -392,8 +392,11 @@ def main():
 
 
 def enhanced_incremental_testing(main_tex_path="main.tex"):
-    """Enhanced incremental testing with sophisticated error isolation."""
+    """Enhanced incremental testing with sophisticated error isolation and performance monitoring."""
     logger.info("Enhanced Incremental Testing - Advanced module isolation...")
+    
+    import time
+    start_time = time.time()
     
     build_system = CTMMBuildSystem(main_tex_path)
     build_system.scan_main_tex()  # Use the correct method name
@@ -402,34 +405,104 @@ def enhanced_incremental_testing(main_tex_path="main.tex"):
         logger.info("No modules to test with enhanced testing")
         return True
     
-    # Advanced testing with error categorization
+    # Advanced testing with comprehensive error categorization
     error_categories = {
         "syntax_errors": [],
         "package_conflicts": [],
         "resource_issues": [],
+        "template_warnings": [],
+        "encoding_issues": [],
         "unknown_errors": []
+    }
+    
+    performance_metrics = {
+        "total_modules": len(build_system.module_files),
+        "successful_modules": 0,
+        "failed_modules": 0,
+        "processing_time": 0,
+        "modules_per_second": 0
     }
     
     logger.info(f"Running enhanced testing on {len(build_system.module_files)} modules...")
     
-    # Test each module with enhanced error detection
-    successful_modules = 0
+    # Test each module with advanced error detection and validation
     for module in sorted(build_system.module_files):
+        module_start = time.time()
         logger.info(f"Enhanced testing: {module}")
-        # For now, assume modules are working (since basic build passed)
-        successful_modules += 1
         
-    # Enhanced error reporting
+        try:
+            # Check if module file exists and is readable
+            if not Path(module).exists():
+                error_categories["template_warnings"].append(f"Missing module: {module}")
+                performance_metrics["failed_modules"] += 1
+                continue
+            
+            # Validate module content for common issues
+            with open(module, 'r', encoding='utf-8', errors='replace') as f:
+                content = f.read()
+            
+            # Check for common LaTeX issues
+            if '\\usepackage{' in content:
+                error_categories["package_conflicts"].append(f"Package declaration in module: {module}")
+            
+            if '\\textbackslash{}\\textbackslash{}' in content:
+                error_categories["syntax_errors"].append(f"Over-escaped content in: {module}")
+            
+            # Check for encoding issues
+            try:
+                content.encode('utf-8')
+            except UnicodeEncodeError:
+                error_categories["encoding_issues"].append(f"Encoding issue in: {module}")
+            
+            # Module passed basic validation
+            performance_metrics["successful_modules"] += 1
+            
+        except Exception as e:
+            error_categories["unknown_errors"].append(f"Error in {module}: {str(e)}")
+            performance_metrics["failed_modules"] += 1
+        
+        # Track per-module performance
+        module_time = time.time() - module_start
+        if module_time > 1.0:  # Flag slow modules
+            error_categories["resource_issues"].append(f"Slow processing for: {module} ({module_time:.2f}s)")
+    
+    # Calculate final performance metrics
+    total_time = time.time() - start_time
+    performance_metrics["processing_time"] = total_time
+    performance_metrics["modules_per_second"] = performance_metrics["total_modules"] / total_time if total_time > 0 else 0
+    
+    # Enhanced comprehensive reporting
     total_errors = sum(len(errors) for errors in error_categories.values())
-    if total_errors == 0:
-        logger.info(f"✓ Enhanced incremental testing: All {successful_modules} modules passed")
-        return True
-    else:
-        logger.warning(f"Enhanced incremental testing: {total_errors} issues categorized")
+    
+    print("\n" + "="*60)
+    print("ENHANCED INCREMENTAL TESTING REPORT")
+    print("="*60)
+    
+    # Performance summary
+    print(f"📊 Performance Summary:")
+    print(f"   Total modules tested: {performance_metrics['total_modules']}")
+    print(f"   Successful: {performance_metrics['successful_modules']}")
+    print(f"   Failed: {performance_metrics['failed_modules']}")
+    print(f"   Processing time: {performance_metrics['processing_time']:.2f}s")
+    print(f"   Processing rate: {performance_metrics['modules_per_second']:.1f} modules/second")
+    
+    # Error analysis
+    if total_errors > 0:
+        print(f"\n🔍 Issue Analysis ({total_errors} total):")
         for category, errors in error_categories.items():
             if errors:
-                logger.warning(f"  {category}: {len(errors)} issues")
+                print(f"   {category.replace('_', ' ').title()}: {len(errors)} issues")
+                if len(errors) <= 3:  # Show details for few errors
+                    for error in errors:
+                        print(f"     • {error}")
+                
+        logger.warning(f"Enhanced incremental testing: {total_errors} issues categorized")
+        print(f"\n❌ Testing completed with issues")
         return False
+    else:
+        print(f"\n✅ All {performance_metrics['successful_modules']} modules passed enhanced testing")
+        logger.info(f"✓ Enhanced incremental testing: All {performance_metrics['successful_modules']} modules passed")
+        return True
 
 
 if __name__ == "__main__":

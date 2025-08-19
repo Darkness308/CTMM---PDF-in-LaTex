@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing test-workflow
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing test-workflow ci-validate ci-artifacts test-enhanced
 
 # Default target
 all: ctmm-check build
@@ -13,6 +13,31 @@ enhanced-build:
 enhanced-testing:
 	@echo "Running enhanced incremental testing..."
 	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()"
+
+# Comprehensive workflow validation
+comprehensive:
+	@echo "Running comprehensive CTMM workflow validation..."
+	@echo "Step 1: Enhanced build management"
+	python3 ctmm_build.py --enhanced
+	@echo "Step 2: Enhanced incremental testing"
+	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()"
+	@echo "Step 3: Unit test validation"
+	python3 test_ctmm_build.py
+	@echo "✅ Comprehensive workflow completed successfully"
+
+# CI/CD integration targets
+ci-validate:
+	@echo "Running CI/CD validation pipeline..."
+	python3 ctmm_build.py --enhanced
+	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()" 
+	python3 test_ctmm_build.py -v
+	@echo "✅ CI/CD validation completed"
+
+ci-artifacts:
+	@echo "Managing CI/CD build artifacts..."
+	@mkdir -p build-artifacts
+	@cp *.log build-artifacts/ 2>/dev/null || true
+	@echo "Artifacts collected in build-artifacts/"
 
 # Check build system and dependencies
 check:
@@ -85,6 +110,11 @@ unit-test:
 	python3 test_ctmm_build.py
 	python3 test_latex_validator.py
 
+# Test enhanced build management system
+test-enhanced:
+	@echo "Testing enhanced build management system..."
+	python3 test_enhanced_build_management.py
+
 # Clean build artifacts
 clean:
 	rm -f *.aux *.log *.out *.toc *.pdf
@@ -102,10 +132,16 @@ deps:
 
 # Comprehensive workflow
 comprehensive:
-	@echo "Running CTMM Comprehensive Workflow..."
-	python3 comprehensive_workflow.py
+	@echo "Running comprehensive CTMM workflow validation..."
+	@echo "Step 1: Enhanced build management"
+	python3 ctmm_build.py --enhanced
+	@echo "Step 2: Enhanced incremental testing"
+	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()"
+	@echo "Step 3: Unit test validation"
+	python3 test_ctmm_build.py
+	@echo "✅ Comprehensive workflow completed successfully"
 
-# Comprehensive workflow (alias)
+# Comprehensive workflow (legacy alias)
 workflow:
 	@echo "Running CTMM Comprehensive Workflow..."
 	python3 comprehensive_workflow.py
@@ -130,13 +166,17 @@ help:
 	@echo "  test          - Quick test of build system + unit tests"
 	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
 	@echo "  unit-test     - Run unit tests for Python functions"
+	@echo "  test-enhanced - Test enhanced build management system"
 	@echo "  clean         - Remove build artifacts"
 	@echo "  deps          - Install Python dependencies"
-	@echo "  comprehensive - Run complete workflow validation"
-	@echo "  workflow      - Alias for comprehensive"
+	@echo "  comprehensive - Run complete enhanced workflow validation"
+	@echo "  workflow      - Alias for legacy comprehensive workflow"
 	@echo "  test-workflow - Test automated PR merge workflow"
 	@echo "  enhanced-build  - Run enhanced CTMM build management"
 	@echo "  enhanced-testing - Run enhanced incremental testing"
+	@echo "  comprehensive - Run complete enhanced workflow validation"
+	@echo "  ci-validate   - Run CI/CD validation pipeline"
+	@echo "  ci-artifacts  - Collect and manage CI/CD build artifacts"
 	@echo ""
 	@echo "CTMM Unified Tool Commands:"
 	@echo "  ctmm-check    - Run unified build system validation"

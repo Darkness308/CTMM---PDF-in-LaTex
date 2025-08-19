@@ -446,20 +446,57 @@ def enhanced_build_management():
         "validation_passed": False,
         "files_created": 0,
         "errors_fixed": 0,
-        "automation_improvements": []
+        "automation_improvements": [],
+        "error_categories": {
+            "syntax_errors": [],
+            "missing_files": [],
+            "resource_issues": [],
+            "template_warnings": []
+        },
+        "performance_metrics": {
+            "total_files_processed": 0,
+            "validation_time": 0,
+            "build_time": 0
+        },
+        "artifacts_managed": {
+            "temp_files_cleaned": 0,
+            "output_files_created": 0,
+            "log_files_generated": 0
+        }
     }
     
+    import time
+    start_time = time.time()
+    
     try:
-        # Run standard build check
+        # Enhanced cleanup of temporary files before starting
+        _cleanup_build_artifacts()
+        
+        # Run standard build check with enhanced monitoring
         exit_code = main()
         build_results["validation_passed"] = (exit_code == 0)
         
-        # Additional enhancements
+        # Enhanced performance tracking
+        build_results["performance_metrics"]["build_time"] = time.time() - start_time
+        
+        # Advanced error categorization and reporting
+        build_results["error_categories"] = _categorize_build_errors()
+        
+        # Comprehensive artifact management
+        build_results["artifacts_managed"] = _manage_build_artifacts()
+        
+        # Additional automation improvements
         build_results["automation_improvements"].extend([
             "Enhanced file resource management implemented",
-            "Improved error detection and recovery systems",
-            "Comprehensive build automation validated"
+            "Improved error detection and recovery systems", 
+            "Comprehensive build automation validated",
+            "Advanced error categorization enabled",
+            "Build artifacts automatically managed",
+            "Performance metrics tracking activated"
         ])
+        
+        # Generate enhanced build report
+        _generate_enhanced_build_report(build_results)
         
         logger.info("Enhanced build management completed successfully")
         return build_results
@@ -467,7 +504,131 @@ def enhanced_build_management():
     except Exception as e:
         logger.error(f"Enhanced build management failed: {e}")
         build_results["validation_passed"] = False
+        build_results["error_categories"]["syntax_errors"].append(str(e))
         return build_results
+
+
+def _cleanup_build_artifacts():
+    """Clean up temporary build artifacts from previous runs."""
+    import os
+    import glob
+    
+    cleanup_patterns = [
+        "*.aux", "*.log", "*.out", "*.toc", "*.temp.*",
+        "main_basic_test.*", "build_error_*.log", "__pycache__/*.pyc"
+    ]
+    
+    cleaned_count = 0
+    for pattern in cleanup_patterns:
+        for file in glob.glob(pattern):
+            try:
+                os.remove(file)
+                cleaned_count += 1
+            except OSError:
+                pass  # File might be in use or already deleted
+    
+    logger.info(f"Cleaned {cleaned_count} temporary files")
+    return cleaned_count
+
+
+def _categorize_build_errors():
+    """Categorize and analyze build errors for better reporting."""
+    error_categories = {
+        "syntax_errors": [],
+        "missing_files": [],
+        "resource_issues": [],
+        "template_warnings": []
+    }
+    
+    # Check for common error patterns in log files
+    import glob
+    for log_file in glob.glob("*.log"):
+        try:
+            with open(log_file, 'r', encoding='utf-8', errors='replace') as f:
+                content = f.read()
+                
+            # Categorize errors based on content
+            if "LaTeX Error" in content:
+                error_categories["syntax_errors"].append(f"LaTeX syntax error in {log_file}")
+            if "File not found" in content or "No such file" in content:
+                error_categories["missing_files"].append(f"Missing file error in {log_file}")
+            if "Memory" in content or "Resource" in content:
+                error_categories["resource_issues"].append(f"Resource issue in {log_file}")
+                
+        except Exception:
+            pass  # Skip unreadable log files
+    
+    return error_categories
+
+
+def _manage_build_artifacts():
+    """Manage build artifacts and provide cleanup statistics."""
+    import os
+    import glob
+    
+    artifacts = {
+        "temp_files_cleaned": 0,
+        "output_files_created": 0, 
+        "log_files_generated": 0
+    }
+    
+    # Count various file types
+    artifacts["log_files_generated"] = len(glob.glob("*.log"))
+    artifacts["output_files_created"] = len(glob.glob("*.pdf"))
+    
+    # Clean up old temporary files
+    temp_patterns = ["*.temp.*", "main_basic_test.*"]
+    for pattern in temp_patterns:
+        for file in glob.glob(pattern):
+            try:
+                os.remove(file)
+                artifacts["temp_files_cleaned"] += 1
+            except OSError:
+                pass
+    
+    return artifacts
+
+
+def _generate_enhanced_build_report(build_results):
+    """Generate comprehensive enhanced build report."""
+    print("\n" + "="*70)
+    print("ENHANCED BUILD MANAGEMENT REPORT")
+    print("="*70)
+    
+    # Performance metrics
+    metrics = build_results["performance_metrics"]
+    print(f"📊 Performance Metrics:")
+    print(f"   Build time: {metrics['build_time']:.2f} seconds")
+    print(f"   Files processed: {metrics['total_files_processed']}")
+    
+    # Error categorization
+    errors = build_results["error_categories"]
+    total_errors = sum(len(v) for v in errors.values())
+    print(f"\n🔍 Error Analysis:")
+    print(f"   Total issues detected: {total_errors}")
+    if errors["syntax_errors"]:
+        print(f"   Syntax errors: {len(errors['syntax_errors'])}")
+    if errors["missing_files"]:
+        print(f"   Missing files: {len(errors['missing_files'])}")
+    if errors["resource_issues"]:
+        print(f"   Resource issues: {len(errors['resource_issues'])}")
+    
+    # Artifact management
+    artifacts = build_results["artifacts_managed"]
+    print(f"\n🗂️  Artifact Management:")
+    print(f"   Temporary files cleaned: {artifacts['temp_files_cleaned']}")
+    print(f"   Output files created: {artifacts['output_files_created']}")
+    print(f"   Log files generated: {artifacts['log_files_generated']}")
+    
+    # Automation improvements
+    print(f"\n🚀 Automation Improvements:")
+    for improvement in build_results["automation_improvements"]:
+        print(f"   • {improvement}")
+    
+    # Overall status
+    status = "✅ SUCCESSFUL" if build_results["validation_passed"] else "❌ ISSUES DETECTED"
+    print(f"\n📋 Overall Status: {status}")
+    print("="*70)
 
 
 def comprehensive_build_workflow():
@@ -484,15 +645,47 @@ def comprehensive_build_workflow():
         print("COMPREHENSIVE BUILD MANAGEMENT SUMMARY")
         print("="*60)
         print("✅ Enhanced automation: OPERATIONAL")
-        print("✅ Error detection: ACTIVE")
+        print("✅ Error detection: ACTIVE") 
         print("✅ File management: OPTIMIZED")
         print("✅ CI/CD reliability: VERIFIED")
+        print("✅ Performance tracking: ENABLED")
+        print("✅ Artifact management: AUTOMATED")
+        
+        # Display performance metrics
+        metrics = results.get("performance_metrics", {})
+        if metrics.get("build_time"):
+            print(f"⏱️  Build completed in {metrics['build_time']:.2f} seconds")
+        
+        # Display automation improvements
+        print("\n🔧 Automation Features:")
         for improvement in results["automation_improvements"]:
             print(f"   • {improvement}")
         print("="*60)
         return True
     else:
         logger.error("✗ Comprehensive build workflow failed")
+        
+        # Enhanced error reporting for CI/CD
+        errors = results.get("error_categories", {})
+        total_errors = sum(len(v) for v in errors.values())
+        
+        print("\n" + "="*60)  
+        print("BUILD FAILURE ANALYSIS")
+        print("="*60)
+        print(f"❌ Build failed with {total_errors} issues detected")
+        
+        if errors.get("syntax_errors"):
+            print("🔴 Syntax errors found - check LaTeX syntax")
+        if errors.get("missing_files"):
+            print("📄 Missing files detected - templates may need completion")
+        if errors.get("resource_issues"):
+            print("⚠️  Resource issues detected - check system resources")
+            
+        print("\n🔗 Debugging Resources:")
+        print("   • Run 'python3 ctmm_build.py' for detailed analysis")
+        print("   • Check log files for specific error details")
+        print("   • Use 'make enhanced-build' for comprehensive diagnostics")
+        print("="*60)
         return False
 
 
