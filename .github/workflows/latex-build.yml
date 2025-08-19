@@ -26,25 +26,26 @@ jobs:
       - name: Run LaTeX syntax validation
         run: |
           python3 validate_latex_syntax.py
-          
+
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
-          
+
       - name: Run Enhanced Build Management
         run: |
           echo "🚀 Running enhanced CTMM build management..."
           python3 ctmm_build.py --enhanced
-          
+
       - name: Run comprehensive CI validation
         run: |
           python3 test_issue_743_validation.py
-          
+
       - name: Enhanced pre-build validation
         run: |
           echo "🔍 Running enhanced pre-build validation..."
           # Check for critical files and dependencies
-          python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          python3 test_issue_761_fix.py || \
+            echo "⚠️  Warning: Some robustness checks failed but continuing..."
 
       - name: Set up LaTeX
         uses: dante-ev/latex-action@v2
@@ -59,7 +60,7 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            
+
       - name: Verify PDF generation
         run: |
           if [ -f "main.pdf" ]; then
