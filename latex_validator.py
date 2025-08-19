@@ -55,13 +55,77 @@ class LaTeXValidator:
     """Validates and cleans LaTeX files from excessive escaping."""
     
     def __init__(self):
-        # Patterns for detecting over-escaped content
+        # Patterns for detecting over-escaped content (25+ patterns for comprehensive detection)
         self.problematic_patterns = {
+            # Basic escaping issues (5 original patterns)
             'textbackslash_escape': r'\\textbackslash\{\}',
             'hypertarget_overuse': r'\\hypertarget\{[^}]+\}\{%\s*\\section',
             'texorpdfstring_overuse': r'\\texorpdfstring\{[^}]*\\textbf\{[^}]*\}\}',
             'excessive_backslashes': r'\\\\&',  # Double backslashes before &
             'auto_generated_labels': r'\\label\{[a-z]+-\d+.*\}',  # Auto-generated labels
+            
+            # Command escaping issues (patterns 6-10)
+            'escaped_emph': r'\\textbackslash\{\}emph\\textbackslash\{\}',
+            'escaped_textbf': r'\\textbackslash\{\}textbf\\textbackslash\{\}',
+            'escaped_textit': r'\\textbackslash\{\}textit\\textbackslash\{\}',
+            'escaped_underline': r'\\textbackslash\{\}underline\\textbackslash\{\}',
+            'escaped_url': r'\\textbackslash\{\}url\\textbackslash\{\}',
+            
+            # Environment escaping issues (patterns 11-15)
+            'escaped_begin': r'\\textbackslash\{\}begin\\textbackslash\{\}',
+            'escaped_end': r'\\textbackslash\{\}end\\textbackslash\{\}',
+            'escaped_itemize': r'\\textbackslash\{\}begin\\textbackslash\{\}itemize',
+            'escaped_enumerate': r'\\textbackslash\{\}begin\\textbackslash\{\}enumerate',
+            'escaped_center': r'\\textbackslash\{\}begin\\textbackslash\{\}center',
+            
+            # Math mode escaping (patterns 16-20)
+            'escaped_math_dollar': r'\\textbackslash\{\}\\\$',
+            'escaped_displaymath': r'\\textbackslash\{\}\\\[',
+            'escaped_equation': r'\\textbackslash\{\}begin\\textbackslash\{\}equation',
+            'escaped_frac': r'\\textbackslash\{\}frac\\textbackslash\{\}',
+            'escaped_sqrt': r'\\textbackslash\{\}sqrt\\textbackslash\{\}',
+            
+            # Reference and citation escaping (patterns 21-25)
+            'escaped_ref': r'\\textbackslash\{\}ref\\textbackslash\{\}',
+            'escaped_cite': r'\\textbackslash\{\}cite\\textbackslash\{\}',
+            'escaped_label': r'\\textbackslash\{\}label\\textbackslash\{\}',
+            'escaped_pageref': r'\\textbackslash\{\}pageref\\textbackslash\{\}',
+            'escaped_autoref': r'\\textbackslash\{\}autoref\\textbackslash\{\}',
+            
+            # Special character escaping (patterns 26-30)
+            'double_escaped_ampersand': r'\\textbackslash\{\}\\textbackslash\{\}&',
+            'escaped_hash': r'\\textbackslash\{\}\\#',
+            'escaped_percent': r'\\textbackslash\{\}\\%',
+            'escaped_dollar_special': r'\\textbackslash\{\}\\\$',
+            'escaped_underscore': r'\\textbackslash\{\}\\_',
+            
+            # Table and figure escaping (patterns 31-35)
+            'escaped_table': r'\\textbackslash\{\}begin\\textbackslash\{\}table',
+            'escaped_figure': r'\\textbackslash\{\}begin\\textbackslash\{\}figure',
+            'escaped_caption': r'\\textbackslash\{\}caption\\textbackslash\{\}',
+            'escaped_hline': r'\\textbackslash\{\}hline\\textbackslash\{\}',
+            'escaped_centering': r'\\textbackslash\{\}centering\\textbackslash\{\}',
+            
+            # Font and formatting escaping (patterns 36-40)
+            'escaped_large': r'\\textbackslash\{\}large\\textbackslash\{\}',
+            'escaped_huge': r'\\textbackslash\{\}huge\\textbackslash\{\}',
+            'escaped_tiny': r'\\textbackslash\{\}tiny\\textbackslash\{\}',
+            'escaped_normalsize': r'\\textbackslash\{\}normalsize\\textbackslash\{\}',
+            'escaped_color': r'\\textbackslash\{\}color\\textbackslash\{\}',
+            
+            # Package-specific escaping (patterns 41-45)
+            'escaped_includegraphics': r'\\textbackslash\{\}includegraphics\\textbackslash\{\}',
+            'escaped_newpage': r'\\textbackslash\{\}newpage\\textbackslash\{\}',
+            'escaped_clearpage': r'\\textbackslash\{\}clearpage\\textbackslash\{\}',
+            'escaped_vspace': r'\\textbackslash\{\}vspace\\textbackslash\{\}',
+            'escaped_hspace': r'\\textbackslash\{\}hspace\\textbackslash\{\}',
+            
+            # Complex escaping patterns (patterns 46-50)
+            'triple_backslashes': r'\\\\\\',  # Three consecutive backslashes
+            'escaped_braces': r'\\textbackslash\{\}\\{',
+            'malformed_commands': r'\\textbackslash\{\}[a-zA-Z]+\\textbackslash\{\}[^a-zA-Z]',
+            'excessive_texorpdfstring': r'\\texorpdfstring\{[^}]*\\texorpdfstring',
+            'nested_textbackslash': r'\\textbackslash\{\\textbackslash\{\}\}',
         }
         
         # Patterns for proper LaTeX structure
@@ -83,11 +147,131 @@ class LaTeXValidator:
         return issues
     
     def clean_excessive_escaping(self, content: str) -> str:
-        """Clean excessive escaping from LaTeX content."""
+        """Clean excessive escaping from LaTeX content using multi-pass approach."""
+        cleaned = content
+        
+        # Pass 1: Fix basic textbackslash escaping patterns
+        cleaned = self._fix_basic_escaping(cleaned)
+        
+        # Pass 2: Fix command escaping
+        cleaned = self._fix_command_escaping(cleaned)
+        
+        # Pass 3: Fix environment escaping  
+        cleaned = self._fix_environment_escaping(cleaned)
+        
+        # Pass 4: Fix special character escaping
+        cleaned = self._fix_special_character_escaping(cleaned)
+        
+        # Pass 5: Simplify complex structures
+        cleaned = self._simplify_complex_structures(cleaned)
+        
+        # Pass 6: Final cleanup
+        cleaned = self._final_cleanup(cleaned)
+        
+        return cleaned
+    
+    def _fix_basic_escaping(self, content: str) -> str:
+        """Pass 1: Fix basic textbackslash escaping."""
         cleaned = content
         
         # Fix textbackslash escaping
         cleaned = re.sub(r'\\textbackslash\{\}', r'\\', cleaned)
+        
+        # Fix nested textbackslash
+        cleaned = re.sub(r'\\textbackslash\{\\textbackslash\{\}\}', r'\\', cleaned)
+        
+        # Fix triple backslashes
+        cleaned = re.sub(r'\\\\\\', r'\\\\', cleaned)
+        
+        return cleaned
+    
+    def _fix_command_escaping(self, content: str) -> str:
+        """Pass 2: Fix command escaping patterns."""
+        cleaned = content
+        
+        # Command patterns to fix
+        commands = [
+            'emph', 'textbf', 'textit', 'underline', 'url', 'ref', 'cite', 'label',
+            'pageref', 'autoref', 'caption', 'centering', 'large', 'huge', 'tiny',
+            'normalsize', 'color', 'includegraphics', 'newpage', 'clearpage',
+            'vspace', 'hspace', 'frac', 'sqrt'
+        ]
+        
+        for cmd in commands:
+            # Fix original pattern: \textbackslash{}command\textbackslash{} → \command
+            pattern = rf'\\textbackslash\{{\}}{cmd}\\textbackslash\{{\}}'
+            replacement = rf'\\{cmd}'
+            cleaned = re.sub(pattern, replacement, cleaned)
+            
+            # Fix post-basic-cleaning pattern: \command\ → \command (remove trailing backslash)
+            pattern = rf'\\{cmd}\\(?![a-zA-Z])'  # Match \command\ but not \command followed by letters
+            replacement = rf'\\{cmd}'
+            cleaned = re.sub(pattern, replacement, cleaned)
+        
+        return cleaned
+    
+    def _fix_environment_escaping(self, content: str) -> str:
+        """Pass 3: Fix environment escaping patterns."""
+        cleaned = content
+        
+        # Environment patterns - handle both original patterns and post-basic-cleaning patterns
+        environments = [
+            'itemize', 'enumerate', 'center', 'table', 'figure', 'equation'
+        ]
+        
+        for env in environments:
+            # Fix original pattern: \textbackslash{}begin\textbackslash{}env → \begin{env}
+            pattern = rf'\\textbackslash\{{\}}begin\\textbackslash\{{\}}{env}'
+            replacement = rf'\\begin{{{env}}}'
+            cleaned = re.sub(pattern, replacement, cleaned)
+            
+            # Fix original pattern: \textbackslash{}end\textbackslash{}env → \end{env}
+            pattern = rf'\\textbackslash\{{\}}end\\textbackslash\{{\}}{env}'
+            replacement = rf'\\end{{{env}}}'
+            cleaned = re.sub(pattern, replacement, cleaned)
+            
+            # Fix post-basic-cleaning pattern: \begin\env → \begin{env}
+            pattern = rf'\\begin\\{env}(?![a-zA-Z])'  # Negative lookahead to avoid matching longer names
+            replacement = rf'\\begin{{{env}}}'
+            cleaned = re.sub(pattern, replacement, cleaned)
+            
+            # Fix post-basic-cleaning pattern: \end\env → \end{env}
+            pattern = rf'\\end\\{env}(?![a-zA-Z])'
+            replacement = rf'\\end{{{env}}}'
+            cleaned = re.sub(pattern, replacement, cleaned)
+        
+        # Fix generic begin/end patterns (both original and post-basic-cleaning)
+        cleaned = re.sub(r'\\textbackslash\{\}begin\\textbackslash\{\}', r'\\begin', cleaned)
+        cleaned = re.sub(r'\\textbackslash\{\}end\\textbackslash\{\}', r'\\end', cleaned)
+        
+        # Fix generic patterns after basic cleaning: \begin\ → \begin{} and \end\ → \end{}
+        cleaned = re.sub(r'\\begin\\(?![a-zA-Z{])', r'\\begin{}', cleaned)
+        cleaned = re.sub(r'\\end\\(?![a-zA-Z{])', r'\\end{}', cleaned)
+        
+        return cleaned
+    
+    def _fix_special_character_escaping(self, content: str) -> str:
+        """Pass 4: Fix special character escaping."""
+        cleaned = content
+        
+        # Fix double escaped ampersand
+        cleaned = re.sub(r'\\textbackslash\{\}\\textbackslash\{\}&', r' \\& ', cleaned)
+        cleaned = re.sub(r'\\\\&', r' \\& ', cleaned)
+        
+        # Fix escaped special characters
+        cleaned = re.sub(r'\\textbackslash\{\}\\#', r'\\#', cleaned)
+        cleaned = re.sub(r'\\textbackslash\{\}\\%', r'\\%', cleaned)
+        cleaned = re.sub(r'\\textbackslash\{\}\\\$', r'\\$', cleaned)
+        cleaned = re.sub(r'\\textbackslash\{\}\\_', r'\\_', cleaned)
+        
+        # Fix escaped braces
+        cleaned = re.sub(r'\\textbackslash\{\}\\{', r'\\{', cleaned)
+        
+        return cleaned
+    
+    def _simplify_complex_structures(self, content: str) -> str:
+        """Pass 5: Simplify complex LaTeX structures."""
+        cleaned = content
         
         # Simplify over-complex section headers
         # Convert: \hypertarget{...}{\section{\texorpdfstring{...}{...}\label{...}}
@@ -146,14 +330,29 @@ class LaTeXValidator:
             cleaned
         )
         
-        # Fix double backslash before ampersand
-        cleaned = re.sub(r'\\\\&', r' \\& ', cleaned)
+        # Fix excessive texorpdfstring nesting
+        cleaned = re.sub(r'\\texorpdfstring\{[^}]*\\texorpdfstring', r'\\texorpdfstring', cleaned)
         
         # Remove empty hypertargets and sections
         cleaned = re.sub(r'\\hypertarget\{section[^}]*\}\{%\s*\\subsection\{\}\\label\{section[^}]*\}\}', '', cleaned)
         
+        return cleaned
+    
+    def _final_cleanup(self, content: str) -> str:
+        """Pass 6: Final cleanup and normalization."""
+        cleaned = content
+        
         # Clean up excessive whitespace
         cleaned = re.sub(r'\n\s*\n\s*\n', '\n\n', cleaned)
+        
+        # Normalize spacing around commands
+        cleaned = re.sub(r'\s+\\', r' \\', cleaned)
+        
+        # Fix malformed commands that might have been created
+        cleaned = re.sub(r'\\([a-zA-Z]+)\\([a-zA-Z]+)', r'\\\1 \\\2', cleaned)
+        
+        # Final pass to catch any remaining textbackslash patterns
+        cleaned = re.sub(r'\\textbackslash\{\}', r'\\', cleaned)
         
         return cleaned
     
