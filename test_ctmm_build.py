@@ -8,6 +8,7 @@ import unittest
 import sys
 import tempfile
 import os
+import inspect
 from pathlib import Path
 
 # Add current directory to path for importing ctmm_build
@@ -309,7 +310,6 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
     def test_build_system_numbered_steps(self):
         """Test that the build system implements numbered steps as described in PR."""
         # This test verifies the main function structure without actually running it
-        import inspect
         
         # Get the source code of the main function
         source = inspect.getsource(ctmm_build.main)
@@ -321,7 +321,6 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
 
     def test_structured_data_returns_enhanced(self):
         """Test that the enhanced build system returns structured data."""
-        import inspect
         
         # Get the source code of the main function
         source = inspect.getsource(ctmm_build.main)
@@ -334,7 +333,6 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
 
     def test_enhanced_error_handling(self):
         """Test that the enhanced build system has proper error handling."""
-        import inspect
         
         # Get the source code of the main function
         source = inspect.getsource(ctmm_build.main)
@@ -358,7 +356,6 @@ class TestBuildSystemStructuredData(unittest.TestCase):
 
     def test_build_data_structure(self):
         """Test that build data structure is properly defined."""
-        import inspect
         
         # Get the source code to examine data structure
         source = inspect.getsource(ctmm_build.main)
@@ -680,7 +677,6 @@ class TestBuildSystemIntegration(unittest.TestCase):
 
     def test_main_function_error_handling(self):
         """Test that main function has proper error handling structure."""
-        import inspect
         
         source = inspect.getsource(ctmm_build.main)
         
