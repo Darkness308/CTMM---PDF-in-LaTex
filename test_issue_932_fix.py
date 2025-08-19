@@ -2,8 +2,8 @@
 """
 Test validation for Issue #932: CI Build Failure - LaTeX Action Version Fix
 
-This test validates that the problematic dante-ev/latex-action@v2.0.0 version
-has been replaced with the correct v2 version that exists.
+This test validates that the problematic dante-ev/latex-action versions
+(v2.0.0 and v2) have been replaced with the correct @latest version that exists.
 """
 
 import os
@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 def test_latex_action_version_fix():
-    """Test that dante-ev/latex-action uses correct version v2."""
+    """Test that dante-ev/latex-action uses correct version @latest."""
     workflow_file = Path(".github/workflows/latex-build.yml")
     
     if not workflow_file.exists():
@@ -20,16 +20,18 @@ def test_latex_action_version_fix():
     
     content = workflow_file.read_text()
     
-    # Check for the problematic version
-    if "dante-ev/latex-action@v2.0.0" in content:
-        print("❌ FAIL: Still using problematic version v2.0.0")
-        print("This version doesn't exist and causes CI failure:")
-        print("'Unable to resolve action `dante-ev/latex-action@v2.0.0`, unable to find version `v2.0.0`'")
-        return False
+    # Check for problematic versions that don't exist
+    problematic_versions = ["dante-ev/latex-action@v2.0.0", "dante-ev/latex-action@v2"]
+    for version in problematic_versions:
+        if version in content:
+            print(f"❌ FAIL: Still using problematic version {version.split('@')[1]}")
+            print("This version doesn't exist and causes CI failure:")
+            print(f"'Unable to resolve action `{version}`, unable to find version `{version.split('@')[1]}`'")
+            return False
     
     # Check for the correct version
-    if "dante-ev/latex-action@v2" in content:
-        print("✅ PASS: Using correct version v2")
+    if "dante-ev/latex-action@latest" in content:
+        print("✅ PASS: Using correct version @latest")
         return True
     
     print("❌ FAIL: dante-ev/latex-action not found or using unexpected version")
@@ -86,8 +88,8 @@ def main():
         print("🎉 ALL TESTS PASSED - Issue #932 fix is working correctly!")
         print()
         print("The GitHub Actions workflow should now be able to:")
-        print("- Resolve the dante-ev/latex-action@v2 action successfully")
-        print("- Avoid the 'unable to find version v2.0.0' error")
+        print("- Resolve the dante-ev/latex-action@latest action successfully")
+        print("- Avoid version resolution errors by using the stable @latest tag")
         print("- Complete the LaTeX PDF build process")
         return 0
     else:
