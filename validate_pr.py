@@ -80,7 +80,15 @@ def check_file_changes(base_branch="main"):
                 if h.strip() and not h.startswith("fatal:"):
                     actual_base = opt
                     break
-    
+    # Check each base option individually using git rev-parse
+    for opt in base_options:
+        # Only check options that are present in available_branches or match base_branch
+        if not any(opt in branch for branch in available_branches) and opt != base_branch:
+            continue
+        success, stdout, stderr = run_command(f"git rev-parse {opt}")
+        if success and stdout.strip() and not stdout.startswith("fatal:"):
+            actual_base = opt
+            break
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
         success, stdout, stderr = run_command("git diff --cached --name-only")
