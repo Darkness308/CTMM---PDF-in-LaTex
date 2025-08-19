@@ -12,17 +12,10 @@
 \makeatletter
 % Check if hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
-copilot/fix-692
     % hyperref is already loaded - just enable interactive mode
     \newcommand{\@ctmmInteractive}{true}%
 }{%
-    % hyperref not loaded - load it and enable interactive mode
-
-    % hyperref is already loaded - just set interactive mode
-    \newcommand{\@ctmmInteractive}{true}%
-}{%
     % hyperref is not loaded - load it and set interactive mode
-main
     \RequirePackage{hyperref}%
     \newcommand{\@ctmmInteractive}{true}%
 }

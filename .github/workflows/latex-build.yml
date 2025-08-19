@@ -46,19 +46,23 @@ jobs:
           # Check for critical files and dependencies
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
 
-      - name: Set up LaTeX
-        uses: dante-ev/latex-action@v2
-        with:
-          root_file: main.tex
-          args: -interaction=nonstopmode -halt-on-error -shell-escape
-          extra_system_packages: |
-            texlive-lang-german
-            texlive-fonts-recommended
-            texlive-latex-recommended
-            texlive-fonts-extra
-            texlive-latex-extra
-            texlive-science
+      - name: Install LaTeX packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-recommended \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-latex-extra \
+            texlive-lang-german \
+            texlive-science \
             texlive-pstricks
+
+      - name: Build LaTeX PDF
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          # Run twice to resolve references and citations
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
             
       - name: Verify PDF generation
         run: |

@@ -228,6 +228,31 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
   - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
   - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
   - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
+  - `File 'fontawesome5.sty' not found`: Das fontawesome5-Paket fehlt – installiere `texlive-fonts-extra` oder das vollständige `texlive-full` Paket.
+
+### Troubleshooting: fontawesome5.sty Package Missing
+
+**Problem:** Fehler beim Kompilieren mit `! LaTeX Error: File 'fontawesome5.sty' not found.`
+
+**Lösung:**
+```bash
+# Ubuntu/Debian:
+sudo apt-get install texlive-fonts-extra
+
+# macOS (mit MacTeX):
+# fontawesome5 ist bereits in MacTeX enthalten
+
+# Windows (MiKTeX):
+# Öffne MiKTeX Console > Packages > Installiere fontawesome5
+
+# Oder installiere das vollständige LaTeX-System:
+sudo apt-get install texlive-full
+```
+
+**Hinweise:**
+- Das `fontawesome5` Paket wird für die Navigationssymbole im CTMM-System verwendet
+- Bei fehlenden Paketen prüfe zuerst, ob `texlive-fonts-extra` installiert ist
+- GitHub Actions CI/CD installiert automatisch alle benötigten Pakete
 
 ### Vorgehen bei neuen Modulen
 
