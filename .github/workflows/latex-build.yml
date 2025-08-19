@@ -26,16 +26,16 @@ jobs:
       - name: Run LaTeX syntax validation
         run: |
           python3 validate_latex_syntax.py
-          
+
       - name: Run CTMM Build System Check
         run: |
           python3 ctmm_build.py
-          
+
       - name: Run Enhanced Build Management
         run: |
           echo "🚀 Running enhanced CTMM build management..."
           python3 ctmm_build.py --enhanced
-          
+
       - name: Run comprehensive CI validation
         run: |
           python3 test_issue_743_validation.py
@@ -59,7 +59,6 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            
       - name: Verify PDF generation
         run: |
           if [ -f "main.pdf" ]; then
