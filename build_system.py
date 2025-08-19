@@ -247,7 +247,7 @@ This file was automatically created by the CTMM Build System because it was refe
         logger.info("Testing modules incrementally...")
         
         original_content = self._read_file_safely(self.main_tex_path)
-            
+        
         module_list = sorted(list(self.module_files))
         
         for i, current_module in enumerate(module_list):
