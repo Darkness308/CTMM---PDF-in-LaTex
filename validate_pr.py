@@ -45,6 +45,8 @@ def check_file_changes(base_branch="main"):
     
     # Try different base branch options
     base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
+    # Remove duplicates while preserving order for efficiency
+    base_options = list(dict.fromkeys(base_options))
     actual_base = None
     
     # Only check base_options that are present in available_branches or match base_branch
@@ -63,49 +65,48 @@ def check_file_changes(base_branch="main"):
     
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
-        success, stdout, stderr = run_command("git diff --cached --name-only")
+        success, stdout, stderr = run_command("git diff --cached --numstat")
         if success and stdout.strip():
             print("📄 Checking staged changes...")
             actual_base = "--cached"
         else:
-            success, stdout, stderr = run_command("git diff --name-only HEAD~1..HEAD")
+            success, stdout, stderr = run_command("git diff --numstat HEAD~1..HEAD")
             if success:
                 actual_base = "HEAD~1"
             else:
                 print("⚠️  Cannot determine base for comparison, checking working directory changes...")
-                success, stdout, stderr = run_command("git diff --name-only")
+                success, stdout, stderr = run_command("git diff --numstat")
                 actual_base = ""
     
-    # Get file changes
-    if actual_base == "--cached":
-        success, stdout, stderr = run_command("git diff --cached --name-only")
-    elif actual_base == "":
-        success, stdout, stderr = run_command("git diff --name-only")
+    # Parse the output we already got from the fallback logic or get it now
+    if not actual_base:
+        # We already have the output from the last fallback call above
+        pass  # stdout already contains the numstat output
+    elif actual_base == "--cached":
+        # We already have the output from the first fallback call above  
+        pass  # stdout already contains the numstat output
+    elif actual_base == "HEAD~1":
+        # We already have the output from the second fallback call above
+        pass  # stdout already contains the numstat output
     else:
-        success, stdout, stderr = run_command(f"git diff --name-only {actual_base}..HEAD")
+        # Get file changes and line statistics for the found base branch
+        success, stdout, stderr = run_command(f"git diff --numstat {actual_base}..HEAD")
     
     if not success:
         print(f"❌ Error checking file changes: {stderr}")
         return False, 0, 0, 0
     
-    changed_files = len(stdout.split('\n')) if stdout.strip() else 0
-    
-    # Get line statistics
-    if actual_base == "--cached":
-        success, stdout, stderr = run_command("git diff --cached --numstat")
-    elif actual_base == "":
-        success, stdout, stderr = run_command("git diff --numstat")
-    else:
-        success, stdout, stderr = run_command(f"git diff --numstat {actual_base}..HEAD")
-    
+    # Parse numstat output to get both file count and line statistics
+    changed_files = 0
     added_lines = 0
     deleted_lines = 0
     
-    if success and stdout.strip():
+    if stdout.strip():
         for line in stdout.split('\n'):
             if line.strip():
                 parts = line.split('\t')
-                if len(parts) >= 2:
+                if len(parts) >= 3:  # numstat format: added\tdeleted\tfilename
+                    changed_files += 1
                     try:
                         added_lines += int(parts[0]) if parts[0] != '-' else 0
                         deleted_lines += int(parts[1]) if parts[1] != '-' else 0

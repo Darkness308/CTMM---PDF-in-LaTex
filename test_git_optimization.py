@@ -53,8 +53,7 @@ class TestGitOptimization(unittest.TestCase):
         mock_run_command.side_effect = [
             (True, mock_branch_output, ""),  # git branch -r
             (True, mock_revparse_output, ""),  # batched git rev-parse
-            (True, "file1.txt\nfile2.py", ""),  # git diff --name-only
-            (True, "10\t5\tfile1.txt\n3\t2\tfile2.py", ""),  # git diff --numstat
+            (True, "10\t5\tfile1.txt\n3\t2\tfile2.py", ""),  # git diff --numstat (single call optimization)
         ]
         
         # Call the function
@@ -100,10 +99,8 @@ class TestGitOptimization(unittest.TestCase):
         mock_run_command.side_effect = [
             (True, mock_branch_output, ""),  # git branch -r
             (False, "", "fatal: ambiguous argument"),  # batched git rev-parse fails
-            (False, "", ""),  # git diff --cached --name-only (no staged changes)
-            (True, "file1.txt", ""),  # git diff --name-only HEAD~1..HEAD (fallback)
-            (True, "file1.txt", ""),  # git diff --name-only HEAD~1..HEAD (for file count)
-            (True, "5\t2\tfile1.txt", ""),  # git diff --numstat HEAD~1..HEAD
+            (False, "", ""),  # git diff --cached --numstat (no staged changes)
+            (True, "5\t2\tfile1.txt", ""),  # git diff --numstat HEAD~1..HEAD (single call optimization)
         ]
         
         # Call the function
@@ -126,10 +123,8 @@ class TestGitOptimization(unittest.TestCase):
         # and it goes to fallback paths
         mock_run_command.side_effect = [
             (True, mock_branch_output, ""),  # git branch -r
-            (False, "", ""),  # git diff --cached --name-only (no staged changes)
-            (True, "file1.txt", ""),  # git diff --name-only HEAD~1..HEAD (fallback)
-            (True, "file1.txt", ""),  # git diff --name-only HEAD~1..HEAD (for changed files)
-            (True, "3\t1\tfile1.txt", ""),  # git diff --numstat HEAD~1..HEAD
+            (False, "", ""),  # git diff --cached --numstat (no staged changes)
+            (True, "3\t1\tfile1.txt", ""),  # git diff --numstat HEAD~1..HEAD (single call optimization)
         ]
         
         # Call with a base branch that doesn't exist in available branches
@@ -153,8 +148,7 @@ class TestGitOptimization(unittest.TestCase):
         mock_run_command.side_effect = [
             (True, mock_branch_output, ""),  # git branch -r
             (True, mock_revparse_output, ""),  # batched git rev-parse with mixed results
-            (True, "file1.txt", ""),  # git diff --name-only
-            (True, "2\t1\tfile1.txt", ""),  # git diff --numstat
+            (True, "2\t1\tfile1.txt", ""),  # git diff --numstat (single call optimization)
         ]
         
         success, changed_files, added_lines, deleted_lines = check_file_changes("main")
@@ -206,8 +200,7 @@ class TestGitOptimization(unittest.TestCase):
                 mock_run_command.side_effect = [
                     (True, mock_branch_output, ""),
                     (True, mock_revparse_output, ""),
-                    (True, "file1.txt", ""),
-                    (True, "1\t0\tfile1.txt", ""),
+                    (True, "1\t0\tfile1.txt", ""),  # git diff --numstat (single call optimization)
                 ]
                 
                 success, changed_files, added_lines, deleted_lines = check_file_changes(input_branch)
@@ -242,6 +235,93 @@ class TestGitOptimization(unittest.TestCase):
             
         except Exception as e:
             self.fail(f"Integration test failed with actual git: {e}")
+
+    @patch('validate_pr.run_command')
+    def test_duplicate_branch_options_optimization(self, mock_run_command):
+        """Test that duplicate branch options are removed to optimize git rev-parse calls."""
+        
+        # Mock git branch -r output
+        mock_branch_output = "origin/main\norigin/develop"
+        
+        # Mock git rev-parse batched output  
+        mock_revparse_output = "abc123def456\n789ghi012jkl"
+        
+        mock_run_command.side_effect = [
+            (True, mock_branch_output, ""),  # git branch -r
+            (True, mock_revparse_output, ""),  # batched git rev-parse (should be deduplicated)
+            (True, "1\t0\tfile1.txt", ""),  # git diff --numstat (single call optimization)
+        ]
+        
+        # Call with base_branch="main" which would create duplicates without optimization
+        success, changed_files, added_lines, deleted_lines = check_file_changes("main")
+        
+        # Verify the function succeeded
+        self.assertTrue(success)
+        
+        # Check that git rev-parse was called with deduplicated arguments
+        calls = mock_run_command.call_args_list
+        revparse_call = None
+        for call in calls:
+            cmd = call[0][0]  # First positional argument (the command)
+            if "git rev-parse" in cmd and not cmd == "git rev-parse":
+                revparse_call = cmd
+                break
+        
+        self.assertIsNotNone(revparse_call, "Should have found a batched git rev-parse call")
+        
+        # Split the command and get the branch arguments
+        parts = revparse_call.split()
+        git_revparse_args = parts[2:]  # Skip "git" and "rev-parse"
+        
+        # Verify no duplicates in the arguments
+        self.assertEqual(len(git_revparse_args), len(set(git_revparse_args)),
+                        "git rev-parse arguments should not contain duplicates")
+        
+        # Verify expected branches are present
+        self.assertIn("origin/main", git_revparse_args)
+        self.assertIn("main", git_revparse_args)
+        
+        # When base_branch="main", we should have exactly 2 unique options: "origin/main", "main"
+        # (since the original list was ["origin/main", "main", "origin/main", "main"])
+        self.assertEqual(len(git_revparse_args), 2)
+
+    @patch('validate_pr.run_command')
+    def test_single_git_diff_call_optimization(self, mock_run_command):
+        """Test that git diff is called only once using --numstat instead of separate --name-only and --numstat calls."""
+        
+        # Mock git branch -r output
+        mock_branch_output = "origin/main\norigin/develop"
+        
+        # Mock git rev-parse batched output
+        mock_revparse_output = "abc123def456\n789ghi012jkl"
+        
+        # Mock git diff --numstat output (combines file names and line stats)
+        mock_numstat_output = "10\t5\tfile1.txt\n3\t2\tfile2.py\n1\t0\tfile3.md"
+        
+        mock_run_command.side_effect = [
+            (True, mock_branch_output, ""),  # git branch -r
+            (True, mock_revparse_output, ""),  # batched git rev-parse
+            (True, mock_numstat_output, ""),  # single git diff --numstat call
+        ]
+        
+        success, changed_files, added_lines, deleted_lines = check_file_changes("main")
+        
+        # Verify the function succeeded
+        self.assertTrue(success)
+        self.assertEqual(changed_files, 3)  # 3 files from numstat output
+        self.assertEqual(added_lines, 14)   # 10 + 3 + 1
+        self.assertEqual(deleted_lines, 7)  # 5 + 2 + 0
+        
+        # Verify that git diff was called only once (not twice as before)
+        calls = mock_run_command.call_args_list
+        git_diff_calls = [call for call in calls if 'git diff' in call[0][0]]
+        self.assertEqual(len(git_diff_calls), 1, 
+                        "Should only call git diff once using --numstat")
+        
+        # Verify the call uses --numstat
+        diff_cmd = git_diff_calls[0][0][0]
+        self.assertIn("--numstat", diff_cmd)
+        self.assertNotIn("--name-only", diff_cmd)
 
 
 def main():
