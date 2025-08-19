@@ -115,6 +115,10 @@ test-ci-robustness:
 	@echo "Testing CI pipeline robustness (Issue #1044)..."
 	python3 test_issue_1044_ci_robustness.py
 
+test-comprehensive-timeout:
+	@echo "Testing comprehensive CI timeout coverage..."
+	python3 test_comprehensive_ci_timeout_coverage.py
+
 # Test automated PR merge workflow
 test-workflow:
 	@echo "Testing Automated PR Merge and Build Workflow..."
@@ -140,6 +144,7 @@ help:
 	@echo "  comprehensive - Run complete workflow validation"
 	@echo "  workflow      - Alias for comprehensive"
 	@echo "  test-ci-robustness - Test CI pipeline robustness (Issue #1044)"
+	@echo "  test-comprehensive-timeout - Test comprehensive CI timeout coverage"
 	@echo "  enhanced-build  - Run enhanced CTMM build management"
 	@echo "  enhanced-testing - Run enhanced incremental testing"
 	@echo ""
