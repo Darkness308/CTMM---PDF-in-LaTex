@@ -116,12 +116,12 @@ def validate_latex_packages():
     
     latex_step = None
     for step in steps:
-        if step.get('name') == 'Set up LaTeX':
+        if step.get('name') == 'Set up LaTeX with retry mechanism':
             latex_step = step
             break
     
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
+        print("❌ ERROR: 'Set up LaTeX with retry mechanism' step not found in workflow")
         return False
     
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
@@ -197,7 +197,7 @@ def validate_workflow_structure():
         'Run LaTeX syntax validation',
         'Run CTMM Build System Check',
         'Run comprehensive CI validation',
-        'Set up LaTeX'
+        'Set up LaTeX with retry mechanism'
     ]
     
     print("📋 Checking workflow step structure...")
