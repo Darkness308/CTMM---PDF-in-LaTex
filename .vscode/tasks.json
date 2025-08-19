@@ -25,7 +25,232 @@
                     "line": 2,
                     "message": 3
                 }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
             }
+        },
+        {
+            "label": "CTMM: Build System Check",
+            "type": "shell",
+            "command": "python3",
+            "args": ["ctmm_build.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Run CTMM build system validation and structure check"
+        },
+        {
+            "label": "CTMM: Module Generator (Interactive)",
+            "type": "shell",
+            "command": "${workspaceFolder}/create-module.sh",
+            "args": [],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Interactive CTMM module creation with guided workflow",
+            "windows": {
+                "command": "bash",
+                "args": ["${workspaceFolder}/create-module.sh"]
+            }
+        },
+        {
+            "label": "CTMM: Generate Arbeitsblatt",
+            "type": "shell",
+            "command": "node",
+            "args": [
+                "module-generator.js",
+                "arbeitsblatt",
+                "${input:moduleName}"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Generate new CTMM Arbeitsblatt (worksheet) module"
+        },
+        {
+            "label": "CTMM: Generate Tool",
+            "type": "shell",
+            "command": "node",
+            "args": [
+                "module-generator.js",
+                "tool",
+                "${input:moduleName}"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Generate new CTMM Tool module"
+        },
+        {
+            "label": "CTMM: Generate Notfallkarte",
+            "type": "shell",
+            "command": "node",
+            "args": [
+                "module-generator.js",
+                "notfallkarte",
+                "${input:moduleName}"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Generate new CTMM Notfallkarte (emergency card) module"
+        },
+        {
+            "label": "CTMM: Complete Build (with PDF)",
+            "type": "shell",
+            "command": "make",
+            "args": ["build"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": {
+                "owner": "latex",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):\\s+(.*)",
+                    "file": 1,
+                    "line": 2,
+                    "message": 3
+                }
+            },
+            "detail": "Complete CTMM build including LaTeX compilation and PDF generation",
+            "dependsOn": "CTMM: Build System Check"
+        },
+        {
+            "label": "CTMM: Validate PR",
+            "type": "shell",
+            "command": "python3",
+            "args": ["validate_pr.py"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Validate PR content and ensure it meets CTMM standards"
+        },
+        {
+            "label": "CTMM: LaTeX Syntax Check",
+            "type": "shell",
+            "command": "python3",
+            "args": ["validate_latex_syntax.py"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Check LaTeX files for syntax errors and escaping issues"
+        },
+        {
+            "label": "CTMM: Clean Build Files",
+            "type": "shell",
+            "command": "make",
+            "args": ["clean"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [],
+            "detail": "Clean LaTeX build artifacts and temporary files"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "moduleName",
+            "description": "Module name (use hyphens for spaces, e.g., taeglicher-stimmungscheck)",
+            "default": "neues-modul",
+            "type": "promptString"
         }
     ]
 }
