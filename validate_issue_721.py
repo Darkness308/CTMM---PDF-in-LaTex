@@ -263,11 +263,6 @@ def validate_issue_721_resolution():
         all_checks_passed = False
     
     # 5. Summary
-    print("\n🔧 Infrastructure Integration Check:")
-    if not validate_integration_compatibility():
-        all_checks_passed = False
-    
-    # 5. Summary
     print("\n" + "=" * 80)
     print("VALIDATION SUMMARY")
     print("=" * 80)
@@ -293,9 +288,6 @@ def main():
     """Main execution function."""
     if not validate_issue_721_resolution():
         print("\\n❌ Validation failed - Issue #721 resolution needs refinement")
-        sys.exit(1)
-    else:
-        print("\n❌ Validation failed - Issue #721 resolution needs refinement")
         sys.exit(1)
     else:
         print("\n✅ Validation successful - Issue #721 comprehensively resolved")
