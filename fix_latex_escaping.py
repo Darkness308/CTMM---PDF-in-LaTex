@@ -33,24 +33,33 @@ class LaTeXDeEscaper:
     def __init__(self):
         # Define the systematic over-escaping patterns and their fixes
         self.escaping_patterns = [
-            # Main LaTeX command patterns
+            # Main LaTeX command patterns - enhanced
             (r'\\textbackslash\{\}([a-zA-Z]+)\\textbackslash\{\}', r'\\\1'),
             
-            # Section and subsection patterns
+            # Section and subsection patterns - enhanced
             (r'\\textbackslash\{\}section\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\section{\\texorpdfstring'),
             (r'\\textbackslash\{\}subsection\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\subsection{\\texorpdfstring'),
             
-            # Hypertarget patterns
+            # Enhanced hypertarget patterns with complex brace structures
+            (r'\\textbackslash\{\}hypertarget\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}([^\\]*?)\\textbackslash\{\}%', r'\\hypertarget{\1}{%'),
+            (r'\\textbackslash\{\}hypertarget\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}', r'\\hypertarget{\1}'),
             (r'\\textbackslash\{\}hypertarget\\textbackslash\{\}', r'\\hypertarget'),
             
-            # Environment patterns
+            # Enhanced environment patterns with brace handling
+            (r'\\textbackslash\{\}begin\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\begin{\1}'),
+            (r'\\textbackslash\{\}end\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\end{\1}'),
             (r'\\textbackslash\{\}begin\\textbackslash\{\}', r'\\begin'),
             (r'\\textbackslash\{\}end\\textbackslash\{\}', r'\\end'),
+            
+            # Enhanced section patterns with complex structures
+            (r'\\textbackslash\{\}section\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}([^\\]*?)\\textbackslash\{\}\\textbackslash\{\}label\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\section{\1}}\\label{\3}'),
+            (r'\\textbackslash\{\}subsection\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}([^\\]*?)\\textbackslash\{\}\\textbackslash\{\}label\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\subsection{\1}}\\label{\3}'),
             
             # Label patterns
             (r'\\textbackslash\{\}label\\textbackslash\{\}', r'\\label'),
             
-            # Text formatting patterns
+            # Text formatting patterns - enhanced
+            (r'\\textbackslash\{\}textbf\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\textbf{\1}'),
             (r'\\textbackslash\{\}textbf\\textbackslash\{\}', r'\\textbf'),
             (r'\\textbackslash\{\}textit\\textbackslash\{\}', r'\\textit'),
             (r'\\textbackslash\{\}emph\\textbackslash\{\}', r'\\emph'),
@@ -65,9 +74,11 @@ class LaTeXDeEscaper:
             (r'\\textbackslash\{\}texorpdfstring\\textbackslash\{\}', r'\\texorpdfstring'),
             
             # Parameter braces - fix excessive bracing patterns
+            (r'\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}', r'{\1}'),
             (r'\\textbackslash\{\}\{([^}]*?)\\textbackslash\{\}\}', r'{\1}'),
             
-            # Simple brace escaping
+            # Simple brace escaping - enhanced
+            (r'\\textbackslash\{\}\\textbackslash\{\}', r''),  # Remove double escaping
             (r'\\textbackslash\{\}\{', r'{'),
             (r'\\textbackslash\{\}\}', r'}'),
             
@@ -77,27 +88,52 @@ class LaTeXDeEscaper:
             # Percentage signs
             (r'\\textbackslash\{\}%', r'%'),
             
-            # Additional common commands
+            # Additional common commands - enhanced
+            (r'\\textbackslash\{\}def\\textbackslash\{\}\\textbackslash\{\}labelenumi\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\def\\labelenumi{\1}'),
             (r'\\textbackslash\{\}def\\textbackslash\{\}', r'\\def'),
             (r'\\textbackslash\{\}deflabelenumi\\textbackslash\{\}', r'\\deflabelenumi'),
+            (r'\\textbackslash\{\}arabic\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\arabic{\1}'),
             (r'\\textbackslash\{\}arabic\\textbackslash\{\}', r'\\arabic'),
             
             # Math mode patterns
             (r'\\textbackslash\{\}\$', r'$'),
             
-            # Ampersand patterns (table separators)
+            # Ampersand patterns (table separators) - enhanced
+            (r'\\textbackslash\{\}\\textbackslash\{\}\&', r'\\&'),
             (r'\\textbackslash\{\}\&', r'\\&'),
             
-            # More environment patterns
+            # More environment patterns - enhanced
             (r'\\textbackslash\{\}enumerate\\textbackslash\{\}', r'enumerate'),
             (r'\\textbackslash\{\}itemize\\textbackslash\{\}', r'itemize'),
             (r'\\textbackslash\{\}quote\\textbackslash\{\}', r'quote'),
+            
+            # Additional complex patterns
+            (r'\\textbackslash\{\}\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'{\1}'),
+            (r'\\textbackslash\{\}\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'{\1}'),
         ]
         
-        # Additional cleanup patterns
+        # Additional cleanup patterns - enhanced for complex structures
         self.cleanup_patterns = [
             # Remove redundant braces around single arguments
             (r'\{\\textbackslash\{\}\}', r'{}'),
+            
+            # Enhanced cleanup for remaining textbackslash escaping
+            (r'\\textbackslash\{\}', r''),  # Remove any remaining textbackslash escaping
+            
+            # Fix environment braces more comprehensively
+            (r'\\begin\{([^}]+)\}\\textbackslash\{\}\\textbackslash\{\}', r'\\begin{\1}'),
+            (r'\\end\{([^}]+)\}\\textbackslash\{\}\\textbackslash\{\}', r'\\end{\1}'),
+            (r'\\begin\\textbackslash\{\}', r'\\begin'),
+            (r'\\end\\textbackslash\{\}', r'\\end'),
+            
+            # Fix hypertarget complex patterns
+            (r'\\hypertarget\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\hypertarget{\1}'),
+            (r'\\hypertarget\{([^}]*?)\}\\textbackslash\{\}\\textbackslash\{\}', r'\\hypertarget{\1}{%'),
+            (r'\\hypertarget\{([^}]*?)\}\{%', r'\\hypertarget{\1}{%'),
+            
+            # Fix section patterns with complex structures
+            (r'\\section\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\section{\1}'),
+            (r'\\subsection\\textbackslash\{\}([^\\]+?)\\textbackslash\{\}\\textbackslash\{\}', r'\\subsection{\1}'),
             
             # Fix texorpdfstring patterns with remaining issues
             (r'\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\texorpdfstring{\1}{\2}}\\label{\3}'),
@@ -109,12 +145,9 @@ class LaTeXDeEscaper:
             (r'\{\{', r'{'),
             (r'\}\}', r'}'),
             
-            # Fix section/subsection brace patterns - more comprehensive
+            # Fix section/subsection brace patterns - more comprehensive  
             (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\section{\\texorpdfstring{\1}{\2}}\\label{\3}'),
             (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\subsection{\\texorpdfstring{\1}{\2}}\\label{\3}'),
-            
-            # Fix hypertarget patterns
-            (r'\\hypertarget\{([^}]*?)\}\{%', r'\\hypertarget{\1}{%'),
             
             # Remove empty text formatting
             (r'\\textbf\{\}', r''),
@@ -130,6 +163,16 @@ class LaTeXDeEscaper:
             # Fix broken section commands
             (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\section{\\texorpdfstring{\1}{\2}}'),
             (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\subsection{\\texorpdfstring{\1}{\2}}'),
+            
+            # Additional cleanup for remaining escaping
+            (r'\\([a-zA-Z]+)\\textbackslash\{\}', r'\\\1'),
+            (r'\\textbackslash\{\}([a-zA-Z]+)', r'\\\1'),
+            
+            # Fix command braces
+            (r'\\([a-zA-Z]+)\\([a-zA-Z]+)', r'\\\1\\\2'),
+            
+            # Final cleanup passes
+            (r'\\\\([a-zA-Z]+)', r'\\\1'),  # Fix double backslashes before commands
         ]
         
         self.stats = {
@@ -140,7 +183,7 @@ class LaTeXDeEscaper:
     
     def process_file(self, input_path: Path, output_path: Path = None) -> Tuple[bool, int]:
         """
-        Process a single LaTeX file to fix over-escaping.
+        Process a single LaTeX file to fix over-escaping with multi-pass capability.
         
         Args:
             input_path: Path to input .tex file
@@ -158,21 +201,39 @@ class LaTeXDeEscaper:
                 content = f.read()
             
             original_content = content
-            replacements_made = 0
+            total_replacements = 0
             
-            # Apply all escaping pattern fixes
-            for pattern, replacement in self.escaping_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Pattern '{pattern}' replaced {count} times")
-            
-            # Apply cleanup patterns
-            for pattern, replacement in self.cleanup_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Cleanup pattern '{pattern}' replaced {count} times")
+            # Multi-pass processing for complex patterns
+            max_passes = 5  # Maximum number of passes
+            for pass_num in range(max_passes):
+                pass_replacements = 0
+                previous_content = content
+                
+                # Apply all escaping pattern fixes
+                for pattern, replacement in self.escaping_patterns:
+                    content, count = re.subn(pattern, replacement, content)
+                    pass_replacements += count
+                    if count > 0:
+                        logger.debug(f"Pass {pass_num+1}: Pattern '{pattern}' replaced {count} times")
+                
+                # Apply cleanup patterns
+                for pattern, replacement in self.cleanup_patterns:
+                    content, count = re.subn(pattern, replacement, content)
+                    pass_replacements += count
+                    if count > 0:
+                        logger.debug(f"Pass {pass_num+1}: Cleanup pattern '{pattern}' replaced {count} times")
+                
+                # Additional specific fixes for remaining issues
+                content = self._apply_final_fixes(content)
+                
+                total_replacements += pass_replacements
+                
+                # If no changes in this pass, we're done
+                if content == previous_content:
+                    logger.debug(f"No changes in pass {pass_num+1}, stopping")
+                    break
+                    
+                logger.debug(f"Pass {pass_num+1} completed with {pass_replacements} replacements")
             
             # Check if content changed
             content_changed = content != original_content
@@ -181,15 +242,34 @@ class LaTeXDeEscaper:
                 # Write the fixed content
                 with open(output_path, 'w', encoding='utf-8') as f:
                     f.write(content)
-                logger.info(f"Fixed {input_path} -> {output_path} ({replacements_made} replacements)")
+                
+                logger.info(f"Fixed {input_path} -> {output_path} ({total_replacements} replacements)")
             else:
-                logger.info(f"No changes needed for {input_path}")
+                logger.debug(f"No changes needed for {input_path}")
             
-            return content_changed, replacements_made
+            return content_changed, total_replacements
             
         except Exception as e:
             logger.error(f"Error processing {input_path}: {e}")
             return False, 0
+
+    def _apply_final_fixes(self, content: str) -> str:
+        """Apply final specific fixes for remaining issues."""
+        # Fix remaining environment braces
+        content = re.sub(r'\\begin\{([^}]+)\}', r'\\begin{\1}', content)
+        content = re.sub(r'\\end\{([^}]+)\}', r'\\end{\1}', content)
+        
+        # Fix remaining command braces
+        content = re.sub(r'\\textbf\{([^}]+)\}', r'\\textbf{\1}', content)
+        content = re.sub(r'\\hypertarget\{([^}]+)\}', r'\\hypertarget{\1}', content)
+        
+        # Fix any remaining textbackslash patterns
+        content = re.sub(r'\\textbackslash\{\}', '', content)
+        
+        # Fix double braces in complex structures
+        content = re.sub(r'\{\{([^}]+)\}\}', r'{\1}', content)
+        
+        return content
     
     def process_directory(self, input_dir: Path, output_dir: Path = None) -> Dict:
         """
