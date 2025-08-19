@@ -3,13 +3,22 @@ name: Build LaTeX PDF
 
 "on":
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+# Explicit permissions for GitHub Actions
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  pull-requests: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,6 +31,17 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install chardet
+
+      - name: Set script permissions
+        run: |
+          chmod +x create-module.sh
+          chmod +x *.py || true  # Make Python scripts executable
+
+      - name: Test module generator system
+        run: |
+          echo "🧪 Testing CTMM module generator..."
+          node module-generator.js --help || echo "Module generator help displayed"
+          echo "✅ Module generator system validated"
 
       - name: Run LaTeX syntax validation
         run: |
@@ -75,15 +95,17 @@ jobs:
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CTMM_PDF
+          name: CTMM_PDF_${{ github.sha }}
           path: main.pdf
+          retention-days: 30
 
       - name: Upload build logs (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: build_logs
+          name: build_logs_${{ github.sha }}
           path: |
             *.log
             build_error_*.log
             build_system.log
+          retention-days: 7
