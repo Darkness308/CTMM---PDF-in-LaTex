@@ -109,26 +109,47 @@ def validate_latex_packages():
         print(f"❌ ERROR: Failed to parse {workflow_path}: {e}")
         return False
     
-    # Find the LaTeX action step
+    # Find the LaTeX installation step (either action-based or direct installation)
     jobs = workflow_content.get('jobs', {})
     build_job = jobs.get('build', {})
     steps = build_job.get('steps', [])
     
     latex_step = None
+    extra_packages = ""
+    
+    # Look for the new direct installation step first
     for step in steps:
-        if step.get('name') == 'Set up LaTeX':
+        if step.get('name') == 'Install LaTeX and packages':
             latex_step = step
+            # Extract packages from the run command
+            run_command = step.get('run', '')
+            extra_packages = run_command
             break
     
+    # Fallback to the old action-based step
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
+        for step in steps:
+            if step.get('name') == 'Set up LaTeX':
+                latex_step = step
+                extra_packages = step.get('with', {}).get('extra_system_packages', '')
+                break
+    
+    if not latex_step:
+        print("❌ ERROR: Neither 'Install LaTeX and packages' nor 'Set up LaTeX' step found in workflow")
         return False
     
-    extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
     print(f"📋 Found LaTeX packages configuration:")
-    for line in extra_packages.strip().split('\n'):
-        if line.strip():
-            print(f"   - {line.strip()}")
+    if 'apt-get install' in extra_packages:
+        # Extract package names from apt-get install commands
+        import re
+        packages = re.findall(r'texlive-[\w-]+', extra_packages)
+        for pkg in packages:
+            print(f"   - {pkg}")
+    else:
+        # Traditional extra_system_packages format
+        for line in extra_packages.strip().split('\n'):
+            if line.strip():
+                print(f"   - {line.strip()}")
     
     # Essential package validation
     required_packages = [
@@ -189,15 +210,18 @@ def validate_workflow_structure():
         print("❌ ERROR: No steps found in build job")
         return False
     
-    # Expected step order for validation
+    # Expected step order for validation (updated for direct LaTeX installation)
     expected_steps = [
         'Checkout repository',
-        'Set up Python',
+        'Set up Python', 
         'Install Python dependencies',
         'Run LaTeX syntax validation',
         'Run CTMM Build System Check',
+        'Run Enhanced Build Management',
         'Run comprehensive CI validation',
-        'Set up LaTeX'
+        'Enhanced pre-build validation',
+        'Install LaTeX and packages',  # Updated from 'Set up LaTeX'
+        'Compile LaTeX document'       # New step
     ]
     
     print("📋 Checking workflow step structure...")
@@ -221,7 +245,7 @@ def validate_workflow_structure():
     validation_steps_indices = []
     
     for i, step_name in enumerate(step_names):
-        if 'Set up LaTeX' in step_name:
+        if 'Install LaTeX and packages' in step_name or 'Set up LaTeX' in step_name:
             latex_step_index = i
         if any(keyword in step_name.lower() for keyword in ['validation', 'check', 'validate']):
             validation_steps_indices.append(i)

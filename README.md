@@ -43,6 +43,44 @@ python3 ctmm_build.py
 - LaTeX-Installation mit TikZ und hyperref
 - Oder GitHub Codespace (vorkonfiguriert)
 
+## Problembehebung
+
+### Fehlende fontawesome5.sty Pakete
+
+Wenn Sie den Fehler `! LaTeX Error: File 'fontawesome5.sty' not found.` erhalten:
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install texlive-fonts-extra
+```
+
+**macOS (mit MacTeX):**
+```bash
+# Stellen Sie sicher, dass Sie die vollständige MacTeX-Installation haben
+brew install --cask mactex
+# Oder aktualisieren Sie Ihre TeX-Distribution
+sudo tlmgr update --self
+sudo tlmgr install fontawesome5
+```
+
+**Windows (MiKTeX):**
+```bash
+# Öffnen Sie MiKTeX Console als Administrator
+# Gehen Sie zu "Packages" und installieren Sie "fontawesome5"
+# Oder verwenden Sie die Kommandozeile:
+mpm --install=fontawesome5
+```
+
+**Alternative für CI/CD (GitHub Actions):**
+Das Repository verwendet jetzt direkte LaTeX-Installation für bessere Kontrolle über Paketabhängigkeiten:
+```yaml
+- name: Install LaTeX and packages
+  run: |
+    sudo apt-get update
+    sudo apt-get install -y texlive-fonts-extra
+```
+
 ## 🎯 CTMM Comprehensive Toolset - "es ist nicht mehr weit"
 
 **Status**: ✅ **COMPLETE AND OPERATIONAL**
