@@ -9,6 +9,7 @@ import subprocess
 import sys
 from pathlib import Path
 import logging
+from datetime import datetime
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -78,51 +79,267 @@ def check_missing_files(files):
 
 
 def create_template(file_path):
-    """Create a minimal template for a missing file."""
+    """Create a sophisticated template for a missing file with enhanced metadata and structure."""
     path = Path(file_path)
     path.parent.mkdir(parents=True, exist_ok=True)
-
+    
+    # Enhanced template generation based on file type and naming patterns
     if file_path.endswith('.sty'):
-        content = f"""% {path.name} - CTMM Style Package
-% TODO: Add content for this style package
-
-\\NeedsTeXFormat{{LaTeX2e}}
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
-
-% TODO: Add package dependencies and commands here
-
-% End of package
-"""
+        content = create_enhanced_style_template(path)
     else:
-        content = f"""% {path.name} - CTMM Module
-% TODO: Add content for this module
-
-\\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
-
-\\begin{{center}}
-\\textit{{This module is under development. Content will be added soon.}}
-\\end{{center}}
-
-% TODO: Complete implementation
-"""
+        content = create_enhanced_module_template(path)
 
     with open(path, 'w', encoding='utf-8') as f:
         f.write(content)
 
-    # Create TODO file
+    # Create enhanced TODO file with context-aware guidance
+    create_enhanced_todo_file(path)
+    logger.info(f"✓ Enhanced template created: {path}")
+
+
+def create_enhanced_style_template(path):
+    """Create an enhanced style package template with intelligent defaults."""
+    package_name = path.stem
+    
+    # Determine package type based on name patterns
+    if 'form' in package_name.lower():
+        package_type = "Form Elements"
+        default_content = """
+% Form-related commands and environments
+\\RequirePackage{hyperref}
+\\RequirePackage{xcolor}
+
+% CTMM Form Elements
+\\newcommand{\\ctmmTextField}[3][5cm]{%
+    \\textbf{#2:} \\underline{\\hspace{#1}}%
+}
+
+\\newcommand{\\ctmmCheckBox}[2][]{%
+    \\CheckBox[name=#1]{#2}%
+}
+"""
+    elif 'design' in package_name.lower():
+        package_type = "Design System"
+        default_content = """
+% Design system colors and styling
+\\RequirePackage{xcolor}
+\\RequirePackage{tcolorbox}
+
+% CTMM Color Scheme
+\\definecolor{ctmmBlue}{HTML}{003087}
+\\definecolor{ctmmOrange}{HTML}{FF6200}
+\\definecolor{ctmmGreen}{HTML}{4CAF50}
+
+% Design environments
+\\newtcolorbox{ctmmBox}[1]{
+    colback=ctmmBlue!5,
+    colframe=ctmmBlue,
+    title=#1
+}
+"""
+    elif 'diagram' in package_name.lower():
+        package_type = "Diagrams and Graphics"
+        default_content = """
+% Diagram and graphics commands
+\\RequirePackage{tikz}
+\\RequirePackage{pgfplots}
+
+% CTMM Diagram styles
+\\tikzset{
+    ctmm/.style={
+        draw=ctmmBlue,
+        fill=ctmmBlue!10,
+        thick
+    }
+}
+"""
+    else:
+        package_type = "General Purpose"
+        default_content = """
+% Package-specific commands and environments
+% TODO: Add your custom LaTeX commands here
+"""
+
+    content = f"""% {path.name} - CTMM {package_type} Package
+% Auto-generated template by Enhanced CTMM Build System
+% Created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+\\NeedsTeXFormat{{LaTeX2e}}
+\\ProvidesPackage{{{package_name}}}[{datetime.now().strftime('%Y/%m/%d')} CTMM {package_type.lower()} package]
+
+% Package identification
+\\newcommand{{\\{package_name}Version}}{{1.0.0}}
+\\newcommand{{\\{package_name}Date}}{{{datetime.now().strftime('%Y-%m-%d')}}}
+
+% Dependencies
+\\RequirePackage{{xcolor}}
+\\RequirePackage{{ifthen}}
+{default_content}
+
+% End of package
+\\endinput
+"""
+    return content
+
+
+def create_enhanced_module_template(path):
+    """Create an enhanced module template with intelligent content based on naming patterns."""
+    module_name = path.stem
+    title = filename_to_title(module_name)
+    
+    # Determine module type and content based on naming patterns
+    if 'arbeitsblatt' in module_name.lower() or 'worksheet' in module_name.lower():
+        module_type = "Arbeitsblatt (Worksheet)"
+        content_template = """
+\\begin{ctmmGreenBox}{Arbeitsblatt: {title}}
+\\section{{{title}}}
+\\label{{sec:{module_name}}}
+
+\\subsection{{Anleitung}}
+Dieses Arbeitsblatt hilft bei der strukturierten Bearbeitung von [THEMA].
+
+\\subsection{{Reflexionsfragen}}
+\\begin{{enumerate}}
+    \\item Was ist die aktuelle Situation?
+    \\item Welche Gefühle sind beteiligt?
+    \\item Was sind mögliche Handlungsoptionen?
+\\end{{enumerate}}
+
+\\subsection{{Notizen}}
+\\ctmmTextField[10cm]{{Ihre Notizen}}{{notes}}
+
+\\end{{ctmmGreenBox}}
+"""
+    elif 'trigger' in module_name.lower():
+        module_type = "Trigger Management"
+        content_template = """
+\\begin{ctmmOrangeBox}{Trigger-Management: {title}}
+\\section{{{title}}}
+\\label{{sec:{module_name}}}
+
+\\subsection{{Trigger-Identifikation}}
+\\begin{{itemize}}
+    \\item \\ctmmCheckBox[trigger1]{{Stress-Trigger}}
+    \\item \\ctmmCheckBox[trigger2]{{Beziehungs-Trigger}}
+    \\item \\ctmmCheckBox[trigger3]{{Sonstige Trigger}}
+\\end{{itemize}}
+
+\\subsection{{Bewältigungsstrategien}}
+\\ctmmTextArea[12cm]{{3}}{{Ihre Strategien}}{{strategies}}
+
+\\end{{ctmmOrangeBox}}
+"""
+    elif 'depression' in module_name.lower():
+        module_type = "Depression Support"
+        content_template = """
+\\begin{ctmmBlueBox}{Depression: {title}}
+\\section{{{title}}}
+\\label{{sec:{module_name}}}
+
+\\subsection{{Stimmungsmonitoring}}
+Aktuelle Stimmung (1-10): \\ctmmTextField[3cm]{{Bewertung}}{{mood}}
+
+\\subsection{{Unterstützende Aktivitäten}}
+\\begin{{itemize}}
+    \\item \\ctmmCheckBox[activity1]{{Spaziergang}}
+    \\item \\ctmmCheckBox[activity2]{{Atemübungen}}
+    \\item \\ctmmCheckBox[activity3]{{Soziale Kontakte}}
+\\end{{itemize}}
+
+\\end{{ctmmBlueBox}}
+"""
+    else:
+        module_type = "General Module"
+        content_template = """
+\\section{{{title}}}
+\\label{{sec:{module_name}}}
+
+\\begin{{ctmmBlueBox}}{{{title}}}
+\\textbf{{Willkommen im {title} Modul}}
+
+Dieses Modul behandelt [THEMA] und bietet strukturierte Unterstützung für:
+\\begin{{itemize}}
+    \\item [PUNKT 1]
+    \\item [PUNKT 2]
+    \\item [PUNKT 3]
+\\end{{itemize}}
+
+\\subsection{{Interaktive Elemente}}
+\\ctmmTextField[8cm]{{Ihre Eingabe}}{{input}}
+
+\\end{{ctmmBlueBox}}
+"""
+
+    # Generate the final content
+    content = f"""% {path.name} - CTMM {module_type}
+% Auto-generated template by Enhanced CTMM Build System
+% Created: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+{content_template.format(title=title, module_name=module_name)}
+
+% TODO: Customize this template for your specific needs
+% TODO: Add additional sections, forms, or interactive elements as needed
+% TODO: Review and test the module before removing this comment
+"""
+    return content
+
+
+def create_enhanced_todo_file(path):
+    """Create an enhanced TODO file with context-aware guidance and completion tracking."""
     todo_path = path.parent / f"TODO_{path.stem}.md"
+    
+    # Determine completion guidelines based on file type
+    if path.suffix == '.sty':
+        guidelines = """
+## Style Package Guidelines
+- [ ] Define package dependencies in the preamble
+- [ ] Create consistent command naming (use \\ctmm prefix)
+- [ ] Add comprehensive documentation for each command
+- [ ] Test compatibility with other CTMM packages
+- [ ] Follow CTMM design system colors and patterns
+"""
+    else:
+        guidelines = """
+## Module Guidelines
+- [ ] Use semantic LaTeX structure (sections, subsections)
+- [ ] Include appropriate CTMM color boxes for content organization
+- [ ] Add interactive form elements where appropriate
+- [ ] Ensure German language consistency (Sie-Form for therapy context)
+- [ ] Test module independently and as part of full document
+"""
+
     todo_content = f"""# TODO: Complete {path.name}
 
-**Status:** Template created, needs content
+**Status:** 🟡 Template created - needs content development  
+**Created:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}  
+**Type:** {path.suffix.upper()} {'Package' if path.suffix == '.sty' else 'Module'}  
 
-## Tasks
-- [ ] Add proper content
-- [ ] Review and test functionality
-- [ ] Update documentation
+## Quick Start
+1. Open `{path.name}` in your LaTeX editor
+2. Replace TODO comments with actual content
+3. Test the file by running `python3 ctmm_build.py`
+4. Mark tasks below as complete when done
 
-Created by CTMM Build System
+{guidelines}
+
+## CTMM Integration Checklist
+- [ ] Follows CTMM naming conventions
+- [ ] Uses appropriate CTMM design elements
+- [ ] Compatible with existing modules/packages
+- [ ] Tested with full document build
+- [ ] Documentation updated
+
+## Completion
+When all tasks are complete:
+1. Remove all TODO comments from `{path.name}`
+2. Test the full CTMM build: `make check`
+3. Delete this TODO file
+4. Commit your changes
+
+---
+**Auto-generated by Enhanced CTMM Build System**
 """
+    
     with open(todo_path, 'w', encoding='utf-8') as f:
         f.write(todo_content)
 

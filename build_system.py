@@ -392,37 +392,49 @@ def main():
 
 
 def enhanced_incremental_testing(main_tex_path="main.tex"):
-    """Enhanced incremental testing with sophisticated error isolation."""
+    """Enhanced incremental testing with sophisticated error isolation and categorization."""
     logger.info("Enhanced Incremental Testing - Advanced module isolation...")
     
     build_system = CTMMBuildSystem(main_tex_path)
-    build_system.scan_main_tex()  # Use the correct method name
+    build_system.scan_main_tex()
     
     if not build_system.module_files:
         logger.info("No modules to test with enhanced testing")
         return True
     
-    # Advanced testing with error categorization
+    # Advanced testing with comprehensive error categorization
     error_categories = {
         "syntax_errors": [],
         "package_conflicts": [],
         "resource_issues": [],
+        "encoding_issues": [],
+        "reference_errors": [],
         "unknown_errors": []
     }
     
+    module_results = {}
+    
     logger.info(f"Running enhanced testing on {len(build_system.module_files)} modules...")
     
-    # Test each module with enhanced error detection
-    successful_modules = 0
+    # Phase 1: Individual module validation
     for module in sorted(build_system.module_files):
         logger.info(f"Enhanced testing: {module}")
-        # For now, assume modules are working (since basic build passed)
-        successful_modules += 1
-        
-    # Enhanced error reporting
+        module_result = test_individual_module(module, error_categories)
+        module_results[module] = module_result
+    
+    # Phase 2: Incremental integration testing
+    integration_results = test_incremental_integration(build_system.module_files, error_categories)
+    
+    # Phase 3: Comprehensive error analysis and reporting
     total_errors = sum(len(errors) for errors in error_categories.values())
+    successful_modules = sum(1 for result in module_results.values() if result['success'])
+    
+    # Generate enhanced report
+    generate_enhanced_testing_report(module_results, integration_results, error_categories)
+    
     if total_errors == 0:
         logger.info(f"✓ Enhanced incremental testing: All {successful_modules} modules passed")
+        logger.info("✓ Integration testing: All module combinations successful")
         return True
     else:
         logger.warning(f"Enhanced incremental testing: {total_errors} issues categorized")
@@ -430,6 +442,336 @@ def enhanced_incremental_testing(main_tex_path="main.tex"):
             if errors:
                 logger.warning(f"  {category}: {len(errors)} issues")
         return False
+
+
+def test_individual_module(module_path, error_categories):
+    """Test an individual module in isolation with sophisticated error detection."""
+    result = {
+        'success': True,
+        'errors': [],
+        'warnings': [],
+        'metrics': {
+            'compilation_time': 0,
+            'file_size': 0,
+            'dependencies': []
+        }
+    }
+    
+    try:
+        # Check if pdflatex is available
+        subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
+        
+        # Create isolated test environment
+        test_content = create_isolated_test_environment(module_path)
+        test_file = f"test_isolated_{Path(module_path).stem}.tex"
+        
+        with open(test_file, 'w', encoding='utf-8') as f:
+            f.write(test_content)
+        
+        # Measure compilation time
+        start_time = datetime.now()
+        
+        # Test compilation
+        compile_result = subprocess.run(
+            ['pdflatex', '-interaction=nonstopmode', test_file],
+            capture_output=True,
+            text=True,
+            errors='replace'
+        )
+        
+        end_time = datetime.now()
+        result['metrics']['compilation_time'] = (end_time - start_time).total_seconds()
+        
+        # Analyze compilation results
+        if compile_result.returncode != 0:
+            result['success'] = False
+            categorize_compilation_errors(compile_result.stdout, compile_result.stderr, error_categories, module_path)
+        else:
+            # Check output quality
+            pdf_path = Path(test_file).with_suffix('.pdf')
+            if pdf_path.exists():
+                result['metrics']['file_size'] = pdf_path.stat().st_size
+            
+        # Clean up test files
+        cleanup_test_files(test_file)
+        
+    except FileNotFoundError:
+        # pdflatex not available - skip actual compilation but validate syntax
+        logger.debug(f"pdflatex not available - validating {module_path} syntax only")
+        result['success'] = validate_module_syntax(module_path, error_categories)
+    except Exception as e:
+        result['success'] = False
+        error_categories['unknown_errors'].append(f"{module_path}: {str(e)}")
+    
+    return result
+
+
+def create_isolated_test_environment(module_path):
+    """Create an isolated LaTeX environment for testing a single module."""
+    return f"""\\documentclass[a4paper,12pt]{{article}}
+
+% Minimal preamble for isolated testing
+\\usepackage[T1]{{fontenc}}
+\\usepackage[utf8]{{inputenc}}
+\\usepackage[ngerman]{{babel}}
+\\usepackage{{xcolor}}
+\\usepackage{{hyperref}}
+
+% CTMM test environment
+\\definecolor{{ctmmBlue}}{{HTML}}{{003087}}
+\\definecolor{{ctmmOrange}}{{HTML}}{{FF6200}}
+\\definecolor{{ctmmGreen}}{{HTML}}{{4CAF50}}
+
+% Mock CTMM commands for testing
+\\newcommand{{\\ctmmTextField}}[3][5cm]{{\\textbf{{#2:}} \\underline{{\\hspace{{#1}}}}}}
+\\newcommand{{\\ctmmCheckBox}}[2][]{{$\\square$ #2}}
+\\newcommand{{\\ctmmTextArea}}[4][10cm]{{\\textbf{{#3:}} \\\\[0.2cm] \\underline{{\\parbox{{#1}}{{\\vspace{{#2\\baselineskip}}}}}}}}
+
+\\newenvironment{{ctmmBlueBox}}[1]{{\\par\\noindent\\textcolor{{ctmmBlue}}{{\\textbf{{#1}}}}\\par\\nopagebreak}}{{\\par}}
+\\newenvironment{{ctmmGreenBox}}[1]{{\\par\\noindent\\textcolor{{ctmmGreen}}{{\\textbf{{#1}}}}\\par\\nopagebreak}}{{\\par}}
+\\newenvironment{{ctmmOrangeBox}}[1]{{\\par\\noindent\\textcolor{{ctmmOrange}}{{\\textbf{{#1}}}}\\par\\nopagebreak}}{{\\par}}
+
+\\begin{{document}}
+
+% Test the module in isolation
+\\input{{{module_path}}}
+
+\\end{{document}}
+"""
+
+
+def test_incremental_integration(module_files, error_categories):
+    """Test incremental integration of modules to identify conflicts."""
+    integration_results = {
+        'successful_combinations': [],
+        'failed_combinations': [],
+        'conflict_pairs': []
+    }
+    
+    try:
+        subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
+        
+        # Test pairs of modules for compatibility
+        module_list = list(module_files)
+        for i, module1 in enumerate(module_list):
+            for module2 in module_list[i+1:]:
+                if test_module_pair_compatibility(module1, module2, error_categories):
+                    integration_results['successful_combinations'].append((module1, module2))
+                else:
+                    integration_results['failed_combinations'].append((module1, module2))
+                    integration_results['conflict_pairs'].append((module1, module2))
+        
+    except FileNotFoundError:
+        logger.debug("pdflatex not available - skipping integration testing")
+        
+    return integration_results
+
+
+def test_module_pair_compatibility(module1, module2, error_categories):
+    """Test if two modules can be used together without conflicts."""
+    test_content = create_dual_module_test_environment(module1, module2)
+    test_file = f"test_integration_{Path(module1).stem}_{Path(module2).stem}.tex"
+    
+    try:
+        with open(test_file, 'w', encoding='utf-8') as f:
+            f.write(test_content)
+        
+        result = subprocess.run(
+            ['pdflatex', '-interaction=nonstopmode', test_file],
+            capture_output=True,
+            text=True,
+            errors='replace'
+        )
+        
+        success = result.returncode == 0
+        if not success:
+            categorize_integration_errors(result.stdout, result.stderr, error_categories, module1, module2)
+        
+        cleanup_test_files(test_file)
+        return success
+        
+    except Exception as e:
+        error_categories['unknown_errors'].append(f"Integration test {module1}+{module2}: {str(e)}")
+        return False
+
+
+def create_dual_module_test_environment(module1, module2):
+    """Create a test environment for two modules."""
+    return f"""\\documentclass[a4paper,12pt]{{article}}
+
+% Minimal preamble for integration testing
+\\usepackage[T1]{{fontenc}}
+\\usepackage[utf8]{{inputenc}}
+\\usepackage[ngerman]{{babel}}
+\\usepackage{{xcolor}}
+\\usepackage{{hyperref}}
+
+% CTMM test environment (same as isolated test)
+\\definecolor{{ctmmBlue}}{{HTML}}{{003087}}
+\\definecolor{{ctmmOrange}}{{HTML}}{{FF6200}}
+\\definecolor{{ctmmGreen}}{{HTML}}{{4CAF50}}
+
+% Mock CTMM commands for testing
+\\newcommand{{\\ctmmTextField}}[3][5cm]{{\\textbf{{#2:}} \\underline{{\\hspace{{#1}}}}}}
+\\newcommand{{\\ctmmCheckBox}}[2][]{{$\\square$ #2}}
+\\newcommand{{\\ctmmTextArea}}[4][10cm]{{\\textbf{{#3:}} \\\\[0.2cm] \\underline{{\\parbox{{#1}}{{\\vspace{{#2\\baselineskip}}}}}}}}
+
+\\newenvironment{{ctmmBlueBox}}[1]{{\\par\\noindent\\textcolor{{ctmmBlue}}{{\\textbf{{#1}}}}\\par\\nopagebreak}}{{\\par}}
+\\newenvironment{{ctmmGreenBox}}[1]{{\\par\\noindent\\textcolor{{ctmmGreen}}{{\\textbf{{#1}}}}\\par\\nopagebreak}}{{\\par}}
+\\newenvironment{{ctmmOrangeBox}}[1]{{\\par\\noindent\\textcolor{{ctmmOrange}}{{\\textbf{{#1}}}}\\par\\nopagebreak}}{{\\par}}
+
+\\begin{{document}}
+
+% Test both modules together
+\\input{{{module1}}}
+\\newpage
+\\input{{{module2}}}
+
+\\end{{document}}
+"""
+
+
+def categorize_compilation_errors(stdout, stderr, error_categories, module_path):
+    """Categorize compilation errors into specific categories for better diagnosis."""
+    combined_output = (stdout + stderr).lower()
+    
+    # Syntax error patterns
+    if any(pattern in combined_output for pattern in ['undefined control sequence', 'missing \\begin{document}']):
+        error_categories['syntax_errors'].append(f"{module_path}: LaTeX syntax error")
+    
+    # Package conflict patterns
+    elif any(pattern in combined_output for pattern in ['option clash', 'package already loaded']):
+        error_categories['package_conflicts'].append(f"{module_path}: Package conflict detected")
+    
+    # Encoding issues
+    elif any(pattern in combined_output for pattern in ['invalid utf-8', 'encoding']):
+        error_categories['encoding_issues'].append(f"{module_path}: Encoding issue")
+    
+    # Reference errors
+    elif any(pattern in combined_output for pattern in ['undefined reference', 'multiply defined']):
+        error_categories['reference_errors'].append(f"{module_path}: Reference error")
+    
+    # Resource issues
+    elif any(pattern in combined_output for pattern in ['file not found', 'i/o error']):
+        error_categories['resource_issues'].append(f"{module_path}: Resource/file issue")
+    
+    # Unknown errors
+    else:
+        error_categories['unknown_errors'].append(f"{module_path}: Unclassified compilation error")
+
+
+def categorize_integration_errors(stdout, stderr, error_categories, module1, module2):
+    """Categorize integration errors between modules."""
+    combined_output = (stdout + stderr).lower()
+    module_pair = f"{module1}+{module2}"
+    
+    if any(pattern in combined_output for pattern in ['multiply defined', 'command already defined']):
+        error_categories['package_conflicts'].append(f"{module_pair}: Command/environment conflict")
+    elif any(pattern in combined_output for pattern in ['undefined reference']):
+        error_categories['reference_errors'].append(f"{module_pair}: Cross-reference conflict")
+    else:
+        error_categories['unknown_errors'].append(f"{module_pair}: Integration conflict")
+
+
+def validate_module_syntax(module_path, error_categories):
+    """Validate module syntax when pdflatex is not available."""
+    try:
+        with open(module_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Basic syntax validation
+        issues = []
+        
+        # Check for common LaTeX syntax issues
+        if content.count('{') != content.count('}'):
+            issues.append("Mismatched braces")
+        
+        if '\\begin{' in content and content.count('\\begin{') != content.count('\\end{'):
+            issues.append("Mismatched begin/end environments")
+        
+        if issues:
+            for issue in issues:
+                error_categories['syntax_errors'].append(f"{module_path}: {issue}")
+            return False
+        
+        return True
+        
+    except Exception as e:
+        error_categories['unknown_errors'].append(f"{module_path}: Syntax validation failed - {str(e)}")
+        return False
+
+
+def cleanup_test_files(base_filename):
+    """Clean up test files and artifacts."""
+    base_path = Path(base_filename)
+    for ext in ['', '.aux', '.log', '.pdf', '.out', '.toc']:
+        cleanup_file = base_path.with_suffix(ext)
+        if cleanup_file.exists():
+            cleanup_file.unlink()
+
+
+def generate_enhanced_testing_report(module_results, integration_results, error_categories):
+    """Generate a comprehensive enhanced testing report."""
+    report_path = Path("enhanced_testing_report.md")
+    
+    total_modules = len(module_results)
+    successful_modules = sum(1 for result in module_results.values() if result['success'])
+    total_errors = sum(len(errors) for errors in error_categories.values())
+    
+    report_content = f"""# Enhanced Incremental Testing Report
+
+Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+
+## Summary
+- **Total Modules Tested**: {total_modules}
+- **Successful Modules**: {successful_modules}
+- **Failed Modules**: {total_modules - successful_modules}
+- **Total Issues Found**: {total_errors}
+
+## Module Test Results
+"""
+    
+    for module, result in module_results.items():
+        status = "✅ PASS" if result['success'] else "❌ FAIL"
+        report_content += f"- {status} `{module}`"
+        if 'compilation_time' in result['metrics'] and result['metrics']['compilation_time'] > 0:
+            report_content += f" (compiled in {result['metrics']['compilation_time']:.2f}s)"
+        report_content += "\n"
+    
+    # Integration testing results
+    if integration_results['successful_combinations'] or integration_results['failed_combinations']:
+        report_content += f"""
+## Integration Testing
+- **Successful Combinations**: {len(integration_results['successful_combinations'])}
+- **Failed Combinations**: {len(integration_results['failed_combinations'])}
+"""
+        
+        if integration_results['conflict_pairs']:
+            report_content += "\n### Module Conflicts\n"
+            for module1, module2 in integration_results['conflict_pairs']:
+                report_content += f"- ⚠️  `{module1}` ↔ `{module2}`\n"
+    
+    # Error categorization
+    if total_errors > 0:
+        report_content += "\n## Error Categories\n"
+        for category, errors in error_categories.items():
+            if errors:
+                report_content += f"\n### {category.replace('_', ' ').title()} ({len(errors)})\n"
+                for error in errors:
+                    report_content += f"- {error}\n"
+    
+    report_content += f"""
+## Recommendations
+{"✅ All modules pass enhanced testing. No action required." if total_errors == 0 else "🔧 Issues found - see error categories above for specific actions needed."}
+
+---
+*Report generated by Enhanced CTMM Build System*
+"""
+    
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write(report_content)
+    
+    logger.info(f"Enhanced testing report saved to {report_path}")
 
 
 if __name__ == "__main__":

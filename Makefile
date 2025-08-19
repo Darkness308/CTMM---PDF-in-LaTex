@@ -14,6 +14,34 @@ enhanced-testing:
 	@echo "Running enhanced incremental testing..."
 	python3 -c "from build_system import enhanced_incremental_testing; enhanced_incremental_testing()"
 
+# Advanced automation targets
+automated-workflow:
+	@echo "Running complete automated workflow..."
+	@echo "Step 1: Enhanced build management"
+	@make enhanced-build
+	@echo "Step 2: Enhanced incremental testing"
+	@make enhanced-testing
+	@echo "Step 3: Comprehensive validation"
+	@make comprehensive
+	@echo "✅ Complete automated workflow finished successfully"
+
+# Missing file detection and template generation
+detect-missing:
+	@echo "Detecting missing files and generating templates..."
+	python3 -c "from ctmm_build import scan_references, check_missing_files, create_template; import sys; refs = scan_references(); missing = check_missing_files(refs['style_files'] + refs['module_files']); [create_template(f) for f in missing]; print(f'Generated {len(missing)} templates') if missing else print('No missing files found')"
+
+# Template cleanup (removes TODO files for completed work)
+cleanup-templates:
+	@echo "Cleaning up completed template TODO files..."
+	@find . -name "TODO_*.md" -exec sh -c 'echo "Remove $$1? (y/N):" && read ans && test "$$ans" = "y" && rm "$$1"' _ {} \;
+
+# Comprehensive error analysis
+error-analysis:
+	@echo "Running comprehensive error analysis..."
+	python3 build_system.py --verbose > error_analysis.log 2>&1 || true
+	@echo "Error analysis saved to error_analysis.log"
+	@grep -E "(ERROR|FAIL|WARNING)" error_analysis.log || echo "No errors found in analysis"
+
 # Check build system and dependencies
 check:
 	@echo "Running CTMM Build System check..."
@@ -126,30 +154,53 @@ test-workflow:
 
 # Help
 help:
-	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
-	@echo "==============================================="
-	@echo "Available targets:"
-	@echo "  all           - Run check and build (default)"
-	@echo "  check         - Check dependencies and run build system"
-	@echo "  validate-pr   - Validate PR content for Copilot review"
-	@echo "  validate      - Validate LaTeX files for escaping issues"
-	@echo "  validate-fix  - Fix LaTeX escaping issues (creates backups)"
-	@echo "  build         - Build the PDF"
-	@echo "  analyze       - Run detailed module analysis"
-	@echo "  test          - Quick test of build system + unit tests"
-	@echo "  test-unit     - Run only unit tests for ctmm_build.py"
-	@echo "  unit-test     - Run unit tests for Python functions"
-	@echo "  clean         - Remove build artifacts"
-	@echo "  deps          - Install Python dependencies"
-	@echo "  comprehensive - Run complete workflow validation"
-	@echo "  workflow      - Alias for comprehensive"
+	@echo "CTMM LaTeX Build System - Enhanced Automated Build Management"
+	@echo "============================================================="
+	@echo ""
+	@echo "🚀 ENHANCED AUTOMATION TARGETS:"
+	@echo "  enhanced-build     - Run enhanced CTMM build management with sophisticated error detection"
+	@echo "  enhanced-testing   - Run enhanced incremental testing with module isolation"
+	@echo "  automated-workflow - Complete automated workflow (build + testing + validation)"
+	@echo "  detect-missing     - Detect missing files and generate enhanced templates"
+	@echo "  cleanup-templates  - Clean up completed template TODO files"
+	@echo "  error-analysis     - Run comprehensive error analysis and categorization"
+	@echo ""
+	@echo "📋 STANDARD BUILD TARGETS:"
+	@echo "  all                - Run check and build (default)"
+	@echo "  check              - Check dependencies and run build system"
+	@echo "  build              - Build the PDF with LaTeX"
+	@echo "  analyze            - Run detailed module analysis"
+	@echo "  test               - Quick test of build system + unit tests"
+	@echo "  test-unit          - Run only unit tests for ctmm_build.py"
+	@echo "  unit-test          - Run unit tests for Python functions"
+	@echo ""
+	@echo "🔧 VALIDATION AND QUALITY:"
+	@echo "  validate-pr        - Validate PR content for Copilot review"
+	@echo "  validate           - Validate LaTeX files for escaping issues"
+	@echo "  validate-fix       - Fix LaTeX escaping issues (creates backups)"
+	@echo "  comprehensive      - Run complete workflow validation"
+	@echo "  workflow           - Alias for comprehensive"
+	@echo ""
+	@echo "🧪 TESTING AND CI/CD:"
 	@echo "  test-ci-robustness - Test CI pipeline robustness (Issue #1044)"
 	@echo "  test-comprehensive-timeout - Test comprehensive CI timeout coverage"
-	@echo "  enhanced-build  - Run enhanced CTMM build management"
-	@echo "  enhanced-testing - Run enhanced incremental testing"
+	@echo "  test-workflow      - Test automated PR merge workflow"
+	@echo "  integration-test   - Run CTMM integration test suite"
 	@echo ""
-	@echo "CTMM Unified Tool Commands:"
-	@echo "  ctmm-check    - Run unified build system validation"
+	@echo "🛠️  CTMM UNIFIED TOOL COMMANDS:"
+	@echo "  ctmm-check         - Run unified build system validation"
+	@echo "  ctmm-fix           - Fix over-escaped LaTeX files"
+	@echo "  ctmm-validate      - Complete project validation"
+	@echo "  ctmm-workflow      - Run complete integration workflow"
+	@echo ""
+	@echo "🧹 MAINTENANCE:"
+	@echo "  clean              - Remove build artifacts"
+	@echo "  deps               - Install Python dependencies"
+	@echo ""
+	@echo "💡 QUICK START:"
+	@echo "   make automated-workflow  # Complete automated build and testing"
+	@echo "   make enhanced-build      # Enhanced build management only"
+	@echo "   make help               # Show this help"
 	@echo "  ctmm-fix      - Fix over-escaped LaTeX files"
 	@echo "  ctmm-validate - Complete project validation"
 	@echo "  ctmm-workflow - Run complete integration workflow"

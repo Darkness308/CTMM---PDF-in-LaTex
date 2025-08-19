@@ -643,9 +643,9 @@ class TestCreateTemplate(unittest.TestCase):
         with open(module_file, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        self.assertIn("\\section{TODO: Test Module}", content)
+        self.assertIn("\\section{Test Module}", content)  # Enhanced template uses proper title, not TODO: prefix
         self.assertIn("\\label{sec:test-module}", content)
-        self.assertIn("TODO", content)
+        self.assertIn("TODO", content)  # Should still have TODO comments
         
         # Check that TODO file was created
         todo_file = "test_templates/TODO_test-module.md"
