@@ -43,21 +43,14 @@ def check_file_changes(base_branch="main"):
     success, stdout, stderr = run_command("git branch -r")
     available_branches = stdout.split('\n') if success else []
     
-    # Try different base branch options
+    # Try different base branch options using batched git rev-parse for optimal performance
     base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
     actual_base = None
     
-    for base_option in base_options:
-        if any(base_option in branch for branch in available_branches) or base_option == base_branch:
-            success, _, _ = run_command(f"git rev-parse {base_option}")
-            if success:
-                actual_base = base_option
-    # Batch git rev-parse for all base_options at once
-    valid_bases = []
     # Only check base_options that are present in available_branches or match base_branch
     filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
     if filtered_options:
-        # Run git rev-parse for all filtered options at once
+        # Run git rev-parse for all filtered options at once (batched approach)
         cmd = "git rev-parse " + " ".join(filtered_options)
         success, stdout, stderr = run_command(cmd)
         if success and stdout.strip():
