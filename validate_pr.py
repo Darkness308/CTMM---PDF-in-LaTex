@@ -68,6 +68,8 @@ def check_file_changes(base_branch="main"):
                     continue
                 # Verify index bounds
                 if idx >= len(filtered_options):
+                # Skip invalid hashes
+                if not h.strip() or h.startswith("fatal:") or idx >= len(filtered_options):
                     continue
                 actual_base = filtered_options[idx]
                 break
