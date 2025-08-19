@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Test validation for Issue #743 fix: CI robustness with LaTeX action version pinning
+Test validation for Issue #743 fix: CI robustness with LaTeX action reliable version
 
 This script validates that the specific changes mentioned in the PR have been properly implemented:
 1. Comprehensive validation step is present in CI workflow
-2. LaTeX action is pinned to @v2.0.0 for reliable builds
+2. LaTeX action uses reliable @v2 version for stable builds
 3. pifont package dependencies are properly configured
 """
 
@@ -15,7 +15,7 @@ from pathlib import Path
 
 
 def test_latex_action_version_pinning():
-    """Test that dante-ev/latex-action is pinned to v2.0.0 as mentioned in PR."""
+    """Test that dante-ev/latex-action uses the reliable v2 version."""
     print("\n🔧 TESTING LATEX ACTION VERSION PINNING")
     print("-" * 50)
     
@@ -47,15 +47,21 @@ def test_latex_action_version_pinning():
         print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
         return False
     
-    # Check the uses field for the exact version
+    # Check the uses field for the correct version
     uses_field = latex_step.get('uses', '')
-    expected_version = 'dante-ev/latex-action@v2.0.0'
+    expected_version = 'dante-ev/latex-action@v2'
+    problematic_version = 'dante-ev/latex-action@v2.0.0'
     
-    if uses_field == expected_version:
-        print(f"✅ CORRECT: LaTeX action is pinned to {expected_version}")
+    if uses_field == problematic_version:
+        print(f"❌ INCORRECT: Using problematic version {problematic_version}")
+        print("This version doesn't exist and will cause CI failure:")
+        print("'Unable to resolve action `dante-ev/latex-action@v2.0.0`, unable to find version `v2.0.0`'")
+        return False
+    elif uses_field == expected_version:
+        print(f"✅ CORRECT: LaTeX action uses reliable version {expected_version}")
         return True
     else:
-        print(f"❌ INCORRECT: Expected '{expected_version}', found '{uses_field}'")
+        print(f"❌ UNEXPECTED: Expected '{expected_version}', found '{uses_field}'")
         return False
 
 
@@ -172,11 +178,11 @@ def run_issue_743_fix_validation():
     """Run all Issue #743 fix validation tests."""
     print("=" * 70)
     print("ISSUE #743 FIX VALIDATION")
-    print("CI Robustness with LaTeX Action Version Pinning")
+    print("CI Robustness with LaTeX Action Reliable Version")
     print("=" * 70)
     
     validation_tests = [
-        ("LaTeX Action Version Pinning", test_latex_action_version_pinning),
+        ("LaTeX Action Reliable Version", test_latex_action_version_pinning),
         ("Comprehensive Validation Step", test_comprehensive_validation_step),
         ("pifont Package Dependencies", test_pifont_package_dependencies),
         ("Validation Script Exists", test_validation_script_exists),
@@ -212,7 +218,7 @@ def run_issue_743_fix_validation():
     if passed == total:
         print("\n🎉 ISSUE #743 FIX VALIDATION PASSED!")
         print("\nThe following PR requirements have been met:")
-        print("  ✓ LaTeX action pinned to @v2.0.0 for reliable builds")
+        print("  ✓ LaTeX action uses reliable @v2 version for stable builds")
         print("  ✓ Comprehensive validation step present in CI workflow")
         print("  ✓ pifont package dependencies properly configured")
         print("  ✓ Validation script test_issue_743_validation.py exists")
