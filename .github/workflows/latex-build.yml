@@ -7,6 +7,10 @@ name: Build LaTeX PDF
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -73,6 +77,18 @@ jobs:
           df -h
           free -h
           echo "✅ System resources checked"
+
+      - name: Assess GitHub Actions runner environment
+        timeout-minutes: 3
+        run: |
+          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Architecture: $RUNNER_ARCH" 
+          echo "GitHub Actions Runner: $RUNNER_NAME"
+          df -h / | head -2
+          free -h | head -2
+          echo "CPU Info:" && nproc
+          echo "✅ Environment assessment complete"
 
       - name: Set up LaTeX
         timeout-minutes: 15
