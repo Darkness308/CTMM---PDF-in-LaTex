@@ -196,7 +196,9 @@ def validate_workflow_structure():
         'Install Python dependencies',
         'Run LaTeX syntax validation',
         'Run CTMM Build System Check',
+        'Run Enhanced Build Management',
         'Run comprehensive CI validation',
+        'Enhanced pre-build validation',
         'Set up LaTeX'
     ]
     
