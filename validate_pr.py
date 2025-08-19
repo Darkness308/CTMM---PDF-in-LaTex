@@ -52,21 +52,7 @@ def check_file_changes(base_branch="main"):
             success, _, _ = run_command(f"git rev-parse {base_option}")
             if success:
                 actual_base = base_option
-    # Batch git rev-parse for all base_options at once
-    valid_bases = []
-    # Only check base_options that are present in available_branches or match base_branch
-    filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
-    if filtered_options:
-        # Run git rev-parse for all filtered options at once
-        cmd = "git rev-parse " + " ".join(filtered_options)
-        success, stdout, stderr = run_command(cmd)
-        if success and stdout.strip():
-            # git rev-parse outputs each hash on a new line, in the same order as the arguments
-            hashes = stdout.split('\n')
-            for h, base_opt in zip(hashes, filtered_options):
-                if h.strip() and not h.startswith("fatal:"):
-                    actual_base = base_opt
-                    break
+                break
     
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
