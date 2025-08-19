@@ -72,7 +72,14 @@ def check_file_changes(base_branch="main"):
                 if not h.strip() or h.startswith("fatal:") or idx >= len(filtered_options):
                     continue
                 actual_base = filtered_options[idx]
-                break
+            # git rev-parse outputs each hash or error on a new line, in the same order as the arguments
+            hashes = stdout.split('\n')
+            # Pair each filtered option with its corresponding output line
+            for idx, (opt, h) in enumerate(zip(filtered_options, hashes)):
+                # Check if hash is valid (not empty, not fatal error)
+                if h.strip() and not h.startswith("fatal:"):
+                    actual_base = opt
+                    break
     
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
