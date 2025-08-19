@@ -60,7 +60,17 @@ def check_file_changes(base_branch="main"):
             for idx, h in enumerate(hashes):
                 if h.strip() and not h.startswith("fatal:") and idx < len(filtered_options):
                     actual_base = filtered_options[idx]
-                    break
+                # Check if hash is valid
+                if not h.strip():
+                    continue
+                # Check if it's not a fatal error
+                if h.startswith("fatal:"):
+                    continue
+                # Verify index bounds
+                if idx >= len(filtered_options):
+                    continue
+                actual_base = filtered_options[idx]
+                break
     
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
