@@ -117,5 +117,5 @@ The failure was caused by a **hyperref package loading conflict** in the `style/
 ---
 
 **Issue Reference**: #684  
-**Resolution Date**: August 16, 2025  
+**Resolution Date**: YYYY-MM-DD  
 **Resolution Method**: Package loading conflict fix in form-elements.sty
