@@ -92,6 +92,35 @@ class LaTeXDeEscaper:
             (r'\\textbackslash\{\}enumerate\\textbackslash\{\}', r'enumerate'),
             (r'\\textbackslash\{\}itemize\\textbackslash\{\}', r'itemize'),
             (r'\\textbackslash\{\}quote\\textbackslash\{\}', r'quote'),
+            
+            # Additional LaTeX commands often over-escaped by converters
+            (r'\\textbackslash\{\}newpage\\textbackslash\{\}', r'\\newpage'),
+            (r'\\textbackslash\{\}clearpage\\textbackslash\{\}', r'\\clearpage'),
+            (r'\\textbackslash\{\}newline\\textbackslash\{\}', r'\\newline'),
+            (r'\\textbackslash\{\}linebreak\\textbackslash\{\}', r'\\linebreak'),
+            
+            # Table-related commands
+            (r'\\textbackslash\{\}hline\\textbackslash\{\}', r'\\hline'),
+            (r'\\textbackslash\{\}cline\\textbackslash\{\}', r'\\cline'),
+            (r'\\textbackslash\{\}multicolumn\\textbackslash\{\}', r'\\multicolumn'),
+            
+            # Figure and graphics commands
+            (r'\\textbackslash\{\}includegraphics\\textbackslash\{\}', r'\\includegraphics'),
+            (r'\\textbackslash\{\}caption\\textbackslash\{\}', r'\\caption'),
+            (r'\\textbackslash\{\}centering\\textbackslash\{\}', r'\\centering'),
+            
+            # Bibliography and citation commands
+            (r'\\textbackslash\{\}cite\\textbackslash\{\}', r'\\cite'),
+            (r'\\textbackslash\{\}bibliography\\textbackslash\{\}', r'\\bibliography'),
+            (r'\\textbackslash\{\}bibliographystyle\\textbackslash\{\}', r'\\bibliographystyle'),
+            
+            # Font and size commands
+            (r'\\textbackslash\{\}tiny\\textbackslash\{\}', r'\\tiny'),
+            (r'\\textbackslash\{\}small\\textbackslash\{\}', r'\\small'),
+            (r'\\textbackslash\{\}large\\textbackslash\{\}', r'\\large'),
+            (r'\\textbackslash\{\}Large\\textbackslash\{\}', r'\\Large'),
+            (r'\\textbackslash\{\}huge\\textbackslash\{\}', r'\\huge'),
+            (r'\\textbackslash\{\}Huge\\textbackslash\{\}', r'\\Huge'),
         ]
         
         # Additional cleanup patterns
@@ -130,6 +159,22 @@ class LaTeXDeEscaper:
             # Fix broken section commands
             (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\section{\\texorpdfstring{\1}{\2}}'),
             (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}$', r'\\subsection{\\texorpdfstring{\1}{\2}}'),
+            
+            # Additional cleanup patterns for edge cases
+            (r'\\textbackslash\{\}\s*\\textbackslash\{\}', r'\\\\'),  # Double backslashes with whitespace
+            (r'\{\\textbackslash\{\}\\textbackslash\{\}\}', r'{}'),   # Braced double backslashes
+            
+            # Fix corrupted environment patterns
+            (r'\\begin\{\\textbackslash\{\}([^}]*?)\\textbackslash\{\}\}', r'\\begin{\1}'),
+            (r'\\end\{\\textbackslash\{\}([^}]*?)\\textbackslash\{\}\}', r'\\end{\1}'),
+            
+            # Clean up over-escaped command sequences
+            (r'\\textbackslash\{\}\\textbackslash\{\}([a-zA-Z]+)', r'\\\1'),
+            
+            # Fix spacing issues around escapes
+            (r'\s+\\textbackslash\{\}\s+', r' '),
+            (r'\\textbackslash\{\}\s+', r''),
+            (r'\s+\\textbackslash\{\}', r''),
         ]
         
         self.stats = {

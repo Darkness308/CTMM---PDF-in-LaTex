@@ -167,17 +167,30 @@ def test_basic_build(main_tex_path="main.tex"):
             check=False
         )
 
-        # Enhanced PDF validation: check both return code and file existence/size
+        # Enhanced PDF validation: check return code, file existence, size, and PDF structure
         temp_pdf = Path(temp_file).with_suffix('.pdf')
         pdf_exists = temp_pdf.exists()
         pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
+        pdf_valid_header = False
         
-        # Validate PDF generation success by file existence and size rather than just return codes
-        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+        # Check PDF header validity for more robust validation
+        if pdf_exists and pdf_size > 0:
+            try:
+                with open(temp_pdf, 'rb') as f:
+                    header = f.read(8)
+                    # Check for PDF magic number (starts with %PDF-)
+                    pdf_valid_header = header.startswith(b'%PDF-')
+            except Exception:
+                pdf_valid_header = False
+        
+        # Validate PDF generation success by multiple criteria rather than just return codes
+        success = (result.returncode == 0 and pdf_exists and 
+                  pdf_size > 1024 and pdf_valid_header)  # At least 1KB and valid PDF
         
         if success:
             logger.info("✓ Basic build successful")
             logger.info("✓ Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
+            logger.info("✓ PDF header validation passed")
         else:
             logger.error("✗ Basic build failed")
             if result.returncode != 0:
@@ -186,6 +199,8 @@ def test_basic_build(main_tex_path="main.tex"):
                 logger.error("Test PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
+            elif not pdf_valid_header:
+                logger.error("Test PDF file has invalid header - file may be corrupted")
             logger.error("LaTeX errors detected (check %s.log for details)", temp_file)
 
         return success
@@ -222,17 +237,30 @@ def test_full_build(main_tex_path="main.tex"):
             check=False
         )
 
-        # Enhanced PDF validation: check both return code and file existence/size
+        # Enhanced PDF validation: check return code, file existence, size, and PDF structure
         pdf_path = Path('main.pdf')
         pdf_exists = pdf_path.exists()
         pdf_size = pdf_path.stat().st_size if pdf_exists else 0
+        pdf_valid_header = False
         
-        # Validate PDF generation success by file existence and size rather than just return codes
-        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+        # Check PDF header validity for more robust validation
+        if pdf_exists and pdf_size > 0:
+            try:
+                with open(pdf_path, 'rb') as f:
+                    header = f.read(8)
+                    # Check for PDF magic number (starts with %PDF-)
+                    pdf_valid_header = header.startswith(b'%PDF-')
+            except Exception:
+                pdf_valid_header = False
+        
+        # Validate PDF generation success by multiple criteria rather than just return codes
+        success = (result.returncode == 0 and pdf_exists and 
+                  pdf_size > 1024 and pdf_valid_header)  # At least 1KB and valid PDF
         
         if success:
             logger.info("✓ Full build successful")
             logger.info("✓ PDF generated successfully (%.2f KB)", pdf_size / 1024)
+            logger.info("✓ PDF header validation passed")
         else:
             logger.error("✗ Full build failed")
             if result.returncode != 0:
@@ -241,6 +269,8 @@ def test_full_build(main_tex_path="main.tex"):
                 logger.error("PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
+            elif not pdf_valid_header:
+                logger.error("PDF file has invalid header - file may be corrupted")
             logger.error("Check main.log for detailed error information")
 
         return success
