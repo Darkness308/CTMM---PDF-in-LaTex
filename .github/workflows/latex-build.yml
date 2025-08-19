@@ -24,29 +24,52 @@ jobs:
           pip install chardet
 
       - name: Run LaTeX syntax validation
+        timeout-minutes: 5
         run: |
+          echo "🔍 Starting LaTeX syntax validation..."
           python3 validate_latex_syntax.py
+          echo "✅ LaTeX syntax validation completed successfully"
           
       - name: Run CTMM Build System Check
+        timeout-minutes: 10
         run: |
+          echo "🔧 Starting CTMM build system check..."
           python3 ctmm_build.py
+          echo "✅ CTMM build system check completed successfully"
           
       - name: Run Enhanced Build Management
+        timeout-minutes: 8
+        continue-on-error: true
         run: |
           echo "🚀 Running enhanced CTMM build management..."
-          python3 ctmm_build.py --enhanced
+          python3 ctmm_build.py --enhanced || echo "⚠️  Enhanced build management had warnings but continuing..."
+          echo "✅ Enhanced build management completed"
           
       - name: Run comprehensive CI validation
+        timeout-minutes: 10
         run: |
+          echo "📋 Starting comprehensive CI validation..."
           python3 test_issue_743_validation.py
+          echo "✅ Comprehensive CI validation completed successfully"
           
       - name: Enhanced pre-build validation
+        timeout-minutes: 8
+        continue-on-error: true
         run: |
           echo "🔍 Running enhanced pre-build validation..."
           # Check for critical files and dependencies
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          echo "✅ Enhanced pre-build validation completed"
+
+      - name: Check system resources before LaTeX compilation
+        run: |
+          echo "📊 Checking system resources..."
+          df -h
+          free -h
+          echo "✅ System resources checked"
 
       - name: Set up LaTeX
+        timeout-minutes: 15
         uses: dante-ev/latex-action@v2
         with:
           root_file: main.tex

@@ -110,6 +110,11 @@ workflow:
 	@echo "Running CTMM Comprehensive Workflow..."
 	python3 comprehensive_workflow.py
 
+# Test CI robustness (Issue #1044 fix)
+test-ci-robustness:
+	@echo "Testing CI pipeline robustness (Issue #1044)..."
+	python3 test_issue_1044_ci_robustness.py
+
 # Test automated PR merge workflow
 test-workflow:
 	@echo "Testing Automated PR Merge and Build Workflow..."
@@ -134,7 +139,7 @@ help:
 	@echo "  deps          - Install Python dependencies"
 	@echo "  comprehensive - Run complete workflow validation"
 	@echo "  workflow      - Alias for comprehensive"
-	@echo "  test-workflow - Test automated PR merge workflow"
+	@echo "  test-ci-robustness - Test CI pipeline robustness (Issue #1044)"
 	@echo "  enhanced-build  - Run enhanced CTMM build management"
 	@echo "  enhanced-testing - Run enhanced incremental testing"
 	@echo ""
