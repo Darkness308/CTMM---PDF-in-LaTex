@@ -623,7 +623,7 @@ class TestCreateTemplate(unittest.TestCase):
             content = f.read()
         
         self.assertIn("\\NeedsTeXFormat{LaTeX2e}", content)
-        self.assertIn("\\ProvidesPackage{test-style}", content)
+        self.assertIn("\\ProvidesPackage{teststyle}", content)  # Sanitized package name
         self.assertIn("TODO", content)
         
         # Check that TODO file was created
@@ -647,7 +647,7 @@ class TestCreateTemplate(unittest.TestCase):
             content = f.read()
         
         self.assertIn("\\section{TODO: Test Module}", content)
-        self.assertIn("\\label{sec:test-module}", content)
+        self.assertIn("\\label{sec:testmodule}", content)  # Sanitized label name
         self.assertIn("TODO", content)
         
         # Check that TODO file was created

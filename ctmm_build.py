@@ -30,6 +30,34 @@ def filename_to_title(filename):
     return ' '.join(word.capitalize() for word in title.split())
 
 
+def sanitize_latex_identifier(name):
+    """
+    Sanitize a string to be safe for use in LaTeX identifiers (package names, labels, commands).
+    
+    LaTeX identifiers should only contain letters and numbers, no special characters.
+    This prevents issues when package names contain hyphens, underscores, or other special characters.
+    
+    Args:
+        name (str): The original name to sanitize
+        
+    Returns:
+        str: A sanitized name safe for LaTeX usage
+    """
+    import re
+    # Keep only alphanumeric characters
+    sanitized = re.sub(r'[^a-zA-Z0-9]', '', name)
+    
+    # Ensure it starts with a letter (LaTeX requirement)
+    if sanitized and not sanitized[0].isalpha():
+        sanitized = 'pkg' + sanitized
+    
+    # Ensure it's not empty
+    if not sanitized:
+        sanitized = 'defaultpackage'
+    
+    return sanitized
+
+
 def scan_references(main_tex_path="main.tex"):
     """Scan main.tex for style and module references."""
     try:
@@ -83,22 +111,24 @@ def create_template(file_path):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     if file_path.endswith('.sty'):
+        safe_package_name = sanitize_latex_identifier(path.stem)
         content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
 \\NeedsTeXFormat{{LaTeX2e}}
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package]
+\\ProvidesPackage{{{safe_package_name}}}[2024/01/01 CTMM {path.stem} package]
 
 % TODO: Add package dependencies and commands here
 
 % End of package
 """
     else:
+        safe_label_name = sanitize_latex_identifier(path.stem)
         content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 
 \\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
+\\label{{sec:{safe_label_name}}}
 
 \\begin{{center}}
 \\textit{{This module is under development. Content will be added soon.}}

@@ -41,6 +41,34 @@ def filename_to_title(filename):
     return ' '.join(word.capitalize() for word in title.split())
 
 
+def sanitize_latex_identifier(name):
+    """
+    Sanitize a string to be safe for use in LaTeX identifiers (package names, labels, commands).
+    
+    LaTeX identifiers should only contain letters and numbers, no special characters.
+    This prevents issues when package names contain hyphens, underscores, or other special characters.
+    
+    Args:
+        name (str): The original name to sanitize
+        
+    Returns:
+        str: A sanitized name safe for LaTeX usage
+    """
+    import re
+    # Keep only alphanumeric characters
+    sanitized = re.sub(r'[^a-zA-Z0-9]', '', name)
+    
+    # Ensure it starts with a letter (LaTeX requirement)
+    if sanitized and not sanitized[0].isalpha():
+        sanitized = 'pkg' + sanitized
+    
+    # Ensure it's not empty
+    if not sanitized:
+        sanitized = 'defaultpackage'
+    
+    return sanitized
+
+
 class CTMMBuildSystem:
     def __init__(self, main_tex_path: str = "main.tex"):
         self.main_tex_path = Path(main_tex_path)
@@ -121,12 +149,13 @@ class CTMMBuildSystem:
             
             if file_path.endswith('.sty'):
                 # Create style file template
+                safe_package_name = sanitize_latex_identifier(path.stem)
                 template_content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 % Created automatically by CTMM Build System
 
 \\NeedsTeXFormat{{LaTeX2e}}[1995/12/01]
-\\ProvidesPackage{{{path.stem}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
+\\ProvidesPackage{{{safe_package_name}}}[2024/01/01 CTMM {path.stem} package - TODO: Add content]
 
 % TODO: Add package dependencies here
 % \\RequirePackage{{xcolor}}
@@ -142,12 +171,13 @@ class CTMMBuildSystem:
 """
             else:
                 # Create module file template  
+                safe_label_name = sanitize_latex_identifier(path.stem)
                 template_content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
 \\section{{TODO: {filename_to_title(path.stem)}}}
-\\label{{sec:{path.stem}}}
+\\label{{sec:{safe_label_name}}}
 
 % TODO: Add module content here
 \\begin{{center}}
