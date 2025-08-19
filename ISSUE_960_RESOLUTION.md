@@ -59,7 +59,7 @@ The issue stems from multiple PRs being created from the same commit on the main
 ### Issue #960
 ✅ **RESOLVED** - New commit created to resolve SHA conflict with PR #570
 - Previous conflicting SHA: (pre-resolution state)
-- New unique SHA: (generated through this commit)
+- New unique SHA: `37d88518efd030465c468135e261d9eda9e8fcfc`
 - Mergify can now evaluate rules for this PR independently
 
 ## Impact and Benefits
