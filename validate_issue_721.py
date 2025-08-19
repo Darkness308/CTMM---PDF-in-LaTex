@@ -267,7 +267,6 @@ def validate_issue_721_resolution():
     if not validate_integration_compatibility():
         all_checks_passed = False
     
-    # 5. Summary
     print("\n" + "=" * 80)
     print("VALIDATION SUMMARY")
     print("=" * 80)
