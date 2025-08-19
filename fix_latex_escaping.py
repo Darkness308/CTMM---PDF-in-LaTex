@@ -113,16 +113,16 @@ class LaTeXDeEscaper:
             (r'\\section\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\section{\\texorpdfstring{\1}{\2}}\\label{\3}'),
             (r'\\subsection\{\\texorpdfstring\{([^}]*?)\}\{([^}]*?)\}\\label\{([^}]*?)\}', r'\\subsection{\\texorpdfstring{\1}{\2}}\\label{\3}'),
             
-            # Fix hypertarget patterns
-            (r'\\hypertarget\{([^}]*?)\}\{%', r'\\hypertarget{\1}{%'),
+            # Note: hypertarget patterns with {% are usually already correct
+            # Only fix if there are actual escaping issues detected by other patterns
             
             # Remove empty text formatting
             (r'\\textbf\{\}', r''),
             (r'\\emph\{\}', r''),
             (r'\\ul\{\}', r''),
             
-            # Fix malformed closing braces after texorpdfstring
-            (r'(\{[^}]*?\})(\{[^}]*?\})\\label\{([^}]*?)\}', r'\1\2}\\label{\3}'),
+            # Note: Removed problematic pattern that was adding braces incorrectly
+            # (r'(\{[^}]*?\})(\{[^}]*?\})\\label\{([^}]*?)\}', r'\1\2}\\label{\3}'),
             
             # Fix missing closing braces for commands
             (r'\\emph\{\\textbf\{([^}]*?)\}([^}]*?)$', r'\\emph{\\textbf{\1}}\2'),
@@ -310,17 +310,32 @@ Examples:
             shutil.copy2(tex_file, backup_file)
             logger.info(f"Created backup: {backup_file}")
     
-    # Process files
+    # Process files with enhanced error handling
     de_escaper = LaTeXDeEscaper()
-    stats = de_escaper.process_directory(input_dir, output_dir)
-    
-    # Print summary
-    print("\n" + "="*50)
-    print("LATEX DE-ESCAPING SUMMARY")
-    print("="*50)
-    print(f"Files processed: {stats['files_processed']}")
-    print(f"Files changed: {stats['files_changed']}")
-    print(f"Total replacements: {stats['total_replacements']}")
+    try:
+        stats = de_escaper.process_directory(input_dir, output_dir)
+        
+        # Enhanced progress reporting
+        success_rate = (stats['files_changed'] / max(stats['files_processed'], 1)) * 100
+        
+        # Print summary
+        print("\n" + "="*50)
+        print("LATEX DE-ESCAPING SUMMARY")
+        print("="*50)
+        print(f"Files processed: {stats['files_processed']}")
+        print(f"Files changed: {stats['files_changed']}")
+        print(f"Files with no changes needed: {stats['files_processed'] - stats['files_changed']}")
+        print(f"Total replacements: {stats['total_replacements']}")
+        print(f"Average replacements per file: {stats['total_replacements'] / max(stats['files_processed'], 1):.1f}")
+        
+        if stats['files_processed'] > 0:
+            print(f"Success rate: {success_rate:.1f}% of files required changes")
+        
+    except Exception as e:
+        logger.error(f"Failed to process directory {input_dir}: {e}")
+        print("\n❌ PROCESSING FAILED")
+        print(f"Error: {e}")
+        sys.exit(1)
     
     # Validate if requested
     if args.validate:
