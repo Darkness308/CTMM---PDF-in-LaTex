@@ -25,6 +25,154 @@
                     "line": 2,
                     "message": 3
                 }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        },
+        {
+            "label": "CTMM: Build System Check",
+            "type": "shell",
+            "command": "python3",
+            "args": ["ctmm_build.py"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "ctmm",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(ERROR|❌).*?([^\\s]+\\.tex):(\\d+)?\\s*(.*)",
+                    "file": 2,
+                    "line": 3,
+                    "message": 4,
+                    "severity": "error"
+                }
+            }
+        },
+        {
+            "label": "CTMM: Module erstellen",
+            "type": "shell",
+            "command": "./create-module.sh",
+            "group": "build",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
+            }
+        },
+        {
+            "label": "CTMM: Cross-Platform Build",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "if exist \"C:\\Program Files\\MiKTeX\\miktex\\bin\\x64\\pdflatex.exe\" (\"C:\\Program Files\\MiKTeX\\miktex\\bin\\x64\\pdflatex.exe\" -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex) else (echo MiKTeX not found in standard location)"]
+            },
+            "linux": {
+                "command": "bash",
+                "args": ["-c", "if command -v pdflatex &> /dev/null; then pdflatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex; else echo 'pdflatex not found'; fi"]
+            },
+            "osx": {
+                "command": "bash", 
+                "args": ["-c", "if command -v pdflatex &> /dev/null; then pdflatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex; else echo 'pdflatex not found'; fi"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CTMM: Full Validation",
+            "type": "shell",
+            "command": "python3",
+            "args": ["validate_pr.py", "--verbose"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always", 
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "ctmm-validator",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(INFO|WARNING|ERROR|❌|⚠️|✅)\\s*:?\\s*(.*?)\\s*([^\\s]+\\.tex):?(\\d+)?\\s*-?\\s*(.*)?$",
+                    "severity": 1,
+                    "message": 2,
+                    "file": 3,
+                    "line": 4
+                }
+            }
+        },
+        {
+            "label": "CTMM: Watch Mode",
+            "type": "shell",
+            "command": "python3",
+            "args": ["build_system.py", "--watch"],
+            "isBackground": true,
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "problemMatcher": {
+                "owner": "ctmm-watch",
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "^\\[CTMM\\] Starting watch mode",
+                    "endsPattern": "^\\[CTMM\\] Waiting for changes"
+                }
+            }
+        },
+        {
+            "label": "CTMM: Complete Workflow",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CTMM: Build System Check",
+                "CTMM: Cross-Platform Build",
+                "CTMM: Full Validation"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "CTMM: Cleanup Build Artifacts",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "if exist build rmdir /s /q build && mkdir build"]
+            },
+            "linux": {
+                "command": "bash",
+                "args": ["-c", "rm -rf build/* && mkdir -p build"]
+            },
+            "osx": {
+                "command": "bash",
+                "args": ["-c", "rm -rf build/* && mkdir -p build"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false
             }
         }
     ]

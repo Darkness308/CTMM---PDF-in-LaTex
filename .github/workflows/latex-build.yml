@@ -7,6 +7,13 @@ name: Build LaTeX PDF
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  actions: write
+  checks: write
+  pull-requests: write
+  issues: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,6 +29,35 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install chardet
+
+      - name: Validate File Structure
+        run: |
+          echo "🔍 Validating CTMM project structure..."
+          
+          # Check for main files
+          if [ ! -f "main.tex" ]; then
+            echo "❌ main.tex not found"
+            exit 1
+          fi
+          
+          # Check for required directories
+          if [ ! -d "modules" ]; then
+            echo "❌ modules/ directory not found"
+            exit 1
+          fi
+          
+          if [ ! -d "style" ]; then
+            echo "❌ style/ directory not found"  
+            exit 1
+          fi
+          
+          # Check for CTMM build system
+          if [ ! -f "ctmm_build.py" ]; then
+            echo "❌ ctmm_build.py not found"
+            exit 1
+          fi
+          
+          echo "✅ Project structure validated"
 
       - name: Run LaTeX syntax validation
         run: |
@@ -65,6 +101,7 @@ jobs:
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
             ls -la main.pdf
+            file main.pdf
           else
             echo "❌ PDF generation failed"
             echo "Checking for LaTeX log files..."
@@ -75,15 +112,57 @@ jobs:
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: CTMM_PDF
+          name: CTMM_PDF_${{ github.run_number }}
           path: main.pdf
+          retention-days: 90
+        if: success()
 
       - name: Upload build logs (on failure)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: build_logs
+          name: build_logs_${{ github.run_number }}
           path: |
             *.log
             build_error_*.log
             build_system.log
+          retention-days: 30
+
+      - name: Comment on PR (success)
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' && success()
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `✅ **CTMM Build Successful**
+              
+              PDF has been successfully generated and uploaded as artifact.
+              
+              Build Details:
+              - Commit: ${{ github.sha }}
+              - Workflow: ${{ github.workflow }}
+              - Actor: ${{ github.actor }}
+              
+              [Download Artifact](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`
+            });
+
+      - name: Comment on PR (failure)
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request' && failure()
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `❌ **CTMM Build Failed**
+              
+              Build failed in workflow: ${{ github.workflow }}
+              Commit: ${{ github.sha }}
+              Actor: ${{ github.actor }}
+              
+              Please check the [build logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.`
+            });
