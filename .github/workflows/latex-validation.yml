@@ -12,16 +12,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
+        timeout-minutes: 5
         uses: actions/checkout@v4
 
       - name: Set up Python
+        timeout-minutes: 5
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Install Python dependencies  
+        timeout-minutes: 5
         run: |
+          echo "📦 Installing Python dependencies..."
           pip install chardet
+          echo "✅ Python dependencies installed successfully"
 
       - name: Run LaTeX syntax validation
         timeout-minutes: 5
@@ -39,6 +44,8 @@ jobs:
 
       - name: Upload validation logs (on failure)
         if: failure()
+        timeout-minutes: 5
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: validation_logs

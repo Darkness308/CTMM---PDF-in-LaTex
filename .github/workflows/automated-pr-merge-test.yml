@@ -30,26 +30,35 @@ jobs:
     
     steps:
     - name: Checkout repository
+      timeout-minutes: 5
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Set up Python
+      timeout-minutes: 5
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
     
     - name: Install dependencies
+      timeout-minutes: 5
       run: |
+        echo "📦 Installing dependencies..."
         pip install chardet requests
+        echo "✅ Dependencies installed successfully"
         
     - name: Configure git
+      timeout-minutes: 3
       run: |
+        echo "⚙️ Configuring git..."
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
+        echo "✅ Git configuration completed"
         
     - name: Create test branch
+      timeout-minutes: 5
       id: create_branch
       run: |
         BASE_BRANCH="${{ inputs.base_branch || 'main' }}"
@@ -68,6 +77,7 @@ jobs:
         echo "✅ Test branch created successfully"
         
     - name: Fetch open PRs
+      timeout-minutes: 5
       id: fetch_prs
       run: |
         echo "🔍 Fetching open pull requests..."
@@ -90,6 +100,7 @@ jobs:
         echo "📊 Found $PR_COUNT open PRs to test"
         
     - name: Initialize test results
+      timeout-minutes: 3
       run: |
         mkdir -p test_results
         echo "# Automated PR Merge and Build Test Results" > test_results/summary.md
@@ -109,6 +120,7 @@ jobs:
         echo "0" > test_results/failed_builds.count
         
     - name: Test merge and build each PR
+      timeout-minutes: 30
       if: steps.fetch_prs.outputs.pr_count > 0
       run: |
         echo "🚀 Starting individual PR merge and build testing..."
@@ -232,6 +244,7 @@ jobs:
         echo "✅ Completed individual PR testing"
         
     - name: Test final combined build
+      timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
       run: |
         echo ""
@@ -289,6 +302,7 @@ jobs:
         fi
         
     - name: Set up LaTeX (if PRs were processed)
+      timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
       uses: dante-ev/latex-action@v2.0.0
       with:
@@ -305,6 +319,7 @@ jobs:
       continue-on-error: true
       
     - name: Verify PDF generation (if PRs were processed)
+      timeout-minutes: 5
       if: steps.fetch_prs.outputs.pr_count > 0
       run: |
         echo ""
@@ -328,6 +343,7 @@ jobs:
         fi
         
     - name: Generate final summary
+      timeout-minutes: 5
       if: always()
       run: |
         echo ""
@@ -396,14 +412,18 @@ jobs:
         fi
         
     - name: Upload test results
+      timeout-minutes: 5
       if: always()
+      continue-on-error: true
       uses: actions/upload-artifact@v4
       with:
         name: automated-merge-test-results-${{ steps.create_branch.outputs.test_branch }}
         path: test_results/
         
     - name: Clean up test branch
+      timeout-minutes: 5
       if: always() && inputs.cleanup_branch != false
+      continue-on-error: true
       run: |
         echo "🧹 Cleaning up test branch..."
         TEST_BRANCH="${{ steps.create_branch.outputs.test_branch }}"
@@ -420,6 +440,7 @@ jobs:
         echo "✅ Test branch cleanup completed"
         
     - name: Job summary
+      timeout-minutes: 3
       if: always()
       run: |
         echo "# Automated PR Merge and Build Test Results" >> $GITHUB_STEP_SUMMARY
