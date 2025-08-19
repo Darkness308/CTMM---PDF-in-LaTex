@@ -293,7 +293,6 @@ def main():
     if not validate_issue_721_resolution():
         print("\\n❌ Validation failed - Issue #721 resolution needs refinement")
         sys.exit(1)
-    else:
         print("\n❌ Validation failed - Issue #721 resolution needs refinement")
         sys.exit(1)
     else:
