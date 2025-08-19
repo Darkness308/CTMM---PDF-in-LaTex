@@ -47,24 +47,30 @@ def check_file_changes(base_branch="main"):
     base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
     actual_base = None
     
-    for base_option in base_options:
-        if any(base_option in branch for branch in available_branches) or base_option == base_branch:
-            success, _, _ = run_command(f"git rev-parse {base_option}")
-            if success:
-                actual_base = base_option
-    # Batch git rev-parse for all base_options at once
-    valid_bases = []
-    # Only check base_options that are present in available_branches or match base_branch
-    filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
+    # Batch git rev-parse for all base_options at once to reduce process overhead
+    # Filter options that might be valid: either in remote branches or local branches
+    filtered_options = []
+    for opt in base_options:
+        # Include if it's in remote branches, matches the requested base, or is a common branch name
+        if (any(opt in branch for branch in available_branches) or 
+            opt == base_branch or 
+            opt in ['main', 'master']):
+            filtered_options.append(opt)
+    
     if filtered_options:
-        # Run git rev-parse for all filtered options at once
+        # Run git rev-parse for all filtered options in a single command
+        # Note: we don't require success=True because some refs might not exist
         cmd = "git rev-parse " + " ".join(filtered_options)
         success, stdout, stderr = run_command(cmd)
-        if success and stdout.strip():
-            # git rev-parse outputs each hash on a new line, in the same order as the arguments
-            hashes = stdout.split('\n')
-            for h, base_opt in zip(hashes, filtered_options):
-                if h.strip() and not h.startswith("fatal:"):
+        if stdout.strip():
+            # git rev-parse outputs each result on a new line, in the same order as the arguments
+            # Even if the command exits with non-zero, valid refs will still produce output
+            lines = stdout.strip().split('\n')
+            for line, base_opt in zip(lines, filtered_options):
+                if (line.strip() and 
+                    len(line.strip()) >= 7 and 
+                    not line.startswith("fatal:") and
+                    not line.startswith("error:")):
                     actual_base = base_opt
                     break
     
