@@ -142,7 +142,7 @@ def test_latex_package_dependency_robustness():
             print(f"❌ Missing essential package: {package}")
     
     # Check for proper LaTeX action configuration
-    if 'dante-ev/latex-action@v2' in content:
+    if 'dante-ev/latex-action@latest' in content:
         print("✅ Using correct LaTeX action version")
     else:
         print("⚠️  LaTeX action version may need verification")

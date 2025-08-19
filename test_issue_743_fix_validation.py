@@ -49,7 +49,7 @@ def test_latex_action_version_pinning():
     
     # Check the uses field for the exact version
     uses_field = latex_step.get('uses', '')
-    expected_version = 'dante-ev/latex-action@v2.0.0'
+    expected_version = 'dante-ev/latex-action@latest'
     
     if uses_field == expected_version:
         print(f"✅ CORRECT: LaTeX action is pinned to {expected_version}")

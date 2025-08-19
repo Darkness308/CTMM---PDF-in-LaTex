@@ -28,8 +28,8 @@ def test_latex_action_version_fix():
         return False
     
     # Check for the correct version
-    if "dante-ev/latex-action@v2" in content:
-        print("✅ PASS: Using correct version v2")
+    if "dante-ev/latex-action@latest" in content:
+        print("✅ PASS: Using working version @latest")
         return True
     
     print("❌ FAIL: dante-ev/latex-action not found or using unexpected version")

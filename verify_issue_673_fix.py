@@ -97,15 +97,15 @@ def validate_github_actions_upgrade():
     content = workflow_file.read_text()
     
     # Check for the upgraded action
-    if "dante-ev/latex-action@v2" in content:
-        print("✅ UPGRADE CONFIRMED: dante-ev/latex-action@v2 detected")
+    if "dante-ev/latex-action@latest" in content:
+        print("✅ UPGRADE CONFIRMED: dante-ev/latex-action@latest detected")
         print("   Enhanced LaTeX compilation capabilities active")
         
         # Extract the full action configuration
         lines = content.split('\n')
         in_latex_step = False
         for i, line in enumerate(lines):
-            if "dante-ev/latex-action@v2" in line:
+            if "dante-ev/latex-action@latest" in line:
                 print(f"   📄 Configuration at line {i+1}:")
                 # Show the action and its parameters
                 for j in range(max(0, i-2), min(len(lines), i+8)):

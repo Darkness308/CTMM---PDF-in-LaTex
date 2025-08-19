@@ -49,12 +49,12 @@ def test_dante_action_version():
         print("This version doesn't exist and will cause CI failure:")
         print("'Unable to resolve action `dante-ev/latex-action@v2.0.0`, unable to find version `v2.0.0`'")
         return False
-    elif uses_action == 'dante-ev/latex-action@v2':
-        print("✅ PASS: Using correct version v2")
+    elif uses_action == 'dante-ev/latex-action@latest':
+        print("✅ PASS: Using working version @latest")
         return True
     elif uses_action.startswith('dante-ev/latex-action@'):
         print(f"⚠️  WARNING: Using version {uses_action}")
-        print("Expected: dante-ev/latex-action@v2")
+        print("Expected: dante-ev/latex-action@latest")
         return False
     else:
         print(f"❌ ERROR: Unexpected action: {uses_action}")
@@ -113,7 +113,7 @@ def main():
         print("🎉 ALL TESTS PASSED - Issue #735 fix is working correctly!")
         print()
         print("The GitHub Actions workflow should now be able to:")
-        print("- Resolve the dante-ev/latex-action@v2 action successfully")
+        print("- Resolve the dante-ev/latex-action@latest action successfully")
         print("- Avoid the 'unable to find version v2.0.0' error")
         print("- Complete the LaTeX PDF build process")
         return True

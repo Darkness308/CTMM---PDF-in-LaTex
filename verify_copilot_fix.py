@@ -100,8 +100,8 @@ def main():
     workflow_file = Path(".github/workflows/latex-build.yml")
     if workflow_file.exists():
         content = workflow_file.read_text()
-        if "dante-ev/latex-action@v2" in content:
-            print("✅ CHANGE VERIFIED: GitHub Action upgraded to @v2")
+        if "dante-ev/latex-action@latest" in content:
+            print("✅ CHANGE VERIFIED: GitHub Action upgraded to @latest")
             print("   This provides enhanced LaTeX compilation capabilities")
         else:
             print("❌ CHANGE NOT FOUND: Expected upgrade not present")
