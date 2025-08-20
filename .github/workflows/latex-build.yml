@@ -90,6 +90,14 @@ jobs:
           echo "CPU Info:" && nproc
           echo "✅ Environment assessment complete"
 
+      - name: Enhanced CI reliability validation
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🔧 Running enhanced CI reliability validation..."
+          python3 enhanced_ci_reliability.py || echo "⚠️  CI reliability check had warnings but continuing..."
+          echo "✅ Enhanced CI reliability validation completed"
+
       - name: Set up LaTeX
         timeout-minutes: 15
         uses: dante-ev/latex-action@v0.2.0

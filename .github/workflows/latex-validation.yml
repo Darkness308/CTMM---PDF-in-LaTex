@@ -56,6 +56,13 @@ jobs:
           free -h | head -2
           echo "✅ Environment assessment complete"
 
+      - name: Enhanced CI reliability validation
+        timeout-minutes: 5
+        run: |
+          echo "🔧 Running enhanced CI reliability validation..."
+          python3 enhanced_ci_reliability.py
+          echo "✅ Enhanced CI reliability validation completed successfully"
+
       - name: Upload validation logs (on failure)
         if: failure()
         timeout-minutes: 5
