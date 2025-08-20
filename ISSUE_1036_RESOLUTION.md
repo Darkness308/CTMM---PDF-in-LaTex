@@ -182,6 +182,15 @@ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/latex-build.yml'
 ### Technical Lineage
 This resolution follows the pattern established in Issue #867 for handling invalid `dante-ev/latex-action` versions by updating to `@latest` rather than attempting to pin to specific potentially unstable versions.
 
+### Validation Approach Consistency
+**Note**: Some existing validation scripts (`test_issue_1062_fix.py`, `validate_workflow_versions.py`) prefer version pinning and flag `@latest` usage. However, for the specific case of `dante-ev/latex-action` version resolution issues:
+
+- **Issue #867 Pattern**: Documented use of `@latest` as the primary solution for invalid version errors
+- **Action-Specific Context**: The `dante-ev/latex-action` repository has inconsistent version tagging, making `@latest` more reliable than specific versions
+- **CI Resolution Priority**: Fixing immediate build failures takes precedence over version pinning preferences
+
+This approach resolves the immediate CI failure while maintaining consistency with the established resolution pattern for this specific action.
+
 ## Expected Outcome
 
 After this fix, the GitHub Actions workflows should:
