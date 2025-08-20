@@ -301,10 +301,12 @@ jobs:
           echo "❌ Final combined build failed"
         fi
         
-    - name: Set up LaTeX (if PRs were processed)
+    - name: Set up LaTeX with xu-cheng action (if PRs were processed)
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
-      uses: dante-ev/latex-action@latest
+      id: latex_primary_pr
+      continue-on-error: true
+      uses: xu-cheng/latex-action@v3
       with:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -316,30 +318,110 @@ jobs:
           texlive-latex-extra
           texlive-science
           texlive-pstricks
-      continue-on-error: true
+
+    - name: Fallback LaTeX installation for PR testing
+      timeout-minutes: 20
+      if: steps.fetch_prs.outputs.pr_count > 0 && steps.latex_primary_pr.outcome == 'failure'
+      run: |
+        echo "🔄 Primary LaTeX action failed for PR testing, attempting fallback..."
+        
+        # Install TeX Live manually
+        echo "📦 Installing TeX Live packages manually..."
+        sudo apt-get update
+        sudo apt-get install -y \
+          texlive-latex-base \
+          texlive-latex-extra \
+          texlive-fonts-recommended \
+          texlive-lang-german \
+          texlive-fonts-extra \
+          texlive-science \
+          texlive-pstricks
+        
+        echo "✅ TeX Live packages installed"
+        
+        # Verify pdflatex is available
+        if ! command -v pdflatex &> /dev/null; then
+          echo "❌ pdflatex still not available after manual installation"
+          exit 1
+        fi
+        
+        echo "🔨 Compiling LaTeX document with fallback..."
+        # First pass
+        pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+        # Second pass for references  
+        pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+        
+        echo "✅ Fallback LaTeX compilation completed"
       
-    - name: Verify PDF generation (if PRs were processed)
+    - name: Verify PDF generation with enhanced analysis (if PRs were processed)
       timeout-minutes: 5
       if: steps.fetch_prs.outputs.pr_count > 0
       run: |
         echo ""
         echo "============================================"
-        echo "📄 Testing PDF generation"
+        echo "📄 Enhanced PDF generation verification"
         echo "============================================"
         
         if [ -f "main.pdf" ]; then
           echo "✅ PDF successfully generated"
+          
+          # Detailed file analysis
+          echo "📊 PDF File Analysis:"
           ls -la main.pdf
-          echo "- **PDF Generation:** ✅ SUCCESS" >> test_results/summary.md
+          file main.pdf
+          
+          # Check PDF size
+          PDF_SIZE=$(stat -c%s "main.pdf")
+          echo "📄 PDF Size: $PDF_SIZE bytes"
+          
+          if [ "$PDF_SIZE" -lt 10000 ]; then
+            echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
+            echo "- **PDF Generation:** ⚠️ SUCCESS (but small size)" >> test_results/summary.md
+          elif [ "$PDF_SIZE" -gt 100000 ]; then
+            echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
+            echo "- **PDF Generation:** ✅ SUCCESS (substantial content)" >> test_results/summary.md
+          else
+            echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
+            echo "- **PDF Generation:** ✅ SUCCESS" >> test_results/summary.md
+          fi
+          
+          # Try to extract basic PDF info
+          if command -v pdfinfo &> /dev/null; then
+            echo "📋 PDF Information:"
+            pdfinfo main.pdf || echo "Unable to extract PDF info"
+          fi
           
           # Save PDF as test artifact
           cp main.pdf test_results/combined_test.pdf
+          echo "✅ Enhanced PDF verification completed"
+          
         else
           echo "❌ PDF generation failed"
           echo "- **PDF Generation:** ❌ FAILED" >> test_results/summary.md
           
-          echo "Checking for LaTeX log files..."
-          find . -name "*.log" -exec echo "=== {} ===" \; -exec head -50 {} \; >> test_results/latex_error.log
+          echo "🔍 Comprehensive error analysis..."
+          
+          # Check for LaTeX log files with enhanced formatting
+          echo "📄 Searching for LaTeX log files..."
+          find . -name "*.log" -type f | head -10
+          
+          echo ""
+          echo "📋 LaTeX Log Analysis:"
+          echo "====================="
+          find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -50 {} \; >> test_results/latex_error.log 2>/dev/null
+          
+          # Check intermediate files
+          echo ""
+          echo "📁 Intermediate Files:"
+          echo "====================="
+          ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
+          
+          # System resource check
+          echo ""
+          echo "💾 System Resources:"
+          echo "==================="
+          df -h .
+          free -h
         fi
         
     - name: Generate final summary

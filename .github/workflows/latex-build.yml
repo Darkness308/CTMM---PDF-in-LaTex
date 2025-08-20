@@ -105,9 +105,11 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Set up LaTeX
+      - name: Set up LaTeX with xu-cheng action
         timeout-minutes: 15
-        uses: dante-ev/latex-action@latest
+        id: latex_primary
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -119,18 +121,99 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            
-      - name: Verify PDF generation
-        timeout-minutes: 3
+
+      - name: Fallback LaTeX installation and compilation
+        timeout-minutes: 20
+        if: steps.latex_primary.outcome == 'failure'
         run: |
-          echo "🔍 Verifying PDF generation..."
+          echo "🔄 Primary LaTeX action failed, attempting fallback installation..."
+          
+          # Install TeX Live manually
+          echo "📦 Installing TeX Live packages manually..."
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-lang-german \
+            texlive-fonts-extra \
+            texlive-science \
+            texlive-pstricks
+          
+          echo "✅ TeX Live packages installed"
+          
+          # Verify pdflatex is available
+          if ! command -v pdflatex &> /dev/null; then
+            echo "❌ pdflatex still not available after manual installation"
+            exit 1
+          fi
+          
+          echo "🔨 Compiling LaTeX document with fallback..."
+          # First pass
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          # Second pass for references
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          
+          echo "✅ Fallback LaTeX compilation completed"
+            
+      - name: Verify PDF generation with enhanced analysis
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Enhanced PDF verification and analysis..."
+          
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
+            
+            # Detailed file analysis
+            echo "📊 PDF File Analysis:"
             ls -la main.pdf
+            file main.pdf
+            
+            # Check PDF size (should be substantial for a complete document)
+            PDF_SIZE=$(stat -c%s "main.pdf")
+            echo "📄 PDF Size: $PDF_SIZE bytes"
+            
+            if [ "$PDF_SIZE" -lt 10000 ]; then
+              echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
+            elif [ "$PDF_SIZE" -gt 100000 ]; then
+              echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
+            else
+              echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
+            fi
+            
+            # Try to extract basic PDF info if available
+            if command -v pdfinfo &> /dev/null; then
+              echo "📋 PDF Information:"
+              pdfinfo main.pdf || echo "Unable to extract PDF info"
+            fi
+            
+            echo "✅ Enhanced PDF verification completed successfully"
           else
             echo "❌ PDF generation failed"
-            echo "Checking for LaTeX log files..."
-            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            echo "🔍 Comprehensive error analysis..."
+            
+            # Check for LaTeX log files
+            echo "📄 Searching for LaTeX log files..."
+            find . -name "*.log" -type f | head -10
+            
+            # Display recent log content with better formatting
+            echo ""
+            echo "📋 LaTeX Log Analysis:"
+            echo "====================="
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
+            
+            # Check for aux files and other intermediate files
+            echo ""
+            echo "📁 Intermediate Files Check:"
+            echo "============================="
+            ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
+            
+            # Check disk space
+            echo ""
+            echo "💾 Disk Space Analysis:"
+            echo "======================"
+            df -h .
+            
             exit 1
           fi
 
