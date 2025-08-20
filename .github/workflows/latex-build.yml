@@ -90,6 +90,21 @@ jobs:
           echo "CPU Info:" && nproc
           echo "✅ Environment assessment complete"
 
+      - name: Enhanced CI environment validation
+        timeout-minutes: 5
+        run: |
+          echo "🔧 Running enhanced CI environment validation..."
+          python3 validate_ci_environment.py
+          echo "✅ Enhanced CI environment validation completed"
+
+      - name: CI failure prevention analysis
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🛡️ Running CI failure prevention analysis..."
+          python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
+          echo "✅ CI failure prevention analysis completed"
+
       - name: Set up LaTeX
         timeout-minutes: 15
         uses: dante-ev/latex-action@v2.3.0
