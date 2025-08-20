@@ -41,7 +41,7 @@ def test_latex_action_robustness():
                 print(f"✅ FOUND: Primary LaTeX action - {step.get('uses')}")
                 
                 # Check for continue-on-error
-                if step.get('continue-on-error') == True:
+                if step.get('continue-on-error') is True:
                     print(f"✅ FOUND: Primary action has continue-on-error")
                 else:
                     print(f"⚠️  WARNING: Primary action missing continue-on-error")
