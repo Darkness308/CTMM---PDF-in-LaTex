@@ -105,9 +105,11 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Set up LaTeX
+      - name: Set up LaTeX (Primary - xu-cheng/latex-action@v3)
+        id: latex_primary
         timeout-minutes: 15
-        uses: dante-ev/latex-action@latest
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -119,18 +121,112 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            
-      - name: Verify PDF generation
-        timeout-minutes: 3
+
+      - name: Set up LaTeX (Fallback - Manual TeX Live Installation)
+        if: steps.latex_primary.outcome == 'failure'
+        timeout-minutes: 20
         run: |
-          echo "🔍 Verifying PDF generation..."
+          echo "🔄 Primary LaTeX action failed, using fallback manual installation..."
+          
+          # Update package lists
+          sudo apt-get update
+          
+          # Install TeX Live and required packages
+          echo "📦 Installing TeX Live packages..."
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-german \
+            texlive-science \
+            texlive-pstricks \
+            texlive-pictures \
+            texlive-plain-generic
+            
+          echo "✅ TeX Live installation completed"
+          
+          # Verify installation
+          pdflatex --version
+          
+          # Compile LaTeX document
+          echo "🔨 Compiling LaTeX document with fallback method..."
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex  # Second pass for references
+          
+          echo "✅ Fallback LaTeX compilation completed"
+            
+      - name: Enhanced PDF Verification with Detailed Analysis
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Enhanced PDF verification and analysis..."
+          
+          # Check if PDF was generated
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
-            ls -la main.pdf
+            
+            # Detailed file analysis
+            echo "📊 PDF File Analysis:"
+            echo "  File size: $(stat -c%s main.pdf) bytes"
+            echo "  File permissions: $(stat -c%A main.pdf)"
+            echo "  Created: $(stat -c%y main.pdf)"
+            
+            # Verify PDF is not corrupted using basic file command
+            if file main.pdf | grep -q "PDF"; then
+              echo "✅ PDF file format verification passed"
+            else
+              echo "❌ PDF file format verification failed"
+              file main.pdf
+            fi
+            
+            # Check PDF file size (should be reasonable)
+            PDF_SIZE=$(stat -c%s main.pdf)
+            if [ "$PDF_SIZE" -gt 1000 ]; then
+              echo "✅ PDF size check passed ($PDF_SIZE bytes)"
+            else
+              echo "❌ PDF size check failed - file too small ($PDF_SIZE bytes)"
+              echo "This may indicate compilation issues"
+            fi
+            
+            # List directory contents for context
+            echo "📂 Directory contents after compilation:"
+            ls -la *.pdf *.log *.aux 2>/dev/null || echo "No additional LaTeX files found"
+            
           else
-            echo "❌ PDF generation failed"
-            echo "Checking for LaTeX log files..."
-            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            echo "❌ PDF generation failed - main.pdf not found"
+            
+            # Comprehensive error analysis
+            echo "🔍 Comprehensive error analysis:"
+            echo "Current directory contents:"
+            ls -la
+            
+            echo ""
+            echo "📄 Checking for LaTeX log files..."
+            if [ -f "main.log" ]; then
+              echo "=== main.log (last 50 lines) ==="
+              tail -50 main.log
+            else
+              echo "No main.log found"
+            fi
+            
+            # Check for any other log files
+            echo ""
+            echo "🔍 Looking for any .log files..."
+            find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec tail -20 {} \;
+            
+            # Check LaTeX installation status
+            echo ""
+            echo "🔧 LaTeX installation verification:"
+            which pdflatex || echo "pdflatex not found in PATH"
+            pdflatex --version 2>/dev/null || echo "pdflatex version check failed"
+            
+            # Check if primary action failed and fallback was used
+            if [ "${{ steps.latex_primary.outcome }}" = "failure" ]; then
+              echo ""
+              echo "⚠️  Primary xu-cheng/latex-action@v3 failed, fallback method was attempted"
+            fi
+            
             exit 1
           fi
 

@@ -301,10 +301,12 @@ jobs:
           echo "❌ Final combined build failed"
         fi
         
-    - name: Set up LaTeX (if PRs were processed)
+    - name: Set up LaTeX (Primary - xu-cheng/latex-action@v3)
+      id: latex_primary
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
-      uses: dante-ev/latex-action@latest
+      continue-on-error: true
+      uses: xu-cheng/latex-action@v3
       with:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -316,30 +318,103 @@ jobs:
           texlive-latex-extra
           texlive-science
           texlive-pstricks
-      continue-on-error: true
+
+    - name: Set up LaTeX (Fallback - Manual TeX Live Installation)
+      if: steps.fetch_prs.outputs.pr_count > 0 && steps.latex_primary.outcome == 'failure'
+      timeout-minutes: 20
+      run: |
+        echo "🔄 Primary LaTeX action failed, using fallback manual installation..."
+        
+        # Update package lists
+        sudo apt-get update
+        
+        # Install TeX Live and required packages
+        echo "📦 Installing TeX Live packages..."
+        sudo apt-get install -y \
+          texlive-latex-base \
+          texlive-latex-recommended \
+          texlive-latex-extra \
+          texlive-fonts-recommended \
+          texlive-fonts-extra \
+          texlive-lang-german \
+          texlive-science \
+          texlive-pstricks \
+          texlive-pictures \
+          texlive-plain-generic
+          
+        echo "✅ TeX Live installation completed"
+        
+        # Verify installation
+        pdflatex --version
+        
+        # Compile LaTeX document
+        echo "🔨 Compiling LaTeX document with fallback method..."
+        pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+        pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex  # Second pass for references
+        
+        echo "✅ Fallback LaTeX compilation completed"
       
-    - name: Verify PDF generation (if PRs were processed)
+    - name: Enhanced PDF Verification (if PRs were processed)
       timeout-minutes: 5
       if: steps.fetch_prs.outputs.pr_count > 0
       run: |
         echo ""
         echo "============================================"
-        echo "📄 Testing PDF generation"
+        echo "📄 Enhanced PDF Generation Verification"
         echo "============================================"
         
         if [ -f "main.pdf" ]; then
           echo "✅ PDF successfully generated"
-          ls -la main.pdf
-          echo "- **PDF Generation:** ✅ SUCCESS" >> test_results/summary.md
           
-          # Save PDF as test artifact
+          # Detailed PDF analysis for automated testing
+          echo "📊 PDF Analysis Results:"
+          echo "  File size: $(stat -c%s main.pdf) bytes"
+          echo "  File permissions: $(stat -c%A main.pdf)"
+          echo "  Created: $(stat -c%y main.pdf)"
+          
+          # Verify PDF integrity
+          if file main.pdf | grep -q "PDF"; then
+            echo "✅ PDF format verification passed"
+          else
+            echo "❌ PDF format verification failed"
+            file main.pdf
+          fi
+          
+          # Check file size threshold
+          PDF_SIZE=$(stat -c%s main.pdf)
+          if [ "$PDF_SIZE" -gt 1000 ]; then
+            echo "✅ PDF size validation passed ($PDF_SIZE bytes)"
+            echo "- **PDF Generation:** ✅ SUCCESS (Size: $PDF_SIZE bytes)" >> test_results/summary.md
+          else
+            echo "❌ PDF size validation failed - file too small ($PDF_SIZE bytes)"
+            echo "- **PDF Generation:** ❌ FAILED (Size too small: $PDF_SIZE bytes)" >> test_results/summary.md
+          fi
+          
+          # Save PDF as test artifact with enhanced naming
           cp main.pdf test_results/combined_test.pdf
+          echo "📦 PDF saved as test artifact: combined_test.pdf"
+          
         else
           echo "❌ PDF generation failed"
-          echo "- **PDF Generation:** ❌ FAILED" >> test_results/summary.md
+          echo "- **PDF Generation:** ❌ FAILED (File not found)" >> test_results/summary.md
           
-          echo "Checking for LaTeX log files..."
-          find . -name "*.log" -exec echo "=== {} ===" \; -exec head -50 {} \; >> test_results/latex_error.log
+          # Enhanced error logging for automated testing
+          echo "🔍 Comprehensive error analysis:"
+          echo "Current directory structure:"
+          find . -type f -name "*.tex" -o -name "*.log" -o -name "*.aux" -o -name "*.pdf" | sort
+          
+          echo ""
+          echo "📄 LaTeX compilation logs:"
+          find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; >> test_results/latex_error_detailed.log
+          
+          # Check which LaTeX method was used
+          if [ "${{ steps.latex_primary.outcome }}" = "failure" ]; then
+            echo "⚠️  Both primary xu-cheng/latex-action@v3 and fallback method failed"
+            echo "- **LaTeX Method:** Fallback manual installation (primary failed)" >> test_results/summary.md
+          else
+            echo "ℹ️  LaTeX compilation used primary xu-cheng/latex-action@v3"
+            echo "- **LaTeX Method:** Primary xu-cheng/latex-action@v3" >> test_results/summary.md
+          fi
         fi
         
     - name: Generate final summary
