@@ -7,6 +7,10 @@ name: LaTeX Validation
   pull_request:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -41,6 +45,16 @@ jobs:
           echo "🔧 Starting CTMM build system check..."
           python3 ctmm_build.py
           echo "✅ CTMM build system check completed successfully"
+
+      - name: Assess GitHub Actions runner environment
+        timeout-minutes: 3
+        run: |
+          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Architecture: $RUNNER_ARCH" 
+          df -h / | head -2
+          free -h | head -2
+          echo "✅ Environment assessment complete"
 
       - name: Upload validation logs (on failure)
         if: failure()
