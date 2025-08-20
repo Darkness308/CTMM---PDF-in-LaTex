@@ -322,7 +322,6 @@ jobs:
     - name: Set up LaTeX (fallback for testing)
       if: steps.fetch_prs.outputs.pr_count > 0 && steps.latex_test_primary.outcome == 'failure'
       timeout-minutes: 20
-      continue-on-error: true
       run: |
         echo "🔄 Primary LaTeX action failed, using fallback method for testing..."
         echo "📦 Installing TeX Live manually..."
