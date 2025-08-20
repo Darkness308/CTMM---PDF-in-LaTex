@@ -59,7 +59,7 @@ $ python3 validate_pr.py --skip-build
 ✅ No uncommitted changes
 📊 Changes compared to main:
   - Files changed: 1
-  - Lines added: 150+
+  - Lines added: 187
   - Lines deleted: 0
 ✅ Meaningful changes detected - Copilot should be able to review
 ```
