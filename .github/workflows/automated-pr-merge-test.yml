@@ -304,7 +304,7 @@ jobs:
     - name: Set up LaTeX (if PRs were processed)
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
-      uses: dante-ev/latex-action@v2.3.0
+      uses: dante-ev/latex-action@v0.2.0
       with:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
