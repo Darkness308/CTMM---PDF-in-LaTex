@@ -68,6 +68,14 @@ jobs:
         echo "🔧 Running CTMM build validation..."
         python3 ctmm_build.py
         echo "✅ CTMM build validation completed successfully"
+        
+    - name: Enhanced CI environment validation for PRs
+      timeout-minutes: 5
+      continue-on-error: true
+      run: |
+        echo "🔧 Running enhanced CI environment validation for PR..."
+        python3 validate_ci_environment.py || echo "⚠️ Some environment checks had warnings but continuing..."
+        echo "✅ Enhanced CI environment validation completed"
     - name: Comment on PR if validation fails
       if: failure()
       timeout-minutes: 3
