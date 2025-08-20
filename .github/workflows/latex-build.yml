@@ -90,9 +90,12 @@ jobs:
           echo "CPU Info:" && nproc
           echo "✅ Environment assessment complete"
 
-      - name: Set up LaTeX
+      # PRIMARY METHOD: Use xu-cheng/latex-action (more reliable alternative)
+      - name: Set up LaTeX (Primary Method)
+        id: latex_primary
         timeout-minutes: 15
-        uses: dante-ev/latex-action@v0.2.0
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -104,6 +107,49 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
+
+      # FALLBACK METHOD: Manual TeX Live installation if primary fails
+      - name: Set up LaTeX (Fallback Method)
+        if: steps.latex_primary.outcome == 'failure'
+        timeout-minutes: 20
+        run: |
+          echo "🔄 Primary LaTeX action failed, using fallback method..."
+          echo "📦 Installing TeX Live manually..."
+          
+          # Update package lists
+          sudo apt-get update
+          
+          # Install TeX Live and required packages
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-german \
+            texlive-science \
+            texlive-pstricks \
+            texlive-pictures \
+            texlive-plain-generic
+          
+          echo "✅ TeX Live installed successfully"
+          
+          # Verify installation
+          pdflatex --version
+          
+          # Compile the LaTeX document
+          echo "🔨 Compiling LaTeX document..."
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          
+          # Run twice to resolve references
+          if [ -f "main.pdf" ]; then
+            echo "🔄 Running second pass for references..."
+            pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+            echo "✅ LaTeX compilation completed successfully"
+          else
+            echo "❌ First pass failed"
+            exit 1
+          fi
             
       - name: Verify PDF generation
         timeout-minutes: 3
@@ -112,6 +158,9 @@ jobs:
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
             ls -la main.pdf
+            # Show PDF file size and basic info
+            file main.pdf
+            echo "📄 PDF size: $(du -h main.pdf | cut -f1)"
           else
             echo "❌ PDF generation failed"
             echo "Checking for LaTeX log files..."

@@ -302,9 +302,11 @@ jobs:
         fi
         
     - name: Set up LaTeX (if PRs were processed)
+      id: latex_test_primary
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
-      uses: dante-ev/latex-action@v0.2.0
+      continue-on-error: true
+      uses: xu-cheng/latex-action@v3
       with:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -316,7 +318,46 @@ jobs:
           texlive-latex-extra
           texlive-science
           texlive-pstricks
+
+    - name: Set up LaTeX (fallback for testing)
+      if: steps.fetch_prs.outputs.pr_count > 0 && steps.latex_test_primary.outcome == 'failure'
+      timeout-minutes: 20
       continue-on-error: true
+      run: |
+        echo "🔄 Primary LaTeX action failed, using fallback method for testing..."
+        echo "📦 Installing TeX Live manually..."
+        
+        # Update package lists
+        sudo apt-get update
+        
+        # Install TeX Live and required packages
+        sudo apt-get install -y \
+          texlive-latex-base \
+          texlive-latex-recommended \
+          texlive-latex-extra \
+          texlive-fonts-recommended \
+          texlive-fonts-extra \
+          texlive-lang-german \
+          texlive-science \
+          texlive-pstricks \
+          texlive-pictures \
+          texlive-plain-generic
+        
+        echo "✅ TeX Live installed successfully"
+        
+        # Compile the LaTeX document
+        echo "🔨 Compiling LaTeX document..."
+        pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+        
+        # Run twice to resolve references
+        if [ -f "main.pdf" ]; then
+          echo "🔄 Running second pass for references..."
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          echo "✅ LaTeX compilation completed successfully"
+        else
+          echo "❌ First pass failed"
+          exit 1
+        fi
       
     - name: Verify PDF generation (if PRs were processed)
       timeout-minutes: 5
