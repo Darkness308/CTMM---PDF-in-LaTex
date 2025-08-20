@@ -107,7 +107,8 @@ jobs:
 
       - name: Set up LaTeX
         timeout-minutes: 15
-        uses: dante-ev/latex-action@latest
+        id: latex_primary
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -119,18 +120,128 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            
-      - name: Verify PDF generation
-        timeout-minutes: 3
+        continue-on-error: true
+
+      - name: Fallback LaTeX installation (if primary action failed)
+        timeout-minutes: 20
+        if: steps.latex_primary.outcome == 'failure'
         run: |
-          echo "🔍 Verifying PDF generation..."
+          echo "⚠️  Primary LaTeX action failed, attempting manual TeX Live installation..."
+          
+          # Update package list
+          sudo apt-get update
+          
+          # Install TeX Live and required packages
+          echo "📦 Installing TeX Live and required packages..."
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-german \
+            texlive-science \
+            texlive-pstricks \
+            texlive-pictures \
+            texlive-plain-generic
+          
+          echo "✅ Manual TeX Live installation completed"
+          
+          # Verify installation
+          echo "🔍 Verifying LaTeX installation..."
+          pdflatex --version
+          
+          # Attempt LaTeX compilation
+          echo "🔨 Attempting LaTeX compilation with fallback installation..."
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          
           if [ -f "main.pdf" ]; then
-            echo "✅ PDF successfully generated"
-            ls -la main.pdf
+            echo "✅ Fallback LaTeX compilation successful"
           else
-            echo "❌ PDF generation failed"
-            echo "Checking for LaTeX log files..."
-            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            echo "❌ Fallback LaTeX compilation failed"
+            exit 1
+          fi
+            
+      - name: Verify PDF generation with enhanced analysis
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Starting enhanced PDF verification and analysis..."
+          
+          # Check if PDF was generated
+          if [ -f "main.pdf" ]; then
+            echo "✅ PDF file successfully generated: main.pdf"
+            
+            # Detailed PDF analysis
+            echo ""
+            echo "📊 PDF File Analysis:"
+            echo "===================="
+            ls -la main.pdf
+            
+            # Check PDF file size and validate it's not empty
+            PDF_SIZE=$(stat -c%s "main.pdf")
+            echo "📏 PDF file size: ${PDF_SIZE} bytes"
+            
+            if [ "$PDF_SIZE" -gt 1000 ]; then
+              echo "✅ PDF file size is adequate (> 1KB)"
+            else
+              echo "⚠️  PDF file size seems unusually small"
+            fi
+            
+            # Try to read PDF metadata if pdfinfo is available
+            if command -v pdfinfo &> /dev/null; then
+              echo ""
+              echo "📋 PDF Metadata:"
+              echo "================"
+              pdfinfo main.pdf || echo "Could not read PDF metadata"
+            fi
+            
+            # Verify PDF is not corrupted by checking first few bytes
+            echo ""
+            echo "🔍 PDF Header Verification:"
+            echo "=========================="
+            PDF_HEADER=$(head -c 10 main.pdf | od -c)
+            if echo "$PDF_HEADER" | grep -q "PDF"; then
+              echo "✅ Valid PDF header found"
+            else
+              echo "⚠️  PDF header verification failed - file may be corrupted"
+            fi
+            
+            echo ""
+            echo "🎉 PDF generation verification completed successfully"
+            
+          else
+            echo "❌ PDF generation failed - main.pdf not found"
+            echo ""
+            echo "🔍 Detailed failure analysis:"
+            echo "============================="
+            
+            # Check working directory contents
+            echo "📁 Current directory contents:"
+            ls -la
+            
+            echo ""
+            echo "🔍 Searching for any generated files:"
+            find . -name "*.pdf" -o -name "*.dvi" -o -name "*.ps" | head -10
+            
+            echo ""
+            echo "📋 LaTeX log file analysis:"
+            echo "=========================="
+            if [ -f "main.log" ]; then
+              echo "Found main.log - showing last 50 lines:"
+              tail -50 main.log
+            else
+              echo "main.log not found"
+            fi
+            
+            echo ""
+            echo "🔍 Searching for all log files:"
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -20 {} \;
+            
+            echo ""
+            echo "🔍 Checking for LaTeX auxiliary files:"
+            ls -la *.aux *.toc *.out 2>/dev/null || echo "No auxiliary files found"
+            
+            echo ""
+            echo "❌ PDF verification failed - exiting with error"
             exit 1
           fi
 
@@ -141,14 +252,61 @@ jobs:
           name: CTMM_PDF
           path: main.pdf
 
-      - name: Upload build logs (on failure)
+      - name: Upload build logs (on failure) 
         if: failure()
         timeout-minutes: 5
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: build_logs
+          name: enhanced_build_logs_${{ github.run_number }}
           path: |
             *.log
+            *.aux
+            *.out
+            *.toc
             build_error_*.log
             build_system.log
+          if-no-files-found: ignore
+
+      - name: Generate comprehensive error report (on failure)
+        if: failure()
+        timeout-minutes: 3
+        continue-on-error: true
+        run: |
+          echo "🔍 Generating comprehensive error report..."
+          
+          ERROR_REPORT="error_report_$(date +%Y%m%d_%H%M%S).md"
+          
+          echo "# LaTeX Build Error Report" > $ERROR_REPORT
+          echo "" >> $ERROR_REPORT
+          echo "**Timestamp:** $(date -u)" >> $ERROR_REPORT
+          echo "**Workflow Run:** ${{ github.run_number }}" >> $ERROR_REPORT
+          echo "**Primary LaTeX Action:** ${{ steps.latex_primary.outcome }}" >> $ERROR_REPORT
+          echo "" >> $ERROR_REPORT
+          
+          echo "## System Environment" >> $ERROR_REPORT
+          echo "- **Runner OS:** $RUNNER_OS" >> $ERROR_REPORT
+          echo "- **Runner Architecture:** $RUNNER_ARCH" >> $ERROR_REPORT
+          echo "- **Available Disk Space:** $(df -h / | tail -1 | awk '{print $4}')" >> $ERROR_REPORT
+          echo "- **Available Memory:** $(free -h | grep '^Mem:' | awk '{print $7}')" >> $ERROR_REPORT
+          echo "" >> $ERROR_REPORT
+          
+          echo "## LaTeX Action Status" >> $ERROR_REPORT
+          echo "- **Primary Action (xu-cheng/latex-action@v3):** ${{ steps.latex_primary.outcome }}" >> $ERROR_REPORT
+          echo "- **Fallback Attempted:** ${{ steps.latex_primary.outcome == 'failure' }}" >> $ERROR_REPORT
+          echo "" >> $ERROR_REPORT
+          
+          echo "## Build Artifacts Analysis" >> $ERROR_REPORT
+          echo "\`\`\`" >> $ERROR_REPORT
+          ls -la >> $ERROR_REPORT
+          echo "\`\`\`" >> $ERROR_REPORT
+          echo "" >> $ERROR_REPORT
+          
+          if [ -f "main.log" ]; then
+            echo "## LaTeX Error Summary" >> $ERROR_REPORT
+            echo "\`\`\`" >> $ERROR_REPORT
+            grep -i "error\|failed\|missing" main.log | head -20 >> $ERROR_REPORT
+            echo "\`\`\`" >> $ERROR_REPORT
+          fi
+          
+          echo "📝 Error report generated: $ERROR_REPORT"
