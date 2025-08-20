@@ -105,9 +105,11 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Set up LaTeX
+      - name: Set up LaTeX (Primary)
         timeout-minutes: 15
-        uses: dante-ev/latex-action@latest
+        id: latex_primary
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -119,18 +121,100 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            
-      - name: Verify PDF generation
-        timeout-minutes: 3
+
+      - name: Set up LaTeX (Fallback - Manual TeX Live)
+        timeout-minutes: 20
+        if: steps.latex_primary.outcome == 'failure'
         run: |
-          echo "🔍 Verifying PDF generation..."
+          echo "🔄 Primary LaTeX action failed, using manual TeX Live installation..."
+          
+          # Install TeX Live manually
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-german \
+            texlive-science \
+            texlive-pstricks \
+            texlive-latex-recommended
+          
+          # Verify installation
+          which pdflatex
+          pdflatex --version
+          
+          # Compile the document
+          echo "🔨 Compiling LaTeX document manually..."
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          
+          # Second pass for references
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          
+          echo "✅ Manual LaTeX compilation completed"
+            
+      - name: Verify PDF generation (Enhanced)
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Enhanced PDF verification starting..."
+          
+          # Check if PDF was generated
           if [ -f "main.pdf" ]; then
-            echo "✅ PDF successfully generated"
-            ls -la main.pdf
+            echo "✅ PDF file found: main.pdf"
+            
+            # Detailed file analysis
+            echo "📊 PDF File Analysis:"
+            echo "  File size: $(ls -lh main.pdf | awk '{print $5}')"
+            echo "  Last modified: $(stat -c %y main.pdf)"
+            
+            # Check if PDF is valid and readable
+            if command -v pdfinfo >/dev/null 2>&1; then
+              echo "📄 PDF Information:"
+              pdfinfo main.pdf | head -10
+            else
+              echo "ℹ️  pdfinfo not available for detailed PDF analysis"
+            fi
+            
+            # Verify PDF is not corrupted (basic check)
+            file main.pdf
+            
+            # Check file is not empty
+            if [ -s main.pdf ]; then
+              echo "✅ PDF file is not empty"
+            else
+              echo "❌ PDF file is empty or corrupted"
+              exit 1
+            fi
+            
+            echo "✅ PDF verification completed successfully"
+            
           else
-            echo "❌ PDF generation failed"
-            echo "Checking for LaTeX log files..."
-            find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+            echo "❌ PDF generation failed - file not found"
+            
+            # Enhanced error reporting
+            echo ""
+            echo "🔍 Diagnostic Information:"
+            echo "  Current directory: $(pwd)"
+            echo "  Files present:"
+            ls -la | head -20
+            
+            echo ""
+            echo "📋 LaTeX Log Files Analysis:"
+            if find . -name "*.log" -type f | head -1 >/dev/null 2>&1; then
+              for logfile in $(find . -name "*.log" -type f); do
+                echo ""
+                echo "=== $logfile (last 30 lines) ==="
+                tail -30 "$logfile"
+              done
+            else
+              echo "  No LaTeX log files found"
+            fi
+            
+            echo ""
+            echo "🔧 Build Environment Check:"
+            echo "  pdflatex available: $(which pdflatex >/dev/null 2>&1 && echo 'YES' || echo 'NO')"
+            echo "  LaTeX distribution: $(pdflatex --version 2>/dev/null | head -1 || echo 'Not available')"
+            
             exit 1
           fi
 
