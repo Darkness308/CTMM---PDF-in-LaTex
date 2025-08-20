@@ -43,6 +43,18 @@ python3 ctmm_build.py
 - LaTeX-Installation mit TikZ und hyperref
 - Oder GitHub Codespace (vorkonfiguriert)
 
+**Für lokale Entwicklung:**
+```bash
+# Schnelle Einrichtung (Ubuntu/Debian)
+make setup
+
+# Oder manuell:
+sudo apt-get install texlive-lang-german texlive-fonts-extra texlive-latex-extra
+pip install chardet
+```
+
+**Bei Build-Problemen:** Siehe [BUILD_TROUBLESHOOTING.md](BUILD_TROUBLESHOOTING.md) für detaillierte Lösungen.
+
 ## 🎯 CTMM Comprehensive Toolset - "es ist nicht mehr weit"
 
 **Status**: ✅ **COMPLETE AND OPERATIONAL**
