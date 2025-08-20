@@ -19,7 +19,7 @@ Version `v2.0.0` does not exist in the `dante-ev/latex-action` repository. GitHu
 
 ### Historical Context
 Based on previous issue resolutions in this repository:
-- ISSUE_607: Used `v0.2` 
+- ISSUE_607: Used `v0.2`
 - ISSUE_735: `v2.0.0` doesn't exist, was fixed to `v2`
 - ISSUE_867: `v2` doesn't exist, was fixed to `@latest`
 - ISSUE_1062: `v2.3.0` doesn't exist, was fixed to `v0.2.0`
