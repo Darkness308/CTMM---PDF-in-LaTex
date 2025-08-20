@@ -220,11 +220,12 @@ def main():
         print("  ✅ All validation systems confirm PR is ready for review")
         print("  ✅ Resolution follows established pattern from 7 previous issues")
         print("  ✅ CTMM therapeutic materials system integrity maintained")
+        print("=" * 80)
+        return True
     else:
         print("❌ SOME CHECKS FAILED - Issue #835 not fully resolved")
-    
-    print("=" * 80)
-    return all_passed
+        print("=" * 80)
+        return False
 
 if __name__ == "__main__":
     success = main()
