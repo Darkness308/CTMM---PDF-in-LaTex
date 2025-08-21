@@ -11,8 +11,20 @@
 
 % Wichtig für \@ifpackageloaded
 \makeatletter
+copilot/vscode1754261474068
 % Interactive Form Detection
 \newcommand{\@ctmmInteractive}{true}
+
+% Check if hyperref is loaded for interactive forms
+\@ifpackageloaded{hyperref}{%
+    % hyperref is already loaded - just enable interactive mode
+    \newcommand{\@ctmmInteractive}{true}%
+}{%
+    % hyperref not loaded - load it and enable interactive mode
+    \RequirePackage{hyperref}%
+    \newcommand{\@ctmmInteractive}{true}%
+}
+main
 \makeatother
 
 % Text Field mit verbessertem Design

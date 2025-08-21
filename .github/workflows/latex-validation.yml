@@ -1,11 +1,27 @@
+copilot/vscode1754261474068
 name: LaTeX Validation
 
 on: [push, pull_request]
+
+---
+name: LaTeX Validation
+
+"on":
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+main
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+copilot/vscode1754261474068
       - uses: actions/checkout@v4
 
       - name: Check \documentclass in first 5 lines
@@ -41,3 +57,56 @@ jobs:
             echo "::error ::main.pdf wurde nicht erzeugt"
             exit 1
           fi
+
+      - name: Checkout repository
+        timeout-minutes: 5
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        timeout-minutes: 5
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies  
+        timeout-minutes: 5
+        run: |
+          echo "📦 Installing Python dependencies..."
+          pip install chardet pyyaml
+          echo "✅ Python dependencies installed successfully"
+
+      - name: Run LaTeX syntax validation
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Starting LaTeX syntax validation..."
+          python3 validate_latex_syntax.py
+          echo "✅ LaTeX syntax validation completed successfully"
+
+      - name: Run CTMM Build System Check
+        timeout-minutes: 10
+        run: |
+          echo "🔧 Starting CTMM build system check..."
+          python3 ctmm_build.py
+          echo "✅ CTMM build system check completed successfully"
+
+      - name: Assess GitHub Actions runner environment
+        timeout-minutes: 3
+        run: |
+          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Architecture: $RUNNER_ARCH" 
+          df -h / | head -2
+          free -h | head -2
+          echo "✅ Environment assessment complete"
+
+      - name: Upload validation logs (on failure)
+        if: failure()
+        timeout-minutes: 5
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation_logs
+          path: |
+            *.log
+            build_error_*.log
+main
