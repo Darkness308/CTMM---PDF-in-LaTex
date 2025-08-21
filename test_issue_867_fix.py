@@ -40,15 +40,18 @@ def test_latex_action_version():
     print(f"✅ Found LaTeX action: {uses}")
     
     # Check for problematic versions that are known to fail
-    problematic_versions = ['@v2', '@v2.0.0']
-    for bad_version in problematic_versions:
-        if bad_version in uses:
-            print(f"❌ Using problematic version: {bad_version}")
-            print(f"   This version was reported as non-existent in Issue #867")
-            return False
+    # Check for exact problematic versions, not substrings
+    if uses.endswith('@v2'):
+        print(f"❌ Using problematic version: @v2")
+        print(f"   This version was reported as non-existent in Issue #867")
+        return False
+    if uses.endswith('@v2.0.0'):
+        print(f"❌ Using problematic version: @v2.0.0")
+        print(f"   This version was reported as non-existent in Issue #735")
+        return False
     
     # Check for valid version patterns
-    valid_patterns = ['@latest', '@v0.2', '@v1', '@master', '@main']
+    valid_patterns = ['@latest', '@v0.2', '@v1', '@master', '@main', '@v2.']
     is_valid = any(pattern in uses for pattern in valid_patterns)
     
     if not is_valid:

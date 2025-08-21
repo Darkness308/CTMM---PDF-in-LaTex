@@ -2,30 +2,18 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CTMM: Kompilieren",
+            "label": "Build LaTeX",
             "type": "shell",
-            "command": "pdflatex",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "-output-directory=build",
-                "main.tex"
-            ],
+            "command": "latexmk -pdf -pdflatex=\"pdflatex -synctex=1 -interaction=nonstopmode -file-line-error\" -outdir=build main.tex",
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "problemMatcher": {
-                "owner": "latex",
-                "fileLocation": ["relative", "${workspaceRoot}"],
-                "pattern": {
-                    "regexp": "^(.*):(\\d+):\\s+(.*)",
-                    "file": 1,
-                    "line": 2,
-                    "message": 3
-                }
             }
+        },
+        {
+            "label": "Clean Build",
+            "type": "shell",
+            "command": "latexmk -c -outdir=build"
         }
     ]
 }

@@ -1,0 +1,224 @@
+% ================================================================
+% CTMM Module: Krisenprotokoll Ausfüllen
+% Basierend auf: 5.5 Krisenprotokoll Ausfüllen.docx
+% ================================================================
+
+\section{Krisenprotokoll - Strukturierte Krisenbewältigung}
+\label{sec:krisenprotokoll}
+
+\begin{ctmmRedBox}[title=\textcolor{white}{CTMM Krisenprotokoll v5.5}]
+
+\textcolor{white}{\textbf{Wichtig:} Dieses Protokoll dient der strukturierten Dokumentation und Nachbereitung von Krisensituationen. Es ersetzt NICHT professionelle Hilfe in akuten Notfällen.}
+
+\vspace{0.5em}
+
+\textcolor{white}{\textbf{Notfallnummern:}}
+\begin{itemize}
+    \item[\textcolor{white}{•}] \textcolor{white}{Rettungsdienst: 112}
+    \item[\textcolor{white}{•}] \textcolor{white}{Krisentelefon: 0800 111 0 111}  
+    \item[\textcolor{white}{•}] \textcolor{white}{Therapeut/in: \TextField[name=crisis_therapist_number,width=6cm,height=1em,bordercolor={1 1 1},backgroundcolor={0.9 0.9 0.9}]{}}
+\end{itemize}
+
+\end{ctmmRedBox}
+
+\subsection{Sofortmaßnahmen in der Krise}
+
+\begin{ctmmOrangeBox}[title=Erste Schritte]
+
+\textbf{1. Sicherheit schaffen}
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_safety_self}{Eigene Sicherheit gewährleistet}
+    \item \ctmmCheckBox{crisis_safety_partner}{Sicherheit des Partners gewährleistet}
+    \item \ctmmCheckBox{crisis_safety_environment}{Sichere Umgebung geschaffen}
+\end{itemize}
+
+\textbf{2. Safe-Words einsetzen}
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_safeword_anker}{"Anker!" verwendet}
+    \item \ctmmCheckBox{crisis_safeword_reset}{"Reset!" verwendet}  
+    \item \ctmmCheckBox{crisis_safeword_eiszeit}{"Eiszeit!" verwendet}
+    \item \ctmmCheckBox{crisis_safeword_other}{Anderes: \ctmmTextField[4cm]{crisis_safeword_custom}{}}
+\end{itemize}
+
+\textbf{3. Grundlegende Deeskalation}
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_deescalation_breathing}{Atemtechnik angewendet}
+    \item \ctmmCheckBox{crisis_deescalation_grounding}{Grounding-Technik verwendet}
+    \item \ctmmCheckBox{crisis_deescalation_separation}{Räumliche Trennung vorgenommen}
+    \item \ctmmCheckBox{crisis_deescalation_timeout}{Time-Out vereinbart}
+\end{itemize}
+
+\end{ctmmOrangeBox}
+
+\subsection{Dokumentation der Krisensituation}
+
+\begin{ctmmGreenBox}[title=Krisendokumentation]
+
+\textbf{Datum und Zeit:} \\
+\ctmmDateField{crisis_date}{Datum}{TT.MM.JJJJ} \quad \ctmmTimeField{crisis_time}{Beginn der Krise}
+
+\textbf{Dauer der Krise:} \\
+\ctmmTextField[4cm]{crisis_duration}{}{Minuten/Stunden}
+
+\textbf{Beteiligte Personen:} \\
+\ctmmCheckBox{crisis_involved_self}{Ich} \quad
+\ctmmCheckBox{crisis_involved_partner}{Partner/in} \quad  
+\ctmmCheckBox{crisis_involved_others}{Andere: \ctmmTextField[6cm]{crisis_involved_other_names}{}}
+
+\textbf{Ort der Krise:} \\
+\ctmmTextField[10cm]{crisis_location}{}{}
+
+\textbf{Auslöser/Trigger:} \\
+\ctmmTextArea[14cm]{4}{crisis_trigger}{Was hat die Krise ausgelöst?}
+
+\textbf{Verlauf der Krise:} \\
+\ctmmTextArea[14cm]{5}{crisis_course}{Beschreibung des Krisenverlaufs}
+
+\end{ctmmGreenBox}
+
+\subsection{Intensitätsskala und Auswirkungen}
+
+\begin{ctmmBlueBox}[title=Bewertung der Krisensituation]
+
+\textbf{Krisenlevel (1-10):} \\
+\ctmmEmotionScale{Gesamtintensität der Krise}{crisis_intensity}
+
+\vspace{0.5em}
+
+\textbf{Emotionale Belastung:} \\[0.5em]
+
+\textbf{Eigene Belastung (1-10):} \\
+\ctmmEmotionScale{Meine Belastung}{crisis_own_stress}
+
+\vspace{0.5em}
+
+\textbf{Partner Belastung (1-10):} \\
+\ctmmEmotionScale{Partner Belastung}{crisis_partner_stress}
+
+\textbf{Körperliche Symptome:} \\
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_symptoms_trembling}{Zittern}
+    \item \ctmmCheckBox{crisis_symptoms_sweating}{Schwitzen}
+    \item \ctmmCheckBox{crisis_symptoms_heartbeat}{Herzrasen}
+    \item \ctmmCheckBox{crisis_symptoms_breathing}{Atemnot}
+    \item \ctmmCheckBox{crisis_symptoms_tension}{Muskelverspannung}
+    \item \ctmmCheckBox{crisis_symptoms_other}{Andere: \ctmmTextField[6cm]{crisis_symptoms_other_desc}{}}
+\end{itemize}
+
+\end{ctmmBlueBox}
+
+\subsection{Angewandte Strategien und Hilfsmaßnahmen}
+
+\begin{ctmmPurpleBox}[title=Eingesetzte Tools und Techniken]
+
+\textbf{CTMM-Tools verwendet:} \\
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_tools_breathing}{5-4-3-2-1 Grounding}
+    \item \ctmmCheckBox{crisis_tools_safewords}{Safeword-System}
+    \item \ctmmCheckBox{crisis_tools_coregulation}{Co-Regulation}
+    \item \ctmmCheckBox{crisis_tools_trigger}{Triggermanagement}
+    \item \ctmmCheckBox{crisis_tools_binding}{Bindungstools}
+\end{itemize}
+
+\textbf{Externe Hilfe:} \\
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_help_emergency}{Notdienst kontaktiert}
+    \item \ctmmCheckBox{crisis_help_therapist}{Therapeut/in kontaktiert}
+    \item \ctmmCheckBox{crisis_help_crisis_line}{Krisentelefon genutzt}
+    \item \ctmmCheckBox{crisis_help_family}{Familie/Freunde kontaktiert}
+    \item \ctmmCheckBox{crisis_help_none}{Keine externe Hilfe nötig}
+\end{itemize}
+
+\textbf{Was hat geholfen?} \\
+\ctmmTextArea[14cm]{4}{crisis_what_helped}{Welche Maßnahmen waren erfolgreich?}
+
+\textbf{Was hat nicht geholfen?} \\
+\ctmmTextArea[14cm]{3}{crisis_what_not_helped}{Welche Strategien waren ineffektiv?}
+
+\end{ctmmPurpleBox}
+
+\subsection{Nachbereitung und Reflexion}
+
+\begin{ctmmGreenBox}[title=Post-Krisen Analyse]
+
+\textbf{Zeitpunkt der Nachbereitung:} \\
+\ctmmDateField{crisis_debrief_date}{Datum der Nachbereitung}{TT.MM.JJJJ} \quad \ctmmTimeField{crisis_debrief_time}{Zeit}
+
+\textbf{Emotionaler Zustand nach der Krise:} \\
+\ctmmEmotionScale{Befinden nach der Krise}{crisis_after_mood}
+
+\textbf{Erkenntnisse und Learnings:} \\
+\ctmmTextArea[14cm]{4}{crisis_learnings}{Was haben wir aus dieser Krise gelernt?}
+
+\textbf{Trigger-Analyse:} \\
+\ctmmTextArea[14cm]{3}{crisis_trigger_analysis}{Wie können wir ähnliche Trigger in Zukunft vermeiden?}
+
+\textbf{Präventionsmaßnahmen:} \\
+\ctmmTextArea[14cm]{3}{crisis_prevention}{Welche Maßnahmen setzen wir zur Prävention um?}
+
+\end{ctmmGreenBox}
+
+\subsection{Actionplan für die Zukunft}
+
+\begin{ctmmBlueBox}[title=Verbesserungsmaßnahmen]
+
+\textbf{Sofort umsetzbar (nächste 24h):} \\
+\ctmmTextArea[14cm]{2}{crisis_action_immediate}{}
+
+\textbf{Kurzfristig (nächste Woche):} \\  
+\ctmmTextArea[14cm]{2}{crisis_action_short}{}
+
+\textbf{Mittelfristig (nächster Monat):} \\
+\ctmmTextArea[14cm]{2}{crisis_action_medium}{}
+
+\textbf{Langfristig (nächste 3 Monate):} \\
+\ctmmTextArea[14cm]{2}{crisis_action_long}{}
+
+\textbf{Follow-up Termine vereinbart:} \\
+\begin{itemize}
+    \item \ctmmCheckBox{crisis_followup_therapist}{Therapeut/in: \ctmmTextField[4cm]{crisis_followup_therapist_date}{}}
+    \item \ctmmCheckBox{crisis_followup_partner}{Partner-Gespräch: \ctmmTextField[4cm]{crisis_followup_partner_date}{}}
+    \item \ctmmCheckBox{crisis_followup_review}{Protokoll-Review: \ctmmTextField[4cm]{crisis_followup_review_date}{}}
+\end{itemize}
+
+\end{ctmmBlueBox}
+
+\subsection{Unterschriften und Bestätigung}
+
+\begin{ctmmOrangeBox}[title=Dokumentation abgeschlossen]
+
+\textbf{Ausgefüllt von:} \\
+\ctmmTextField[6cm]{crisis_completed_by}{}{Name}
+
+\textbf{Datum der Fertigstellung:} \\
+\ctmmDateField{crisis_completion_date}{Fertigstellung}{TT.MM.JJJJ}
+
+\textbf{Bestätigung Partner/in:} \\
+\ctmmTextField[6cm]{crisis_partner_confirmation}{}{Name und Datum}
+
+\textbf{Zusätzliche Bemerkungen:} \\
+\ctmmTextArea[14cm]{2}{crisis_additional_notes}{}
+
+\end{ctmmOrangeBox}
+
+% ================================================================
+% Querverweise zu anderen Modulen
+% ================================================================
+
+\subsection{Verbindung zu anderen CTMM-Tools}
+
+\textbf{Vor der Krise:}
+\begin{itemize}
+    \item \hyperref[sec:triggermanagement]{Triggermanagement} - Prävention
+    \item \hyperref[sec:safewords]{Safeword-System} - Früherkennung
+    \item \hyperref[sec:co-regulation]{Co-Regulation} - Stabilisierung
+\end{itemize}
+
+\textbf{Nach der Krise:}
+\begin{itemize}
+    \item \hyperref[sec:trigger-forschungstagebuch]{Trigger-Forschungstagebuch} - Analyse
+    \item \hyperref[sec:bindung]{Bindungsleitfaden} - Reparatur
+    \item \hyperref[sec:depression]{Depression-Monitoring} - Überwachung
+\end{itemize}
+
+\newpage

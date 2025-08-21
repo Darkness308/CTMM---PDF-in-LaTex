@@ -12,7 +12,7 @@
 
 \subsection*{\faCalendar~Grunddaten}
 \textbf{Datum:} \ctmmTextField[5.5cm]{}{date} \quad \textbf{Zeit:} \ctmmTextField[2.5cm]{}{time}\\[0.2cm]
-\textbf{Check:} \ctmmCheckBox[morning]{Morgen} \ctmmCheckBox[evening]{Abend}
+\textbf{Check:} \ctmmCheckBox{morning}{Morgen} \ctmmCheckBox{evening}{Abend}
 
 \vspace{0.5cm}
 
@@ -23,11 +23,11 @@
 \hline
 \textbf{Bereich} & \textbf{ER} & \textbf{SIE} \\
 \hline
-\textbf{Stimmung (1-10):} & \ctmmTextField[3cm]{}{er_mood} & \ctmmTextField[3cm]{}{sie_mood} \\
+\textbf{Stimmung (1-10):} & \ctmmTextField[3cm]{}{er_mood} & \ctmmTextField[3cm]{}{sie\_mm \\
 \hline
-\textbf{Schlafstunden:} & \ctmmTextField[3cm]{}{er_sleep} & \ctmmTextField[3cm]{}{sie_sleep} \\
+\textbf{Schlafstunden:} & \ctmmTextField[3cm]{}{er_sleep} & \ctmmTextField[3cm]{}{sie\_mm \\
 \hline
-\textbf{Medikamente:} & \ctmmCheckBox[er_meds_yes]{OK} \ctmmCheckBox[er_meds_forgotten]{Vergessen} & \ctmmCheckBox[sie_meds_yes]{OK} \ctmmCheckBox[sie_meds_forgotten]{Vergessen} \\
+\textbf{Medikamente:} & \ctmmCheckBox{er_meds_yes}{OK} \ctmmCheckBox{er_meds_forgotten}{Vergessen} & \ctmmCheckBox{sie_meds_yes}{OK} \ctmmCheckBox{sie_meds_forgotten}{Vergessen} \\
 \hline
 \end{tabularx}
 \end{center}
@@ -38,25 +38,25 @@
 \ctmmTextField[12cm]{}{appointments}
 
 \textbf{Support-Person verfügbar:} \\
-\ctmmCheckBox[support_yes]{Ja, Name:} \ctmmTextField[4cm]{}{support_name} \\
-\ctmmCheckBox[support_no]{Nein, Backup:} \ctmmTextField[4cm]{}{support_backup}
+\ctmmCheckBox{support_yes}{Ja, Name:} \ctmmTextField[4cm]{}{support\_mm \\
+\ctmmCheckBox{support_no}{Nein, Backup:} \ctmmTextField[4cm]{}{support\_mm
 
 \textbf{Safe-Words erklärt:} \\
-\ctmmCheckBox[safewords_explained_guests]{Allen Anwesenden (Gäste/Familie)} \\
-\ctmmCheckBox[safewords_explained_not_needed]{Nicht nötig (nur wir zwei)}
+\ctmmCheckBox{safewords_explained_guests}{Allen Anwesenden (Gäste/Familie)} \\
+\ctmmCheckBox{safewords_explained_not_needed}{Nicht nötig (nur wir zwei)}
 
 \vspace{0.7cm}
 \subsection*{\faMoon~Abend-Reflexion}
 \textbf{Was war heute gut:} \\
-\ctmmTextField[12cm]{}{evening_good}
+\ctmmTextField[12cm]{}{evening\_mm
 
 \textbf{Was war schwierig:} \\
-\ctmmTextField[12cm]{}{evening_difficult}
+\ctmmTextField[12cm]{}{evening\_mm
 
-\textbf{Safe-Word benutzt:} \ctmmCheckBox[safeword_no]{Nein} \ctmmCheckBox[safeword_yes]{Ja, welches:} \ctmmTextField[4cm]{}{safeword_used}
+\textbf{Safe-Word benutzt:} \ctmmCheckBox{safeword_no}{Nein} \ctmmCheckBox{safeword_yes}{Ja, welches:} \ctmmTextField[4cm]{}{safeword\_mm
 
 \textbf{Morgen wichtig:} \\
-\ctmmTextField[12cm]{}{tomorrow_important}
+\ctmmTextField[12cm]{}{tomorrow\_mm
 
 \vspace{1cm}
 \begin{center}

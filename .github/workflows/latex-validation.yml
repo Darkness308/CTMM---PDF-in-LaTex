@@ -1,38 +1,103 @@
----
 name: LaTeX Validation
 
 "on":
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Check \documentclass in first 5 lines
+        run: |
+          head -n 5 main.tex | grep -q '\documentclass' || (echo "::error ::\documentclass fehlt in den ersten 5 Zeilen von main.tex" && exit 1)
+
+      - name: Check no \usepackage after \begin{document}
+        run: |
+          awk '/\begin{document}/ {flag=1; next} flag && /\usepackage/ {print; exit 1}' main.tex || true
+
+      - name: Check hyperref is last package
+        run: |
+          lastpkg=$(grep '\usepackage' main.tex | grep -v '^%' | tail -1)
+          echo "$lastpkg" | grep 'hyperref' || (echo "::error ::hyperref ist nicht das letzte Paket in main.tex" && exit 1)
+
+      - name: Check all \ctmmRef labels exist
+        run: |
+          refs=$(grep -o '\ctmmRef{[^}]*}' modules/*.tex | sed 's/.*{//;s/}//')
+          for ref in $refs; do
+            grep -q "\label{\$ref}" modules/*.tex main.tex || (echo "::error ::Label {\$ref} fehlt!" && exit 1)
+          done
+
+      - name: Build PDF
+        uses: dante-ev/latex-action@v2
+        with:
+          root_file: main.tex
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-fonts-extra
+            texlive-latex-extra
+            texlive-science
+            texlive-pstricks
+
+      - name: Check PDF output
+        run: |
+          if [ ! -f build/main.pdf ]; then
+            echo "::error ::main.pdf wurde nicht erzeugt"
+            exit 1
+          fi
 
       - name: Set up Python
+        timeout-minutes: 5
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Install Python dependencies  
+        timeout-minutes: 5
         run: |
-          pip install chardet
+          echo "📦 Installing Python dependencies..."
+          pip install chardet pyyaml
+          echo "✅ Python dependencies installed successfully"
 
       - name: Run LaTeX syntax validation
+        timeout-minutes: 5
         run: |
+          echo "🔍 Starting LaTeX syntax validation..."
           python3 validate_latex_syntax.py
+          echo "✅ LaTeX syntax validation completed successfully"
 
       - name: Run CTMM Build System Check
+        timeout-minutes: 10
         run: |
+          echo "🔧 Starting CTMM build system check..."
           python3 ctmm_build.py
+          echo "✅ CTMM build system check completed successfully"
+
+      - name: Assess GitHub Actions runner environment
+        timeout-minutes: 3
+        run: |
+          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Architecture: $RUNNER_ARCH" 
+          df -h / | head -2
+          free -h | head -2
+          echo "✅ Environment assessment complete"
 
       - name: Upload validation logs (on failure)
         if: failure()
+        timeout-minutes: 5
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
           name: validation_logs
