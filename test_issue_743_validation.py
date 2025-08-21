@@ -193,7 +193,6 @@ def main():
         status = "✅ PASS" if result else "❌ FAIL"
         print(f"{status} {test_name}")
     for (test_name, _), result in zip(tests, test_results):
-        status = "✅ PASS" if result else "❌ FAIL"
     print(f"\nTests passed: {passed_tests}/{total_tests}")
     
     if passed_tests == total_tests:
