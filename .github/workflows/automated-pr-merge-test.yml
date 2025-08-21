@@ -46,7 +46,7 @@ jobs:
       timeout-minutes: 5
       run: |
         echo "📦 Installing dependencies..."
-        pip install chardet requests
+        pip install chardet requests pyyaml
         echo "✅ Dependencies installed successfully"
         
     - name: Configure git
