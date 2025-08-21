@@ -105,7 +105,7 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Set up LaTeX with xu-cheng action
+      - name: Set up LaTeX
         timeout-minutes: 15
         id: latex_primary
         continue-on-error: true
