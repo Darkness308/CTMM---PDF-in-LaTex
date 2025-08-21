@@ -1,17 +1,8 @@
-copilot/vscode1754261474068
-name: CI Build PDF
-
----
 name: Build LaTeX PDF
-main
 
 "on":
   push:
-copilot/vscode1754261474068
-    branches: [ main, develop ]
-
     branches: [main]
-main
   pull_request:
     branches: [main]
 
@@ -30,44 +21,6 @@ jobs:
       - name: Checkout repository
         timeout-minutes: 5
         uses: actions/checkout@v4
-
-copilot/vscode1754261474068
-      - name: Install LaTeX dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y texlive-full texlive-fonts-extra
-          sudo apt-get install -y chktex lacheck  # LaTeX Linting Tools
-
-      - name: LaTeX Syntax Check (chktex)
-        run: |
-          find . -name "*.tex" -exec chktex -q {} \; || echo "LaTeX warnings found"
-
-      - name: Compile LaTeX (3-pass for hyperlinks)
-        uses: dante-ev/latex-action@latest
-        with:
-          root_file: main.tex
-          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
-          extra_system_packages: "py-pygments"
-
-      - name: Check PDF output
-        run: |
-          if [ ! -f build/main.pdf ]; then
-            echo "❌ main.pdf was not created"
-            exit 1
-          else
-            echo "✅ main.pdf successfully created"
-            ls -la build/main.pdf
-            # Basic PDF validation
-            pdfinfo build/main.pdf
-          fi
-
-      - name: Link validation
-        run: |
-          echo "Checking for undefined references..."
-          if grep -i "undefined" main.log; then
-            echo "⚠️  Undefined references found"
-          else
-            echo "✅ No undefined references"
 
       - name: Set up Python
         timeout-minutes: 5
@@ -96,21 +49,14 @@ copilot/vscode1754261474068
           python3 ctmm_build.py
           echo "✅ CTMM build system check completed successfully"
           
-      - name: Run Enhanced Build Management
-        timeout-minutes: 8
-        continue-on-error: true
-        run: |
-          echo "🚀 Running enhanced CTMM build management..."
-          python3 ctmm_build.py --enhanced || echo "⚠️  Enhanced build management had warnings but continuing..."
-          echo "✅ Enhanced build management completed"
-          
       - name: Run comprehensive CI validation
         timeout-minutes: 10
         run: |
           echo "📋 Starting comprehensive CI validation..."
           python3 test_issue_743_validation.py
           echo "✅ Comprehensive CI validation completed successfully"
-          
+
+      - name: Install LaTeX dependencies
       - name: Enhanced pre-build validation
         timeout-minutes: 8
         continue-on-error: true
@@ -154,12 +100,16 @@ copilot/vscode1754261474068
           echo "🛡️ Running CI failure prevention analysis..."
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
+        run: |
+          echo "🛡️ Running CI failure prevention analysis..."
+          python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
+          echo "✅ CI failure prevention analysis completed"
 
       - name: Set up LaTeX
         timeout-minutes: 15
         id: latex_primary
         continue-on-error: true
-        uses: xu-cheng/latex-action@v3
+        uses: dante-ev/latex-action@v2.0.0
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -265,7 +215,6 @@ copilot/vscode1754261474068
             df -h .
             
             exit 1
-main
           fi
 
       - name: Upload PDF artifact
@@ -281,24 +230,8 @@ main
         continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-copilot/vscode1754261474068
-          name: CTMM_PDF_Build_${{ github.sha }}
-          path: build/main.pdf
-          retention-days: 30
-
-      - name: Upload build logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
           name: Build_Logs_${{ github.sha }}
           path: |
-            main.log
-            main.aux
-          retention-days: 7
-
-          name: build_logs
-          path: |
             *.log
-            build_error_*.log
-            build_system.log
-main
+            *.aux
+          retention-days: 7
