@@ -1,3 +1,8 @@
+copilot/vscode1754261474068
+name: LaTeX Validation
+
+on: [push, pull_request]
+
 ---
 name: LaTeX Validation
 
@@ -10,11 +15,49 @@ name: LaTeX Validation
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+main
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+copilot/vscode1754261474068
+      - uses: actions/checkout@v4
+
+      - name: Check \documentclass in first 5 lines
+        run: |
+          head -n 5 main.tex | grep -q '\\documentclass' || (echo "::error ::\\documentclass fehlt in den ersten 5 Zeilen von main.tex" && exit 1)
+
+      - name: Check no \usepackage after \begin{document}
+        run: |
+          awk '/\\begin{document}/ {flag=1; next} flag && /\\usepackage/ {print; exit 1}' main.tex || true
+
+      - name: Check hyperref is last package
+        run: |
+          lastpkg=$(grep '\\usepackage' main.tex | grep -v '^%' | tail -1)
+          echo "$lastpkg" | grep 'hyperref' || (echo "::error ::hyperref ist nicht das letzte Paket in main.tex" && exit 1)
+
+      - name: Check all \ctmmRef labels exist
+        run: |
+          refs=$(grep -o '\\ctmmRef{[^}]*}' modules/*.tex | sed 's/.*{//;s/}//')
+          for ref in $refs; do
+            grep -q "\\label{$ref}" modules/*.tex main.tex || (echo "::error ::Label {$ref} fehlt!" && exit 1)
+          done
+
+      - name: Build PDF
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: main.tex
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
+          extra_system_packages: "py-pygments"
+
+      - name: Check PDF output
+        run: |
+          if [ ! -f build/main.pdf ]; then
+            echo "::error ::main.pdf wurde nicht erzeugt"
+            exit 1
+          fi
+
       - name: Checkout repository
         timeout-minutes: 5
         uses: actions/checkout@v4
@@ -66,3 +109,4 @@ jobs:
           path: |
             *.log
             build_error_*.log
+main

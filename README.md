@@ -11,6 +11,42 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## Verwendung
 1. Klone das Repository
+copilot/vscode1754261474068
+2. Führe das Setup-Script aus: `./ctmm-workflow.sh checkup`
+3. Kompiliere das Dokument: `./ctmm-workflow.sh build`
+4. Oder öffne das Projekt in einem GitHub Codespace
+
+## Git-Workflow
+
+Dieses Projekt verwendet einen strukturierten Git-Workflow, der in der Datei `GIT-WORKFLOW.md` detailliert beschrieben ist.
+
+### Schnellstart für Entwickler
+
+```bash
+# Umgebung prüfen
+./ctmm-workflow.sh checkup
+
+# Neues Feature beginnen
+./ctmm-workflow.sh feature mein-neues-feature
+
+# Änderungen committen
+git add .
+./ctmm-workflow.sh commit add "Meine Beschreibung"
+
+# Änderungen pushen
+./ctmm-workflow.sh push
+
+# PDF generieren
+./ctmm-workflow.sh build
+```
+
+### LaTeX-Besonderheiten
+
+Bei der Arbeit mit dem CTMM-System sollten folgende LaTeX-Besonderheiten beachtet werden:
+
+- Formularfeld-IDs müssen Underscores mit Backslash escapen: `{form\_id}` statt `{form_id}`
+- Verwenden Sie `./ctmm-workflow.sh fix-latex` um häufige Probleme automatisch zu beheben
+
 2. Führe `python3 ctmm_build.py` aus um das Projekt zu validieren
 3. Kompiliere main.tex mit einem LaTeX-Editor
 4. Oder öffne das Projekt in einem GitHub Codespace
@@ -33,6 +69,7 @@ python3 ctmm_build.py
 - ✅ Substantielle Inhaltsänderungen (nicht nur Leerzeichen)
 - ✅ Erfolgreicher Build-System-Test
 - ✅ Verwendung der PR-Vorlage
+main
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
@@ -277,3 +314,18 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 
 **Tipp:**
 Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+
+## GitHub-Integration Probleme
+
+Bei Fehlern wie **"Resource not accessible by integration"** siehe: [`GITHUB-PERMISSIONS.md`](GITHUB-PERMISSIONS.md)
+
+Diese Datei erklärt:
+- Wo diese Fehler zu finden sind
+- Wie GitHub CLI-Berechtigungen zu konfigurieren sind
+- Wie Workflow-Probleme zu beheben sind
+- Wie Repository-Einstellungen zu prüfen sind
+
+**Häufige Ursachen:**
+- GitHub CLI nicht angemeldet oder unzureichende Berechtigungen
+- Workflow-Dateien verweisen auf nicht existierende Dateien
+- Repository-Einstellungen blockieren Actions-Zugriff
