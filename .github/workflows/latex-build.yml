@@ -38,7 +38,7 @@ jobs:
 
       - name: Build LaTeX PDF
         run: |
-          pdflatex -halt-on-error main.tex
+          pdflatex -halt-on-error -interaction=nonstopmode -file-line-error main.tex
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
