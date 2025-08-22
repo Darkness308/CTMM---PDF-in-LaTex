@@ -96,88 +96,30 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Install LaTeX packages
+      - name: Set up LaTeX
         timeout-minutes: 15
-        run: |
-          echo "📦 Installing essential LaTeX packages for CTMM system..."
-          
-          # Update package list
-          sudo apt-get update
-          
-          # Install comprehensive LaTeX packages including FontAwesome support
-          sudo apt-get install -y \
-            texlive-latex-base \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-lang-german \
-            texlive-fonts-extra \
-            texlive-science \
-            texlive-pstricks \
-            # ghostscript is required for EPS image conversion and PDF post-processing in CTMM LaTeX documents
-            ghostscript
-          
-          echo "✅ LaTeX packages installed successfully"
-          
-          # Verify essential commands are available
-          echo "🔍 Verifying LaTeX installation..."
-          pdflatex --version
-          echo "✅ pdflatex is available"
-
-      - name: Compile LaTeX document
-        timeout-minutes: 20
-        run: |
-          echo "🔨 Compiling CTMM LaTeX document with pdflatex..."
-          
-          # First pass - process document structure and references
-          echo "📄 First compilation pass..."
-          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-          
-          # Second pass - resolve cross-references and citations
-          echo "📄 Second compilation pass..."
-          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-          
-          echo "✅ LaTeX compilation completed successfully"
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-fonts-extra
+            texlive-latex-extra
+            texlive-science
+            texlive-pstricks
             
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
           echo "🔍 Enhanced PDF verification and analysis..."
           
+          # Check for PDF in current directory (xu-cheng/latex-action output location)
           if [ -f "main.pdf" ]; then
-            echo "✅ PDF successfully generated"
-            
-            # Detailed file analysis
-            echo "📊 PDF File Analysis:"
-            ls -la main.pdf
-            file main.pdf
-            
-            # Check PDF size (should be substantial for a complete document)
-            PDF_SIZE=$(stat -c%s "main.pdf")
-            echo "📄 PDF Size: $PDF_SIZE bytes"
-            
-            if [ "$PDF_SIZE" -lt 10000 ]; then
-              echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
-            elif [ "$PDF_SIZE" -gt 100000 ]; then
-              echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
-            else
-              echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
-            fi
-            
-            # Verify FontAwesome package support
-            echo "🔍 Checking FontAwesome package support..."
-            if grep -q "fontawesome5" main.log 2>/dev/null; then
-              echo "✅ FontAwesome5 package was loaded successfully"
-            else
-              echo "⚠️  FontAwesome5 package loading status unknown"
-            fi
-            
-            # Try to extract basic PDF info if available
-            if command -v pdfinfo &> /dev/null; then
-              echo "📋 PDF Information:"
-              pdfinfo main.pdf || echo "Unable to extract PDF info"
-            fi
-            
-            echo "✅ Enhanced PDF verification completed successfully"
+            echo "✅ PDF successfully generated in current directory"
+            PDF_LOCATION="main.pdf"
           else
             echo "❌ PDF generation failed"
             echo "🔍 Comprehensive error analysis..."
@@ -212,6 +154,39 @@ jobs:
             
             exit 1
           fi
+          
+          # Detailed file analysis
+          echo "📊 PDF File Analysis:"
+          ls -la "$PDF_LOCATION"
+          file "$PDF_LOCATION"
+          
+          # Check PDF size (should be substantial for a complete document)
+          PDF_SIZE=$(stat -c%s "$PDF_LOCATION")
+          echo "📄 PDF Size: $PDF_SIZE bytes"
+          
+          if [ "$PDF_SIZE" -lt 10000 ]; then
+            echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
+          elif [ "$PDF_SIZE" -gt 100000 ]; then
+            echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
+          else
+            echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
+          fi
+          
+          # Verify FontAwesome package support
+          echo "🔍 Checking FontAwesome package support..."
+          if grep -q "fontawesome5" main.log 2>/dev/null; then
+            echo "✅ FontAwesome5 package was loaded successfully"
+          else
+            echo "⚠️  FontAwesome5 package loading status unknown"
+          fi
+          
+          # Try to extract basic PDF info if available
+          if command -v pdfinfo &> /dev/null; then
+            echo "📋 PDF Information:"
+            pdfinfo "$PDF_LOCATION" || echo "Unable to extract PDF info"
+          fi
+          
+          echo "✅ Enhanced PDF verification completed successfully"
 
       - name: Upload PDF artifact
         timeout-minutes: 5

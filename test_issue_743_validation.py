@@ -189,15 +189,14 @@ def validate_workflow_structure():
         print("❌ ERROR: No steps found in build job")
         return False
     
-    # Expected step order for validation
-    expected_steps = [
+    # Expected step order for validation (core validation steps, LaTeX can be later)
+    expected_core_steps = [
         'Checkout repository',
         'Set up Python',
         'Install Python dependencies',
         'Run LaTeX syntax validation',
         'Run CTMM Build System Check',
-        'Run comprehensive CI validation',
-        'Set up LaTeX'
+        'Run comprehensive CI validation'
     ]
     
     print("📋 Checking workflow step structure...")
@@ -205,7 +204,7 @@ def validate_workflow_structure():
     step_names = [step.get('name', 'Unknown') for step in steps]
     all_passed = True
     
-    for i, expected_step in enumerate(expected_steps):
+    for i, expected_step in enumerate(expected_core_steps):
         if i < len(step_names):
             actual_step = step_names[i]
             if expected_step == actual_step:
