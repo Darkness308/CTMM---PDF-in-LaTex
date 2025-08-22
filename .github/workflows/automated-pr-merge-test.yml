@@ -311,13 +311,8 @@ jobs:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
         extra_system_packages: |
-          texlive-lang-german
-          texlive-fonts-recommended
-          texlive-latex-recommended
-          texlive-fonts-extra
-          texlive-latex-extra
-          texlive-science
-          texlive-pstricks
+          py3-pygments
+          ghostscript
 
     - name: Fallback LaTeX installation for PR testing
       timeout-minutes: 20

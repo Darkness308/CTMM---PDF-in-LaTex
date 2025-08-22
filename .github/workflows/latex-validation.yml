@@ -72,13 +72,8 @@ jobs:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
           extra_system_packages: |
-            texlive-lang-german
-            texlive-fonts-recommended
-            texlive-latex-recommended
-            texlive-fonts-extra
-            texlive-latex-extra
-            texlive-science
-            texlive-pstricks
+            py3-pygments
+            ghostscript
 
       - name: Check PDF output
         run: |
