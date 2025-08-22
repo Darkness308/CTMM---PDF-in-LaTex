@@ -116,13 +116,21 @@ def validate_latex_packages():
     
     latex_step = None
     for step in steps:
-        if step.get('name') == 'Set up LaTeX':
+        if step.get('name') == 'Set up LaTeX' and 'xu-cheng/latex-action' in str(step.get('uses', '')):
             latex_step = step
             break
     
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
+        print("❌ ERROR: 'Set up LaTeX' step with xu-cheng/latex-action not found in workflow")
         return False
+    
+    # Check that the correct action is used
+    action_uses = latex_step.get('uses', '')
+    if 'xu-cheng/latex-action@v3' not in action_uses:
+        print(f"❌ ERROR: Expected xu-cheng/latex-action@v3, found: {action_uses}")
+        return False
+    
+    print("✅ CORRECT: Using xu-cheng/latex-action@v3")
     
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
     print(f"📋 Found LaTeX packages configuration:")
@@ -197,6 +205,11 @@ def validate_workflow_structure():
         'Run LaTeX syntax validation',
         'Run CTMM Build System Check',
         'Run comprehensive CI validation',
+        'Enhanced pre-build validation',
+        'Check system resources before LaTeX compilation',
+        'Assess GitHub Actions runner environment',
+        'Enhanced CI environment validation',
+        'CI failure prevention analysis',
         'Set up LaTeX'
     ]
     
