@@ -47,6 +47,34 @@ Bei der Arbeit mit dem CTMM-System sollten folgende LaTeX-Besonderheiten beachte
 - Formularfeld-IDs müssen Underscores mit Backslash escapen: `{form\_id}` statt `{form_id}`
 - Verwenden Sie `./ctmm-workflow.sh fix-latex` um häufige Probleme automatisch zu beheben
 
+### Troubleshooting
+
+#### FontAwesome Package Issues
+
+Das CTMM-System verwendet das `fontawesome5` Package für Icons (z.B. `\faCompass` in den Überschriften). Falls LaTeX-Compilation mit Fehlern wie "FontAwesome not found" oder "Package fontawesome5 Error" fehlschlägt:
+
+**Lösung für lokale Installation:**
+```bash
+# Ubuntu/Debian
+sudo apt-get install texlive-fonts-extra
+
+# Fedora/CentOS/RHEL
+sudo dnf install texlive-fontawesome
+
+# macOS (MacTeX)
+# FontAwesome ist standardmäßig in MacTeX enthalten
+
+# MiKTeX (Windows)
+# Installiere über MiKTeX Package Manager: fontawesome5
+```
+
+**Automatische Lösung in GitHub Actions:**
+Das Repository ist so konfiguriert, dass alle erforderlichen LaTeX-Pakete, einschließlich `texlive-fonts-extra` für FontAwesome-Unterstützung, automatisch in der CI/CD-Pipeline installiert werden.
+
+**Häufige FontAwesome-Fehler:**
+- `! LaTeX Error: File 'fontawesome5.sty' not found` → Installiere `texlive-fonts-extra`
+- `! Package fontawesome5 Error: The current font does not contain the symbol` → Prüfe, ob alle Font-Pakete installiert sind
+
 2. Führe `python3 ctmm_build.py` aus um das Projekt zu validieren
 3. Kompiliere main.tex mit einem LaTeX-Editor
 4. Oder öffne das Projekt in einem GitHub Codespace
