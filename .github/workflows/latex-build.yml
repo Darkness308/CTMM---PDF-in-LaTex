@@ -96,47 +96,21 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Install LaTeX packages
+      - name: Set up LaTeX
         timeout-minutes: 15
-        run: |
-          echo "📦 Installing essential LaTeX packages for CTMM system..."
-          
-          # Update package list
-          sudo apt-get update
-          
-          # Install comprehensive LaTeX packages including FontAwesome support
-          sudo apt-get install -y \
-            texlive-latex-base \
-            texlive-latex-extra \
-            texlive-fonts-recommended \
-            texlive-lang-german \
-            texlive-fonts-extra \
-            texlive-science \
-            texlive-pstricks \
-            # ghostscript is required for EPS image conversion and PDF post-processing in CTMM LaTeX documents
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-fonts-extra
+            texlive-latex-extra
+            texlive-science
+            texlive-pstricks
             ghostscript
-          
-          echo "✅ LaTeX packages installed successfully"
-          
-          # Verify essential commands are available
-          echo "🔍 Verifying LaTeX installation..."
-          pdflatex --version
-          echo "✅ pdflatex is available"
-
-      - name: Compile LaTeX document
-        timeout-minutes: 20
-        run: |
-          echo "🔨 Compiling CTMM LaTeX document with pdflatex..."
-          
-          # First pass - process document structure and references
-          echo "📄 First compilation pass..."
-          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-          
-          # Second pass - resolve cross-references and citations
-          echo "📄 Second compilation pass..."
-          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-          
-          echo "✅ LaTeX compilation completed successfully"
             
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
