@@ -37,7 +37,7 @@ jobs:
           done
 
       - name: Build PDF
-        uses: dante-ev/latex-action@v2
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
