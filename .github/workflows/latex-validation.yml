@@ -22,7 +22,7 @@ jobs:
 
       - name: Check no \usepackage after \begin{document}
         run: |
-          awk '/\\begin\{document\}/ {flag=1; next} flag && /\\\\usepackage/ {print; exit 1}' main.tex || true
+          awk '/\\\\begin\{document\}/ {flag=1; next} flag && /\\\\usepackage/ {print; exit 1}' main.tex || true
 
       - name: Check hyperref is last core package
         run: |
