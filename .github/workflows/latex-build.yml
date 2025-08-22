@@ -113,6 +113,7 @@ jobs:
             texlive-fonts-extra \
             texlive-science \
             texlive-pstricks \
+            # ghostscript is required for EPS image conversion and PDF post-processing in CTMM LaTeX documents
             ghostscript
           
           echo "✅ LaTeX packages installed successfully"
