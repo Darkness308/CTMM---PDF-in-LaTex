@@ -96,32 +96,15 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Set up LaTeX
+      - name: Install LaTeX packages
         timeout-minutes: 15
-        id: latex_primary
-        continue-on-error: true
-        uses: xu-cheng/latex-action@v3
-        with:
-          root_file: main.tex
-          args: -interaction=nonstopmode -halt-on-error -shell-escape
-          extra_system_packages: |
-            texlive-lang-german
-            texlive-fonts-recommended
-            texlive-latex-recommended
-            texlive-fonts-extra
-            texlive-latex-extra
-            texlive-science
-            texlive-pstricks
-
-      - name: Fallback LaTeX installation and compilation
-        timeout-minutes: 20
-        if: steps.latex_primary.outcome == 'failure'
         run: |
-          echo "🔄 Primary LaTeX action failed, attempting fallback installation..."
+          echo "📦 Installing essential LaTeX packages for CTMM system..."
           
-          # Install TeX Live manually
-          echo "📦 Installing TeX Live packages manually..."
+          # Update package list
           sudo apt-get update
+          
+          # Install comprehensive LaTeX packages including FontAwesome support
           sudo apt-get install -y \
             texlive-latex-base \
             texlive-latex-extra \
@@ -129,23 +112,31 @@ jobs:
             texlive-lang-german \
             texlive-fonts-extra \
             texlive-science \
-            texlive-pstricks
+            texlive-pstricks \
+            # ghostscript is required for EPS image conversion and PDF post-processing in CTMM LaTeX documents
+            ghostscript
           
-          echo "✅ TeX Live packages installed"
+          echo "✅ LaTeX packages installed successfully"
           
-          # Verify pdflatex is available
-          if ! command -v pdflatex &> /dev/null; then
-            echo "❌ pdflatex still not available after manual installation"
-            exit 1
-          fi
+          # Verify essential commands are available
+          echo "🔍 Verifying LaTeX installation..."
+          pdflatex --version
+          echo "✅ pdflatex is available"
+
+      - name: Compile LaTeX document
+        timeout-minutes: 20
+        run: |
+          echo "🔨 Compiling CTMM LaTeX document with pdflatex..."
           
-          echo "🔨 Compiling LaTeX document with fallback..."
-          # First pass
+          # First pass - process document structure and references
+          echo "📄 First compilation pass..."
           pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-          # Second pass for references
+          
+          # Second pass - resolve cross-references and citations
+          echo "📄 Second compilation pass..."
           pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
           
-          echo "✅ Fallback LaTeX compilation completed"
+          echo "✅ LaTeX compilation completed successfully"
             
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
@@ -172,6 +163,14 @@ jobs:
               echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
             fi
             
+            # Verify FontAwesome package support
+            echo "🔍 Checking FontAwesome package support..."
+            if grep -q "fontawesome5" main.log 2>/dev/null; then
+              echo "✅ FontAwesome5 package was loaded successfully"
+            else
+              echo "⚠️  FontAwesome5 package loading status unknown"
+            fi
+            
             # Try to extract basic PDF info if available
             if command -v pdfinfo &> /dev/null; then
               echo "📋 PDF Information:"
@@ -192,6 +191,12 @@ jobs:
             echo "📋 LaTeX Log Analysis:"
             echo "====================="
             find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
+            
+            # Check for FontAwesome related errors
+            echo ""
+            echo "🔍 FontAwesome Error Check:"
+            echo "=========================="
+            find . -name "*.log" -exec grep -i "fontawesome\|font.*not.*found" {} \; 2>/dev/null || echo "No FontAwesome-related errors found"
             
             # Check for aux files and other intermediate files
             echo ""
