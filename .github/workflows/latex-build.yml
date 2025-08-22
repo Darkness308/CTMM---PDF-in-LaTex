@@ -40,50 +40,24 @@ jobs:
         run: |
           echo "🔍 Starting LaTeX syntax validation..."
           python3 validate_latex_syntax.py
-copilot/fix-1038
-
-
           echo "✅ LaTeX syntax validation completed successfully"
-          
-main
       - name: Run CTMM Build System Check
         timeout-minutes: 10
         run: |
           echo "🔧 Starting CTMM build system check..."
           python3 ctmm_build.py
-copilot/fix-1038
-
-      - name: Run Enhanced Build Management
-        run: |
-          echo "🚀 Running enhanced CTMM build management..."
-          python3 ctmm_build.py --enhanced
-
-
           echo "✅ CTMM build system check completed successfully"
-          
-main
       - name: Run comprehensive CI validation
         timeout-minutes: 10
         run: |
           echo "📋 Starting comprehensive CI validation..."
           python3 test_issue_743_validation.py
-copilot/fix-1038
-
-
           echo "✅ Comprehensive CI validation completed successfully"
-
-      - name: Install LaTeX dependencies
-main
       - name: Enhanced pre-build validation
         timeout-minutes: 8
         continue-on-error: true
         run: |
           echo "🔍 Running enhanced pre-build validation..."
-          # Check for critical files and dependencies
-copilot/fix-1038
-          python3 test_issue_761_fix.py || \
-            echo "⚠️  Warning: Some robustness checks failed but continuing..."
-
           python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
           echo "✅ Enhanced pre-build validation completed"
 
@@ -121,17 +95,12 @@ copilot/fix-1038
           echo "🛡️ Running CI failure prevention analysis..."
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
-        run: |
-          echo "🛡️ Running CI failure prevention analysis..."
-          python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
-          echo "✅ CI failure prevention analysis completed"
-main
 
       - name: Set up LaTeX
         timeout-minutes: 15
         id: latex_primary
         continue-on-error: true
-        uses: dante-ev/latex-action@v2.0.0
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -143,9 +112,6 @@ main
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-
-copilot/fix-1038
-      - name: Verify PDF generation
 
       - name: Fallback LaTeX installation and compilation
         timeout-minutes: 20
@@ -183,7 +149,6 @@ copilot/fix-1038
             
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
-main
         run: |
           echo "🔍 Enhanced PDF verification and analysis..."
           
