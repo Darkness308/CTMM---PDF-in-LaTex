@@ -318,6 +318,7 @@ jobs:
           texlive-latex-extra
           texlive-science
           texlive-pstricks
+          ghostscript
 
     - name: Fallback LaTeX installation for PR testing
       timeout-minutes: 20
