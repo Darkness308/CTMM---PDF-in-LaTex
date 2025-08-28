@@ -68,7 +68,7 @@ def test_latex_action_consistency():
 
 def test_hyperref_bookmark_validation():
     """Test that hyperref/bookmark package order validation works correctly."""
-    print("\n📦 Testing Hyperref/Bookmark Package Order Validation")
+    print("\n📦 Testing hyperref/bookmark Package Order Validation")
     print("=" * 60)
     
     if not os.path.exists('main.tex'):
