@@ -116,7 +116,8 @@ def validate_latex_packages():
     
     latex_step = None
     for step in steps:
-        if step.get('name') == 'Set up LaTeX' and 'xu-cheng/latex-action' in str(step.get('uses', '')):
+        step_name = step.get('name', '')
+        if 'Set up LaTeX' in step_name and 'xu-cheng/latex-action' in str(step.get('uses', '')):
             latex_step = step
             break
     
@@ -210,7 +211,7 @@ def validate_workflow_structure():
         'Assess GitHub Actions runner environment',
         'Enhanced CI environment validation',
         'CI failure prevention analysis',
-        'Set up LaTeX'
+        'Set up LaTeX with xu-cheng action'
     ]
     
     print("📋 Checking workflow step structure...")
