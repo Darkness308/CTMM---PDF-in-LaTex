@@ -66,8 +66,10 @@ jobs:
             grep -q "\label{\$ref}" modules/*.tex main.tex || (echo "::error ::Label {\$ref} fehlt!" && exit 1)
           done
 
-      - name: Build PDF
-        uses: dante-ev/latex-action@v2.3.0
+      - name: Build PDF with xu-cheng action
+        id: latex_primary
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
@@ -79,11 +81,16 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-copilot/fix-1167
-          extra_system_packages: ${{ join(fromJson('["' + join('\n', github.event.inputs.latex_system_packages) + '"]'), '\n') }}
-
             ghostscript
-main
+
+      - name: Fallback LaTeX compilation
+        if: steps.latex_primary.outcome == 'failure'
+        run: |
+          echo "🔄 Primary LaTeX action failed, attempting fallback..."
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-lang-german texlive-science texlive-pstricks ghostscript
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex
 
       - name: Check PDF output
         run: |

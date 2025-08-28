@@ -96,9 +96,11 @@ jobs:
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           echo "✅ CI failure prevention analysis completed"
 
-      - name: Set up LaTeX
+      - name: Set up LaTeX with xu-cheng action
         timeout-minutes: 15
-        uses: dante-ev/latex-action@v2.3.0
+        id: latex_primary
+        continue-on-error: true
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
@@ -111,6 +113,32 @@ jobs:
             texlive-science
             texlive-pstricks
             ghostscript
+
+      - name: Fallback LaTeX installation and compilation
+        timeout-minutes: 20
+        if: steps.latex_primary.outcome == 'failure'
+        run: |
+          echo "🔄 Primary LaTeX action failed, attempting fallback..."
+          
+          # Install TeX Live packages
+          echo "📦 Installing TeX Live packages..."
+          sudo apt-get update
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-german \
+            texlive-science \
+            texlive-pstricks \
+            ghostscript
+          
+          # Manual compilation (run twice for references)
+          echo "🔧 Compiling LaTeX manually..."
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
+          
+          echo "✅ Fallback compilation completed"
             
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5

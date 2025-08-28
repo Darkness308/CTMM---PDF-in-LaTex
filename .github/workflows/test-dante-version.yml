@@ -1,24 +1,24 @@
-name: Test dante-ev/latex-action version availability
+name: Test xu-cheng/latex-action version availability
 
 on:
   workflow_dispatch:
 
 jobs:
-  test-v2-3-0:
+  test-v3:
     runs-on: ubuntu-latest
     steps:
-      - name: Test if v2.3.0 exists
+      - name: Test if xu-cheng v3 exists
         id: test_version
         continue-on-error: true
-        uses: dante-ev/latex-action@v2.3.0
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: test.tex
           
       - name: Report result
         run: |
           if [ "${{ steps.test_version.outcome }}" = "success" ]; then
-            echo "✅ v2.3.0 exists and works"
+            echo "✅ xu-cheng/latex-action@v3 exists and works"
           else
-            echo "❌ v2.3.0 does not exist or failed"
+            echo "❌ xu-cheng/latex-action@v3 does not exist or failed"
             echo "Previous step outcome: ${{ steps.test_version.outcome }}"
           fi
