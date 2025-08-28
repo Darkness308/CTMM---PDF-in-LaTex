@@ -79,7 +79,11 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
+copilot/fix-1167
+          extra_system_packages: ${{ join(fromJson('["' + join('\n', github.event.inputs.latex_system_packages) + '"]'), '\n') }}
+
             ghostscript
+main
 
       - name: Check PDF output
         run: |
