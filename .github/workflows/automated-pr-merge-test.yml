@@ -301,12 +301,12 @@ jobs:
           echo "❌ Final combined build failed"
         fi
         
-    - name: Set up LaTeX with xu-cheng action (if PRs were processed)
+    - name: Set up LaTeX with dante-ev action (if PRs were processed)
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
       id: latex_primary_pr
       continue-on-error: true
-      uses: xu-cheng/latex-action@v3
+      uses: dante-ev/latex-action@v2.3.0
       with:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
@@ -318,6 +318,7 @@ jobs:
           texlive-latex-extra
           texlive-science
           texlive-pstricks
+          ghostscript
 
     - name: Fallback LaTeX installation for PR testing
       timeout-minutes: 20
