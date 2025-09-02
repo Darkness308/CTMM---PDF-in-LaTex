@@ -67,7 +67,7 @@ jobs:
           done
 
       - name: Build PDF
-        uses: dante-ev/latex-action@v2.3.0
+        uses: dante-ev/latex-action@2025-A
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
@@ -79,11 +79,7 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-copilot/fix-1167
-          extra_system_packages: ${{ join(fromJson('["' + join('\n', github.event.inputs.latex_system_packages) + '"]'), '\n') }}
-
             ghostscript
-main
 
       - name: Check PDF output
         run: |

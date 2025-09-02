@@ -98,7 +98,7 @@ jobs:
 
       - name: Set up LaTeX
         timeout-minutes: 15
-        uses: dante-ev/latex-action@v2.3.0
+        uses: dante-ev/latex-action@2025-A
         with:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
