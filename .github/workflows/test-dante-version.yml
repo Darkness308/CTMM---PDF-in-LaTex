@@ -4,21 +4,21 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-v2-3-0:
+  test-2025-A:
     runs-on: ubuntu-latest
     steps:
-      - name: Test if v2.3.0 exists
+      - name: Test if 2025-A exists
         id: test_version
         continue-on-error: true
-        uses: dante-ev/latex-action@v2.3.0
+        uses: dante-ev/latex-action@v0.2.0
         with:
           root_file: test.tex
           
       - name: Report result
         run: |
           if [ "${{ steps.test_version.outcome }}" = "success" ]; then
-            echo "✅ v2.3.0 exists and works"
+            echo "✅ 2025-A exists and works"
           else
-            echo "❌ v2.3.0 does not exist or failed"
+            echo "❌ 2025-A does not exist or failed"
             echo "Previous step outcome: ${{ steps.test_version.outcome }}"
           fi
