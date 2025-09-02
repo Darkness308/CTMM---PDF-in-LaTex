@@ -120,8 +120,27 @@ def fix_unrelated_histories_pr(pr_info):
                 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
                 commit_msg = f"Resolve unrelated histories for PR #{pr_number}: {pr_title} ({timestamp})"
                 
-                success, stdout, stderr = run_command(f'git add . && git commit -m "{commit_msg}"')
-                if success:
+                # Run 'git add .' first
+                success, stdout, stderr = run_command(['git', 'add', '.'])
+                if not success:
+                    result['error_message'] = f"Failed to add changes: {stderr}"
+                    print(f"   ❌ Failed to add changes: {stderr}")
+                else:
+                    # Run 'git commit -m <commit_msg>' safely
+                    success, stdout, stderr = run_command(['git', 'commit', '-m', commit_msg])
+                    if success:
+                        result['fix_attempted'] = True
+                        result['fix_successful'] = True
+                        result['new_commit_created'] = True
+                        
+                        # Get new SHA
+                        success, new_sha, _ = run_command(['git', 'rev-parse', 'HEAD'])
+                        if success:
+                            result['new_sha'] = new_sha.strip()
+                            print(f"   ✅ Alternative fix successful, new SHA: {result['new_sha']}")
+                    else:
+                        result['error_message'] = f"Failed to commit changes: {stderr}"
+                        print(f"   ❌ Failed to commit changes: {stderr}")
                     result['fix_attempted'] = True
                     result['fix_successful'] = True
                     result['new_commit_created'] = True
