@@ -20,6 +20,10 @@ main_basic_test.*
 *.temp.*
 *.test_*.*
 
+## Workflow Healing System files:
+workflow_healing.log
+workflow_healing.log.*
+
 ## Python cache files:
 __pycache__/
 *.py[cod]
