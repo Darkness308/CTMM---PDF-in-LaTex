@@ -306,7 +306,7 @@ jobs:
       if: steps.fetch_prs.outputs.pr_count > 0
       id: latex_primary_pr
       continue-on-error: true
-      uses: dante-ev/latex-action@2025-A
+      uses: dante-ev/latex-action@v0.2.0
       with:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape

@@ -84,7 +84,7 @@ tlmgr install insdljs eforms acrotex
   run: find . -name "*.tex" -exec chktex -q {} \;
 
 - name: Compile with 3-pass build
-  uses: dante-ev/latex-action@2025-A
+  uses: dante-ev/latex-action@v0.2.0
   with:
     root_file: main.tex
     args: "-synctex=1 -interaction=nonstopmode -file-line-error"
