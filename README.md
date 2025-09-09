@@ -11,6 +11,70 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
 ## Verwendung
 1. Klone das Repository
+copilot/vscode1754261474068
+2. Führe das Setup-Script aus: `./ctmm-workflow.sh checkup`
+3. Kompiliere das Dokument: `./ctmm-workflow.sh build`
+4. Oder öffne das Projekt in einem GitHub Codespace
+
+## Git-Workflow
+
+Dieses Projekt verwendet einen strukturierten Git-Workflow, der in der Datei `GIT-WORKFLOW.md` detailliert beschrieben ist.
+
+### Schnellstart für Entwickler
+
+```bash
+# Umgebung prüfen
+./ctmm-workflow.sh checkup
+
+# Neues Feature beginnen
+./ctmm-workflow.sh feature mein-neues-feature
+
+# Änderungen committen
+git add .
+./ctmm-workflow.sh commit add "Meine Beschreibung"
+
+# Änderungen pushen
+./ctmm-workflow.sh push
+
+# PDF generieren
+./ctmm-workflow.sh build
+```
+
+### LaTeX-Besonderheiten
+
+Bei der Arbeit mit dem CTMM-System sollten folgende LaTeX-Besonderheiten beachtet werden:
+
+- Formularfeld-IDs müssen Underscores mit Backslash escapen: `{form\_id}` statt `{form_id}`
+- Verwenden Sie `./ctmm-workflow.sh fix-latex` um häufige Probleme automatisch zu beheben
+
+### Troubleshooting
+
+#### FontAwesome Package Issues
+
+Das CTMM-System verwendet das `fontawesome5` Package für Icons (z.B. `\faCompass` in den Überschriften). Falls LaTeX-Compilation mit Fehlern wie "FontAwesome not found" oder "Package fontawesome5 Error" fehlschlägt:
+
+**Lösung für lokale Installation:**
+```bash
+# Ubuntu/Debian
+sudo apt-get install texlive-fonts-extra
+
+# Fedora/CentOS/RHEL
+sudo dnf install texlive-fontawesome
+
+# macOS (MacTeX)
+# FontAwesome ist standardmäßig in MacTeX enthalten
+
+# MiKTeX (Windows)
+# Installiere über MiKTeX Package Manager: fontawesome5
+```
+
+**Automatische Lösung in GitHub Actions:**
+Das Repository ist so konfiguriert, dass alle erforderlichen LaTeX-Pakete, einschließlich `texlive-fonts-extra` für FontAwesome-Unterstützung, automatisch in der CI/CD-Pipeline installiert werden.
+
+**Häufige FontAwesome-Fehler:**
+- `! LaTeX Error: File 'fontawesome5.sty' not found` → Installiere `texlive-fonts-extra`
+- `! Package fontawesome5 Error: The current font does not contain the symbol` → Prüfe, ob alle Font-Pakete installiert sind
+
 2. Führe `python3 ctmm_build.py` aus um das Projekt zu validieren
 3. Kompiliere main.tex mit einem LaTeX-Editor
 4. Oder öffne das Projekt in einem GitHub Codespace
@@ -33,6 +97,7 @@ python3 ctmm_build.py
 - ✅ Substantielle Inhaltsänderungen (nicht nur Leerzeichen)
 - ✅ Erfolgreicher Build-System-Test
 - ✅ Verwendung der PR-Vorlage
+main
 
 ## Struktur
 - `/style/` - Design-Dateien und gemeinsam verwendete Komponenten
@@ -42,6 +107,18 @@ python3 ctmm_build.py
 ## Anforderungen
 - LaTeX-Installation mit TikZ und hyperref
 - Oder GitHub Codespace (vorkonfiguriert)
+
+**Für lokale Entwicklung:**
+```bash
+# Schnelle Einrichtung (Ubuntu/Debian)
+make setup
+
+# Oder manuell:
+sudo apt-get install texlive-lang-german texlive-fonts-extra texlive-latex-extra
+pip install chardet
+```
+
+**Bei Build-Problemen:** Siehe [BUILD_TROUBLESHOOTING.md](BUILD_TROUBLESHOOTING.md) für detaillierte Lösungen.
 
 ## 🎯 CTMM Comprehensive Toolset - "es ist nicht mehr weit"
 
@@ -66,6 +143,24 @@ python3 comprehensive_workflow.py --cleanup
 **CTMM Build System:**
 
 Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das folgende Funktionen bietet:
+
+### Enhanced Build Management (Neu!)
+```bash
+# Enhanced CTMM Build Management
+python3 ctmm_build.py --enhanced
+make enhanced-build
+
+# Enhanced Incremental Testing  
+make enhanced-testing
+```
+
+Das Enhanced Build Management System bietet:
+- **Comprehensive Automation**: Verbesserte automatisierte Fehlerbehandlung und Template-Generierung
+- **Advanced Error Recovery**: Fortschrittliche Fehlererkennung mit automatischen Korrekturen
+- **Resource Management**: Optimierte Dateibehandlung ohne Resource-Warnings
+- **CI/CD Reliability**: Erweiterte GitHub Actions Integration
+
+Siehe [ENHANCED_BUILD_MANAGEMENT.md](ENHANCED_BUILD_MANAGEMENT.md) für Details.
 
 ### Automatisierte Build-Prüfung
 ```bash
@@ -138,17 +233,30 @@ python3 test_ctmm_build.py
 python3 test_latex_validator.py
 ```
 
+**Umfassende Testabdeckung (51+ Tests):**
+
 Die Tests überprüfen:
-- `filename_to_title()` Funktion mit 29 umfassenden Testfällen:
+- **`filename_to_title()` Funktion** mit 29 umfassenden Testfällen:
   - Grundlegende Separator-Konvertierung (Unterstriche, Bindestriche)
   - Deutsche Umlaute und Sonderzeichen
   - Numerische Präfixe und realistische Therapie-Dateinamen
   - Edge Cases (lange Dateinamen, mehrfache Separatoren, Leerzeichen)
   - Robustheit und Fehlerbehandlung
-- LaTeX-Validator Funktionalität
-- Escaping-Problem Erkennung und Behebung
-- Build-System Integration und strukturierte Datenrückgabe
-- Nummerierte Schritte und erweiterte Fehlerbehandlung
+
+- **Build-System Kernfunktionen** mit 15+ Testfällen:
+  - `scan_references()` - LaTeX-Referenzen scannen mit Kommentar-Filterung
+  - `check_missing_files()` - Dateien-Existenz-Prüfung
+  - `create_template()` - Template-Erstellung für fehlende Dateien
+  - LaTeX-Validator Integration
+  - Strukturierte Datenrückgabe und erweiterte Fehlerbehandlung
+
+- **Erweiterte Integration Tests**:
+  - Nummerierte Schritte-Implementierung
+  - Strukturierte Build-Daten und Fehlerbehandlung
+  - Modulare Helper-Funktionen
+  - End-to-End Build-System Workflow
+  - Kommentar-Filterung in LaTeX-Dateien (neu)
+  - Escaped-Prozent-Zeichen Behandlung (neu)
 
 ### Modulare Test-Strategie
 
@@ -234,3 +342,18 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 
 **Tipp:**
 Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+
+## GitHub-Integration Probleme
+
+Bei Fehlern wie **"Resource not accessible by integration"** siehe: [`GITHUB-PERMISSIONS.md`](GITHUB-PERMISSIONS.md)
+
+Diese Datei erklärt:
+- Wo diese Fehler zu finden sind
+- Wie GitHub CLI-Berechtigungen zu konfigurieren sind
+- Wie Workflow-Probleme zu beheben sind
+- Wie Repository-Einstellungen zu prüfen sind
+
+**Häufige Ursachen:**
+- GitHub CLI nicht angemeldet oder unzureichende Berechtigungen
+- Workflow-Dateien verweisen auf nicht existierende Dateien
+- Repository-Einstellungen blockieren Actions-Zugriff

@@ -241,7 +241,7 @@ class LaTeXDeEscaper:
                 content = f.read()
             
             # Check for remaining over-escaped commands
-            if '\\textbackslash{}' in content:
+            if r'\textbackslash{}' in content:
                 issues.append("Still contains over-escaped commands")
             
             # Check for unmatched braces (but allow some tolerance for content)

@@ -2,30 +2,141 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CTMM: Kompilieren",
+            "label": "CTMM: Build Complete System",
             "type": "shell",
-            "command": "pdflatex",
-            "args": [
-                "-synctex=1",
-                "-interaction=nonstopmode",
-                "-file-line-error",
-                "-output-directory=build",
-                "main.tex"
-            ],
+            "command": "${workspaceFolder}/ctmm_build.py",
+            "windows": {
+                "command": "python",
+                "args": ["${workspaceFolder}/ctmm_build.py"]
+            },
+            "linux": {
+                "command": "python3",
+                "args": ["${workspaceFolder}/ctmm_build.py"]
+            },
+            "osx": {
+                "command": "python3", 
+                "args": ["${workspaceFolder}/ctmm_build.py"]
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": {
-                "owner": "latex",
-                "fileLocation": ["relative", "${workspaceRoot}"],
-                "pattern": {
-                    "regexp": "^(.*):(\\d+):\\s+(.*)",
-                    "file": 1,
-                    "line": 2,
-                    "message": 3
-                }
+            "problemMatcher": "$latex",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": ["CTMM: Create Build Directory"]
+        },
+        {
+            "label": "CTMM: Build Single Module",
+            "type": "shell", 
+            "command": "pdflatex",
+            "args": ["-interaction=nonstopmode", "-file-line-error", "-output-directory=build", "main.tex"],
+            "windows": {
+                "command": "pdflatex.exe"
+            },
+            "group": "build",
+            "problemMatcher": "$latex",
+            "presentation": {
+                "echo": true,
+                "reveal": "always", 
+                "focus": false,
+                "panel": "shared"
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": ["CTMM: Create Build Directory"]
+        },
+        {
+            "label": "CTMM: Generate Module",
+            "type": "shell",
+            "command": "${workspaceFolder}/create-module.sh",
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "bash ${workspaceFolder}/create-module.sh"]
+            },
+            "linux": {
+                "command": "bash",
+                "args": ["${workspaceFolder}/create-module.sh"]
+            },
+            "osx": {
+                "command": "bash",
+                "args": ["${workspaceFolder}/create-module.sh"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
             }
+        },
+        {
+            "label": "CTMM: Clean Build Directory",
+            "type": "shell",
+            "command": "rm",
+            "args": ["-rf", "build"],
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "if exist build rmdir /s /q build"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CTMM: Create Build Directory", 
+            "type": "shell",
+            "command": "mkdir",
+            "args": ["-p", "build"],
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "if not exist build mkdir build"]
+            },
+            "group": "build",
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "CTMM: Clean and Build",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "CTMM: Clean Build Directory",
+                "CTMM: Build Complete System"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build LaTeX (Legacy)",
+            "type": "shell",
+            "command": "latexmk -pdf -pdflatex=\"pdflatex -synctex=1 -interaction=nonstopmode -file-line-error\" -outdir=build main.tex",
+            "group": "build",
+            "problemMatcher": "$latex"
+        },
+        {
+            "label": "Clean Build (Legacy)",
+            "type": "shell",
+            "command": "latexmk -c -outdir=build",
+            "group": "build"
         }
     ]
 }

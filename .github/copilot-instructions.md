@@ -103,6 +103,8 @@ python3 ctmm_build.py
 - **Module Dependencies**: Ensures all referenced files exist or creates templates
 - **Form Element Validation**: Verifies proper use of CTMM form components
 
+**Note**: Build tests will show FAIL if pdflatex is not installed, but dependency checking and file generation still work correctly.
+
 **Alternative Commands:**
 ```bash
 make check          # Run build system check
@@ -117,7 +119,7 @@ The build system includes comprehensive unit tests for core functions:
 ```bash
 python3 test_ctmm_build.py -v
 ```
-Tests cover filename-to-title conversion, German therapy terminology, and build system integration.
+Tests cover filename-to-title conversion (23 test cases), German therapy terminology, and build system integration (56 total tests).
 
 ### 📄 LaTeX Best Practices
 
@@ -210,6 +212,13 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 - **Cultural sensitivity**: Content is designed for German-speaking therapy contexts
 - **Professional tone**: Maintain therapeutic, non-judgmental language
 
+**CTMM Methodology:**
+CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing triggers and relationship challenges:
+- **Catch:** Recognize triggers and emotional states
+- **Track:** Monitor feelings and situational patterns  
+- **Map:** Understand underlying patterns and dynamics
+- **Match:** Adapt responses and interventions appropriately
+
 **Content Types:**
 - **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
 - **Trigger Management**: Coping strategies and identification tools
@@ -277,13 +286,8 @@ Tests cover filename-to-title conversion, German therapy terminology, and build 
 - `modules/*.tex` - Individual therapy content
 
 **Common Macros:**
-copilot/fix-65
-- `\ctmmCheckBox[fieldname]{label}` - Interactive form checkboxes
-- `\ctmmTextField[width]{default}{fieldname}` - Text input fields
-
 - `\ctmmCheckBox[name]{label}` - Interactive form checkboxes
 - `\ctmmTextField[width]{label}{name}` - Text input fields
-main
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 

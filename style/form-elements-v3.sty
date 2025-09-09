@@ -1,0 +1,387 @@
+% ============================================================
+% CTMM Form Elements Package - Version 3.0.0
+% Advanced Interactive PDF Forms for Therapeutic Documentation
+% ============================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{form-elements-v3}[2024/12/19 v3.0.0 CTMM Advanced Interactive Forms]
+
+% ============================================================
+% ENHANCED DEPENDENCIES AND CONFIGURATION
+% ============================================================
+
+% Core packages
+\RequirePackage{xcolor}
+\RequirePackage{tikz}
+\RequirePackage{calc}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{geometry}
+\RequirePackage{ifthen}
+\RequirePackage{forloop}
+
+% Advanced PDF form packages
+\RequirePackage[unicode]{hyperref}
+\RequirePackage{insdljs}  % JavaScript in PDF
+\RequirePackage{eforms}   % Enhanced Forms
+
+% Form configuration
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+    pdftitle={CTMM Therapeutic Materials - Interactive Forms},
+    pdfauthor={CTMM Team},
+    pdfsubject={Therapeutic Documentation System},
+    pdfcreator={LaTeX with CTMM Form Package v3.0.0},
+    pdfproducer={CTMM Therapeutic Documentation System},
+    pdfdisplaydoctitle=true,
+    pdfpagelayout=OneColumn,
+    pdfstartview=FitH,
+    pdfpagemode=UseNone
+}
+
+% ============================================================
+% FORM STYLING AND LAYOUT CONFIGURATION
+% ============================================================
+
+% Dimensions
+\newlength{\ctmmFieldWidth}
+\setlength{\ctmmFieldWidth}{8cm}
+\newlength{\ctmmFieldHeight}
+\setlength{\ctmmFieldHeight}{1.2em}
+\newlength{\ctmmSmallFieldWidth}
+\setlength{\ctmmSmallFieldWidth}{4cm}
+
+% Colors for forms
+\definecolor{ctmmFieldBg}{RGB}{248, 249, 250}
+\definecolor{ctmmFieldBorder}{RGB}{52, 152, 219}  % ctmmBlue
+\definecolor{ctmmRequiredField}{RGB}{255, 235, 235}
+\definecolor{ctmmFieldActive}{RGB}{235, 247, 255}
+
+% Mode detection
+\newboolean{ctmmPrintMode}
+\setboolean{ctmmPrintMode}{false}
+
+% ============================================================
+% CORE FORM FIELD COMMANDS
+% ============================================================
+
+% Advanced text field with validation
+\newcommand{\ctmmTextField}[4][8cm]{%
+    % Parameters: [width]{name}{default}{placeholder}
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: underlined space
+        \makebox[#1]{\hrulefill} {\footnotesize\textit{#4}}%
+    }{%
+        % Interactive mode: real PDF form field
+        \TextField[
+            name=#2,
+            width=#1,
+            height=\ctmmFieldHeight,
+            bordercolor=ctmmFieldBorder,
+            backgroundcolor=ctmmFieldBg,
+            value={#3},
+            default={#3},
+            charsize=10pt,
+            maxlen=200,
+            tooltip={#4}
+        ]{}%
+    }%
+}
+
+% Enhanced text area with line counting
+\newcommand{\ctmmTextArea}[5][8cm]{%
+    % Parameters: [width]{height}{name}{default}{placeholder}
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: multiple lines
+        \begin{minipage}[t][#2][t]{#1}
+            \newcounter{ctmmLineCounter}
+            \setcounter{ctmmLineCounter}{1}
+            \loop
+                \makebox[#1]{\hrulefill}\\[0.3em]
+                \stepcounter{ctmmLineCounter}
+            \ifnum\value{ctmmLineCounter}<6
+            \repeat
+        \end{minipage}%
+        {\footnotesize\textit{#5}}%
+    }{%
+        % Interactive mode
+        \TextField[
+            name=#3,
+            width=#1,
+            height=#2,
+            bordercolor=ctmmFieldBorder,
+            backgroundcolor=ctmmFieldBg,
+            multiline=true,
+            default={#4},
+            charsize=10pt,
+            tooltip={#5}
+        ]{}%
+    }%
+}
+
+% Enhanced checkbox with custom symbols
+\newcommand{\ctmmCheckBox}[3]{%
+    % Parameters: {name}{label}{value}
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: empty square
+        \tikz[baseline=-0.1ex]{\draw[ctmmFieldBorder, line width=1pt] (0,0) rectangle (0.4,0.4);} #2%
+    }{%
+        % Interactive mode
+        \CheckBox[
+            name=#1,
+            value=#3,
+            width=0.4cm,
+            height=0.4cm,
+            bordercolor=ctmmFieldBorder,
+            backgroundcolor=ctmmFieldBg,
+            tooltip={Check to select: #2}
+        ]{} #2%
+    }%
+}
+
+% Radio button group
+\newcommand{\ctmmRadioButton}[4]{%
+    % Parameters: {group}{value}{label}{tooltip}
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: empty circle
+        \tikz[baseline=-0.1ex]{\draw[ctmmFieldBorder, line width=1pt] (0.2,0.2) circle (0.15);} #3%
+    }{%
+        % Interactive mode
+        \RadioButton[
+            name=#1,
+            radio=#2,
+            width=0.4cm,
+            height=0.4cm,
+            bordercolor=ctmmFieldBorder,
+            backgroundcolor=ctmmFieldBg,
+            tooltip={#4}
+        ]{} #3%
+    }%
+}
+
+% ============================================================
+% ADVANCED FORM ELEMENTS
+% ============================================================
+
+% Dropdown/ComboBox
+\newcommand{\ctmmDropdown}[4][5cm]{%
+    % Parameters: [width]{name}{options}{default}
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: underlined field with options
+        \makebox[#1]{\hrulefill} {\footnotesize\textit{Options: #3}}%
+    }{%
+        % Interactive mode
+        \ComboBox[
+            name=#2,
+            width=#1,
+            height=\ctmmFieldHeight,
+            bordercolor=ctmmFieldBorder,
+            backgroundcolor=ctmmFieldBg,
+            default={#4}
+        ]{#3}{}%
+    }%
+}
+
+% Date picker field
+\newcommand{\ctmmDateField}[3]{%
+    % Parameters: {name}{label}{format}
+    \textbf{#2:} \ctmmTextField[\ctmmSmallFieldWidth]{#1}{}{#3}%
+}
+
+% Time field
+\newcommand{\ctmmTimeField}[2]{%
+    % Parameters: {name}{label}
+    \textbf{#2:} \ctmmTextField[3cm]{#1}{}{HH:MM}%
+}
+
+% Number field with validation
+\newcommand{\ctmmNumberField}[5][3cm]{%
+    % Parameters: [width]{name}{label}{min}{max}
+    \textbf{#3:} \ctmmTextField[#1]{#2}{}{Zahl zwischen #4 und #5}%
+}
+
+% ============================================================
+% FORM SUBMISSION AND INTERACTION
+% ============================================================
+
+% Submit button
+\newcommand{\ctmmSubmitButton}[2][Submit Form]{%
+    % Parameters: [label]{action}
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: styled box
+        \tikz{\node[draw=ctmmFieldBorder, fill=ctmmFieldBg, rounded corners=3pt, minimum width=3cm, minimum height=1cm] {#1};}%
+    }{%
+        % Interactive mode
+        \SubmitForm[
+            cAction={#2},
+            width=3cm,
+            height=1cm,
+            bordercolor=ctmmFieldBorder,
+            backgroundcolor=ctmmFieldBg
+        ]{#1}%
+    }%
+}
+
+% Reset button
+\newcommand{\ctmmResetButton}[1][Reset Form]{%
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode: styled box
+        \tikz{\node[draw=ctmmOrange, fill=ctmmOrange!10, rounded corners=3pt, minimum width=3cm, minimum height=1cm] {#1};}%
+    }{%
+        % Interactive mode
+        \ResetForm[
+            width=3cm,
+            height=1cm,
+            bordercolor=ctmmOrange,
+            backgroundcolor=ctmmOrange!10
+        ]{#1}%
+    }%
+}
+
+% ============================================================
+% SPECIALIZED THERAPEUTIC FORM ELEMENTS
+% ============================================================
+
+% Mood scale (1-10) with visual indicators
+\newcommand{\ctmmMoodScale}[2]{%
+    % Parameters: {name}{label}
+    \textbf{#2 (1-10):} \\[0.5em]
+    \begin{tabular}{*{10}{c}}
+        \small 1 & \small 2 & \small 3 & \small 4 & \small 5 & \small 6 & \small 7 & \small 8 & \small 9 & \small 10 \\
+        \ctmmRadioButton{#1}{1}{}{Sehr schlecht} & 
+        \ctmmRadioButton{#1}{2}{}{Schlecht} & 
+        \ctmmRadioButton{#1}{3}{}{Ziemlich schlecht} & 
+        \ctmmRadioButton{#1}{4}{}{Eher schlecht} & 
+        \ctmmRadioButton{#1}{5}{}{Neutral} & 
+        \ctmmRadioButton{#1}{6}{}{Eher gut} & 
+        \ctmmRadioButton{#1}{7}{}{Ziemlich gut} & 
+        \ctmmRadioButton{#1}{8}{}{Gut} & 
+        \ctmmRadioButton{#1}{9}{}{Sehr gut} & 
+        \ctmmRadioButton{#1}{10}{}{Ausgezeichnet} \\
+    \end{tabular}
+}
+
+% Trigger intensity scale with color coding
+\newcommand{\ctmmTriggerScale}[2]{%
+    % Parameters: {name}{label}
+    \textbf{#2 Intensität:} \\[0.3em]
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textcolor{ctmmGreen}{\ctmmRadioButton{#1}{1}{1}{Niedrig}} & 
+    \textcolor{ctmmOrange}{\ctmmRadioButton{#1}{2}{2}{Leicht erhöht}} & 
+    \textcolor{ctmmOrange}{\ctmmRadioButton{#1}{3}{3}{Mittel}} & 
+    \textcolor{ctmmRed}{\ctmmRadioButton{#1}{4}{4}{Hoch}} & 
+    \textcolor{ctmmRed}{\ctmmRadioButton{#1}{5}{5}{Sehr hoch}} \\
+    \hline
+    \end{tabular}
+}
+
+% Weekly schedule grid
+\newcommand{\ctmmWeeklyGrid}[2]{%
+    % Parameters: {name_prefix}{label}
+    \textbf{#2:} \\[0.5em]
+    \begin{tabularx}{\textwidth}{|X|X|X|X|X|X|X|}
+    \hline
+    \textbf{Mo} & \textbf{Di} & \textbf{Mi} & \textbf{Do} & \textbf{Fr} & \textbf{Sa} & \textbf{So} \\
+    \hline
+    \ctmmTextField[2.5cm]{#1_mo}{}{Montag} & 
+    \ctmmTextField[2.5cm]{#1_di}{}{Dienstag} & 
+    \ctmmTextField[2.5cm]{#1_mi}{}{Mittwoch} & 
+    \ctmmTextField[2.5cm]{#1_do}{}{Donnerstag} & 
+    \ctmmTextField[2.5cm]{#1_fr}{}{Freitag} & 
+    \ctmmTextField[2.5cm]{#1_sa}{}{Samstag} & 
+    \ctmmTextField[2.5cm]{#1_so}{}{Sonntag} \\
+    \hline
+    \end{tabularx}
+}
+
+% Complete daily tracker
+\newcommand{\ctmmDailyTracker}[1]{%
+    % Parameters: {unique_id}
+    \begin{tcolorbox}[
+        colback=ctmmBlue!5,
+        colframe=ctmmBlue,
+        title={\textbf{Täglicher CTMM-Tracker}},
+        fonttitle=\bfseries
+    ]
+    
+    \ctmmDateField{#1_date}{Datum}{TT.MM.JJJJ} \quad \ctmmTimeField{#1_time}{Zeit}
+    
+    \vspace{0.5em}
+    \ctmmMoodScale{#1_mood_morning}{Morgenstimmung}
+    
+    \vspace{0.5em}
+    \ctmmMoodScale{#1_mood_evening}{Abendstimmung}
+    
+    \vspace{0.5em}
+    \ctmmTriggerScale{#1_trigger}{Trigger}
+    
+    \vspace{0.5em}
+    \textbf{Angewandte Strategien:} \\[0.3em]
+    \ctmmCheckBox{#1_breath}{Atemtechnik}{breath} \quad
+    \ctmmCheckBox{#1_ground}{Grounding}{ground} \quad
+    \ctmmCheckBox{#1_pause}{Pause}{pause} \quad
+    \ctmmCheckBox{#1_talk}{Gespräch}{talk}
+    
+    \vspace{0.5em}
+    \textbf{Reflexion:} \\[0.3em]
+    \ctmmTextArea[\textwidth]{3cm}{#1_reflection}{}{Was war heute besonders? Erkenntnisse?}
+    
+    \end{tcolorbox}
+}
+
+% ============================================================
+% FORM VALIDATION AND JAVASCRIPT
+% ============================================================
+
+% Add form validation JavaScript
+\AtBeginDocument{%
+    \ifthenelse{\boolean{ctmmPrintMode}}{%
+        % Print mode - no JavaScript needed
+    }{%
+        % Interactive mode - add validation
+        \begin{insDLJS}{ctmm}{CTMM Form Validation}
+        function validateCTMMForm() {
+            var fields = this.getField();
+            var errors = [];
+            
+            // Check required fields
+            if (this.getField("date").value == "") {
+                errors.push("Datum ist erforderlich");
+            }
+            
+            if (errors.length > 0) {
+                app.alert("Bitte korrigieren Sie folgende Fehler:\n" + errors.join("\n"));
+                return false;
+            }
+            
+            return true;
+        }
+        \end{insDLJS}%
+    }%
+}
+
+% ============================================================
+% MODE SWITCHING COMMANDS
+% ============================================================
+
+% Enable print mode
+\newcommand{\enablePrintMode}{%
+    \setboolean{ctmmPrintMode}{true}%
+}
+
+% Enable interactive mode  
+\newcommand{\enableInteractiveMode}{%
+    \setboolean{ctmmPrintMode}{false}%
+}
+
+% Auto-detect mode based on packages
+\AtEndOfPackage{%
+    \@ifpackageloaded{eforms}{%
+        \enableInteractiveMode%
+    }{%
+        \enablePrintMode%
+    }%
+}
+
+\endinput

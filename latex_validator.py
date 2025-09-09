@@ -15,6 +15,42 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
+def sanitize_pkg_name(name):
+    """
+    Sanitize package names to proper CamelCase format.
+    
+    Converts names with numbers, hyphens, and underscores to proper CamelCase:
+    - '123-package' → 'pkg123Package'
+    - '1-package' → 'pkg1Package'  
+    - '2_test' → 'pkg2Test'
+    - '999-name' → 'pkg999Name'
+    
+    Args:
+        name (str): The input package name to sanitize
+        
+    Returns:
+        str: The sanitized package name in CamelCase format
+    """
+    if not name:
+        return 'pkg'
+        
+    # Split on hyphens and underscores
+    parts = re.split(r'[-_]', name)
+    sanitized = 'pkg'
+    
+    for i, part in enumerate(parts):
+        if not part:  # Skip empty parts
+            continue
+        if part.isdigit():
+            # If part is purely numeric, add as-is
+            sanitized += part
+        else:
+            # Capitalize the first letter of non-numeric parts
+            sanitized += part.capitalize()
+    
+    return sanitized
+
+
 class LaTeXValidator:
     """Validates and cleans LaTeX files from excessive escaping."""
     
@@ -144,10 +180,19 @@ class LaTeXValidator:
             logger.info(f"Validating {tex_file}")
             is_valid, issues, cleaned_content = self.validate_file(tex_file)
             
+            # Properly handle file reading to avoid resource warnings
+            try:
+                with open(tex_file, 'r', encoding='utf-8', errors='replace') as f:
+                    original_content = f.read()
+                original_size = len(original_content)
+            except Exception as e:
+                logger.warning(f"Could not read file size for {tex_file}: {e}")
+                original_size = 0
+            
             results[str(tex_file)] = {
                 'valid': is_valid,
                 'issues': issues,
-                'original_size': len(open(tex_file, 'r', encoding='utf-8', errors='replace').read()),
+                'original_size': original_size,
                 'cleaned_size': len(cleaned_content)
             }
             
