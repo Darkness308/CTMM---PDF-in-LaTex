@@ -80,7 +80,7 @@ main                                     # ← Orphaned branch name
 ### Technologie-Stack
 - **Primär:** LaTeX (Deutsch, Article-Klasse, A4, 12pt)
 - **Build-Automation:** Python 3.x
-- **CI/CD:** GitHub Actions (dante-ev/latex-action@v1)
+- **CI/CD:** GitHub Actions (dante-ev/latex-action@v1 in `latex-build.yml`, dante-ev/latex-action@v0.2.0 in `latex-validation.yml` und `automated-pr-merge-test.yml`)  <!-- Hinweis: Versionsinkonsistenz dokumentiert -->
 - **Versionskontrolle:** Git
 - **Hauptpakete:** TikZ, hyperref, tcolorbox, fontawesome5, babel
 
