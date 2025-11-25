@@ -1,37 +1,194 @@
 name: Build LaTeX PDF
 
-on:
+"on":
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
+        timeout-minutes: 5
         uses: actions/checkout@v4
 
       - name: Set up Python
+        timeout-minutes: 5
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
-      - name: Install Python dependencies  
+      - name: Install Python dependencies
+        timeout-minutes: 5
         run: |
-          pip install chardet
+          echo "📦 Installing Python dependencies..."
+          pip install chardet pyyaml
+          echo "✅ Python dependencies installed successfully"
 
-      - name: Run CTMM Build System Check
+      - name: Run LaTeX syntax validation
+        timeout-minutes: 5
         run: |
+          echo "🔍 Starting LaTeX syntax validation..."
+          python3 validate_latex_syntax.py
+          echo "✅ LaTeX syntax validation completed successfully"
+      - name: Run CTMM Build System Check
+        timeout-minutes: 10
+        run: |
+          echo "🔧 Starting CTMM build system check..."
           python3 ctmm_build.py
+          echo "✅ CTMM build system check completed successfully"
+      - name: Run comprehensive CI validation
+        timeout-minutes: 10
+        run: |
+          echo "📋 Starting comprehensive CI validation..."
+          python3 test_issue_743_validation.py
+          echo "✅ Comprehensive CI validation completed successfully"
+      - name: Enhanced pre-build validation
+        timeout-minutes: 8
+        continue-on-error: true
+        run: |
+          echo "🔍 Running enhanced pre-build validation..."
+          python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          echo "✅ Enhanced pre-build validation completed"
+
+      - name: Check system resources before LaTeX compilation
+        timeout-minutes: 3
+        run: |
+          echo "📊 Checking system resources..."
+          df -h
+          free -h
+          echo "✅ System resources checked"
+
+      - name: Assess GitHub Actions runner environment
+        timeout-minutes: 3
+        run: |
+          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner Architecture: $RUNNER_ARCH" 
+          echo "GitHub Actions Runner: $RUNNER_NAME"
+          df -h / | head -2
+          free -h | head -2
+          echo "CPU Info:" && nproc
+          echo "✅ Environment assessment complete"
+
+      - name: Enhanced CI environment validation
+        timeout-minutes: 5
+        run: |
+          echo "🔧 Running enhanced CI environment validation..."
+          python3 validate_ci_environment.py
+          echo "✅ Enhanced CI environment validation completed"
+
+      - name: CI failure prevention analysis
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🛡️ Running CI failure prevention analysis..."
+          python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
+          echo "✅ CI failure prevention analysis completed"
 
       - name: Set up LaTeX
-        uses: dante-ev/latex-action@v2.0.0
+        timeout-minutes: 15
+        uses: dante-ev/latex-action@v0.2.0
         with:
           root_file: main.tex
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-fonts-extra
+            texlive-latex-extra
+            texlive-science
+            texlive-pstricks
+            ghostscript
+            
+      - name: Verify PDF generation with enhanced analysis
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Enhanced PDF verification and analysis..."
+          
+          if [ -f "main.pdf" ]; then
+            echo "✅ PDF successfully generated"
+            
+            # Detailed file analysis
+            echo "📊 PDF File Analysis:"
+            ls -la main.pdf
+            file main.pdf
+            
+            # Check PDF size (should be substantial for a complete document)
+            PDF_SIZE=$(stat -c%s "main.pdf")
+            echo "📄 PDF Size: $PDF_SIZE bytes"
+            
+            if [ "$PDF_SIZE" -lt 10000 ]; then
+              echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
+            elif [ "$PDF_SIZE" -gt 100000 ]; then
+              echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
+            else
+              echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
+            fi
+            
+            # Verify FontAwesome package support
+            echo "🔍 Checking FontAwesome package support..."
+            if grep -q "fontawesome5" main.log 2>/dev/null; then
+              echo "✅ FontAwesome5 package was loaded successfully"
+            else
+              echo "⚠️  FontAwesome5 package loading status unknown"
+            fi
+            
+            # Try to extract basic PDF info if available
+            if command -v pdfinfo &> /dev/null; then
+              echo "📋 PDF Information:"
+              pdfinfo main.pdf || echo "Unable to extract PDF info"
+            fi
+            
+            echo "✅ Enhanced PDF verification completed successfully"
+          else
+            echo "❌ PDF generation failed"
+            echo "🔍 Comprehensive error analysis..."
+            
+            # Check for LaTeX log files
+            echo "📄 Searching for LaTeX log files..."
+            find . -name "*.log" -type f | head -10
+            
+            # Display recent log content with better formatting
+            echo ""
+            echo "📋 LaTeX Log Analysis:"
+            echo "====================="
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
+            
+            # Check for FontAwesome related errors
+            echo ""
+            echo "🔍 FontAwesome Error Check:"
+            echo "=========================="
+            find . -name "*.log" -exec grep -i "fontawesome\|font.*not.*found" {} \; 2>/dev/null || echo "No FontAwesome-related errors found"
+            
+            # Check for aux files and other intermediate files
+            echo ""
+            echo "📁 Intermediate Files Check:"
+            echo "============================="
+            ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
+            
+            # Check disk space
+            echo ""
+            echo "💾 Disk Space Analysis:"
+            echo "======================"
+            df -h .
+            
+            exit 1
+          fi
 
       - name: Upload PDF artifact
+        timeout-minutes: 5
         uses: actions/upload-artifact@v4
         with:
           name: CTMM_PDF
@@ -39,10 +196,12 @@ jobs:
 
       - name: Upload build logs (on failure)
         if: failure()
+        timeout-minutes: 5
+        continue-on-error: true
         uses: actions/upload-artifact@v4
         with:
-          name: build_logs
+          name: Build_Logs_${{ github.sha }}
           path: |
             *.log
-            build_error_*.log
-            build_system.log
+            *.aux
+          retention-days: 7
