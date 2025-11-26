@@ -2,8 +2,19 @@
 \RequirePackage{xcolor}
 % CTMM zentrale Konfiguration
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{ctmm-config}[2025/08/05 CTMM zentrale Konfiguration]
+\ProvidesPackage{ctmm-config}[2025/11/06 CTMM zentrale Konfiguration]
 
+% ============================================================
+% PACKAGE OPTIONS
+% ============================================================
+\newif\if@ctmmDarkMode
+\@ctmmDarkModefalse
+
+\DeclareOption{darkmode}{%
+    \@ctmmDarkModetrue
+}
+
+\ProcessOptions\relax
 
 % Version und Autor
 \newcommand{\ctmmVersion}{1.0.0}
@@ -26,3 +37,16 @@
 \newcommand{\ctmmTextTrigger}{Trigger}
 \newcommand{\ctmmTextSuccess}{Erfolg}
 % ... weitere Texte nach Bedarf ...
+
+% ============================================================
+% DARK MODE ACTIVATION
+% ============================================================
+% Load dark theme if darkmode option was specified
+
+\if@ctmmDarkMode
+    \RequirePackage{ctmm-dark-theme}
+    \AtBeginDocument{%
+        \ctmmEnableDarkMode%
+        \PackageInfo{ctmm-config}{Dark mode activated - therapeutic color system loaded}%
+    }
+\fi
