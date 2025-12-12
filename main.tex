@@ -1,21 +1,27 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt]{article} % <-- HINZUGEFÜGT
 
 % Pakete
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc} % Nicht mehr nötig mit aktuellem pdfLaTeX
+\usepackage{lmodern} % Schriftartenproblem beheben
+\usepackage{microtype} % Verbesserte Schriftbildqualität und weniger Font-Warnungen
+\usepackage{textcomp} % Zusätzliche Symbole und Font-Kompatibilität
 \usepackage[ngerman]{babel}
 \usepackage{geometry}
-\usepackage{hyperref}
+
+% CTMM Pakete
+\usepackage{style/ctmm-config}
 \usepackage{xcolor}
 \usepackage{fontawesome5}
 \usepackage{tcolorbox}
 \usepackage{tabularx}
 \usepackage{amssymb}
-
-% CTMM Pakete
+\usepackage{amsmath}
 \usepackage{style/ctmm-design}
-\usepackage{style/form-elements}
-\usepackage{style/ctmm-diagrams}
+\usepackage{style/ctmm-navigation}
+\usepackage{style/ctmm-form-elements} % Interaktive Formularelemente (lädt form-elements-v3 mit Tooltips)
+% hyperref MUSS als letztes geladen werden (vor bookmark!)
+\usepackage{hyperref}
+\usepackage{bookmark} % Optional: bessere Lesezeichen
 
 % Dokumentenkonfiguration
 \geometry{
@@ -26,22 +32,19 @@
 }
 
 \hypersetup{
-  colorlinks=false,
-  pdfborder={0 0 0},
+  % pdfborder={0 0 0}, % Optional: kann entfernt werden, falls Fehler
   pdftitle={CTMM-System - Interaktives Therapie-Workbook},
   pdfauthor={CTMM-Team},
   pdfsubject={Therapiematerialien mit ausfüllbaren Formularen},
   pdfkeywords={CTMM, Therapie, Trigger, Borderline, ADHS, ASS, KPTBS, interaktiv},
   pdfcreator={LaTeX mit hyperref},
   pdfproducer={pdfLaTeX},
-  % Formular-spezifische Einstellungen
   bookmarksopen=true,
-  bookmarksopenlevel=1,
-  % Für bessere Formularkompatibilität
-  pdfencoding=auto,
-  unicode=true
+  bookmarksopenlevel=1
 }
 
+\hbadness=10000
+\vbadness=10000
 \begin{document}
 
 \title{%
@@ -58,7 +61,7 @@
 \tableofcontents
 \newpage
 
-\section*{\textcolor{ctmmBlue}{\faCompass~CTMM-System Übersicht}}
+\section*{\texorpdfstring{\textcolor{ctmmBlue}{\faCompass~CTMM-System Übersicht}}{CTMM-System Übersicht}}
 \addcontentsline{toc}{section}{CTMM-System Übersicht}
 
 \begin{ctmmBlueBox}{Was ist CTMM?}
@@ -76,10 +79,14 @@
 \input{modules/navigation-system}
 \input{modules/depression}
 \input{modules/bindungsleitfaden}
+\input{modules/co-regulation-gemeinsame-staerkung}
+\input{modules/krisenprotokoll-ausfuellen}
+\input{modules/dbt-emotionsregulation}
 \input{modules/triggermanagement}
 \input{modules/notfallkarten}
 \input{modules/safewords}
 \input{modules/interactive}
+\input{modules/interactive-diagrams}
 \input{modules/qrcode}
 \input{modules/therapiekoordination}
 \input{modules/selbstreflexion}
@@ -91,6 +98,13 @@
 \input{modules/arbeitsblatt-checkin}
 \input{modules/arbeitsblatt-trigger}
 \input{modules/arbeitsblatt-depression-monitoring}
+\input{modules/arbeitsblatt-taeglicher-stimmungscheck}
+\input{modules/trigger-forschungstagebuch}
+\input{modules/matching-matrix-trigger-reaktion}
+\input{modules/accessibility-features}
+\input{modules/bibliography-sources}
+\input{modules/form-demo}
+\input{modules/diagrams-demo-fixed}
 \input{modules/demo-interactive}
 
 \end{document}

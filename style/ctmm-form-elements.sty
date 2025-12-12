@@ -1,0 +1,52 @@
+% ============================================================
+% CTMM Form Elements - Wrapper Package
+% Purpose: Provides unified interface to CTMM form functionality
+% Loads the advanced form-elements-v3 package with tooltips
+% ============================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ctmm-form-elements}[2025/11/06 v1.0.0 CTMM Form Elements Wrapper]
+
+% ============================================================
+% CONFIGURATION OPTIONS
+% ============================================================
+
+% Option to use basic version instead of advanced
+\newif\if@ctmmBasicForms
+\@ctmmBasicFormsfalse
+
+\DeclareOption{basic}{%
+    \@ctmmBasicFormstrue
+}
+
+\DeclareOption{enhanced}{%
+    \@ctmmBasicFormsfalse
+}
+
+\ProcessOptions\relax
+
+% ============================================================
+% LOAD APPROPRIATE FORM PACKAGE
+% ============================================================
+
+\if@ctmmBasicForms
+    % Load basic enhanced version (no tooltips, simpler)
+    \RequirePackage{form-elements-enhanced}
+    \PackageInfo{ctmm-form-elements}{Loading basic form elements (enhanced)}
+\else
+    % Load advanced V3 version (with tooltips, JavaScript, full features)
+    \RequirePackage{form-elements-v3}
+    \PackageInfo{ctmm-form-elements}{Loading advanced form elements (v3 with tooltips)}
+\fi
+
+% ============================================================
+% BACKWARD COMPATIBILITY ALIASES
+% ============================================================
+% All commands are already defined in the loaded packages,
+% so no additional aliases needed unless there are naming conflicts
+
+% If needed in the future, add aliases here:
+% \let\oldCommandName\newCommandName
+
+% ============================================================
+% END OF PACKAGE
+% ============================================================

@@ -1,0 +1,134 @@
+{
+  "timestamp": "2025-09-02 14:19:00 UTC",
+  "test_branch": "comprehensive-resolution-20250902-141854",
+  "summary": {
+    "total_prs": 11,
+    "successful_merges": 1,
+    "resolved_conflicts": 0,
+    "unresolved_conflicts": 8,
+    "fetch_failures": 0
+  },
+  "results": [
+    {
+      "pr_number": 1185,
+      "pr_title": "[WIP] identifiziere in diesem repo : l\u00f6se bei allen offenen pull request, die merge k",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "success",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": ""
+    },
+    {
+      "pr_number": 653,
+      "pr_title": "Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "unrelated_histories",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "fatal: refusing to merge unrelated histories\n | Attempted fix failed: "
+    },
+    {
+      "pr_number": 572,
+      "pr_title": "Copilot/fix 314",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "unrelated_histories",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "fatal: refusing to merge unrelated histories\n | Attempted fix failed: "
+    },
+    {
+      "pr_number": 571,
+      "pr_title": "Copilot/fix 237",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 569,
+      "pr_title": "Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 555,
+      "pr_title": "Copilot/fix 300",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 489,
+      "pr_title": "Fix CI workflow: resolve LaTeX package naming issue causing build failures",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 423,
+      "pr_title": "Fix CI workflow: correct LaTeX package names for German support",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 307,
+      "pr_title": "Fix LaTeX syntax error: Add missing backslash to \\textcolor command",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 232,
+      "pr_title": "Fix YAML syntax error in LaTeX build workflow",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    },
+    {
+      "pr_number": 3,
+      "pr_title": "Implement comprehensive LaTeX build and document conversion workflows",
+      "analysis_success": true,
+      "can_fetch": true,
+      "merge_status": "other_conflict",
+      "resolution_applied": false,
+      "resolution_type": "none",
+      "new_sha": "",
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
+    }
+  ]
+}
