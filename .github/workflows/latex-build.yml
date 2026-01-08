@@ -86,7 +86,7 @@ jobs:
         run: |
           echo "🔍 Assessing GitHub Actions runner environment..."
           echo "Runner OS: $RUNNER_OS"
-          echo "Runner Architecture: $RUNNER_ARCH" 
+          echo "Runner Architecture: $RUNNER_ARCH"
           echo "GitHub Actions Runner: $RUNNER_NAME"
           df -h / | head -2
           free -h | head -2
