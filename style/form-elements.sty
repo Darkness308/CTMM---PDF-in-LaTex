@@ -7,24 +7,24 @@
 \RequirePackage{calc}
 \RequirePackage{forloop}
 \RequirePackage{pifont}  % Für Checkbox-Symbole
-% Hyperref wird bereits in main.tex geladen
+% Hyperref is loaded in main.tex before this package
+% This ensures proper package ordering for PDF forms
 
 % Wichtig für \@ifpackageloaded
 \makeatletter
-copilot/vscode1754261474068
+
 % Interactive Form Detection
 \newcommand{\@ctmmInteractive}{true}
 
-% Check if hyperref is loaded for interactive forms
+% Verify hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
-    % hyperref is already loaded - just enable interactive mode
-    \newcommand{\@ctmmInteractive}{true}%
+    % hyperref is already loaded - good!
+    \PackageInfo{form-elements}{hyperref detected - interactive mode enabled}%
 }{%
-    % hyperref not loaded - load it and enable interactive mode
-    \RequirePackage{hyperref}%
-    \newcommand{\@ctmmInteractive}{true}%
+    % hyperref not loaded - warn user
+    \PackageWarning{form-elements}{hyperref not loaded - forms may not work correctly}%
 }
-main
+
 \makeatother
 
 % Text Field mit verbessertem Design
