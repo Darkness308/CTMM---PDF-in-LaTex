@@ -20,24 +20,12 @@
 \RequirePackage{forloop}
 
 % Advanced PDF form packages
-\RequirePackage[unicode]{hyperref}
-\RequirePackage{insdljs}  % JavaScript in PDF
-\RequirePackage{eforms}   % Enhanced Forms
+% NOTE: insdljs and eforms MUST be loaded in main.tex AFTER hyperref
+% They are not loaded here because hyperref must be loaded after all other packages
+% See main.tex for the proper loading order
 
-% Form configuration
-\hypersetup{
-    colorlinks=false,
-    pdfborder={0 0 0},
-    pdftitle={CTMM Therapeutic Materials - Interactive Forms},
-    pdfauthor={CTMM Team},
-    pdfsubject={Therapeutic Documentation System},
-    pdfcreator={LaTeX with CTMM Form Package v3.0.0},
-    pdfproducer={CTMM Therapeutic Documentation System},
-    pdfdisplaydoctitle=true,
-    pdfpagelayout=OneColumn,
-    pdfstartview=FitH,
-    pdfpagemode=UseNone
-}
+% NOTE: hyperref configuration is handled in main.tex
+% This package only defines form field commands and styling
 
 % ============================================================
 % FORM STYLING AND LAYOUT CONFIGURATION

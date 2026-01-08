@@ -19,9 +19,12 @@
 \usepackage{style/ctmm-design}
 \usepackage{style/ctmm-navigation}
 \usepackage{style/ctmm-form-elements} % Interaktive Formularelemente (lädt form-elements-v3 mit Tooltips)
-% hyperref MUSS als letztes geladen werden (vor bookmark!)
-\usepackage{hyperref}
-\usepackage{bookmark} % Optional: bessere Lesezeichen
+% hyperref MUSS vor abhängigen Paketen (insdljs, eforms) und vor bookmark geladen werden
+\usepackage[unicode]{hyperref}
+% insdljs und eforms benötigen hyperref und müssen danach geladen werden
+\usepackage{insdljs}  % JavaScript in PDF - für interaktive Formulare
+\usepackage{eforms}   % Enhanced Forms - für form-elements-v3
+\usepackage{bookmark} % Optional: bessere Lesezeichen - MUSS als letztes Paket geladen werden
 
 % Dokumentenkonfiguration
 \geometry{
@@ -32,13 +35,18 @@
 }
 
 \hypersetup{
-  % pdfborder={0 0 0}, % Optional: kann entfernt werden, falls Fehler
+  colorlinks=false,
+  pdfborder={0 0 0},
   pdftitle={CTMM-System - Interaktives Therapie-Workbook},
   pdfauthor={CTMM-Team},
   pdfsubject={Therapiematerialien mit ausfüllbaren Formularen},
   pdfkeywords={CTMM, Therapie, Trigger, Borderline, ADHS, ASS, KPTBS, interaktiv},
   pdfcreator={LaTeX mit hyperref},
   pdfproducer={pdfLaTeX},
+  pdfdisplaydoctitle=true,
+  pdfpagelayout=OneColumn,
+  pdfstartview=FitH,
+  pdfpagemode=UseNone,
   bookmarksopen=true,
   bookmarksopenlevel=1
 }
