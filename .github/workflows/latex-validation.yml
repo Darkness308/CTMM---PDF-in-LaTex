@@ -38,7 +38,7 @@ jobs:
           
           echo "Debug: hyperref at line $hyperref_line"
           echo "Debug: bookmark at line $bookmark_line"
-          
+
           # If bookmark exists, it should come after hyperref
           if [ -n "$bookmark_line" ] && [ "$bookmark_line" -lt "$hyperref_line" ]; then
             echo "::error ::bookmark package should come after hyperref"
@@ -51,7 +51,7 @@ jobs:
           echo "Debug: checking from line $next_line onward"
           packages_after_hyperref=$(echo "$packages" | tail -n +$next_line | grep -v 'bookmark')
           echo "Debug: packages after hyperref (filtered): '$packages_after_hyperref'"
-          
+
           if [ -n "$packages_after_hyperref" ]; then
             echo "::error ::Core packages found after hyperref (only bookmark is allowed): $packages_after_hyperref"
             exit 1
