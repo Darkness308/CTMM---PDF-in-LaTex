@@ -30,7 +30,7 @@ This PR addresses CI LaTeX build failures by implementing comprehensive fixes to
 uses: xu-cheng/latex-action@v3
 with:
   root_file: main.tex
-  args: -interaction=nonstopmode -halt-on-error -shell-escape
+  args: -interaction=nonstopmode -halt-on-error
 ```
 
 **Key Improvements:**
