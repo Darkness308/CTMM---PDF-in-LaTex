@@ -116,21 +116,21 @@ def validate_latex_packages():
     
     latex_step = None
     for step in steps:
-        if step.get('name') == 'Set up LaTeX' and 'xu-cheng/latex-action' in str(step.get('uses', '')):
+        if step.get('name') == 'Set up LaTeX' and 'dante-ev/latex-action' in str(step.get('uses', '')):
             latex_step = step
             break
     
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step with xu-cheng/latex-action not found in workflow")
+        print("❌ ERROR: 'Set up LaTeX' step with dante-ev/latex-action not found in workflow")
         return False
     
     # Check that the correct action is used
     action_uses = latex_step.get('uses', '')
-    if 'xu-cheng/latex-action@v3' not in action_uses:
-        print(f"❌ ERROR: Expected xu-cheng/latex-action@v3, found: {action_uses}")
+    if 'dante-ev/latex-action@v0.2.0' not in action_uses:
+        print(f"❌ ERROR: Expected dante-ev/latex-action@v0.2.0, found: {action_uses}")
         return False
     
-    print("✅ CORRECT: Using xu-cheng/latex-action@v3")
+    print("✅ CORRECT: Using dante-ev/latex-action@v0.2.0")
     
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
     print(f"📋 Found LaTeX packages configuration:")
