@@ -24,7 +24,6 @@ import sys
 import yaml
 import subprocess
 import re
-from pathlib import Path
 
 def test_yaml_syntax_fixes():
     """Test that all workflow files have properly quoted 'on:' keywords."""

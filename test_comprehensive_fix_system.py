@@ -6,9 +6,7 @@ Tests the end-to-end functionality described in the PR overview.
 
 import unittest
 import tempfile
-import subprocess
 import sys
-import os
 from pathlib import Path
 
 # Add current directory to path for imports

@@ -15,11 +15,10 @@ Author: CTMM-Team / Copilot
 Issue: #1118 - Form field standardization fix
 """
 
-import os
 import re
 import sys
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List
 
 class FormFieldValidator:
     def __init__(self, repo_root: str):

@@ -37,7 +37,6 @@ class TestLaTeXDeEscaper(unittest.TestCase):
     def test_basic_command_escaping(self):
         """Test fixing of basic over-escaped LaTeX commands."""
         content = r"\textbackslash{}hypertarget\textbackslash{}{some-target}"
-        expected = r"\hypertarget{some-target}"
         
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
@@ -51,7 +50,6 @@ class TestLaTeXDeEscaper(unittest.TestCase):
     def test_section_header_escaping(self):
         """Test fixing of over-escaped section headers."""
         content = r"\textbackslash{}section\textbackslash{}\textbackslash{}\textbackslash{}texorpdfstring\textbackslash{}{Title}{Plain Title}"
-        expected_pattern = r"\section{\texorpdfstring{Title}{Plain Title}}"
         
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)

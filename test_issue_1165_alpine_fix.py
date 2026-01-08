@@ -31,9 +31,6 @@ def test_alpine_compatibility():
         'texlive-latex-base'
     ]
     
-    # Alpine packages that are compatible
-    alpine_packages = ['py3-pygments', 'ghostscript']
-    
     success = True
     
     for workflow_file in workflow_files:

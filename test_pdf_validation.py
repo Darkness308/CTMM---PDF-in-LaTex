@@ -6,9 +6,7 @@ Tests the enhanced PDF validation that checks file existence and size.
 
 import unittest
 import tempfile
-import subprocess
 import sys
-import os
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 

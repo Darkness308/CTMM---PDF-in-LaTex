@@ -15,7 +15,6 @@ import os
 import shutil
 from pathlib import Path
 import sys
-import subprocess
 
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +23,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 try:
     from fix_latex_escaping import LaTeXDeEscaper
     from ctmm_build import test_basic_build, test_full_build, validate_latex_files
-    from latex_validator import LaTeXValidator
 except ImportError as e:
     print(f"Import error: {e}")
     print("Ensure all required modules are available")
@@ -235,7 +233,7 @@ This is a test document for PDF validation.
     
     def test_pdf_validation_logic_exists(self):
         """Test that enhanced PDF validation logic exists in build functions."""
-        # Import the build module and check for enhanced validation
+        # Check that the build functions exist from imported ctmm_build module
         import ctmm_build
         
         # Check that the build functions exist
