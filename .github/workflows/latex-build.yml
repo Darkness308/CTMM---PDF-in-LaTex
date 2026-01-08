@@ -121,7 +121,8 @@ jobs:
         uses: dante-ev/latex-action@v0.2.0
         with:
           root_file: main.tex
-          args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
+          # Note: shell-escape is intentionally disabled for security; enable only if a specific package requires it.
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
           extra_system_packages: |
             texlive-lang-german
             texlive-fonts-recommended
