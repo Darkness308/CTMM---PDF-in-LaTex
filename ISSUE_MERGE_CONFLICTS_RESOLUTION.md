@@ -58,9 +58,9 @@ Comprehensive analysis of the CTMM repository found **ZERO merge conflicts** and
 
 Searched for git merge conflict markers:
 ```
-<<<<<<< HEAD
-=======
->>>>>>> branch-name
+< < < < < < < HEAD
+= = = = = = =
+> > > > > > > branch-name
 ```
 
 **Result:** No conflict markers found in any file (except as string literals in test files, which is intentional)
