@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 # GitHub Copilot Instructions for CTMM LaTeX Therapeutic Materials System
 
 **DIRECTIVE: Always follow these instructions first. Only search for additional context if the information here is incomplete or found to be in error.**
-=======
-# Copilot Instructions for CTMM-System
->>>>>>> pr-653
 
 ## Project Overview
 
@@ -19,7 +15,6 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 
 **Language**: Primary content is in German (Deutsch)
 
-<<<<<<< HEAD
 ## Essential Setup & Dependencies
 
 ### Required Dependencies - Install First
@@ -140,107 +135,16 @@ python3 validate_pr.py
 ## LaTeX Architecture & Build Process
 
 ### Repository Structure
-=======
-## CTMM Methodology
-
-**CTMM** stands for **Catch-Track-Map-Match** - a structured therapeutic approach designed specifically for neurodiverse couples and individuals:
-
-### 🔍 **Catch** (Erkennen)
-- **Early Detection**: Identifying triggers, emotional states, and behavioral patterns before they escalate
-- **Mindfulness Techniques**: Developing awareness of internal and external cues
-- **Signal Recognition**: Learning to recognize warning signs in oneself and partner
-
-### 📊 **Track** (Verfolgen) 
-- **Documentation**: Systematic recording of patterns, triggers, and responses
-- **Progress Monitoring**: Tracking therapeutic goals and intervention effectiveness
-- **Data Collection**: Using worksheets (Arbeitsblätter) for structured self-reflection
-
-### 🗺️ **Map** (Zuordnen)
-- **Pattern Analysis**: Connecting triggers to responses and identifying recurring themes
-- **Relationship Mapping**: Understanding how individual patterns affect couple dynamics
-- **Resource Mapping**: Identifying available coping strategies and support systems
-
-### 🤝 **Match** (Anpassen)
-- **Personalized Interventions**: Tailoring therapeutic strategies to individual needs
-- **Couple Coordination**: Synchronizing approaches between partners
-- **Adaptive Responses**: Developing flexible coping mechanisms for different situations
-
-### 🎯 **Therapeutic Applications**
-The CTMM system is particularly effective for:
-- **Co-Regulation**: Partners learning to support each other's emotional regulation
-- **Trigger Management**: Proactive identification and response to emotional triggers
-- **Communication**: Structured approaches to difficult conversations
-- **Crisis Prevention**: Early intervention strategies to prevent escalation
-
-## Repository Structure
-
->>>>>>> pr-653
 ```
 ├── main.tex                    # Main LaTeX document (entry point)
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
-<<<<<<< HEAD
-│   ├── ctmm-form-elements.sty # Interactive form components  
-│   └── ctmm-navigation.sty    # Navigation system
-=======
 │   ├── form-elements.sty      # Interactive form components  
 │   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
->>>>>>> pr-653
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
 │   ├── trigger*.tex           # Trigger management modules
 │   ├── depression.tex         # Depression-related content
-<<<<<<< HEAD
-│   └── ...                    # Other therapeutic modules
-```
-
-### LaTeX Best Practices - CRITICAL Rules
-- **Package Loading**: ALL `\usepackage{...}` commands MUST be in `main.tex` preamble ONLY
-- **NEVER** load packages in modules or after `\begin{document}`
-- **Form Elements**: Use ONLY CTMM form elements:
-  ```latex
-  \ctmmCheckBox[field_name]{Label}     # Interactive checkbox
-  \ctmmTextField[width]{label}{name}   # Text input field
-  \ctmmTextArea[width]{lines}{label}{name}  # Multi-line text area
-  ```
-- **NEVER** use `\Box`, `\blacksquare`, or basic LaTeX form elements directly
-
-### Current LaTeX Compilation Issue
-**Known Problem**: LaTeX compilation currently fails due to malformed `\ctmmTextField` commands with incorrectly escaped underscores.
-
-**Error Pattern**:
-```
-! Missing } inserted.
-l.21 ...tmmTextField[4cm]{}{therapist_psycho\_mm &
-```
-
-**Do NOT attempt to fix this during normal development** - focus on build system validation and module development.
-
-## GitHub Actions & CI/CD
-
-### Workflows with Timing
-1. **`latex-build.yml`** - Main PDF build workflow
-   - LaTeX package installation: 15 minutes timeout
-   - Build validation steps: 5-10 minutes timeout each
-   - Total workflow: ~20-30 minutes when working
-
-2. **`latex-validation.yml`** - Syntax and structure validation
-   - Faster validation-only workflow
-   - 10-15 minutes total
-
-**CRITICAL TIMEOUTS**:
-- LaTeX package installation: NEVER CANCEL - takes 4-5 minutes, set 15+ minute timeout
-- Build system validation: NEVER CANCEL - set 10+ minute timeout
-- Unit tests: NEVER CANCEL - set 5+ minute timeout
-
-### CI Failure Prevention
-The repository has comprehensive CI failure prevention:
-```bash
-# Test CI robustness (for CI pipeline issues)
-python3 test_issue_1044_ci_robustness.py
-python3 test_comprehensive_ci_timeout_coverage.py
-```
-=======
 │   ├── bindungsleitfaden.tex  # Relationship binding guide
 │   ├── notfallkarten.tex      # Emergency intervention cards
 │   ├── safewords.tex          # Safe word systems
@@ -349,136 +253,21 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 - Navigation system with `\faCompass` icons
 - Interactive PDF features with hyperref integration
 - Form elements automatically adapt for print vs. digital use
->>>>>>> pr-653
 
 ## Development Workflow
 
 ### Adding New Modules
-<<<<<<< HEAD
-1. **Reference in main.tex**:
-=======
 
 1. **Reference in main.tex:**
->>>>>>> pr-653
    ```latex
    \input{modules/my-new-module}
    ```
 
-<<<<<<< HEAD
 2. **Run build system** (auto-generates templates):
-=======
-2. **Run build system:**
->>>>>>> pr-653
    ```bash
    python3 ctmm_build.py
    ```
 
-<<<<<<< HEAD
-3. **Files created automatically**:
-   - `modules/my-new-module.tex` - Template with basic structure
-   - `modules/TODO_my-new-module.md` - Task list for completion
-
-4. **Complete module content** and remove TODO file when finished
-
-### Development Best Practices
-- Always run `python3 ctmm_build.py` after making changes
-- Use `make validate` to check for LaTeX escaping issues
-- Run `make unit-test` frequently during development
-- Use `make validate-pr` before creating pull requests
-
-## Validation Scenarios - Test These After Changes
-
-### 1. Build System Validation
-```bash
-# Primary validation - ALWAYS works
-python3 ctmm_build.py
-# Expected: All checks pass, files exist or templates created
-```
-
-### 2. Unit Test Validation  
-```bash
-# Comprehensive test suite
-make unit-test
-# Expected: All 77 tests pass
-```
-
-### 3. LaTeX Structure Validation
-```bash
-# Validate LaTeX syntax and escaping
-make validate
-# Expected: No escaping issues found
-```
-
-### 4. Form Element Testing (Manual)
-When LaTeX compilation is working:
-- Test interactive PDF forms in generated PDF
-- Verify checkboxes, text fields, and text areas function
-- Check form field naming and accessibility
-
-### 5. Module Integration Testing
-```bash
-# Test individual modules by temporarily commenting others in main.tex
-# Uncomment one module at a time to isolate issues
-```
-
-## Troubleshooting Common Issues
-
-### Build Errors
-- `Undefined control sequence` → Check if macro is defined in `main.tex` preamble
-- `Can be used only in preamble` → Move `\usepackage` to `main.tex` preamble  
-- Missing file errors → Run `python3 ctmm_build.py` to auto-generate templates
-- Form element errors → Check `\ctmmTextField` syntax and escaping
-
-### LaTeX Package Issues
-```bash
-# FontAwesome missing
-sudo apt-get install texlive-fonts-extra
-
-# German language support missing  
-sudo apt-get install texlive-lang-german
-
-# Complete package installation
-sudo apt-get install texlive-full
-```
-
-### CI/CD Issues
-- Check GitHub Actions logs for timeout issues
-- Verify all timeouts are set to appropriate values (10+ minutes)
-- Use comprehensive validation scripts to identify pipeline problems
-
-## Quick Reference
-
-### Most Important Commands
-```bash
-# 1. ALWAYS start here - primary build validation
-python3 ctmm_build.py                    # 1.9s, timeout: 5min
-
-# 2. Test changes thoroughly  
-make unit-test                          # 0.2s, timeout: 3min
-
-# 3. Validate before PR
-make validate-pr                        # 0.1s, timeout: 2min
-
-# 4. Fix LaTeX issues
-make validate                           # Check escaping
-make validate-fix                       # Fix with backups
-```
-
-### Key Files to Know
-- `main.tex` - Document entry point and ALL package definitions
-- `ctmm_build.py` - Primary build system and validation
-- `Makefile` - Common build commands and shortcuts
-- `.github/workflows/` - CI/CD pipelines with proper timeouts
-
-### Timing Expectations - NEVER CANCEL
-- **Build system check**: 1.9 seconds  
-- **Unit tests**: 0.2 seconds
-- **LaTeX package installation**: 4-5 minutes
-- **PR validation**: 0.1 seconds
-- **LaTeX compilation**: 1-2 seconds (when working)
-
-**Remember**: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts. Always test thoroughly and validate changes comprehensively before committing.
-=======
 3. **Auto-generated files:**
    - `modules/my-new-module.tex` - Template with basic structure
    - `modules/TODO_my-new-module.md` - Task list for completion
@@ -592,4 +381,3 @@ CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing tr
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
 Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
->>>>>>> pr-653
