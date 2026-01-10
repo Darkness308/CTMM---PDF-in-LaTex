@@ -37,7 +37,12 @@ def print_step(step_num, description):
     print("-" * 50)
 
 def run_command(cmd, description, check=True):
-    """Run a command and handle errors gracefully."""
+    """Run a command and handle errors gracefully.
+    
+    Note: shell=True is used here because all commands are hardcoded string literals
+    (e.g., "python3 validate_latex_syntax.py", "make clean") with no user input,
+    making this usage safe from command injection vulnerabilities.
+    """
     try:
         print(f"Running: {description}")
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True, errors='replace')

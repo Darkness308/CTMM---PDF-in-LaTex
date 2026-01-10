@@ -16,7 +16,7 @@ import time
 import json
 import subprocess
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 class ContinuousBuildHealer:
     """
@@ -37,7 +37,7 @@ class ContinuousBuildHealer:
         self.healed_workflows = []
         self.failed_healing_attempts = []
     
-    def check_workflow_status(self) -> Dict[str, any]:
+    def check_workflow_status(self) -> Dict[str, Any]:
         """
         Check current status of all workflows in the repository.
         
