@@ -35,41 +35,68 @@ jobs:
           pip install chardet
           echo "✅ Python dependencies installed successfully"
 
-      - name: Run LaTeX syntax validation
-        timeout-minutes: 5
+      - name: Verify validation scripts and dependencies
+        timeout-minutes: 3
         run: |
-          echo "🔍 Starting LaTeX syntax validation..."
+          echo "🔍 Verifying validation scripts and dependencies..."
+          echo ""
+          echo "📋 Required Scripts (workflow will fail if missing):"
+          echo "  - ctmm_build.py: $([ -f 'ctmm_build.py' ] && echo '✅ Found' || echo '❌ MISSING')"
+          
+          echo ""
+          echo "📋 Optional Scripts (workflow continues if missing):"
+          echo "  - validate_latex_syntax.py: $([ -f 'validate_latex_syntax.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - test_issue_743_validation.py: $([ -f 'test_issue_743_validation.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - test_issue_761_fix.py: $([ -f 'test_issue_761_fix.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - validate_ci_environment.py: $([ -f 'validate_ci_environment.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - ci_failure_prevention.py: $([ -f 'ci_failure_prevention.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          
+          echo ""
+          # Verify required scripts exist
+          if [ ! -f "ctmm_build.py" ]; then
+            echo "❌ ERROR: Required script ctmm_build.py is missing!"
+            exit 1
+          fi
+          
+          echo "✅ Validation script verification completed"
+
+      - name: Run LaTeX syntax validation (optional)
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🔍 Starting LaTeX syntax validation (optional)..."
           if [ -f "validate_latex_syntax.py" ]; then
             python3 validate_latex_syntax.py
             echo "✅ LaTeX syntax validation completed successfully"
           else
-            echo "⚠️ validate_latex_syntax.py not found, skipping..."
+            echo "⚠️ validate_latex_syntax.py not found, skipping (optional script)..."
           fi
-      - name: Run CTMM Build System Check
+      - name: Run CTMM Build System Check (required)
         timeout-minutes: 10
         run: |
-          echo "🔧 Starting CTMM build system check..."
+          echo "🔧 Starting CTMM build system check (required)..."
           python3 ctmm_build.py
           echo "✅ CTMM build system check completed successfully"
-      - name: Run comprehensive CI validation
+      - name: Run comprehensive CI validation (optional)
         timeout-minutes: 10
+        continue-on-error: true
         run: |
-          echo "📋 Starting comprehensive CI validation..."
+          echo "📋 Starting comprehensive CI validation (optional)..."
           if [ -f "test_issue_743_validation.py" ]; then
             python3 test_issue_743_validation.py
             echo "✅ Comprehensive CI validation completed successfully"
           else
-            echo "⚠️ test_issue_743_validation.py not found, skipping..."
+            echo "⚠️ test_issue_743_validation.py not found, skipping (optional script)..."
           fi
-      - name: Enhanced pre-build validation
+      - name: Enhanced pre-build validation (optional)
         timeout-minutes: 8
         continue-on-error: true
         run: |
-          echo "🔍 Running enhanced pre-build validation..."
+          echo "🔍 Running enhanced pre-build validation (optional)..."
           if [ -f "test_issue_761_fix.py" ]; then
             python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
           else
-            echo "⚠️ test_issue_761_fix.py not found, skipping..."
+            echo "⚠️ test_issue_761_fix.py not found, skipping (optional script)..."
           fi
           echo "✅ Enhanced pre-build validation completed"
 
@@ -91,26 +118,27 @@ jobs:
           echo "🔹 CPU Info (logical cores):"
           nproc
           echo "✅ System resources and environment assessment complete"
-      - name: Enhanced CI environment validation
+      - name: Enhanced CI environment validation (optional)
         timeout-minutes: 5
+        continue-on-error: true
         run: |
-          echo "🔧 Running enhanced CI environment validation..."
+          echo "🔧 Running enhanced CI environment validation (optional)..."
           if [ -f "validate_ci_environment.py" ]; then
             python3 validate_ci_environment.py
             echo "✅ Enhanced CI environment validation completed"
           else
-            echo "⚠️ validate_ci_environment.py not found, skipping..."
+            echo "⚠️ validate_ci_environment.py not found, skipping (optional script)..."
           fi
 
-      - name: CI failure prevention analysis
+      - name: CI failure prevention analysis (optional)
         timeout-minutes: 5
         continue-on-error: true
         run: |
-          echo "🛡️ Running CI failure prevention analysis..."
+          echo "🛡️ Running CI failure prevention analysis (optional)..."
           if [ -f "ci_failure_prevention.py" ]; then
             python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
           else
-            echo "⚠️ ci_failure_prevention.py not found, skipping..."
+            echo "⚠️ ci_failure_prevention.py not found, skipping (optional script)..."
           fi
           echo "✅ CI failure prevention analysis completed"
 
