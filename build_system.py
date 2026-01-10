@@ -410,7 +410,7 @@ def enhanced_incremental_testing(main_tex_path="main.tex"):
         "unknown_errors": []
     }
     
-    logger.info(f"Running enhanced testing on {len(build_system.module_files)} modules...")
+    logger.info("Running enhanced testing on %d modules...", len(build_system.module_files))
     
     # Test each module with enhanced error detection
     successful_modules = 0
