@@ -38,11 +38,11 @@ create_feature() {
         echo "Beispiel: ./ctmm-workflow.sh feature mein-feature"
         exit 1
     fi
-    
+
     echo -e "${YELLOW}Wechsle zu develop und aktualisiere...${NC}"
     git checkout develop || git checkout -b develop
     git pull origin develop || true
-    
+
     branch_name="feature/$1"
     echo -e "${YELLOW}Erstelle neuen Feature-Branch: $branch_name${NC}"
     git checkout -b "$branch_name"
@@ -56,11 +56,11 @@ create_fix() {
         echo "Beispiel: ./ctmm-workflow.sh fix latex-underscore-escaping"
         exit 1
     fi
-    
+
     echo -e "${YELLOW}Wechsle zu develop und aktualisiere...${NC}"
     git checkout develop || git checkout -b develop
     git pull origin develop || true
-    
+
     branch_name="fix/$1"
     echo -e "${YELLOW}Erstelle neuen Bugfix-Branch: $branch_name${NC}"
     git checkout -b "$branch_name"
@@ -75,7 +75,7 @@ create_commit() {
         echo "Verfügbare Typen: fix, add, upd, doc, ref, sty"
         exit 1
     fi
-    
+
     case "$1" in
         fix) prefix="[FIX]";;
         add) prefix="[ADD]";;
@@ -88,7 +88,7 @@ create_commit() {
             exit 1
             ;;
     esac
-    
+
     commit_msg="$prefix $2"
     echo -e "${YELLOW}Erstelle Commit: $commit_msg${NC}"
     git commit -m "$commit_msg"
@@ -100,11 +100,11 @@ push_branch() {
     current_branch=$(git branch --show-current)
     echo -e "${YELLOW}Pushe aktuellen Branch: $current_branch${NC}"
     git push -u origin "$current_branch"
-    
+
     # Repository-URL ermitteln
     remote_url=$(git remote get-url origin)
     repo_url=$(echo "$remote_url" | sed -e 's/^git@github.com:/https:\/\/github.com\//' -e 's/\.git$//' -e 's/^https:\/\/github.com\//https:\/\/github.com\//')
-    
+
     echo -e "${GREEN}Branch wurde gepusht. PR erstellen:${NC}"
     echo -e "${BLUE}$repo_url/pull/new/$current_branch${NC}"
 }
@@ -115,7 +115,7 @@ finish_feature() {
     echo -e "${YELLOW}Wechsle zu develop und aktualisiere...${NC}"
     git checkout develop || git checkout -b develop
     git pull origin develop || true
-    
+
     echo -e "${YELLOW}Lösche lokalen Branch: $current_branch${NC}"
     git branch -d "$current_branch" || echo -e "${RED}Branch konnte nicht gelöscht werden. Möglicherweise wurden Änderungen noch nicht gemerged.${NC}"
     echo -e "${GREEN}Feature abgeschlossen. Du befindest dich jetzt im develop-Branch.${NC}"
@@ -127,7 +127,7 @@ build_project() {
     mkdir -p build
     pdflatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex
     pdflatex -synctex=1 -interaction=nonstopmode -file-line-error -output-directory=build main.tex  # Zweiter Lauf für Referenzen
-    
+
     if [ -f build/main.pdf ]; then
         echo -e "${GREEN}PDF erfolgreich erstellt: build/main.pdf${NC}"
         echo "Öffne PDF im Standardviewer..."
@@ -144,23 +144,23 @@ create_release() {
         echo "Beispiel: ./ctmm-workflow.sh release 1.2.0"
         exit 1
     fi
-    
+
     version="v$1"
-    
+
     echo -e "${YELLOW}Wechsle zu develop und aktualisiere...${NC}"
     git checkout develop || git checkout -b develop
     git pull origin develop || true
-    
+
     branch_name="release/$version"
     echo -e "${YELLOW}Erstelle neuen Release-Branch: $branch_name${NC}"
     git checkout -b "$branch_name"
-    
+
     # Build erstellen und Versionsnummer setzen
     echo -e "${YELLOW}Aktualisiere Version...${NC}"
     echo "$version" > VERSION
     git add VERSION
     git commit -m "[REL] Version $version vorbereiten"
-    
+
     echo -e "${GREEN}Release-Branch $branch_name erstellt.${NC}"
     echo -e "${BLUE}Nächste Schritte:${NC}"
     echo "1. Führe Tests durch"
@@ -173,11 +173,11 @@ create_release() {
 # Funktion zur Überprüfung der Umgebungseinstellungen
 check_environment() {
     echo -e "${YELLOW}Überprüfe Git-Konfiguration...${NC}"
-    
+
     # Git-Konfiguration überprüfen
     git_user=$(git config --get user.name)
     git_email=$(git config --get user.email)
-    
+
     if [ -z "$git_user" ] || [ -z "$git_email" ]; then
         echo -e "${RED}Git-Benutzer nicht vollständig konfiguriert!${NC}"
         echo "Bitte konfigurieren Sie Git mit folgenden Befehlen:"
@@ -186,7 +186,7 @@ check_environment() {
     else
         echo -e "${GREEN}Git-Benutzer konfiguriert als: $git_user <$git_email>${NC}"
     fi
-    
+
     # Branch-Struktur überprüfen
     echo -e "${YELLOW}Überprüfe Branch-Struktur...${NC}"
     if ! git rev-parse --verify develop &>/dev/null; then
@@ -200,12 +200,12 @@ check_environment() {
     else
         echo -e "${GREEN}Develop-Branch existiert.${NC}"
     fi
-    
+
     # LaTeX-Umgebung überprüfen
     echo -e "${YELLOW}Überprüfe LaTeX-Umgebung...${NC}"
     if command -v pdflatex &>/dev/null; then
         echo -e "${GREEN}pdflatex ist installiert.${NC}"
-        
+
         # Verzeichnisstruktur prüfen
         for dir in "build" "modules" "style"; do
             if [ ! -d "$dir" ]; then
@@ -225,15 +225,15 @@ check_environment() {
 # Funktion zum Korrigieren von LaTeX-Formularfeldern
 fix_latex_fields() {
     echo -e "${YELLOW}Korrigiere LaTeX-Formularfelder...${NC}"
-    
+
     # Zähler für gefundene und korrigierte Fehler
     found=0
     fixed=0
-    
+
     # Suche nach Formularfeldern mit Underscores ohne Escape
     echo -e "${YELLOW}Suche nach nicht-escapten Underscores in Formularfeldern...${NC}"
     files=$(find modules -name "*.tex" -type f)
-    
+
     for file in $files; do
         # Suche nach Mustern wie {name_id} und ersetze sie mit {name\_id}
         while IFS= read -r line; do
@@ -241,7 +241,7 @@ fix_latex_fields() {
                 if [[ "$line" =~ \{\}\{[^}]*_[^}]*\} ]]; then
                     found=$((found+1))
                     echo -e "${YELLOW}Gefunden in $file:${NC} $line"
-                    
+
                     # Ersetzt Underscores innerhalb von {}
                     fixed_line=$(echo "$line" | sed -E 's/(\{\}\{[^}]*)_([^}]*\})/\1\\_\2/g')
                     sed -i "s/$line/$fixed_line/" "$file" && fixed=$((fixed+1))
@@ -249,7 +249,7 @@ fix_latex_fields() {
             fi
         done < "$file"
     done
-    
+
     echo -e "${GREEN}Formularfeld-Überprüfung abgeschlossen:${NC}"
     echo "Gefundene Probleme: $found"
     echo "Korrigierte Probleme: $fixed"

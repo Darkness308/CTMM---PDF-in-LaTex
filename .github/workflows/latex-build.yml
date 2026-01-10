@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "🔍 Assessing GitHub Actions runner environment..."
           echo "Runner OS: $RUNNER_OS"
-          echo "Runner Architecture: $RUNNER_ARCH" 
+          echo "Runner Architecture: $RUNNER_ARCH"
           echo "GitHub Actions Runner: $RUNNER_NAME"
           df -h / | head -2
           free -h | head -2
@@ -110,82 +110,85 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
+            python3-pygments
+            py3-pygments
             ghostscript
-            
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
           echo "🔍 Enhanced PDF verification and analysis..."
-          
+
+          # Check for PDF in current directory (xu-cheng/latex-action output location)
           if [ -f "main.pdf" ]; then
-            echo "✅ PDF successfully generated"
-            
-            # Detailed file analysis
-            echo "📊 PDF File Analysis:"
-            ls -la main.pdf
-            file main.pdf
-            
-            # Check PDF size (should be substantial for a complete document)
-            PDF_SIZE=$(stat -c%s "main.pdf")
-            echo "📄 PDF Size: $PDF_SIZE bytes"
-            
-            if [ "$PDF_SIZE" -lt 10000 ]; then
-              echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
-            elif [ "$PDF_SIZE" -gt 100000 ]; then
-              echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
-            else
-              echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
-            fi
-            
-            # Verify FontAwesome package support
-            echo "🔍 Checking FontAwesome package support..."
-            if grep -q "fontawesome5" main.log 2>/dev/null; then
-              echo "✅ FontAwesome5 package was loaded successfully"
-            else
-              echo "⚠️  FontAwesome5 package loading status unknown"
-            fi
-            
-            # Try to extract basic PDF info if available
-            if command -v pdfinfo &> /dev/null; then
-              echo "📋 PDF Information:"
-              pdfinfo main.pdf || echo "Unable to extract PDF info"
-            fi
-            
-            echo "✅ Enhanced PDF verification completed successfully"
+            echo "✅ PDF successfully generated in current directory"
+            PDF_LOCATION="main.pdf"
           else
             echo "❌ PDF generation failed"
             echo "🔍 Comprehensive error analysis..."
-            
+
             # Check for LaTeX log files
             echo "📄 Searching for LaTeX log files..."
             find . -name "*.log" -type f | head -10
-            
+
             # Display recent log content with better formatting
             echo ""
             echo "📋 LaTeX Log Analysis:"
             echo "====================="
             find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
-            
+
             # Check for FontAwesome related errors
             echo ""
             echo "🔍 FontAwesome Error Check:"
             echo "=========================="
             find . -name "*.log" -exec grep -i "fontawesome\|font.*not.*found" {} \; 2>/dev/null || echo "No FontAwesome-related errors found"
-            
+
             # Check for aux files and other intermediate files
             echo ""
             echo "📁 Intermediate Files Check:"
             echo "============================="
             ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
-            
+
             # Check disk space
             echo ""
             echo "💾 Disk Space Analysis:"
             echo "======================"
             df -h .
-            
+
             exit 1
           fi
+
+          # Detailed file analysis
+          echo "📊 PDF File Analysis:"
+          ls -la "$PDF_LOCATION"
+          file "$PDF_LOCATION"
+
+          # Check PDF size (should be substantial for a complete document)
+          PDF_SIZE=$(stat -c%s "$PDF_LOCATION")
+          echo "📄 PDF Size: $PDF_SIZE bytes"
+
+          if [ "$PDF_SIZE" -lt 10000 ]; then
+            echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
+          elif [ "$PDF_SIZE" -gt 100000 ]; then
+            echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
+          else
+            echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
+          fi
+
+          # Verify FontAwesome package support
+          echo "🔍 Checking FontAwesome package support..."
+          if grep -q "fontawesome5" main.log 2>/dev/null; then
+            echo "✅ FontAwesome5 package was loaded successfully"
+          else
+            echo "⚠️  FontAwesome5 package loading status unknown"
+          fi
+
+          # Try to extract basic PDF info if available
+          if command -v pdfinfo &> /dev/null; then
+            echo "📋 PDF Information:"
+            pdfinfo "$PDF_LOCATION" || echo "Unable to extract PDF info"
+          fi
+
+          echo "✅ Enhanced PDF verification completed successfully"
 
       - name: Upload PDF artifact
         timeout-minutes: 5

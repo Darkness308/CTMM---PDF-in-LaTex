@@ -14,7 +14,7 @@
                 "args": ["${workspaceFolder}/ctmm_build.py"]
             },
             "osx": {
-                "command": "python3", 
+                "command": "python3",
                 "args": ["${workspaceFolder}/ctmm_build.py"]
             },
             "group": {
@@ -35,7 +35,7 @@
         },
         {
             "label": "CTMM: Build Single Module",
-            "type": "shell", 
+            "type": "shell",
             "command": "pdflatex",
             "args": ["-interaction=nonstopmode", "-file-line-error", "-output-directory=build", "main.tex"],
             "windows": {
@@ -45,7 +45,7 @@
             "problemMatcher": "$latex",
             "presentation": {
                 "echo": true,
-                "reveal": "always", 
+                "reveal": "always",
                 "focus": false,
                 "panel": "shared"
             },
@@ -94,7 +94,7 @@
             }
         },
         {
-            "label": "CTMM: Create Build Directory", 
+            "label": "CTMM: Create Build Directory",
             "type": "shell",
             "command": "mkdir",
             "args": ["-p", "build"],
