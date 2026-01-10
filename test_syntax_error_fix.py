@@ -17,7 +17,7 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
     def setUp(self):
         """Set up test by reading the ctmm_build.py file."""
         self.ctmm_build_path = os.path.join(
-            os.path.dirname(__file__), 
+            os.path.dirname(__file__),
             "ctmm_build.py"
         )
         with open(self.ctmm_build_path, 'r', encoding='utf-8') as f:
@@ -34,22 +34,22 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
         """Test that template creation section has proper try-except structure."""
         # Parse the source code
         tree = ast.parse(self.source_code)
-        
+
         # Find the main() function
         main_func = None
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) and node.name == 'main':
                 main_func = node
                 break
-        
+
         self.assertIsNotNone(main_func, "main() function not found")
-        
+
         # Look for try-except blocks in main()
         try_blocks = []
         for node in ast.walk(main_func):
             if isinstance(node, ast.Try):
                 try_blocks.append(node)
-        
+
         # Ensure we have try-except blocks
         self.assertGreater(
             len(try_blocks), 0,
@@ -60,7 +60,7 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
         """Test that there are no orphaned except blocks without matching try."""
         # Parse the source code
         tree = ast.parse(self.source_code)
-        
+
         # Walk through the AST and verify structure
         for node in ast.walk(tree):
             # All except handlers should be part of a Try node
@@ -72,7 +72,7 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
                         if node in potential_parent.handlers:
                             parent_has_try = True
                             break
-                
+
                 # If we found an ExceptHandler, it should be in a Try
                 # (This is actually impossible in valid Python AST, but we test it anyway)
                 self.assertTrue(
@@ -84,25 +84,25 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
         """Test that template creation has proper error handling structure."""
         # This test verifies the specific fix for the reported issue
         # The code should have: if total_missing > 0: ... try: ... except:
-        
+
         lines = self.source_code.split('\n')
-        
+
         # Find the template creation section
         template_section_start = None
         for i, line in enumerate(lines):
             if 'Creating templates for missing files' in line:
                 template_section_start = i
                 break
-        
+
         self.assertIsNotNone(
             template_section_start,
             "Template creation section not found"
         )
-        
+
         # Check that there's a try block after the print statement
         found_try = False
         found_except = False
-        
+
         # Look in the next 20 lines for try and except
         for i in range(template_section_start, min(template_section_start + 20, len(lines))):
             line = lines[i].strip()
@@ -110,7 +110,7 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
                 found_try = True
             if line.startswith('except Exception as e:'):
                 found_except = True
-        
+
         self.assertTrue(
             found_try,
             "Template creation section missing try block"
@@ -123,7 +123,7 @@ class TestCTMMBuildSyntaxFix(unittest.TestCase):
     def test_all_try_blocks_have_except(self):
         """Test that all try blocks have corresponding except or finally."""
         tree = ast.parse(self.source_code)
-        
+
         for node in ast.walk(tree):
             if isinstance(node, ast.Try):
                 # Each Try node should have either handlers or finalbody
