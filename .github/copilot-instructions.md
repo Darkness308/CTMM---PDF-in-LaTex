@@ -7,7 +7,7 @@
 This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
 
 - Depression and mood disorders
-- Trigger management 
+- Trigger management
 - Borderline Personality Disorder (BPD)
 - ADHD, Autism Spectrum Disorder (ASD)
 - Complex PTSD (CPTSD)
@@ -102,7 +102,7 @@ python3 test_latex_validator.py  # 21 validator tests
 
 **Test Coverage**:
 - `filename_to_title()` function (29 test cases)
-- Build system core functions (27+ test cases)  
+- Build system core functions (27+ test cases)
 - LaTeX validator functions (21 test cases)
 
 ### LaTeX Validation & Escaping Issues
@@ -128,7 +128,7 @@ python3 validate_pr.py
 
 **PR Requirements for Copilot Review**:
 - At least 1 file with meaningful changes
-- Substantive content changes (not just whitespace)  
+- Substantive content changes (not just whitespace)
 - Successful CTMM build system validation
 - Use provided PR template
 
@@ -301,13 +301,6 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 - **Cultural sensitivity**: Content is designed for German-speaking therapy contexts
 - **Professional tone**: Maintain therapeutic, non-judgmental language
 
-**CTMM Methodology:**
-CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing triggers and relationship challenges:
-- **Catch:** Recognize triggers and emotional states
-- **Track:** Monitor feelings and situational patterns  
-- **Map:** Understand underlying patterns and dynamics
-- **Match:** Adapt responses and interventions appropriately
-
 **Content Types:**
 - **Arbeitsblätter** (Worksheets): Interactive forms for self-reflection
 - **Trigger Management**: Coping strategies and identification tools
@@ -363,16 +356,35 @@ CTMM stands for **Catch-Track-Map-Match** - a systematic approach to managing tr
 
 ## Quick Reference
 
+### Most Important Commands
+```bash
+# 1. ALWAYS start here - primary build validation
+python3 ctmm_build.py                    # 1.9s, timeout: 5min
+
+# 2. Test changes thoroughly  
+make unit-test                          # 0.2s, timeout: 3min
+
+# 3. Validate before PR
+make validate-pr                        # 0.1s, timeout: 2min
+
+# 4. Fix LaTeX issues
+make validate                           # Check escaping
+make validate-fix                       # Fix with backups
+```
+
 **Build Commands:**
 - `python3 ctmm_build.py` - Main build system
 - `make check` - Quick dependency check
 - `make build` - Generate PDF
 - `make clean` - Remove artifacts
 
-**Key Files:**
-- `main.tex` - Document entry point and preamble
+### Key Files to Know
+- `main.tex` - Document entry point and ALL package definitions
+- `ctmm_build.py` - Primary build system and validation
 - `style/*.sty` - Design and component definitions
 - `modules/*.tex` - Individual therapy content
+- `Makefile` - Common build commands and shortcuts
+- `.github/workflows/` - CI/CD pipelines with proper timeouts
 
 **Common Macros:**
 - `\ctmmCheckBox[name]{label}` - Interactive form checkboxes

@@ -9,44 +9,44 @@ import json
 
 def test_workflow_files():
     """Test each workflow file for GitHub Actions compatibility."""
-    
+
     workflow_files = [
         '.github/workflows/latex-build.yml',
-        '.github/workflows/latex-validation.yml', 
+        '.github/workflows/latex-validation.yml',
         '.github/workflows/static.yml',
         '.github/workflows/pr-validation.yml',
         '.github/workflows/automated-pr-merge-test.yml'
     ]
-    
+
     print("Testing GitHub Actions workflow file structure...")
     print("=" * 60)
-    
+
     for file_path in workflow_files:
         print(f"\n🔍 Testing {os.path.basename(file_path)}")
         print("-" * 40)
-        
+
         with open(file_path, 'r') as f:
             content = f.read()
-        
+
         try:
             # Parse YAML
             workflow = yaml.safe_load(content)
-            
+
             # Required fields check
             required_fields = ['name', 'on', 'jobs']
             missing_fields = [field for field in required_fields if field not in workflow]
-            
+
             if missing_fields:
                 print(f"❌ Missing required fields: {missing_fields}")
                 continue
-            
+
             print(f"✅ Name: {workflow['name']}")
-            
+
             # Check triggers
             triggers = workflow['on']
             if isinstance(triggers, dict):
                 print(f"✅ Triggers: {list(triggers.keys())}")
-                
+
                 # Validate common trigger types
                 for trigger_type in triggers:
                     if trigger_type in ['push', 'pull_request']:
@@ -62,12 +62,12 @@ def test_workflow_files():
             else:
                 print(f"❌ Invalid triggers format: {type(triggers)}")
                 continue
-            
+
             # Check jobs
             jobs = workflow['jobs']
             if isinstance(jobs, dict):
                 print(f"✅ Jobs: {list(jobs.keys())}")
-                
+
                 for job_name, job_config in jobs.items():
                     if 'runs-on' in job_config:
                         print(f"   {job_name}: {job_config['runs-on']}")
@@ -76,9 +76,9 @@ def test_workflow_files():
             else:
                 print(f"❌ Invalid jobs format: {type(jobs)}")
                 continue
-                
+
             print("✅ Workflow structure is valid")
-            
+
         except yaml.YAMLError as e:
             print(f"❌ YAML parsing error: {e}")
         except Exception as e:

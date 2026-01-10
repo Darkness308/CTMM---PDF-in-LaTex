@@ -73,7 +73,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("bindung_muster", "Bindung Muster"),
             ("kommunikation_skills", "Kommunikation Skills"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -103,7 +103,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("ptsd-coping-strategies", "Ptsd Coping Strategies"),
             ("adhd_attention_exercises", "Adhd Attention Exercises"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -117,7 +117,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("module_name.txt", "Module Name.txt"),
             ("test.file.name", "Test.file.name"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -131,7 +131,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("therapie_übung", "Therapie Übung"),
             ("test_ß_character", "Test Ss Character"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -146,7 +146,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("_", ""),
             ("-", ""),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -166,7 +166,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("ängste_bewältigen", "Ängste Bewältigen"),
             ("selbst-fürsorge", "Selbst Fürsorge"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -181,7 +181,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("config$test", "Config$test"),
             ("module%name", "Module%name"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -194,7 +194,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("2_advanced_techniques", "2 Advanced Techniques"),
             ("session_10_review", "Session 10 Review"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -208,7 +208,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("  spaced  out  ", "Spaced Out"),
             ("tab\tcharacter", "Tab Character"),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -222,7 +222,7 @@ class TestFilenameToTitle(unittest.TestCase):
             ("hello---world", "Hello World"),    # Multiple hyphens
             ("hello_-_world", "Hello World"),    # Mixed separators
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = ctmm_build.filename_to_title(input_name)
@@ -282,13 +282,13 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         # Test scan_references returns structured data
         references = ctmm_build.scan_references("main.tex")
         self.assertIsInstance(references, dict)
-        
+
         # Verify required keys exist
         required_keys = ["style_files", "module_files"]
         for key in required_keys:
             self.assertIn(key, references, f"Missing required key: {key}")
             self.assertIsInstance(references[key], list, f"Key {key} should be a list")
-        
+
         # Test check_missing_files returns list
         all_files = references["style_files"] + references["module_files"]
         missing_files = ctmm_build.check_missing_files(all_files)
@@ -301,7 +301,7 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result, dict)
         self.assertEqual(result["style_files"], [])
         self.assertEqual(result["module_files"], [])
-        
+
         # Test check_missing_files with empty list
         result = ctmm_build.check_missing_files([])
         self.assertIsInstance(result, list)
@@ -310,10 +310,10 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
     def test_build_system_numbered_steps(self):
         """Test that the build system implements numbered steps as described in PR."""
         # This test verifies the main function structure without actually running it
-        
+
         # Get the source code of the main function
         source = inspect.getsource(ctmm_build.main)
-        
+
         # Check that numbered steps are implemented
         self.assertIn("step = 1", source, "Build system should use numbered steps")
         self.assertIn("step += 1", source, "Build system should increment step numbers")
@@ -321,10 +321,10 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
 
     def test_structured_data_returns_enhanced(self):
         """Test that the enhanced build system returns structured data."""
-        
+
         # Get the source code of the main function
         source = inspect.getsource(ctmm_build.main)
-        
+
         # Check for structured data patterns
         self.assertIn("build_data", source, "Main function should use structured data")
         self.assertIn("latex_validation", source, "Should track LaTeX validation status")
@@ -333,10 +333,10 @@ class TestCTMMBuildSystemIntegration(unittest.TestCase):
 
     def test_enhanced_error_handling(self):
         """Test that the enhanced build system has proper error handling."""
-        
+
         # Get the source code of the main function
         source = inspect.getsource(ctmm_build.main)
-        
+
         # Check for try-except blocks
         self.assertIn("try:", source, "Main function should have error handling")
         self.assertIn("except Exception as e:", source, "Should catch and handle exceptions")
@@ -356,19 +356,19 @@ class TestBuildSystemStructuredData(unittest.TestCase):
 
     def test_build_data_structure(self):
         """Test that build data structure is properly defined."""
-        
+
         # Get the source code to examine data structure
         source = inspect.getsource(ctmm_build.main)
-        
+
         # Check for expected data structure keys
         expected_keys = [
             "latex_validation",
-            "file_scanning", 
+            "file_scanning",
             "file_existence",
             "template_creation",
             "build_testing"
         ]
-        
+
         for key in expected_keys:
             self.assertIn(f'"{key}"', source, f"build_data should contain {key}")
 
@@ -382,11 +382,11 @@ class TestBuildSystemStructuredData(unittest.TestCase):
             "template_creation": {"created_count": 0, "created_files": []},
             "build_testing": {"basic_passed": True, "full_passed": True}
         }
-        
+
         # Test _generate_exit_code with successful build
         exit_code = ctmm_build._generate_exit_code(mock_build_data)
         self.assertEqual(exit_code, 0, "Should return 0 for successful build")
-        
+
         # Test _generate_exit_code with failed build
         mock_build_data["build_testing"]["basic_passed"] = False
         exit_code = ctmm_build._generate_exit_code(mock_build_data)
@@ -399,23 +399,23 @@ class TestBuildSystemStructuredData(unittest.TestCase):
 \\documentclass{article}
 % This is a comment with \\usepackage{style/commented-style}
 \\usepackage{style/active-style}
-% Another comment with \\input{modules/commented-module}  
+% Another comment with \\input{modules/commented-module}
 \\input{modules/active-module}
 \\begin{document}
 \\end{document}
 """
         test_file = "test_enhanced.tex"
-        
+
         try:
             with open(test_file, 'w', encoding='utf-8') as f:
                 f.write(test_content)
-            
+
             result = ctmm_build.scan_references(test_file)
-            
+
             # Should only find non-commented references
             self.assertEqual(result["style_files"], ["style/active-style.sty"])
             self.assertEqual(result["module_files"], ["modules/active-module.tex"])
-            
+
         finally:
             if Path(test_file).exists():
                 Path(test_file).unlink()
@@ -433,17 +433,17 @@ Content with \\% escaped percent
 \\end{document}
 """
         test_file = "test_escaped.tex"
-        
+
         try:
             with open(test_file, 'w', encoding='utf-8') as f:
                 f.write(test_content)
-            
+
             result = ctmm_build.scan_references(test_file)
-            
+
             # Should find both references despite escaped % in content
             self.assertEqual(result["style_files"], ["style/test-style.sty"])
             self.assertEqual(result["module_files"], ["modules/test-module.tex"])
-            
+
         finally:
             if Path(test_file).exists():
                 Path(test_file).unlink()
@@ -479,20 +479,20 @@ class TestScanReferences(unittest.TestCase):
             f.write(self.test_content)
 
         result = ctmm_build.scan_references(self.test_main_tex)
-        
+
         # Verify return structure
         self.assertIsInstance(result, dict)
         self.assertIn("style_files", result)
         self.assertIn("module_files", result)
-        
+
         # Verify style files
         expected_style_files = [
             "style/ctmm-design.sty",
-            "style/form-elements.sty", 
+            "style/form-elements.sty",
             "style/ctmm-diagrams.sty"
         ]
         self.assertEqual(sorted(result["style_files"]), sorted(expected_style_files))
-        
+
         # Verify module files
         expected_module_files = [
             "modules/arbeitsblatt-trigger.tex",
@@ -507,7 +507,7 @@ class TestScanReferences(unittest.TestCase):
             f.write("")
 
         result = ctmm_build.scan_references(self.test_main_tex)
-        
+
         self.assertEqual(result["style_files"], [])
         self.assertEqual(result["module_files"], [])
 
@@ -526,7 +526,7 @@ class TestScanReferences(unittest.TestCase):
             f.write(content)
 
         result = ctmm_build.scan_references(self.test_main_tex)
-        
+
         self.assertEqual(result["style_files"], ["style/active-style.sty"])
         self.assertEqual(result["module_files"], ["modules/active-module.tex"])
 
@@ -539,7 +539,7 @@ class TestCheckMissingFiles(unittest.TestCase):
         self.test_files = []
         self.existing_file = "test_existing.txt"
         self.missing_file = "test_missing.txt"
-        
+
         # Create an existing file for testing
         with open(self.existing_file, 'w') as f:
             f.write("test content")
@@ -554,32 +554,32 @@ class TestCheckMissingFiles(unittest.TestCase):
     def test_check_missing_files_mixed_list(self):
         """Test check_missing_files with both existing and missing files."""
         files_to_check = [self.existing_file, self.missing_file]
-        
+
         result = ctmm_build.check_missing_files(files_to_check)
-        
+
         self.assertIsInstance(result, list)
         self.assertEqual(result, [self.missing_file])
 
     def test_check_missing_files_all_exist(self):
         """Test check_missing_files when all files exist."""
         files_to_check = [self.existing_file]
-        
+
         result = ctmm_build.check_missing_files(files_to_check)
-        
+
         self.assertEqual(result, [])
 
     def test_check_missing_files_all_missing(self):
         """Test check_missing_files when all files are missing."""
         files_to_check = ["missing1.txt", "missing2.txt"]
-        
+
         result = ctmm_build.check_missing_files(files_to_check)
-        
+
         self.assertEqual(sorted(result), sorted(files_to_check))
 
     def test_check_missing_files_empty_list(self):
         """Test check_missing_files with empty file list."""
         result = ctmm_build.check_missing_files([])
-        
+
         self.assertEqual(result, [])
 
 
@@ -609,20 +609,20 @@ class TestCreateTemplate(unittest.TestCase):
         self.test_files.append(style_file)
         self.test_files.append("test_templates/TODO_test-style.md")
         self.test_dirs.append("test_templates")
-        
+
         ctmm_build.create_template(style_file)
-        
+
         # Check that style file was created
         self.assertTrue(Path(style_file).exists())
-        
+
         # Check content contains expected elements
         with open(style_file, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         self.assertIn("\\NeedsTeXFormat{LaTeX2e}", content)
         self.assertIn("\\ProvidesPackage{test-style}", content)
         self.assertIn("TODO", content)
-        
+
         # Check that TODO file was created
         todo_file = "test_templates/TODO_test-style.md"
         self.assertTrue(Path(todo_file).exists())
@@ -633,20 +633,20 @@ class TestCreateTemplate(unittest.TestCase):
         self.test_files.append(module_file)
         self.test_files.append("test_templates/TODO_test-module.md")
         self.test_dirs.append("test_templates")
-        
+
         ctmm_build.create_template(module_file)
-        
+
         # Check that module file was created
         self.assertTrue(Path(module_file).exists())
-        
+
         # Check content contains expected elements
         with open(module_file, 'r', encoding='utf-8') as f:
             content = f.read()
-        
+
         self.assertIn("\\section{TODO: Test Module}", content)
         self.assertIn("\\label{sec:test-module}", content)
         self.assertIn("TODO", content)
-        
+
         # Check that TODO file was created
         todo_file = "test_templates/TODO_test-module.md"
         self.assertTrue(Path(todo_file).exists())
@@ -657,9 +657,9 @@ class TestCreateTemplate(unittest.TestCase):
         self.test_files.append(nested_file)
         self.test_files.append("deep/nested/path/TODO_test-file.md")
         self.test_dirs.extend(["deep/nested/path", "deep/nested", "deep"])
-        
+
         ctmm_build.create_template(nested_file)
-        
+
         # Check that all directories were created
         self.assertTrue(Path("deep").exists())
         self.assertTrue(Path("deep/nested").exists())
@@ -677,12 +677,12 @@ class TestBuildSystemIntegration(unittest.TestCase):
 
     def test_main_function_error_handling(self):
         """Test that main function has proper error handling structure."""
-        
+
         source = inspect.getsource(ctmm_build.main)
-        
+
         # Check for logging usage
         self.assertIn("logger.", source, "Main function should use logging")
-        
+
         # Check for step-by-step execution
         self.assertIn("step", source, "Main function should implement steps")
 
@@ -690,16 +690,16 @@ class TestBuildSystemIntegration(unittest.TestCase):
         """Test the complete build system workflow."""
         # This test verifies that all main functions work together
         # without actually running LaTeX compilation
-        
+
         # Test scan_references
         references = ctmm_build.scan_references("main.tex")
         self.assertIsInstance(references, dict)
-        
+
         # Test check_missing_files
         all_files = references["style_files"] + references["module_files"]
         missing_files = ctmm_build.check_missing_files(all_files)
         self.assertIsInstance(missing_files, list)
-        
+
         # Test validate_latex_files
         is_valid = ctmm_build.validate_latex_files()
         self.assertIsInstance(is_valid, bool)
@@ -711,11 +711,11 @@ class TestBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result, dict)
         self.assertIn("style_files", result)
         self.assertIn("module_files", result)
-        
+
         # Test check_missing_files return type
         result = ctmm_build.check_missing_files([])
         self.assertIsInstance(result, list)
-        
+
         # Test validate_latex_files return type
         result = ctmm_build.validate_latex_files()
         self.assertIsInstance(result, bool)
@@ -727,7 +727,7 @@ class TestBuildSystemIntegration(unittest.TestCase):
         self.assertIsInstance(result, dict)
         self.assertEqual(result["style_files"], [])
         self.assertEqual(result["module_files"], [])
-        
+
         # Test check_missing_files with invalid paths
         result = ctmm_build.check_missing_files(["invalid/path/file.txt"])
         self.assertIsInstance(result, list)

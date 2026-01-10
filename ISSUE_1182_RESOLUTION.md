@@ -15,7 +15,7 @@
 
 **Files Examined:**
 - `main.tex` - 8 textcolor commands (all properly formatted)
-- `style/ctmm-design.sty` - 3 textcolor commands (all properly formatted) 
+- `style/ctmm-design.sty` - 3 textcolor commands (all properly formatted)
 - `style/form-elements.sty` - 1 textcolor command (all properly formatted)
 - All module files in `modules/` - 81+ textcolor commands (all properly formatted)
 
