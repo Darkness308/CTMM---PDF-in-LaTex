@@ -1,11 +1,11 @@
 {
-  "timestamp": "2025-09-02 14:19:00 UTC",
-  "test_branch": "comprehensive-resolution-20250902-141854",
+  "timestamp": "2026-01-10 13:24:09 UTC",
+  "test_branch": "comprehensive-resolution-20260110-132405",
   "summary": {
     "total_prs": 11,
-    "successful_merges": 1,
+    "successful_merges": 0,
     "resolved_conflicts": 0,
-    "unresolved_conflicts": 8,
+    "unresolved_conflicts": 9,
     "fetch_failures": 0
   },
   "results": [
@@ -14,11 +14,11 @@
       "pr_title": "[WIP] identifiziere in diesem repo : l\u00f6se bei allen offenen pull request, die merge k",
       "analysis_success": true,
       "can_fetch": true,
-      "merge_status": "success",
+      "merge_status": "unrelated_histories",
       "resolution_applied": false,
       "resolution_type": "none",
       "new_sha": "",
-      "error_message": ""
+      "error_message": "fatal: refusing to merge unrelated histories\n | Attempted fix failed: "
     },
     {
       "pr_number": 653,
@@ -36,11 +36,11 @@
       "pr_title": "Copilot/fix 314",
       "analysis_success": true,
       "can_fetch": true,
-      "merge_status": "unrelated_histories",
+      "merge_status": "other_conflict",
       "resolution_applied": false,
       "resolution_type": "none",
       "new_sha": "",
-      "error_message": "fatal: refusing to merge unrelated histories\n | Attempted fix failed: "
+      "error_message": "error: Merging is not possible because you have unmerged files.\nhint: Fix them up in the work tree, and then use 'git add/rm <file>'\nhint: as appropriate to mark resolution and make a commit.\nfatal: Exiting because of an unresolved conflict.\n"
     },
     {
       "pr_number": 571,

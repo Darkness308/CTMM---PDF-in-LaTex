@@ -22,6 +22,7 @@ except ImportError:
     VALIDATOR_AVAILABLE = False
     logger.debug("LaTeX validator not available for escaping checks")
 
+<<<<<<< HEAD
 # Import form field validator
 try:
     from validate_form_fields import FormFieldValidator
@@ -30,6 +31,8 @@ except ImportError:
     FORM_VALIDATOR_AVAILABLE = False
     logger.debug("Form field validator not available")
 
+=======
+>>>>>>> pr-653
 
 def filename_to_title(filename):
     """Convert filename to a readable title."""
@@ -292,6 +295,7 @@ def validate_latex_files():
     return not issues_found
 
 
+<<<<<<< HEAD
 def validate_form_fields():
     """Validate form fields using the FormFieldValidator."""
     if not FORM_VALIDATOR_AVAILABLE:
@@ -307,6 +311,8 @@ def validate_form_fields():
         return False
 
 
+=======
+>>>>>>> pr-653
 def main():
     """Run the CTMM build system check."""
     logger.info("CTMM Build System - Starting check...")
@@ -332,6 +338,7 @@ def main():
         build_data["latex_validation"]["errors"].append(str(e))
         latex_valid = False
 
+<<<<<<< HEAD
     # Step 1a: Validate form fields
     step_a = f"{step}a"
     print(f"\n{step_a}. Validating form fields...")
@@ -344,6 +351,8 @@ def main():
         build_data["form_validation"] = {"passed": False, "errors": [str(e)]}
         form_valid = False
 
+=======
+>>>>>>> pr-653
     # Step 2: Scan for references
     step += 1
     print(f"\n{step}. Scanning file references...")
@@ -430,21 +439,32 @@ def main():
     # Step 7: Generate build report
     step += 1
     print(f"\n{step}. Generating build report...")
+<<<<<<< HEAD
     form_valid = build_data.get("form_validation", {}).get("passed", True)
     _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
+=======
+    _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
+>>>>>>> pr-653
                            len(style_files), len(module_files), total_missing, missing_files)
 
     return _generate_exit_code(build_data)
 
 
+<<<<<<< HEAD
 def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
+=======
+def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
+>>>>>>> pr-653
                            style_count, module_count, total_missing, missing_files):
     """Generate and display the build summary."""
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
     print(f"LaTeX validation: {'✓ PASS' if latex_valid else '✗ ISSUES FOUND'}")
+<<<<<<< HEAD
     print(f"Form field validation: {'✓ PASS' if form_valid else '✗ ISSUES FOUND'}")
+=======
+>>>>>>> pr-653
     print(f"Style files: {style_count}")
     print(f"Module files: {module_count}")
     print(f"Missing files: {total_missing} (templates created)")
@@ -460,11 +480,14 @@ def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_
         print("\nLATEX VALIDATION:")
         print("- Escaping issues found in LaTeX files")
         print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
+<<<<<<< HEAD
         
     if not form_valid:
         print("\nFORM FIELD VALIDATION:")
         print("- Form field issues found in LaTeX files")
         print("- Run 'python3 validate_form_fields.py' to detect and fix issues")
+=======
+>>>>>>> pr-653
 
 
 def _generate_exit_code(build_data):
@@ -472,10 +495,16 @@ def _generate_exit_code(build_data):
     basic_passed = build_data["build_testing"]["basic_passed"]
     full_passed = build_data["build_testing"]["full_passed"]
     latex_passed = build_data["latex_validation"]["passed"]
+<<<<<<< HEAD
     form_passed = build_data.get("form_validation", {}).get("passed", True)
     
     # Return 0 only if all critical tests pass
     if basic_passed and full_passed and latex_passed and form_passed:
+=======
+    
+    # Return 0 only if all critical tests pass
+    if basic_passed and full_passed and latex_passed:
+>>>>>>> pr-653
         return 0
     else:
         return 1
