@@ -140,7 +140,12 @@ python3 validate_pr.py
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
 │   ├── ctmm-form-elements.sty # Interactive form components
+│   ├── ctmm-form-elements.sty # Interactive form components  
 │   └── ctmm-navigation.sty    # Navigation system
+=======
+│   ├── form-elements.sty      # Interactive form components  
+│   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
+pr-653
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
 │   ├── trigger*.tex           # Trigger management modules
@@ -312,3 +317,4 @@ make validate-fix                       # Fix with backups
 - **LaTeX compilation**: 1-2 seconds (when working)
 
 **Remember**: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts. Always test thoroughly and validate changes comprehensively before committing.
+main

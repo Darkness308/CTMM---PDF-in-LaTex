@@ -181,6 +181,12 @@ class LaTeXDeEscaper:
             original_content = content
             replacements_made = 0
 
+            
+            original_content = content
+            replacements_made = 0
+            
+HEAD
+main
             # Apply all escaping pattern fixes with error handling
             for i, (pattern, replacement) in enumerate(self.escaping_patterns):
                 try:
@@ -209,6 +215,8 @@ class LaTeXDeEscaper:
                     logger.warning(f"Error applying cleanup pattern {i+1}: {e}")
                     continue
 
+            
+main
             # Check if content changed
             content_changed = content != original_content
 
@@ -242,6 +250,8 @@ class LaTeXDeEscaper:
         except PermissionError as e:
             logger.error(f"Permission denied: {e}")
             return False, 0
+
+pr-653
         except Exception as e:
             logger.error(f"Error processing {input_path}: {e}")
             return False, 0

@@ -1,15 +1,15 @@
 # Comprehensive Merge Conflict Resolution Report
 
-**Analysis Branch:** comprehensive-resolution-20250902-141854
-**Timestamp:** 2025-09-02 14:19:00 UTC
+**Analysis Branch:** comprehensive-resolution-20260110-132405
+**Timestamp:** 2026-01-10 13:24:09 UTC
 **Total PRs Analyzed:** 11
 
 ## Executive Summary
 
 🎯 **Resolution Results:**
-- ✅ **1** PRs can merge cleanly (no conflicts)
+- ✅ **0** PRs can merge cleanly (no conflicts)
 - 🔧 **0** PRs had conflicts that were automatically resolved
-- 🔥 **8** PRs have conflicts requiring manual resolution
+- 🔥 **9** PRs have conflicts requiring manual resolution
 - ❌ **0** PRs could not be analyzed (fetch failed)
 
 ## Summary Statistics
@@ -17,18 +17,20 @@
 | Metric | Count | Percentage |
 |--------|-------|------------|
 | Total PRs Analyzed | 11 | 100% |
-| Clean Merges | 1 | 9.1% |
+| Clean Merges | 0 | 0.0% |
 | Auto-Resolved | 0 | 0.0% |
-| Manual Resolution Needed | 8 | 72.7% |
+| Manual Resolution Needed | 9 | 81.8% |
 | Analysis Failed | 0 | 0.0% |
 
 ## Individual PR Analysis and Resolution
 
 ### PR #1185: [WIP] identifiziere in diesem repo : löse bei allen offenen pull request, die merge k
 
-- **Status:** ✅ READY TO MERGE
-- **Analysis:** No conflicts detected
-- **Action Required:** None - can be merged normally
+- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Issue:** Unrelated Histories
+- **Error Details:** fatal: refusing to merge unrelated histories
+ | Attempted fix failed: ...
+- **Action Required:** Manual investigation
 
 ### PR #653: Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest
 
@@ -41,9 +43,11 @@
 ### PR #572: Copilot/fix 314
 
 - **Status:** ⚠️ INVESTIGATION NEEDED
-- **Issue:** Unrelated Histories
-- **Error Details:** fatal: refusing to merge unrelated histories
- | Attempted fix failed: ...
+- **Issue:** Other Conflict
+- **Error Details:** error: Merging is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+fatal: E...
 - **Action Required:** Manual investigation
 
 ### PR #571: Copilot/fix 237
@@ -130,9 +134,10 @@ fatal: E...
 
 ### Immediate Actions Required:
 
-#### 2. Manually Resolve Conflicts (8 PRs)
+#### 2. Manually Resolve Conflicts (9 PRs)
 These PRs require manual intervention:
 
+- **PR #572**: Other Conflict
 - **PR #571**: Other Conflict
 - **PR #569**: Other Conflict
 - **PR #555**: Other Conflict
@@ -141,11 +146,6 @@ These PRs require manual intervention:
 - **PR #307**: Other Conflict
 - **PR #232**: Other Conflict
 - **PR #3**: Other Conflict
-
-#### 3. Ready-to-Merge PRs (1 PRs)
-These PRs can be merged immediately:
-
-- **PR #1185**: Ready for merge
 
 ## Technical Resolution Details
 

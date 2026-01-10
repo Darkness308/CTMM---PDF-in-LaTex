@@ -118,9 +118,10 @@ def test_no_merge_conflict_markers():
                 content = f.read()
 
             # Check for git merge conflict markers (with spaces)
+            # Note: Markers are split to avoid git merge conflicts
             conflict_patterns = [
-                r'<<<<<<< ',
-                r'>>>>>>> ',
+                r'<' * 7 + r' ',
+                r'>' * 7 + r' ',
                 r'^=======$'  # Match only lines that are exactly =======
             ]
 

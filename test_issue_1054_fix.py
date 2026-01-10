@@ -77,12 +77,13 @@ def test_no_merge_conflict_markers():
 
     workflow_files = glob.glob(".github/workflows/*.yml")
     # More precise conflict markers - must be at start of line
+    # Note: Markers are split to avoid git merge conflicts
     conflict_patterns = [
-        ('<<<<<<< ', 'Git merge conflict start'),
-        ('>>>>>>> ', 'Git merge conflict end'),
-        ('======= ', 'Git merge conflict separator'),
-        ('<<<<<<< HEAD', 'Git HEAD conflict marker'),
-        ('>>>>>>> origin/', 'Git origin conflict marker'),
+        ('<' * 7 + ' ', 'Git merge conflict start'),
+        ('>' * 7 + ' ', 'Git merge conflict end'),
+        ('=' * 7 + ' ', 'Git merge conflict separator'),
+        ('<' * 7 + ' HEAD', 'Git HEAD conflict marker'),
+        ('>' * 7 + ' origin/', 'Git origin conflict marker'),
         ('refs/heads/', 'Orphaned branch reference'),
         ('refs/pull/', 'Orphaned PR reference')
     ]
