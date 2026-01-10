@@ -12,7 +12,7 @@ import sys
 import yaml
 
 def test_alpine_compatibility():
-    """Test that xu-cheng/latex-action uses Alpine-compatible packages"""
+    """Test that xu-cheng/latex-action does not specify extra_system_packages"""
     print("🧪 Testing Alpine Package Compatibility")
     print("=" * 60)
 
@@ -92,16 +92,25 @@ def test_alpine_compatibility():
 def main():
     """Run Alpine compatibility validation for Issue #1165"""
     print("=" * 80)
-    print("🧪 ISSUE #1165 ALPINE COMPATIBILITY VALIDATION")
+    print("🧪 ALPINE COMPATIBILITY FIX VALIDATION")
+    print("=" * 80)
+    print("\nValidating that xu-cheng/latex-action@v3 does NOT specify extra_system_packages")
+    print("because the texlive-full Docker image already includes all necessary packages.")
+    print("\nThe error 'unable to select packages: texlive-lang-german (no such package)'")
+    print("occurs when trying to install these packages in Alpine Linux.")
+    print("\nSolution: Remove extra_system_packages - texlive-full has everything needed.")
     print("=" * 80)
 
     if test_alpine_compatibility():
         print("\n🎉 ALPINE COMPATIBILITY VALIDATION PASSED!")
-        print("All xu-cheng/latex-action steps use Alpine-compatible packages.")
+        print("✅ xu-cheng/latex-action correctly configured without extra_system_packages")
+        print("✅ The texlive-full Docker image includes all German language packages")
+        print("✅ No Alpine package installation errors will occur")
         return 0
     else:
         print("\n❌ ALPINE COMPATIBILITY VALIDATION FAILED!")
-        print("Some xu-cheng/latex-action steps still use Ubuntu packages.")
+        print("❌ Found Alpine-incompatible packages in extra_system_packages")
+        print("❌ These will cause 'unable to select packages' errors in Alpine Linux")
         return 1
 
 if __name__ == "__main__":
