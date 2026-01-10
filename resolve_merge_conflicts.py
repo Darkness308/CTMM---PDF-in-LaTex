@@ -12,12 +12,12 @@ This script:
 import os
 import sys
 import re
+import subprocess
 from pathlib import Path
 from typing import List, Tuple
 
 def find_conflict_files() -> List[str]:
     """Find all files with merge conflicts using git status."""
-    import subprocess
     
     result = subprocess.run(
         ['git', 'diff', '--name-only', '--diff-filter=U'],
@@ -42,16 +42,18 @@ def resolve_conflicts_in_file(file_path: str) -> Tuple[bool, str]:
     except Exception as e:
         return False, f"Failed to read file: {e}"
     
-    # Check if file has conflict markers
-    if not ('<<<<<<< HEAD' in content or '<<<<<<< ' in content):
+    # Check if file has conflict markers using regex for better detection
+    # This pattern matches any conflict start marker regardless of branch name
+    conflict_pattern = r'^<{7}\s'
+    if not re.search(conflict_pattern, content, re.MULTILINE):
         return True, "No conflicts found"
     
     # Pattern to match conflict blocks
-    # <<<<<<< HEAD
+    # <<<<<<< HEAD (or any branch name)
     # ... content from HEAD ...
     # =======
-    # ... content from main ...
-    # >>>>>>> main
+    # ... content from incoming branch ...
+    # >>>>>>> branch-name
     
     lines = content.split('\n')
     resolved_lines = []
@@ -125,7 +127,6 @@ def main():
             resolved_count += 1
             
             # Stage the resolved file
-            import subprocess
             try:
                 subprocess.run(['git', 'add', file_path], check=True)
                 print(f"   📌 Staged for commit")
