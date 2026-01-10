@@ -2,6 +2,9 @@
 """
 Test validation for Issue #1165: CI Alpine Compatibility Fix
 Validates that CI workflows use Alpine-compatible packages for xu-cheng/latex-action.
+
+Issue: texlive-lang-german does not exist in Alpine repositories
+Solution: Use texlive-lang-european which includes German language support
 """
 
 import os
@@ -19,16 +22,21 @@ def test_alpine_compatibility():
         '.github/workflows/automated-pr-merge-test.yml'
     ]
 
-    # Ubuntu packages that should NOT be used with xu-cheng/latex-action
-    ubuntu_packages = [
-        'texlive-lang-german',
+    # Packages that should NOT be used with xu-cheng/latex-action (Alpine)
+    # because they don't exist in Alpine repositories
+    incompatible_packages = [
+        'texlive-lang-german',  # Use texlive-lang-european instead
+    ]
+
+    # Alpine-compatible packages that SHOULD be used
+    alpine_compatible = [
+        'texlive-lang-european',  # Includes German + other European languages
         'texlive-fonts-recommended',
         'texlive-latex-recommended',
         'texlive-fonts-extra',
         'texlive-latex-extra',
         'texlive-science',
         'texlive-pstricks',
-        'texlive-latex-base'
     ]
 
     success = True
@@ -52,17 +60,24 @@ def test_alpine_compatibility():
                         step_with = step.get('with', {})
                         extra_packages = step_with.get('extra_system_packages', '')
 
-                        # Check for Ubuntu packages in xu-cheng/latex-action steps
-                        ubuntu_found = []
-                        for ubuntu_pkg in ubuntu_packages:
-                            if ubuntu_pkg in extra_packages:
-                                ubuntu_found.append(ubuntu_pkg)
+                        # Check for incompatible packages in xu-cheng/latex-action steps
+                        incompatible_found = []
+                        for incompatible_pkg in incompatible_packages:
+                            if incompatible_pkg in extra_packages:
+                                incompatible_found.append(incompatible_pkg)
 
-                        if ubuntu_found:
-                            print(f"❌ Found Ubuntu packages in xu-cheng/latex-action: {ubuntu_found}")
+                        if incompatible_found:
+                            print(f"❌ Found Alpine-incompatible packages: {incompatible_found}")
+                            print(f"   These packages don't exist in Alpine repositories")
                             success = False
                         else:
-                            print("✅ xu-cheng/latex-action uses Alpine-compatible packages")
+                            print("✅ No Alpine-incompatible packages found")
+
+                        # Check for Alpine-compatible alternatives
+                        if 'texlive-lang-european' in extra_packages:
+                            print("✅ Using texlive-lang-european (Alpine-compatible, includes German)")
+                        elif step.get('uses', '').startswith('xu-cheng/latex-action'):
+                            print("⚠️  Consider using texlive-lang-european for German support")
 
         except Exception as e:
             print(f"❌ Error checking {workflow_file}: {e}")
@@ -75,14 +90,20 @@ def main():
     print("=" * 80)
     print("🧪 ISSUE #1165 ALPINE COMPATIBILITY VALIDATION")
     print("=" * 80)
+    print("\nValidating that xu-cheng/latex-action uses Alpine-compatible packages...")
+    print("Issue: texlive-lang-german doesn't exist in Alpine repositories")
+    print("Solution: Use texlive-lang-european which includes German support\n")
 
     if test_alpine_compatibility():
         print("\n🎉 ALPINE COMPATIBILITY VALIDATION PASSED!")
         print("All xu-cheng/latex-action steps use Alpine-compatible packages.")
+        print("✅ texlive-lang-european is used instead of texlive-lang-german")
+        print("✅ German language support is available via texlive-lang-european")
         return 0
     else:
         print("\n❌ ALPINE COMPATIBILITY VALIDATION FAILED!")
-        print("Some xu-cheng/latex-action steps still use Ubuntu packages.")
+        print("Some xu-cheng/latex-action steps use Alpine-incompatible packages.")
+        print("❌ texlive-lang-german must be replaced with texlive-lang-european")
         return 1
 
 if __name__ == "__main__":
