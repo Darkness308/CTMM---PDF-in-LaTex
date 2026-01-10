@@ -318,6 +318,7 @@ jobs:
           texlive-latex-extra
           texlive-science
           texlive-pstricks
+          py3-pygments
           ghostscript
 
     - name: Fallback LaTeX installation for PR testing

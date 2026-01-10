@@ -153,40 +153,95 @@ class LaTeXDeEscaper:
             output_path = input_path
             
         try:
-            # Read the file with UTF-8 encoding
-            with open(input_path, 'r', encoding='utf-8') as f:
-                content = f.read()
+            # Validate input file exists
+            if not input_path.exists():
+                logger.error(f"Input file does not exist: {input_path}")
+                return False, 0
+            
+            # Check if input file is readable
+            if not input_path.is_file():
+                logger.error(f"Input path is not a file: {input_path}")
+                return False, 0
+            
+            # Read the file with UTF-8 encoding and error handling
+            try:
+                with open(input_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+            except UnicodeDecodeError as e:
+                logger.error(f"Unicode decode error reading {input_path}: {e}")
+                # Try with error handling
+                try:
+                    with open(input_path, 'r', encoding='utf-8', errors='replace') as f:
+                        content = f.read()
+                    logger.warning(f"Read {input_path} with character replacement due to encoding issues")
+                except Exception as e2:
+                    logger.error(f"Failed to read {input_path} even with error handling: {e2}")
+                    return False, 0
             
             original_content = content
             replacements_made = 0
             
-            # Apply all escaping pattern fixes
-            for pattern, replacement in self.escaping_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Pattern '{pattern}' replaced {count} times")
+            # Apply all escaping pattern fixes with error handling
+            for i, (pattern, replacement) in enumerate(self.escaping_patterns):
+                try:
+                    content, count = re.subn(pattern, replacement, content)
+                    replacements_made += count
+                    if count > 0:
+                        logger.debug(f"Escaping pattern {i+1} '{pattern[:50]}...' replaced {count} times")
+                except re.error as e:
+                    logger.warning(f"Regex error in escaping pattern {i+1}: {e}")
+                    continue
+                except Exception as e:
+                    logger.warning(f"Error applying escaping pattern {i+1}: {e}")
+                    continue
             
-            # Apply cleanup patterns
-            for pattern, replacement in self.cleanup_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Cleanup pattern '{pattern}' replaced {count} times")
+            # Apply cleanup patterns with error handling
+            for i, (pattern, replacement) in enumerate(self.cleanup_patterns):
+                try:
+                    content, count = re.subn(pattern, replacement, content)
+                    replacements_made += count
+                    if count > 0:
+                        logger.debug(f"Cleanup pattern {i+1} '{pattern[:50]}...' replaced {count} times")
+                except re.error as e:
+                    logger.warning(f"Regex error in cleanup pattern {i+1}: {e}")
+                    continue
+                except Exception as e:
+                    logger.warning(f"Error applying cleanup pattern {i+1}: {e}")
+                    continue
             
             # Check if content changed
             content_changed = content != original_content
             
             if content_changed:
-                # Write the fixed content
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    f.write(content)
-                logger.info(f"Fixed {input_path} -> {output_path} ({replacements_made} replacements)")
+                try:
+                    # Ensure output directory exists
+                    output_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    # Write the fixed content
+                    with open(output_path, 'w', encoding='utf-8') as f:
+                        f.write(content)
+                    logger.info(f"Fixed {input_path} -> {output_path} ({replacements_made} replacements)")
+                    
+                except PermissionError as e:
+                    logger.error(f"Permission denied writing to {output_path}: {e}")
+                    return False, 0
+                except IOError as e:
+                    logger.error(f"IO error writing to {output_path}: {e}")
+                    return False, 0
+                except Exception as e:
+                    logger.error(f"Unexpected error writing to {output_path}: {e}")
+                    return False, 0
             else:
                 logger.info(f"No changes needed for {input_path}")
             
             return content_changed, replacements_made
             
+        except FileNotFoundError as e:
+            logger.error(f"File not found: {e}")
+            return False, 0
+        except PermissionError as e:
+            logger.error(f"Permission denied: {e}")
+            return False, 0
         except Exception as e:
             logger.error(f"Error processing {input_path}: {e}")
             return False, 0
