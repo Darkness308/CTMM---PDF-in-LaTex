@@ -98,10 +98,10 @@ jobs:
 
       - name: Set up LaTeX
         timeout-minutes: 15
-        uses: dante-ev/latex-action@v0.2.0
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
-          args: "-synctex=1 -interaction=nonstopmode -file-line-error -shell-escape"
+          args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
           extra_system_packages: |
             texlive-lang-german
             texlive-fonts-recommended
@@ -110,13 +110,7 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
-            python3-pygments
-            py3-pygments
             ghostscript
-=======
-            ghostscript
-            
-pr-653
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
