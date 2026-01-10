@@ -113,10 +113,6 @@ jobs:
             python3-pygments
             py3-pygments
             ghostscript
-=======
-            ghostscript
-            
-pr-653
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
