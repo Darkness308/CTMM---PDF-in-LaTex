@@ -10,6 +10,7 @@ echo "========================"
 echo "Welchen Modul-Typ möchten Sie erstellen?"
 echo "1) Arbeitsblatt (arbeitsblatt)"
 echo "2) Tool (tool)"  
+echo "2) Tool (tool)"
 echo "3) Notfallkarte (notfallkarte)"
 echo ""
 read -p "Wählen Sie (1-3): " choice
@@ -47,11 +48,16 @@ if [ $? -eq 0 ]; then
     # Dateiname generieren (vereinfacht)
     filename=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-\|-$//g')
     
+
+    # Dateiname generieren (aus dem Modulnamen, ohne Leerzeichen und in Kleinbuchstaben)
+    filename=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')
+
     case $type in
         "arbeitsblatt") prefix="arbeitsblatt-";;
         "tool") prefix="tool-";;
         "notfallkarte") prefix="notfall-";;
     esac
+
     echo "   \\input{modules/${prefix}${filename}}"
     echo "3. Kompilieren Sie das Dokument"
     echo ""
