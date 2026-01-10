@@ -13,13 +13,13 @@ import re
 import sys
 from pathlib import Path
 
-def test_hyperref_package_loading_fix():
+def test_hyperref_package_loading_fix(style_file_path):
     """Test that the hyperref package loading conflict has been fixed."""
 
-    style_file = Path("style/form-elements.sty")
+    style_file = Path(style_file_path)
 
     if not style_file.exists():
-        print("❌ FAIL: style/form-elements.sty not found")
+        print(f"❌ FAIL: {style_file_path} not found")
         return False
 
     try:
@@ -30,7 +30,7 @@ def test_hyperref_package_loading_fix():
         return False
 
     # Test 1: Check for merge conflict markers
-    conflict_markers = ['copilot/fix-692', 'main', '<<<<<<', '>>>>>>', '======']
+    conflict_markers = ['<<<<<<<', '>>>>>>>', 'copilot/fix-']
     for marker in conflict_markers:
         if marker in content:
             print(f"❌ FAIL: Found merge conflict marker '{marker}' in {style_file}")
@@ -79,20 +79,29 @@ def test_hyperref_package_loading_fix():
         return False
     print("✅ PASS: TRUE branch does not reload hyperref")
 
-    # FALSE branch SHOULD contain RequirePackage{hyperref}
-    if '\\RequirePackage{hyperref}' not in false_branch_content:
-        print("❌ FAIL: FALSE branch (hyperref not loaded) missing \\RequirePackage{hyperref}")
+    # FALSE branch should NOT contain RequirePackage{hyperref} - it should warn instead
+    if '\\RequirePackage{hyperref}' in false_branch_content:
+        print("❌ FAIL: FALSE branch (hyperref not loaded) should NOT load hyperref - it should issue a warning instead")
         return False
-    print("✅ PASS: FALSE branch properly loads hyperref")
+    print("✅ PASS: FALSE branch does not load hyperref")
 
-    # Test 4: Check that both branches define @ctmmInteractive
-    if '\\newcommand{\\@ctmmInteractive}{true}' not in true_branch_content:
-        print("❌ FAIL: TRUE branch missing \\newcommand{\\@ctmmInteractive}{true}")
+    # FALSE branch should contain PackageWarning
+    if '\\PackageWarning' not in false_branch_content:
+        print("❌ FAIL: FALSE branch should issue a PackageWarning when hyperref is not loaded")
         return False
-    if '\\newcommand{\\@ctmmInteractive}{true}' not in false_branch_content:
-        print("❌ FAIL: FALSE branch missing \\newcommand{\\@ctmmInteractive}{true}")
+    print("✅ PASS: FALSE branch issues a warning when hyperref is not loaded")
+
+    # Test 4: Check that TRUE branch sets @ctmmInteractive to true
+    if '\\renewcommand{\\@ctmmInteractive}{true}' not in true_branch_content:
+        print("❌ FAIL: TRUE branch missing \\renewcommand{\\@ctmmInteractive}{true}")
         return False
-    print("✅ PASS: Both branches define @ctmmInteractive correctly")
+    print("✅ PASS: TRUE branch enables interactive mode")
+    
+    # FALSE branch should set @ctmmInteractive to false
+    if '\\renewcommand{\\@ctmmInteractive}{false}' not in false_branch_content:
+        print("❌ FAIL: FALSE branch should set \\@ctmmInteractive to false")
+        return False
+    print("✅ PASS: FALSE branch disables interactive mode")
 
     # Test 5: Check for helpful comments
     if 'hyperref is already loaded' not in content:
@@ -127,9 +136,10 @@ def test_main_tex_hyperref_loading():
         print(f"❌ FAIL: Error reading {main_file}: {e}")
         return False
 
-    # Check that hyperref is loaded before form-elements
+    # Check that hyperref is loaded before form-elements packages
     hyperref_line = None
     form_elements_line = None
+    ctmm_form_elements_line = None
 
     lines = content.split('\n')
     for i, line in enumerate(lines):
@@ -137,21 +147,32 @@ def test_main_tex_hyperref_loading():
             hyperref_line = i
         elif '\\usepackage{style/form-elements}' in line:
             form_elements_line = i
+        elif '\\usepackage{style/ctmm-form-elements}' in line:
+            ctmm_form_elements_line = i
 
     if hyperref_line is None:
         print("❌ FAIL: main.tex does not load hyperref package")
         return False
     print("✅ PASS: main.tex loads hyperref package")
 
-    if form_elements_line is None:
-        print("❌ FAIL: main.tex does not load style/form-elements package")
-        return False
-    print("✅ PASS: main.tex loads style/form-elements package")
+    # Check which form-elements package is used
+    if form_elements_line is not None:
+        print("✅ PASS: main.tex loads style/form-elements package")
+        if hyperref_line >= form_elements_line:
+            print(f"❌ FAIL: hyperref (line {hyperref_line+1}) should be loaded before form-elements (line {form_elements_line+1})")
+            return False
+        print("✅ PASS: hyperref is loaded before form-elements")
+    
+    if ctmm_form_elements_line is not None:
+        print("✅ PASS: main.tex loads style/ctmm-form-elements package")
+        if hyperref_line >= ctmm_form_elements_line:
+            print(f"❌ FAIL: hyperref (line {hyperref_line+1}) should be loaded before ctmm-form-elements (line {ctmm_form_elements_line+1})")
+            return False
+        print("✅ PASS: hyperref is loaded before ctmm-form-elements")
 
-    if hyperref_line >= form_elements_line:
-        print(f"❌ FAIL: hyperref (line {hyperref_line+1}) should be loaded before form-elements (line {form_elements_line+1})")
+    if form_elements_line is None and ctmm_form_elements_line is None:
+        print("❌ FAIL: main.tex does not load any form-elements package")
         return False
-    print("✅ PASS: hyperref is loaded before form-elements")
 
     return True
 
@@ -165,10 +186,14 @@ def main():
     all_tests_passed = True
 
     print("\n1. Testing style/form-elements.sty hyperref loading logic...")
-    if not test_hyperref_package_loading_fix():
+    if not test_hyperref_package_loading_fix("style/form-elements.sty"):
         all_tests_passed = False
 
-    print("\n2. Testing main.tex package loading order...")
+    print("\n2. Testing style/ctmm-form-elements.sty hyperref loading logic...")
+    if not test_hyperref_package_loading_fix("style/ctmm-form-elements.sty"):
+        all_tests_passed = False
+
+    print("\n3. Testing main.tex package loading order...")
     if not test_main_tex_hyperref_loading():
         all_tests_passed = False
 
