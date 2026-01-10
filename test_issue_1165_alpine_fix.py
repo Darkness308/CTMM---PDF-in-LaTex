@@ -76,7 +76,7 @@ def test_alpine_compatibility():
                             print(f"   ✅ Uses Alpine-compatible German support: {alpine_german_found}")
                         else:
                             # No German language package specified - acceptable if German support not needed
-                            print("   ℹ️  No German language package specified")
+                            print("   ℹ️  No German-specific package specified; this is acceptable if German support is not required")
 
         except Exception as e:
             print(f"❌ Error checking {workflow_file}: {e}")
