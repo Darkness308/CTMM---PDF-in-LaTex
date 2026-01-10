@@ -103,13 +103,13 @@ jobs:
           root_file: main.tex
           args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
           extra_system_packages: |
-            texlive-lang-german
-            texlive-fonts-recommended
-            texlive-latex-recommended
-            texlive-latex-extra
-            texlive-fonts-extra
-            texlive-science
-            texlive-pstricks
+            texlive-lang-german          # German language support (babel)
+            texlive-fonts-recommended    # Recommended fonts
+            texlive-latex-recommended    # Recommended LaTeX packages
+            texlive-latex-extra          # Extra LaTeX packages
+            texlive-fonts-extra          # Extra fonts (includes pifont)
+            texlive-science              # Scientific packages
+            texlive-pstricks             # Provides pifont for form elements
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
