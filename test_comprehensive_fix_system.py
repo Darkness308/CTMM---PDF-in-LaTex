@@ -8,7 +8,6 @@ import unittest
 import tempfile
 import subprocess
 import sys
-import os
 from pathlib import Path
 
 # Add current directory to path for imports
