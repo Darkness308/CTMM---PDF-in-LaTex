@@ -15,37 +15,6 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 
 **Language**: Primary content is in German (Deutsch)
 
-## CTMM Methodology
-
-**CTMM** stands for **Catch-Track-Map-Match** - a structured therapeutic approach designed specifically for neurodiverse couples and individuals:
-
-### 🔍 **Catch** (Erkennen)
-- **Early Detection**: Identifying triggers, emotional states, and behavioral patterns before they escalate
-- **Mindfulness Techniques**: Developing awareness of internal and external cues
-- **Signal Recognition**: Learning to recognize warning signs in oneself and partner
-
-### 📊 **Track** (Verfolgen) 
-- **Documentation**: Systematic recording of patterns, triggers, and responses
-- **Progress Monitoring**: Tracking therapeutic goals and intervention effectiveness
-- **Data Collection**: Using worksheets (Arbeitsblätter) for structured self-reflection
-
-### 🗺️ **Map** (Zuordnen)
-- **Pattern Analysis**: Connecting triggers to responses and identifying recurring themes
-- **Relationship Mapping**: Understanding how individual patterns affect couple dynamics
-- **Resource Mapping**: Identifying available coping strategies and support systems
-
-### 🤝 **Match** (Anpassen)
-- **Personalized Interventions**: Tailoring therapeutic strategies to individual needs
-- **Couple Coordination**: Synchronizing approaches between partners
-- **Adaptive Responses**: Developing flexible coping mechanisms for different situations
-
-### 🎯 **Therapeutic Applications**
-The CTMM system is particularly effective for:
-- **Co-Regulation**: Partners learning to support each other's emotional regulation
-- **Trigger Management**: Proactive identification and response to emotional triggers
-- **Communication**: Structured approaches to difficult conversations
-- **Crisis Prevention**: Early intervention strategies to prevent escalation
-
 ## Essential Setup & Dependencies
 
 ### Required Dependencies - Install First
@@ -170,9 +139,7 @@ python3 validate_pr.py
 ├── main.tex                    # Main LaTeX document (entry point)
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── ctmm-form-elements.sty # Interactive form components  
-│   ├── form-elements.sty      # Alternative form components
-│   ├── ctmm-navigation.sty    # Navigation system
+│   ├── form-elements.sty      # Interactive form components  
 │   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
@@ -195,15 +162,69 @@ python3 validate_pr.py
 └── .github/workflows/         # CI/CD for PDF generation and validation
 ```
 
-### LaTeX Best Practices - CRITICAL Rules
-- **Package Loading**: ALL `\usepackage{...}` commands MUST be in `main.tex` preamble ONLY
+## LaTeX Architecture & Conventions
+
+### 🔧 Build System Usage
+
+**Primary Build Command:**
+```bash
+python3 ctmm_build.py
+```
+
+**What the build system does:**
+1. **LaTeX Validation**: Checks for over-escaping issues and syntax problems
+2. **Reference Scanning**: Scans `main.tex` for all `\usepackage{style/...}` and `\input{modules/...}` references
+3. **Template Generation**: Auto-generates missing template files with proper structure
+4. **Incremental Testing**: Tests basic build (without modules) and full build separately
+5. **Documentation**: Creates TODO files for new templates with completion guidelines
+6. **Error Recovery**: Gracefully handles missing LaTeX installation for CI environments
+
+**Build System Requirements:**
+- **Python 3.x** (required) - Core build system functionality
+- **LaTeX Distribution** (optional) - For PDF compilation (TeX Live, MiKTeX)
+  - If LaTeX is not available, the system validates structure without compilation
+  - GitHub Actions workflow includes full LaTeX environment setup
+- **Required Python packages**: `chardet` for encoding detection
+
+**Validation Capabilities:**
+- **Over-escaping Detection**: Identifies and can fix excessive `\textbackslash{}` usage
+- **Syntax Validation**: Checks LaTeX file structure and command usage
+- **Module Dependencies**: Ensures all referenced files exist or creates templates
+- **Form Element Validation**: Verifies proper use of CTMM form components
+
+**Note**: Build tests will show FAIL if pdflatex is not installed, but dependency checking and file generation still work correctly.
+
+**Alternative Commands:**
+```bash
+make check          # Run build system check
+make build          # Build PDF with pdflatex
+make analyze        # Detailed module testing
+make unit-test      # Run Python unit tests
+python3 build_system.py --verbose  # Granular analysis
+```
+
+**Unit Testing:**
+The build system includes comprehensive unit tests for core functions:
+```bash
+python3 test_ctmm_build.py -v
+```
+Tests cover filename-to-title conversion (23 test cases), German therapy terminology, and build system integration (56 total tests).
+
+### 📄 LaTeX Best Practices
+
+#### Package Loading Rules
+- **CRITICAL**: All `\usepackage{...}` commands MUST be in the preamble of `main.tex`
 - **NEVER** load packages in modules or after `\begin{document}`
-- **Form Elements**: Use ONLY CTMM form elements:
+- Error: `Can be used only in preamble` → Move package to preamble
+
+#### Custom Macros & Commands
+- Define custom macros centrally in preamble or style files
+- **Form Elements Convention**: Use CTMM form elements only:
   ```latex
-  \ctmmCheckBox[field_name]{Label}     # Interactive checkbox
-  \ctmmTextField[width]{label}{name}   # Text input field
-  \ctmmTextArea[width]{lines}{label}{name}  # Multi-line text area
-  \ctmmRadioButton{group}{value}{label}     # Radio button
+  \ctmmCheckBox[field_name]{Label}     % Interactive checkbox
+  \ctmmTextField[width]{label}{name}   % Text input field
+  \ctmmTextArea[width]{lines}{label}{name}  % Multi-line text area
+  \ctmmRadioButton{group}{value}{label}     % Radio button
   ```
 - **NEVER** use `\Box`, `\blacksquare`, or basic LaTeX form elements directly
 
@@ -211,17 +232,6 @@ python3 validate_pr.py
 - Modules should contain ONLY content, not package definitions
 - Use existing macros and commands defined in preamble/style files
 - Keep modules focused on single therapeutic concepts
-
-### Current LaTeX Compilation Issue
-**Known Problem**: LaTeX compilation currently fails due to malformed `\ctmmTextField` commands with incorrectly escaped underscores.
-
-**Error Pattern**:
-```
-! Missing } inserted.
-l.21 ...tmmTextField[4cm]{}{therapist_psycho\_mm &
-```
-
-**Do NOT attempt to fix this during normal development** - focus on build system validation and module development.
 
 ### 🎨 CTMM Design System
 
@@ -244,31 +254,6 @@ l.21 ...tmmTextField[4cm]{}{therapist_psycho\_mm &
 - Interactive PDF features with hyperref integration
 - Form elements automatically adapt for print vs. digital use
 
-## GitHub Actions & CI/CD
-
-### Workflows with Timing
-1. **`latex-build.yml`** - Main PDF build workflow
-   - LaTeX package installation: 15 minutes timeout
-   - Build validation steps: 5-10 minutes timeout each
-   - Total workflow: ~20-30 minutes when working
-
-2. **`latex-validation.yml`** - Syntax and structure validation
-   - Faster validation-only workflow
-   - 10-15 minutes total
-
-**CRITICAL TIMEOUTS**:
-- LaTeX package installation: NEVER CANCEL - takes 4-5 minutes, set 15+ minute timeout
-- Build system validation: NEVER CANCEL - set 10+ minute timeout
-- Unit tests: NEVER CANCEL - set 5+ minute timeout
-
-### CI Failure Prevention
-The repository has comprehensive CI failure prevention:
-```bash
-# Test CI robustness (for CI pipeline issues)
-python3 test_issue_1044_ci_robustness.py
-python3 test_comprehensive_ci_timeout_coverage.py
-```
-
 ## Development Workflow
 
 ### Adding New Modules
@@ -278,85 +263,32 @@ python3 test_comprehensive_ci_timeout_coverage.py
    \input{modules/my-new-module}
    ```
 
-2. **Run build system:**
+2. **Run build system** (auto-generates templates):
    ```bash
    python3 ctmm_build.py
    ```
 
-3. **Files created automatically:**
+3. **Auto-generated files:**
    - `modules/my-new-module.tex` - Template with basic structure
    - `modules/TODO_my-new-module.md` - Task list for completion
 
 4. **Complete the module** and remove TODO file when finished
 
-### Development Best Practices
-- Always run `python3 ctmm_build.py` after making changes
-- Use `make validate` to check for LaTeX escaping issues
-- Run `make unit-test` frequently during development
-- Use `make validate-pr` before creating pull requests
+### Troubleshooting Common Issues
 
-## Validation Scenarios - Test These After Changes
-
-### 1. Build System Validation
-```bash
-# Primary validation - ALWAYS works
-python3 ctmm_build.py
-# Expected: All checks pass, files exist or templates created
-```
-
-### 2. Unit Test Validation
-```bash
-# Comprehensive test suite
-make unit-test
-# Expected: All 77 tests pass
-```
-
-### 3. LaTeX Structure Validation
-```bash
-# Validate LaTeX syntax and escaping
-make validate
-# Expected: No escaping issues found
-```
-
-### 4. Form Element Testing (Manual)
-When LaTeX compilation is working:
-- Test interactive PDF forms in generated PDF
-- Verify checkboxes, text fields, and text areas function
-- Check form field naming and accessibility
-
-### 5. Module Integration Testing
-```bash
-# Test individual modules by temporarily commenting others in main.tex
-# Uncomment one module at a time to isolate issues
-```
-
-## Troubleshooting Common Issues
-
-### Build Errors
-- `Undefined control sequence` → Check if macro is defined in `main.tex` preamble
+**Build Errors:**
+- `Undefined control sequence` → Check if macro is defined in preamble
 - `Command already defined` → Remove duplicate macro definitions  
-- `Can be used only in preamble` → Move `\usepackage` to `main.tex` preamble  
-- Missing file errors → Run `python3 ctmm_build.py` to auto-generate templates
-- Form element errors → Check `\ctmmTextField` syntax and escaping
+- Missing file errors → Run `ctmm_build.py` to auto-generate templates
+- `Can be used only in preamble` → Move `\usepackage` to main.tex preamble
 - `Package hyperref Error` → Ensure hyperref is loaded last in package list
 - LaTeX compilation fails → Check for special characters in German text, use proper UTF-8 encoding
 
-### LaTeX Package Issues
-```bash
-# FontAwesome missing
-sudo apt-get install texlive-fonts-extra
-
-# German language support missing
-sudo apt-get install texlive-lang-german
-
-# Complete package installation
-sudo apt-get install texlive-full
-```
-
-### CI/CD Issues
-- Check GitHub Actions logs for timeout issues
-- Verify all timeouts are set to appropriate values (10+ minutes)
-- Use comprehensive validation scripts to identify pipeline problems
+**Module Guidelines:**
+- Use semantic section structure: `\section{Title}`, `\subsection{}`
+- Include therapeutic instructions in German
+- Add form elements for interactive use
+- Test individual modules by temporarily commenting others
 
 ## Content Guidelines
 
@@ -460,11 +392,4 @@ make validate-fix                       # Fix with backups
 - `\begin{ctmmBlueBox}{title}` - Styled info boxes
 - `\textcolor{ctmmBlue}{text}` - CTMM colors
 
-### Timing Expectations - NEVER CANCEL
-- **Build system check**: 1.9 seconds  
-- **Unit tests**: 0.2 seconds
-- **LaTeX package installation**: 4-5 minutes
-- **PR validation**: 0.1 seconds
-- **LaTeX compilation**: 1-2 seconds (when working)
-
-**Remember**: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts. Always test thoroughly and validate changes comprehensively before committing.
+Remember: This is specialized therapeutic content requiring both LaTeX expertise and sensitivity to mental health contexts.
