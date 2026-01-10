@@ -73,26 +73,24 @@ jobs:
           fi
           echo "✅ Enhanced pre-build validation completed"
 
-      - name: Check system resources before LaTeX compilation
+      - name: Assess system resources and GitHub Actions runner environment
         timeout-minutes: 3
         run: |
-          echo "📊 Checking system resources..."
+          echo "📊 Checking system resources and runner environment..."
+          echo "🔹 Full disk usage:"
           df -h
+          echo "🔹 Full memory usage:"
           free -h
-          echo "✅ System resources checked"
-
-      - name: Assess GitHub Actions runner environment
-        timeout-minutes: 3
-        run: |
-          echo "🔍 Assessing GitHub Actions runner environment..."
-          echo "Runner OS: $RUNNER_OS"
-          echo "Runner Architecture: $RUNNER_ARCH"
-          echo "GitHub Actions Runner: $RUNNER_NAME"
+          echo "🔹 Runner metadata:"
+          echo "  Runner OS: $RUNNER_OS"
+          echo "  Runner Architecture: $RUNNER_ARCH"
+          echo "  GitHub Actions Runner: $RUNNER_NAME"
+          echo "🔹 Summary (root filesystem and memory):"
           df -h / | head -2
           free -h | head -2
-          echo "CPU Info:" && nproc
-          echo "✅ Environment assessment complete"
-
+          echo "🔹 CPU Info (logical cores):"
+          nproc
+          echo "✅ System resources and environment assessment complete"
       - name: Enhanced CI environment validation
         timeout-minutes: 5
         run: |
