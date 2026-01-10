@@ -264,7 +264,7 @@ This file was automatically created by the CTMM Build System because it was refe
                 else:
                     # Comment out this module
                     modified_content = re.sub(
-                        '(\\\\input\\{%s\\})' % module_pattern,
+                        f'(\\\\input\\{{{module_pattern}\\}})',
                         r'% \1  % Disabled for incremental testing',
                         modified_content
                     )
