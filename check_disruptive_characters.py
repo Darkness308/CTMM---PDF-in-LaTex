@@ -9,8 +9,9 @@ Script to find disruptive characters that could block merges:
 """
 
 import os
+import re
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Any
 import codecs
 
 # File extensions to check
@@ -28,7 +29,10 @@ SKIP_DIRS = {
 
 class DisruptiveCharacterFinder:
     def __init__(self):
-        self.issues = {}
+        # Regex patterns for merge conflict markers
+        self.conflict_start = re.compile(r'^<{7}(\s|$)')
+        self.conflict_sep = re.compile(r'^={7}(\s|$)')
+        self.conflict_end = re.compile(r'^>{7}(\s|$)')
     
     def should_check_file(self, file_path: Path) -> bool:
         """Check if file should be scanned."""
@@ -47,7 +51,7 @@ class DisruptiveCharacterFinder:
         
         return False
     
-    def check_file(self, file_path: Path) -> Dict[str, any]:
+    def check_file(self, file_path: Path) -> Dict[str, Any]:
         """Check a file for various disruptive characters."""
         issues = []
         
@@ -92,7 +96,7 @@ class DisruptiveCharacterFinder:
                         'description': 'File is not UTF-8 encoded',
                         'severity': 'low'
                     })
-                except:
+                except UnicodeDecodeError:
                     issues.append({
                         'type': 'encoding',
                         'description': 'Unable to decode file',
@@ -103,13 +107,8 @@ class DisruptiveCharacterFinder:
             lines = content.split('\n')
             
             # Check for merge conflict markers (exactly 7 characters or 7 followed by space/text)
-            import re
-            conflict_start = re.compile(r'^<{7}(\s|$)')
-            conflict_sep = re.compile(r'^={7}(\s|$)')
-            conflict_end = re.compile(r'^>{7}(\s|$)')
-            
             for i, line in enumerate(lines, 1):
-                if conflict_start.match(line):
+                if self.conflict_start.match(line):
                     issues.append({
                         'type': 'conflict_marker',
                         'line': i,
@@ -117,7 +116,7 @@ class DisruptiveCharacterFinder:
                         'severity': 'critical',
                         'content': line[:50]
                     })
-                elif conflict_sep.match(line):
+                elif self.conflict_sep.match(line):
                     issues.append({
                         'type': 'conflict_marker',
                         'line': i,
@@ -125,7 +124,7 @@ class DisruptiveCharacterFinder:
                         'severity': 'critical',
                         'content': line[:50]
                     })
-                elif conflict_end.match(line):
+                elif self.conflict_end.match(line):
                     issues.append({
                         'type': 'conflict_marker',
                         'line': i,

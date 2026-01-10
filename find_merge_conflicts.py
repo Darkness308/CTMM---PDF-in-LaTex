@@ -10,7 +10,7 @@ Searches for:
 import os
 import re
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Any
 
 # Patterns for merge conflict markers
 CONFLICT_START = re.compile(r'^<{7}(\s|$)')
@@ -48,7 +48,7 @@ def should_check_file(file_path: Path) -> bool:
     return False
 
 
-def find_conflicts_in_file(file_path: Path) -> List[Dict[str, any]]:
+def find_conflicts_in_file(file_path: Path) -> List[Dict[str, Any]]:
     """
     Find merge conflict markers in a file.
     Returns list of conflicts with line numbers and content.
