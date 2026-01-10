@@ -49,7 +49,7 @@ jobs:
           # Style packages (like ctmm-form-elements) are allowed after hyperref as they depend on it
           next_line=$((hyperref_line + 1))
           echo "Debug: checking from line $next_line onward"
-          packages_after_hyperref=$(echo "$packages" | tail -n +$next_line | grep -vE '(bookmark|style/)')
+          packages_after_hyperref=$(echo "$packages" | tail -n +$next_line | grep -vE '\\usepackage\{(bookmark|style/)')
           echo "Debug: packages after hyperref (filtered): '$packages_after_hyperref'"
 
           if [ -n "$packages_after_hyperref" ]; then
