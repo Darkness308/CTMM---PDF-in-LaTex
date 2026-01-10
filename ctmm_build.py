@@ -431,13 +431,13 @@ def main():
     step += 1
     print(f"\n{step}. Generating build report...")
     form_valid = build_data.get("form_validation", {}).get("passed", True)
-    _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok,
+    _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
                            len(style_files), len(module_files), total_missing, missing_files)
 
     return _generate_exit_code(build_data)
 
 
-def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok,
+def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
                            style_count, module_count, total_missing, missing_files):
     """Generate and display the build summary."""
     print("\n" + "="*50)
@@ -465,7 +465,6 @@ def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_
         print("\nFORM FIELD VALIDATION:")
         print("- Form field issues found in LaTeX files")
         print("- Run 'python3 validate_form_fields.py' to detect and fix issues")
-
 
 def _generate_exit_code(build_data):
     """Generate appropriate exit code based on build results."""
