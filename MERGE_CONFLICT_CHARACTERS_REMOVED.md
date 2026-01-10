@@ -8,7 +8,7 @@
 
 ## Problem Statement (Deutsch)
 
-> "in mehreren dateien behindern konflikte den merge. identifiziere alle störenden zeichen und entferne sie"
+> "in mehreren dateien behindern Konflikte den merge. identifiziere alle störenden zeichen und entferne sie"
 
 **English Translation:**
 > "in multiple files, conflicts hinder the merge. identify all problematic characters and remove them"
