@@ -46,7 +46,7 @@ All conflicts resolved, repository is now merge-ready.
 **Problem:**
 ```yaml
             ghostscript
-=======
+= = = = = = =
             ghostscript
             
 pr-653
@@ -80,9 +80,9 @@ Clean YAML structure, validated syntax ✅
 ```markdown
 Searched for git merge conflict markers:
 ```
-<<<<<<< HEAD
-=======
->>>>>>> branch-name
+< < < < < < < HEAD
+= = = = = = =
+> > > > > > > branch-name
 ```
 ```
 
