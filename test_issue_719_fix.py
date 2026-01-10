@@ -30,16 +30,16 @@ def test_sanitize_pkg_name_function():
     """Test the specific function that had the indentation error."""
     try:
         from latex_validator import sanitize_pkg_name
-        
+
         # Test cases for the function
         test_cases = [
             ("arbeitsblatt-checkin", "pkgArbeitsblattCheckin"),
-            ("trigger-management", "pkgTriggerManagement"), 
+            ("trigger-management", "pkgTriggerManagement"),
             ("module123", "pkgModule123"),
             ("test", "pkgTest"),
             ("", "pkg")
         ]
-        
+
         for input_val, expected in test_cases:
             result = sanitize_pkg_name(input_val)
             if result == expected:
@@ -47,7 +47,7 @@ def test_sanitize_pkg_name_function():
             else:
                 print(f"❌ sanitize_pkg_name('{input_val}') = '{result}', expected '{expected}'")
                 return False
-        
+
         return True
     except Exception as e:
         print(f"❌ Error testing sanitize_pkg_name function: {e}")
@@ -62,7 +62,7 @@ def test_ctmm_build_system():
             text=True,
             timeout=60
         )
-        
+
         if result.returncode == 0:
             print("✅ CTMM build system runs successfully")
             return True
@@ -70,7 +70,7 @@ def test_ctmm_build_system():
             print(f"❌ CTMM build system failed with exit code {result.returncode}")
             print(f"Stderr: {result.stderr}")
             return False
-            
+
     except subprocess.TimeoutExpired:
         print("❌ CTMM build system timed out")
         return False
@@ -85,27 +85,27 @@ def main():
     print("=" * 70)
     print("Testing indentation fix in latex_validator.py")
     print()
-    
+
     all_tests_passed = True
-    
+
     # Test 1: Import LaTeXValidator
     print("1. Testing LaTeXValidator import...")
     if not test_latex_validator_import():
         all_tests_passed = False
     print()
-    
+
     # Test 2: Test the specific function that had the error
     print("2. Testing sanitize_pkg_name function...")
     if not test_sanitize_pkg_name_function():
         all_tests_passed = False
     print()
-    
+
     # Test 3: Test CTMM build system
     print("3. Testing CTMM build system...")
     if not test_ctmm_build_system():
         all_tests_passed = False
     print()
-    
+
     # Summary
     print("=" * 70)
     if all_tests_passed:

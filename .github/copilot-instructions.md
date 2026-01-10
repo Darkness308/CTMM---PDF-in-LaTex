@@ -7,7 +7,7 @@
 This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
 
 - Depression and mood disorders
-- Trigger management 
+- Trigger management
 - Borderline Personality Disorder (BPD)
 - ADHD, Autism Spectrum Disorder (ASD)
 - Complex PTSD (CPTSD)
@@ -133,7 +133,7 @@ python3 test_latex_validator.py  # 21 validator tests
 
 **Test Coverage**:
 - `filename_to_title()` function (29 test cases)
-- Build system core functions (27+ test cases)  
+- Build system core functions (27+ test cases)
 - LaTeX validator functions (21 test cases)
 
 ### LaTeX Validation & Escaping Issues
@@ -159,7 +159,7 @@ python3 validate_pr.py
 
 **PR Requirements for Copilot Review**:
 - At least 1 file with meaningful changes
-- Substantive content changes (not just whitespace)  
+- Substantive content changes (not just whitespace)
 - Successful CTMM build system validation
 - Use provided PR template
 
@@ -304,7 +304,7 @@ python3 ctmm_build.py
 # Expected: All checks pass, files exist or templates created
 ```
 
-### 2. Unit Test Validation  
+### 2. Unit Test Validation
 ```bash
 # Comprehensive test suite
 make unit-test
@@ -346,7 +346,7 @@ When LaTeX compilation is working:
 # FontAwesome missing
 sudo apt-get install texlive-fonts-extra
 
-# German language support missing  
+# German language support missing
 sudo apt-get install texlive-lang-german
 
 # Complete package installation

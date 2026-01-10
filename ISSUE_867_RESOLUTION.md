@@ -28,7 +28,7 @@ uses: dante-ev/latex-action@latest
 
 **Change**: Updated the version reference from `v2` to `latest`, which points to the most recent stable version of the action that is guaranteed to exist.
 
-**Rationale**: 
+**Rationale**:
 - `@latest` is always available and points to the most recent stable release
 - Provides automatic updates to newer stable versions
 - Follows GitHub Actions best practices for active maintenance scenarios

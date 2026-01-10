@@ -107,7 +107,7 @@
     \draw[ctmmArrow] (vorbeugen) -- (reagieren);
     \draw[ctmmArrow] (reagieren) -- (lernen);
     \draw[ctmmArrow] (lernen) -- (erkennen);
-    
+
     % Center label
     \node[font=\scriptsize, text=gray] at ($(erkennen)!0.5!(reagieren)$) {CTMM\\Zyklus};
 \end{tikzpicture}
@@ -125,13 +125,13 @@
     every node/.style={font=\footnotesize}
 ]
     % Vertical escalation levels
-    \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, text width=4cm, align=center] (stufe1) 
+    \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, text width=4cm, align=center] (stufe1)
         {\textbf{Stufe 1: Prävention}\\Alltag, Skills, Vorbereitung};
-    \node[rectangle, fill=ctmmOrange!20, draw=ctmmOrange, text width=4cm, align=center, below=of stufe1] (stufe2) 
+    \node[rectangle, fill=ctmmOrange!20, draw=ctmmOrange, text width=4cm, align=center, below=of stufe1] (stufe2)
         {\textbf{Stufe 2: Akutphase}\\Trigger erkannt, Safe-Words};
-    \node[rectangle, fill=ctmmRed!20, draw=ctmmRed, text width=4cm, align=center, below=of stufe2] (stufe3) 
+    \node[rectangle, fill=ctmmRed!20, draw=ctmmRed, text width=4cm, align=center, below=of stufe2] (stufe3)
         {\textbf{Stufe 3: Eskalation}\\Notfallplan, Rückzug};
-    \node[rectangle, fill=ctmmPurple!20, draw=ctmmPurple, text width=4cm, align=center, below=of stufe3] (stufe4) 
+    \node[rectangle, fill=ctmmPurple!20, draw=ctmmPurple, text width=4cm, align=center, below=of stufe3] (stufe4)
         {\textbf{Stufe 4: Rückkehr}\\Ritual, Reflexion, Lernen};
 
     % Arrows showing progression and return
@@ -139,7 +139,7 @@
     \draw[ctmmColorArrow={ctmmRed}{2pt}] ([xshift=0.5cm]stufe2.south) -- ([xshift=0.5cm]stufe3.north);
     \draw[ctmmColorArrow={ctmmPurple}{2pt}] ([xshift=0.5cm]stufe3.south) -- ([xshift=0.5cm]stufe4.north);
     \draw[ctmmColorArrow={ctmmGreen}{2pt}] ([xshift=-0.5cm]stufe4.north) -- ([xshift=-0.5cm]stufe1.south);
-    
+
     % Labels
     \node[font=\tiny, right] at ([xshift=0.7cm]stufe1.south east) {Trigger};
     \node[font=\tiny, right] at ([xshift=0.7cm]stufe2.south east) {Überforderung};
@@ -160,19 +160,19 @@
     every node/.style={font=\footnotesize}
 ]
     % Partner nodes
-    \node[ellipse, fill=ctmmBlue!20, draw=ctmmBlue, text width=2.5cm, align=center] (er) 
+    \node[ellipse, fill=ctmmBlue!20, draw=ctmmBlue, text width=2.5cm, align=center] (er)
         {\textbf{ER}\\kPTBS, ASS\\ADHS, Post-OP};
-    \node[ellipse, fill=ctmmRed!20, draw=ctmmRed, text width=2.5cm, align=center, right=of er] (sie) 
+    \node[ellipse, fill=ctmmRed!20, draw=ctmmRed, text width=2.5cm, align=center, right=of er] (sie)
         {\textbf{SIE}\\Borderline\\ADHS, ASS};
 
     % Interaction arrows
     \draw[ctmmColorArrow={ctmmOrange}{1.5pt}, bend left=20] (er.north) to node[above, font=\tiny] {Rückzug} (sie.north);
     \draw[ctmmColorArrow={ctmmRed}{1.5pt}, bend left=20] (sie.south) to node[below, font=\tiny] {Verlustangst} (er.south);
-    
+
     % Center intervention
-    \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, font=\tiny\bfseries] at ($(er)!0.5!(sie)$) 
+    \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, font=\tiny\bfseries] at ($(er)!0.5!(sie)$)
         {Safe-Words\\Ko-Regulation\\CTMM-Tools};
-        
+
     % Background circle for system
     \node[circle, draw=ctmmPurple, dashed, fit=(er)(sie), inner sep=1cm] {};
     \node[above, font=\tiny, text=ctmmPurple] at (current bounding box.north) {Bindungssicherheit};
@@ -192,7 +192,7 @@
 ]
     % Timeline base
     \draw[thick, ctmmGray] (0,0) -- (10,0);
-    
+
     % Time markers
     \foreach \x/\label in {0/Start,2.5/Woche 1,5/Woche 2,7.5/Woche 3,10/Monat} {
         \draw (\x,-0.1) -- (\x,0.1);
@@ -215,7 +215,7 @@
     % Axes
     \draw[->] (0,0) -- (8,0) node[right] {Zeit};
     \draw[->] (0,0) -- (0,6) node[above] {Stimmung};
-    
+
     % Grid
     \foreach \x in {1,2,...,7} {
         \draw[gray!30] (\x,0) -- (\x,5);
@@ -224,12 +224,12 @@
         \draw[gray!30] (0,\y) -- (7,\y);
         \node[left] at (0,\y) {\y};
     }
-    
+
     % Zones
     \fill[ctmmRed!10] (0,0) rectangle (7,2);
     \fill[ctmmOrange!10] (0,2) rectangle (7,3.5);
     \fill[ctmmGreen!10] (0,3.5) rectangle (7,5);
-    
+
     \node[right, font=\tiny] at (7.1,1) {Krise};
     \node[right, font=\tiny] at (7.1,2.75) {Achtung};
     \node[right, font=\tiny] at (7.1,4.25) {Stabil};

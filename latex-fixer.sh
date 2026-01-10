@@ -45,7 +45,7 @@ find modules -name "*.tex" -type f | while read -r file; do
     # Einfache Prüfung: Anzahl von \begin{...} sollte der Anzahl von \end{...} entsprechen
     begins=$(grep -c "\\\\begin{" "$file")
     ends=$(grep -c "\\\\end{" "$file")
-    
+
     if [ "$begins" != "$ends" ]; then
         echo -e "${RED}Potentiell nicht geschlossene Umgebung in $file${NC}"
         echo -e "  Anzahl \\begin: $begins"
