@@ -29,10 +29,32 @@ class CharacterValidator:
         self.files_with_issues = 0
 
     def detect_encoding(self, file_path: Path) -> Dict[str, any]:
-        """Detect the encoding of a file."""
+        """Detect the encoding of a file.
+
+        For LaTeX files (.tex, .sty), we force UTF-8 encoding as they should
+        always be UTF-8. chardet often misidentifies UTF-8 files with German
+        umlauts as MacRoman, leading to false positives.
+        """
         try:
             with open(file_path, 'rb') as f:
                 raw_data = f.read()
+
+                # For LaTeX files, force UTF-8 encoding
+                if file_path.suffix in ['.tex', '.sty']:
+                    # Verify it's valid UTF-8
+                    try:
+                        raw_data.decode('utf-8')
+                        return {
+                            'encoding': 'utf-8',
+                            'confidence': 1.0,
+                            'has_bom': raw_data.startswith(b'\xef\xbb\xbf'),
+                            'raw_data': raw_data
+                        }
+                    except UnicodeDecodeError:
+                        # If UTF-8 fails, fall back to chardet
+                        pass
+
+                # For other files or if UTF-8 failed, use chardet
                 result = chardet.detect(raw_data)
                 return {
                     'encoding': result['encoding'],
@@ -81,10 +103,16 @@ class CharacterValidator:
         return issues
 
     def find_problematic_non_ascii(self, content: str, file_path: Path) -> List[Dict]:
-        """Find potentially problematic non-ASCII characters."""
+        """Find potentially problematic non-ASCII characters.
+
+        NOTE: German umlauts (ä, ö, ü, Ä, Ö, Ü, ß) are VALID in UTF-8 LaTeX
+        files and should NOT be reported as problematic. LaTeX handles them
+        correctly with proper encoding.
+        """
         issues = []
 
         # Characters that should typically be escaped in LaTeX
+        # NOTE: We exclude German umlauts as they are valid UTF-8 characters
         problematic_chars = {
             '§': r'\S',
             '°': r'\degree',
@@ -106,9 +134,16 @@ class CharacterValidator:
             '"': r"''",
         }
 
+        # Valid German characters that should NOT be reported
+        valid_german_chars = set('äöüÄÖÜßáàâéèêíìîóòôúùûÁÀÂÉÈÊÍÌÎÓÒÔÚÙÛ')
+
         for line_num, line in enumerate(content.splitlines(), 1):
             for char_pos, char in enumerate(line, 1):
                 if ord(char) > 127:  # Non-ASCII
+                    # Skip valid German/European characters
+                    if char in valid_german_chars:
+                        continue
+
                     # Check if it's a problematic character
                     if char in problematic_chars:
                         # Check if it's already escaped (basic check)
