@@ -110,15 +110,15 @@ def run_tests():
     # Create a test suite
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
-    
+
     # Add test cases
     suite.addTests(loader.loadTestsFromTestCase(TestFilenameToTitle))
     suite.addTests(loader.loadTestsFromTestCase(TestIntegration))
-    
+
     # Run tests
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
-    
+
     # Return success status
     return result.wasSuccessful()
 
