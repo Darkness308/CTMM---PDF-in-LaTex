@@ -12,22 +12,14 @@ jobs:
   validate-pr-content:
     runs-on: ubuntu-latest
     name: Validate PR has reviewable content
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> pr-653
     steps:
     - name: Checkout code
       timeout-minutes: 5
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
     - name: Check for file changes
       timeout-minutes: 5
       id: changes
@@ -35,68 +27,40 @@ jobs:
         # Get the base and head commits
         BASE_SHA="${{ github.event.pull_request.base.sha }}"
         HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
         # Count changed files
         CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA | wc -l)
         ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}')
         DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}')
-<<<<<<< HEAD
 
         echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
         echo "added_lines=$ADDED_LINES" >> $GITHUB_OUTPUT
         echo "deleted_lines=$DELETED_LINES" >> $GITHUB_OUTPUT
 
-=======
-        
-        echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
-        echo "added_lines=$ADDED_LINES" >> $GITHUB_OUTPUT
-        echo "deleted_lines=$DELETED_LINES" >> $GITHUB_OUTPUT
-        
->>>>>>> pr-653
         echo "📊 PR Statistics:"
         echo "- Changed files: $CHANGED_FILES"
         echo "- Added lines: $ADDED_LINES"
         echo "- Deleted lines: $DELETED_LINES"
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
     - name: Validate PR has content
       timeout-minutes: 3
       run: |
         CHANGED_FILES="${{ steps.changes.outputs.changed_files }}"
         ADDED_LINES="${{ steps.changes.outputs.added_lines }}"
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
         if [ "$CHANGED_FILES" -eq 0 ]; then
           echo "❌ Error: This PR has no file changes."
           echo "Copilot cannot review PRs without any changed files."
           echo "Please ensure your PR includes actual code or documentation changes."
           exit 1
         fi
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
         if [ "$ADDED_LINES" -eq 0 ] && [ "${{ steps.changes.outputs.deleted_lines }}" -eq 0 ]; then
           echo "❌ Error: This PR has no content changes (0 additions, 0 deletions)."
           echo "Please include meaningful changes for Copilot to review."
           exit 1
         fi
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
         echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added"
     - name: Run CTMM build check
       timeout-minutes: 8
@@ -104,11 +68,7 @@ jobs:
         echo "🔧 Running CTMM build validation..."
         python3 ctmm_build.py
         echo "✅ CTMM build validation completed successfully"
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> pr-653
     - name: Enhanced CI environment validation for PRs
       timeout-minutes: 5
       continue-on-error: true
@@ -135,11 +95,7 @@ jobs:
               - Deleted lines: ${{ steps.changes.outputs.deleted_lines }}
 
               **Why this matters:** Copilot cannot review pull requests that contain no file changes or content modifications.
-<<<<<<< HEAD
 
-=======
-              
->>>>>>> pr-653
               ### To fix this issue:
               1. Ensure you have committed and pushed actual changes to files
               2. Check that your changes are included in this PR branch

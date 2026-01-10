@@ -1,10 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-<<<<<<< HEAD
 .PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix validate-forms validate-forms-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing test-workflow setup
-=======
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing test-workflow setup
->>>>>>> pr-653
 
 # Default target
 all: ctmm-check build
@@ -38,7 +34,6 @@ validate-fix:
 	@echo "Fixing LaTeX escaping issues..."
 	python3 latex_validator.py modules/ --fix
 
-<<<<<<< HEAD
 # Validate form fields
 validate-forms:
 	@echo "Validating form field syntax and conventions..."
@@ -49,8 +44,6 @@ validate-forms-fix:
 	@echo "Fixing form field issues..."
 	echo "y" | python3 validate_form_fields.py
 
-=======
->>>>>>> pr-653
 # CTMM Unified Tool Commands
 ctmm-check:
 	@echo "Running CTMM unified build check..."

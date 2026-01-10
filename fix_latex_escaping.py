@@ -153,7 +153,6 @@ class LaTeXDeEscaper:
             output_path = input_path
             
         try:
-<<<<<<< HEAD
             # Validate input file exists
             if not input_path.exists():
                 logger.error(f"Input file does not exist: {input_path}")
@@ -178,16 +177,10 @@ class LaTeXDeEscaper:
                 except Exception as e2:
                     logger.error(f"Failed to read {input_path} even with error handling: {e2}")
                     return False, 0
-=======
-            # Read the file with UTF-8 encoding
-            with open(input_path, 'r', encoding='utf-8') as f:
-                content = f.read()
->>>>>>> pr-653
             
             original_content = content
             replacements_made = 0
             
-<<<<<<< HEAD
             # Apply all escaping pattern fixes with error handling
             for i, (pattern, replacement) in enumerate(self.escaping_patterns):
                 try:
@@ -215,27 +208,11 @@ class LaTeXDeEscaper:
                 except Exception as e:
                     logger.warning(f"Error applying cleanup pattern {i+1}: {e}")
                     continue
-=======
-            # Apply all escaping pattern fixes
-            for pattern, replacement in self.escaping_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Pattern '{pattern}' replaced {count} times")
-            
-            # Apply cleanup patterns
-            for pattern, replacement in self.cleanup_patterns:
-                content, count = re.subn(pattern, replacement, content)
-                replacements_made += count
-                if count > 0:
-                    logger.debug(f"Cleanup pattern '{pattern}' replaced {count} times")
->>>>>>> pr-653
             
             # Check if content changed
             content_changed = content != original_content
             
             if content_changed:
-<<<<<<< HEAD
                 try:
                     # Ensure output directory exists
                     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -248,32 +225,26 @@ class LaTeXDeEscaper:
                 except PermissionError as e:
                     logger.error(f"Permission denied writing to {output_path}: {e}")
                     return False, 0
+                except Exception as e:
+                    logger.error(f"Error writing file: {e}")
+                    return False, 0
                 except IOError as e:
                     logger.error(f"IO error writing to {output_path}: {e}")
                     return False, 0
                 except Exception as e:
                     logger.error(f"Unexpected error writing to {output_path}: {e}")
                     return False, 0
-=======
-                # Write the fixed content
-                with open(output_path, 'w', encoding='utf-8') as f:
-                    f.write(content)
-                logger.info(f"Fixed {input_path} -> {output_path} ({replacements_made} replacements)")
->>>>>>> pr-653
             else:
                 logger.info(f"No changes needed for {input_path}")
             
             return content_changed, replacements_made
             
-<<<<<<< HEAD
         except FileNotFoundError as e:
             logger.error(f"File not found: {e}")
             return False, 0
         except PermissionError as e:
             logger.error(f"Permission denied: {e}")
             return False, 0
-=======
->>>>>>> pr-653
         except Exception as e:
             logger.error(f"Error processing {input_path}: {e}")
             return False, 0
