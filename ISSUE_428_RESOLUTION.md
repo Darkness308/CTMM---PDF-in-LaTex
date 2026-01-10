@@ -1,7 +1,7 @@
 # Issue #428 Resolution - "ist dieser fehler jetzt behoben"
 
 ## Frage / Question
-**Deutsch:** "ist dieser fehler jetzt behoben"  
+**Deutsch:** "ist dieser fehler jetzt behoben"
 **English:** "Is this error now fixed"
 
 ## Antwort / Answer: ✅ **JA / YES - Der Fehler ist behoben / The error is fixed**
@@ -32,7 +32,7 @@ Ebenfalls in der PR-Review wurde die Funktion `generate_build_report()` als Plat
 #### ✅ Code-Qualität verifiziert
 - [x] Alle essentiellen Funktionen sind weiterhin vorhanden:
   - `test_basic_build()`
-  - `test_full_build()`  
+  - `test_full_build()`
   - `scan_references()`
   - `check_missing_files()`
   - `create_template()`

@@ -35,7 +35,7 @@ Overall Result: 4/5 tests passed
 
 Updated `test_issue_743_validation.py` to check for the correct LaTeX action:
 
-**File**: `test_issue_743_validation.py`  
+**File**: `test_issue_743_validation.py`
 **Lines Modified**: 5 lines (119, 124, 129, 130, 133)
 
 #### Specific Changes:
@@ -44,7 +44,7 @@ Updated `test_issue_743_validation.py` to check for the correct LaTeX action:
    ```python
    # Before
    if step.get('name') == 'Set up LaTeX' and 'xu-cheng/latex-action' in str(step.get('uses', '')):
-   
+
    # After
    if step.get('name') == 'Set up LaTeX' and 'dante-ev/latex-action' in str(step.get('uses', '')):
    ```
@@ -53,7 +53,7 @@ Updated `test_issue_743_validation.py` to check for the correct LaTeX action:
    ```python
    # Before
    print("❌ ERROR: 'Set up LaTeX' step with xu-cheng/latex-action not found in workflow")
-   
+
    # After
    print("❌ ERROR: 'Set up LaTeX' step with dante-ev/latex-action not found in workflow")
    ```
@@ -62,7 +62,7 @@ Updated `test_issue_743_validation.py` to check for the correct LaTeX action:
    ```python
    # Before
    if 'xu-cheng/latex-action@v3' not in action_uses:
-   
+
    # After
    if 'dante-ev/latex-action' not in action_uses:
    ```
@@ -71,7 +71,7 @@ Updated `test_issue_743_validation.py` to check for the correct LaTeX action:
    ```python
    # Before
    print(f"❌ ERROR: Expected xu-cheng/latex-action@v3, found: {action_uses}")
-   
+
    # After
    print(f"❌ ERROR: Expected dante-ev/latex-action, found: {action_uses}")
    ```
@@ -80,7 +80,7 @@ Updated `test_issue_743_validation.py` to check for the correct LaTeX action:
    ```python
    # Before
    print("✅ CORRECT: Using xu-cheng/latex-action@v3")
-   
+
    # After
    print(f"✅ CORRECT: Using {action_uses}")
    ```
@@ -180,7 +180,7 @@ When the next GitHub Actions run executes:
 
 ---
 
-**Resolution Status**: ✅ COMPLETE  
-**Commit**: e6dbfe84e67a507390938f3af0f2046c99cb96da  
-**Branch**: copilot/fix-run-error  
+**Resolution Status**: ✅ COMPLETE
+**Commit**: e6dbfe84e67a507390938f3af0f2046c99cb96da
+**Branch**: copilot/fix-run-error
 **Author**: copilot-swe-agent[bot]

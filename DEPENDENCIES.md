@@ -20,14 +20,14 @@
 ### Document Structure & Formatting
 ```latex
 \RequirePackage{geometry}     % v5.9 - Page layout
-\RequirePackage{fancyhdr}     % v4.0.1 - Headers and footers  
+\RequirePackage{fancyhdr}     % v4.0.1 - Headers and footers
 \RequirePackage{titlesec}     % v2.14 - Section formatting
 \RequirePackage{tocloft}      % v2.3i - Table of contents
 \RequirePackage{multicol}     % v1.9a - Multiple columns
 \RequirePackage{enumitem}     % v3.9 - List formatting
 ```
 
-### Colors & Graphics  
+### Colors & Graphics
 ```latex
 \RequirePackage{xcolor}       % v2.14 - Color support
 \RequirePackage{tikz}         % v3.1.10 - Graphics and diagrams
@@ -66,7 +66,7 @@ sudo apt-get install -y chktex lacheck  # Linting tools
 ```bash
 tlmgr update --self
 tlmgr install collection-latexextra
-tlmgr install collection-fontsrecommended  
+tlmgr install collection-fontsrecommended
 tlmgr install insdljs eforms acrotex
 ```
 
@@ -80,7 +80,7 @@ tlmgr install insdljs eforms acrotex
     sudo apt-get install -y texlive-full texlive-fonts-extra
     sudo apt-get install -y chktex lacheck
 
-- name: LaTeX Syntax Check  
+- name: LaTeX Syntax Check
   run: find . -name "*.tex" -exec chktex -q {} \;
 
 - name: Compile with 3-pass build

@@ -53,7 +53,7 @@ $ python3 validate_latex_syntax.py
 
 ## Impact
 - **Fixes CI build failures**: GitHub Actions workflow will now successfully resolve the LaTeX action
-- **Enables PDF generation**: LaTeX compilation can proceed without action resolution errors  
+- **Enables PDF generation**: LaTeX compilation can proceed without action resolution errors
 - **Maintains compatibility**: No breaking changes to existing document structure or functionality
 - **Improves reliability**: Eliminates version-related workflow failures
 
@@ -64,7 +64,7 @@ $ python3 validate_latex_syntax.py
 ## Technical Details
 The `dante-ev/latex-action` GitHub Action follows semantic versioning with major version tags:
 - ✅ `v2` - Valid major version tag
-- ❌ `v2.0.0` - Does not exist 
+- ❌ `v2.0.0` - Does not exist
 - ✅ `v0.2` - Valid specific version (older)
 
 **Error behavior**: GitHub Actions fails immediately during workflow parsing when it cannot resolve the specified action version, preventing any steps from executing.

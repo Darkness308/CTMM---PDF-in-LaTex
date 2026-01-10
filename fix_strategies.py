@@ -27,37 +27,37 @@ class FixResult:
 
 class FixStrategies:
     """Implements automated fix strategies for common workflow errors."""
-    
+
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.repo_root = Path.cwd()
-    
+
     def apply_fixes(self, analysis: ErrorAnalysis) -> List[FixResult]:
         """Apply appropriate fix strategies based on error analysis."""
         if not analysis.is_solvable:
             self.logger.warning("Analysis indicates errors are not solvable")
             return []
-        
+
         results = []
-        
+
         # Apply fixes in priority order
-        for category in sorted(analysis.error_categories, 
+        for category in sorted(analysis.error_categories,
                              key=lambda x: config.fix_strategies.get(x, {}).get('priority', 999)):
-            
+
             if category in config.fix_strategies:
                 self.logger.info(f"Applying fix strategy for category: {category}")
-                
+
                 fix_result = self._apply_category_fix(category, analysis)
                 if fix_result:
                     results.append(fix_result)
-                    
+
                     # If this fix failed critically, stop here
                     if not fix_result.success and fix_result.error_message:
                         self.logger.error(f"Critical fix failure for {category}: {fix_result.error_message}")
                         break
-        
+
         return results
-    
+
     def _apply_category_fix(self, category: str, analysis: ErrorAnalysis) -> Optional[FixResult]:
         """Apply fix strategy for a specific error category."""
         try:
@@ -76,7 +76,7 @@ class FixStrategies:
             else:
                 self.logger.warning(f"No fix strategy implemented for category: {category}")
                 return None
-                
+
         except Exception as e:
             self.logger.error(f"Error applying fix for category {category}: {e}")
             return FixResult(
@@ -87,43 +87,43 @@ class FixStrategies:
                 validation_passed=False,
                 error_message=str(e)
             )
-    
+
     def _fix_latex_action_version(self, analysis: ErrorAnalysis) -> FixResult:
         """Fix LaTeX action version issues."""
         workflow_files = self._find_workflow_files()
         files_modified = []
         changes_made = []
-        
+
         fallback_version = config.fix_strategies['latex_action_version']['fallback_version']
-        
+
         for workflow_file in workflow_files:
             file_path = self.repo_root / workflow_file
-            
+
             if not file_path.exists():
                 continue
-            
+
             with open(file_path, 'r') as f:
                 content = f.read()
-            
+
             # Find and replace dante-ev/latex-action versions
             pattern = r'(uses:\s*dante-ev/latex-action@)(v?[\d\.]+)'
             matches = re.findall(pattern, content)
-            
+
             if matches:
                 old_content = content
                 content = re.sub(pattern, f'\\1{fallback_version}', content)
-                
+
                 if content != old_content:
                     with open(file_path, 'w') as f:
                         f.write(content)
-                    
+
                     files_modified.append(str(workflow_file))
                     changes_made.append(f"Updated LaTeX action to {fallback_version} in {workflow_file}")
                     self.logger.info(f"Updated LaTeX action version in {workflow_file}")
-        
+
         # Validate the changes
         validation_passed = self._validate_changes(files_modified)
-        
+
         return FixResult(
             success=len(files_modified) > 0,
             description=f"Updated LaTeX action versions to {fallback_version}",
@@ -131,7 +131,7 @@ class FixStrategies:
             changes_made=changes_made,
             validation_passed=validation_passed
         )
-    
+
     def _fix_missing_packages(self, analysis: ErrorAnalysis) -> FixResult:
         """Fix missing LaTeX packages by updating workflow dependencies."""
         # Extract missing package names from errors
@@ -144,7 +144,7 @@ class FixStrategies:
                     r'File\s+([^\.]+)\.sty\s+not found',
                     r'texlive-([^\s]+)'
                 ]
-                
+
                 for pattern in patterns:
                     match = re.search(pattern, error.matched_text)
                     if match:
@@ -156,7 +156,7 @@ class FixStrategies:
                             missing_packages.add(f'texlive-{pkg[:-4]}')
                         else:
                             missing_packages.add(f'texlive-{pkg}')
-        
+
         if not missing_packages:
             return FixResult(
                 success=False,
@@ -165,50 +165,50 @@ class FixStrategies:
                 changes_made=[],
                 validation_passed=False
             )
-        
+
         # Update workflow files to include missing packages
         workflow_files = self._find_workflow_files()
         files_modified = []
         changes_made = []
-        
+
         for workflow_file in workflow_files:
             if 'latex-build' in workflow_file:  # Only update the main LaTeX build workflow
                 file_path = self.repo_root / workflow_file
-                
+
                 if not file_path.exists():
                     continue
-                
+
                 with open(file_path, 'r') as f:
                     content = f.read()
-                
+
                 # Find the extra_system_packages section
                 package_section_pattern = r'(extra_system_packages:\s*\|)([^-]*?)(\n\s*-?\s*\n|\n\s*[a-zA-Z]|\Z)'
                 match = re.search(package_section_pattern, content, re.DOTALL)
-                
+
                 if match:
                     existing_packages = match.group(2)
                     packages_to_add = []
-                    
+
                     for pkg in missing_packages:
                         if pkg not in existing_packages:
                             packages_to_add.append(pkg)
-                    
+
                     if packages_to_add:
                         new_packages = existing_packages.rstrip()
                         for pkg in packages_to_add:
                             new_packages += f"\n            {pkg}"
-                        
+
                         new_content = content.replace(match.group(2), new_packages + '\n            ')
-                        
+
                         with open(file_path, 'w') as f:
                             f.write(new_content)
-                        
+
                         files_modified.append(str(workflow_file))
                         changes_made.extend([f"Added package {pkg}" for pkg in packages_to_add])
                         self.logger.info(f"Added {len(packages_to_add)} packages to {workflow_file}")
-        
+
         validation_passed = self._validate_changes(files_modified)
-        
+
         return FixResult(
             success=len(files_modified) > 0,
             description=f"Added missing LaTeX packages: {', '.join(missing_packages)}",
@@ -216,45 +216,45 @@ class FixStrategies:
             changes_made=changes_made,
             validation_passed=validation_passed
         )
-    
+
     def _fix_timeouts(self, analysis: ErrorAnalysis) -> FixResult:
         """Fix timeout issues by increasing timeout values."""
         workflow_files = self._find_workflow_files()
         files_modified = []
         changes_made = []
-        
+
         multiplier = config.fix_strategies['timeout']['timeout_multiplier']
-        
+
         for workflow_file in workflow_files:
             file_path = self.repo_root / workflow_file
-            
+
             if not file_path.exists():
                 continue
-            
+
             with open(file_path, 'r') as f:
                 content = f.read()
-            
+
             # Find and increase timeout-minutes values
             timeout_pattern = r'timeout-minutes:\s*(\d+)'
-            
+
             def increase_timeout(match):
                 current_timeout = int(match.group(1))
                 new_timeout = max(int(current_timeout * multiplier), current_timeout + 5)
                 return f'timeout-minutes: {new_timeout}'
-            
+
             old_content = content
             content = re.sub(timeout_pattern, increase_timeout, content)
-            
+
             if content != old_content:
                 with open(file_path, 'w') as f:
                     f.write(content)
-                
+
                 files_modified.append(str(workflow_file))
                 changes_made.append(f"Increased timeouts by {multiplier}x in {workflow_file}")
                 self.logger.info(f"Increased timeouts in {workflow_file}")
-        
+
         validation_passed = self._validate_changes(files_modified)
-        
+
         return FixResult(
             success=len(files_modified) > 0,
             description=f"Increased timeout values by factor of {multiplier}",
@@ -262,35 +262,35 @@ class FixStrategies:
             changes_made=changes_made,
             validation_passed=validation_passed
         )
-    
+
     def _fix_dependency_errors(self, analysis: ErrorAnalysis) -> FixResult:
         """Fix Python dependency errors."""
         workflow_files = self._find_workflow_files()
         files_modified = []
         changes_made = []
-        
+
         for workflow_file in workflow_files:
             file_path = self.repo_root / workflow_file
-            
+
             if not file_path.exists():
                 continue
-            
+
             with open(file_path, 'r') as f:
                 content = f.read()
-            
+
             # Look for pip install commands and add upgrade flags
             pip_pattern = r'(pip install)([^|&\n]*)'
-            
+
             def upgrade_pip_install(match):
                 install_cmd = match.group(1)
                 packages = match.group(2)
                 if '--upgrade' not in packages:
                     return f'{install_cmd} --upgrade{packages}'
                 return match.group(0)
-            
+
             old_content = content
             content = re.sub(pip_pattern, upgrade_pip_install, content)
-            
+
             # Also ensure pip itself is upgraded
             if 'pip install' in content and 'pip install --upgrade pip' not in content:
                 content = content.replace(
@@ -298,17 +298,17 @@ class FixStrategies:
                     'pip install --upgrade pip && pip install',
                     1  # Only replace the first occurrence
                 )
-            
+
             if content != old_content:
                 with open(file_path, 'w') as f:
                     f.write(content)
-                
+
                 files_modified.append(str(workflow_file))
                 changes_made.append(f"Added pip upgrade flags in {workflow_file}")
                 self.logger.info(f"Updated pip install commands in {workflow_file}")
-        
+
         validation_passed = self._validate_changes(files_modified)
-        
+
         return FixResult(
             success=len(files_modified) > 0,
             description="Updated Python dependency installation with upgrade flags",
@@ -316,7 +316,7 @@ class FixStrategies:
             changes_made=changes_made,
             validation_passed=validation_passed
         )
-    
+
     def _fix_font_errors(self, analysis: ErrorAnalysis) -> FixResult:
         """Fix FontAwesome and font-related errors."""
         # This is primarily handled by the package installation fix
@@ -324,50 +324,50 @@ class FixStrategies:
         workflow_files = self._find_workflow_files()
         files_modified = []
         changes_made = []
-        
+
         for workflow_file in workflow_files:
             if 'latex-build' in workflow_file:
                 file_path = self.repo_root / workflow_file
-                
+
                 if not file_path.exists():
                     continue
-                
+
                 with open(file_path, 'r') as f:
                     content = f.read()
-                
+
                 # Ensure FontAwesome packages are included
                 fontawesome_packages = [
                     'texlive-fonts-extra',
                     'texlive-fonts-recommended'
                 ]
-                
+
                 package_section_pattern = r'(extra_system_packages:\s*\|)([^-]*?)(\n\s*-?\s*\n|\n\s*[a-zA-Z]|\Z)'
                 match = re.search(package_section_pattern, content, re.DOTALL)
-                
+
                 if match:
                     existing_packages = match.group(2)
                     packages_to_add = []
-                    
+
                     for pkg in fontawesome_packages:
                         if pkg not in existing_packages:
                             packages_to_add.append(pkg)
-                    
+
                     if packages_to_add:
                         new_packages = existing_packages.rstrip()
                         for pkg in packages_to_add:
                             new_packages += f"\n            {pkg}"
-                        
+
                         new_content = content.replace(match.group(2), new_packages + '\n            ')
-                        
+
                         with open(file_path, 'w') as f:
                             f.write(new_content)
-                        
+
                         files_modified.append(str(workflow_file))
                         changes_made.extend([f"Added FontAwesome package {pkg}" for pkg in packages_to_add])
                         self.logger.info(f"Added FontAwesome packages to {workflow_file}")
-        
+
         validation_passed = self._validate_changes(files_modified)
-        
+
         return FixResult(
             success=len(files_modified) > 0,
             description="Added FontAwesome and font packages",
@@ -375,41 +375,41 @@ class FixStrategies:
             changes_made=changes_made,
             validation_passed=validation_passed
         )
-    
+
     def _fix_workflow_syntax(self, analysis: ErrorAnalysis) -> FixResult:
         """Fix basic workflow syntax issues."""
         workflow_files = self._find_workflow_files()
         files_modified = []
         changes_made = []
-        
+
         for workflow_file in workflow_files:
             file_path = self.repo_root / workflow_file
-            
+
             if not file_path.exists():
                 continue
-            
+
             with open(file_path, 'r') as f:
                 content = f.read()
-            
+
             old_content = content
-            
+
             # Fix common YAML syntax issues
             # Ensure proper quoting of 'on:' keyword
             content = re.sub(r'^on:', '"on":', content, flags=re.MULTILINE)
-            
+
             # Fix indentation issues (basic)
             content = re.sub(r'^\s\s([a-zA-Z])', r'  \1', content, flags=re.MULTILINE)
-            
+
             if content != old_content:
                 with open(file_path, 'w') as f:
                     f.write(content)
-                
+
                 files_modified.append(str(workflow_file))
                 changes_made.append(f"Fixed YAML syntax in {workflow_file}")
                 self.logger.info(f"Fixed workflow syntax in {workflow_file}")
-        
+
         validation_passed = self._validate_changes(files_modified)
-        
+
         return FixResult(
             success=len(files_modified) > 0,
             description="Fixed workflow YAML syntax issues",
@@ -417,26 +417,26 @@ class FixStrategies:
             changes_made=changes_made,
             validation_passed=validation_passed
         )
-    
+
     def _find_workflow_files(self) -> List[str]:
         """Find all workflow files in the repository."""
         workflow_dir = self.repo_root / '.github' / 'workflows'
         if not workflow_dir.exists():
             return []
-        
+
         workflow_files = []
         for file_path in workflow_dir.glob('*.yml'):
             workflow_files.append(str(file_path.relative_to(self.repo_root)))
         for file_path in workflow_dir.glob('*.yaml'):
             workflow_files.append(str(file_path.relative_to(self.repo_root)))
-        
+
         return workflow_files
-    
+
     def _validate_changes(self, modified_files: List[str]) -> bool:
         """Validate changes using existing validation tools."""
         if not modified_files:
             return True
-        
+
         try:
             # Run YAML syntax validation
             result = subprocess.run(
@@ -446,14 +446,14 @@ class FixStrategies:
                 cwd=self.repo_root,
                 timeout=60
             )
-            
+
             if result.returncode == 0:
                 self.logger.info("Workflow syntax validation passed")
                 return True
             else:
                 self.logger.error(f"Workflow syntax validation failed: {result.stderr}")
                 return False
-                
+
         except subprocess.TimeoutExpired:
             self.logger.warning("Validation timeout - assuming success")
             return True
@@ -467,15 +467,15 @@ class FixStrategies:
 def main():
     """Test the fix strategies functionality."""
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-    
+
     # Import here to avoid circular imports during testing
     from error_analyzer import ErrorAnalyzer, ErrorInstance
-    
+
     strategies = FixStrategies()
-    
+
     print("🔧 Testing Fix Strategies")
     print("=" * 50)
-    
+
     # Create a sample error analysis for testing
     sample_errors = [
         ErrorInstance(
@@ -497,7 +497,7 @@ def main():
             job_name='test-job'
         )
     ]
-    
+
     # Create a mock analysis
     class MockAnalysis:
         def __init__(self):
@@ -509,13 +509,13 @@ def main():
             self.is_solvable = True
             self.recommended_fixes = []
             self.analysis_timestamp = '2024-01-01T00:00:00'
-    
+
     mock_analysis = MockAnalysis()
-    
+
     # Test fix application
     print("📝 Testing fix application...")
     results = strategies.apply_fixes(mock_analysis)
-    
+
     print(f"✅ Applied {len(results)} fix strategies:")
     for i, result in enumerate(results, 1):
         status = "✅" if result.success else "❌"
@@ -525,7 +525,7 @@ def main():
         if result.changes_made:
             for change in result.changes_made:
                 print(f"      - {change}")
-    
+
     print("\n✅ Fix strategies test completed")
 
 if __name__ == "__main__":

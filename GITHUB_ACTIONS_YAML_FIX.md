@@ -26,7 +26,7 @@ on:
   push:
     branches: [main]
 
-# ✅ Correct (quoted)  
+# ✅ Correct (quoted)
 "on":
   push:
     branches: [main]
@@ -43,7 +43,7 @@ on:
 All three workflow files have been validated and confirmed to have the correct syntax:
 
 - ✅ **latex-build.yml**: Triggers on push/pull_request to main branch
-- ✅ **latex-validation.yml**: Triggers on push/pull_request to main branch  
+- ✅ **latex-validation.yml**: Triggers on push/pull_request to main branch
 - ✅ **static.yml**: Triggers on push to main branch and manual workflow_dispatch
 
 ### Technical Verification
@@ -55,7 +55,7 @@ yaml.safe_load('on:\n  push:\n    branches: [main]')
 # Issue: Key is boolean True, not string "on"
 
 # Correct parsing (quoted)
-yaml.safe_load('"on":\n  push:\n    branches: [main]')  
+yaml.safe_load('"on":\n  push:\n    branches: [main]')
 # Result: {'on': {'push': {'branches': ['main']}}}
 # Success: Key is string "on" as expected by GitHub Actions
 ```
@@ -65,7 +65,7 @@ yaml.safe_load('"on":\n  push:\n    branches: [main]')
 The YAML syntax issue has been successfully resolved for both issues #458 and #532. All GitHub Actions workflow files now use the quoted `"on":` syntax, ensuring:
 
 - Proper YAML parsing with string keys
-- Correct GitHub Actions trigger recognition  
+- Correct GitHub Actions trigger recognition
 - Reliable workflow execution on push and pull request events
 
 The fix ensures workflows will trigger correctly and prevents YAML boolean interpretation issues.
@@ -75,7 +75,7 @@ The fix ensures workflows will trigger correctly and prevents YAML boolean inter
 Multiple validation scripts confirm the fix is working correctly:
 
 1. **`validate_workflow_syntax.py`**: Comprehensive validation of all workflow files
-2. **`test_workflow_structure.py`**: Tests GitHub Actions workflow structure compliance  
+2. **`test_workflow_structure.py`**: Tests GitHub Actions workflow structure compliance
 3. **`final_verification.py`**: Demonstrates the fix by comparing incorrect vs correct syntax
 4. **`validate_issue_532.py`**: Specific validation for Issue #532 resolution
 
