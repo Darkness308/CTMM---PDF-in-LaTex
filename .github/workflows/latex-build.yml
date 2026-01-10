@@ -32,7 +32,7 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "📦 Installing Python dependencies..."
-          pip install chardet pyyaml
+          pip install chardet
           echo "✅ Python dependencies installed successfully"
 
       - name: Run LaTeX syntax validation
