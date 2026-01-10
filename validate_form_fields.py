@@ -153,7 +153,7 @@ class FormFieldValidator:
         # Check for proper field naming conventions
         field_patterns = [
             r'\\ctmmTextField\[[^\]]*\]\{[^}]*\}\{([^}]+)\}',
-            r'\\ctmmTextArea\[[^\]]*\]\{[^}]*\}\{[^}]*\}\{([^}]+)\}',
+            r'\\ctmmTextArea\[[^\]]*\]\{[^}]*\}\{([^}]+)\}\{[^}]*\}',  # Capture 3rd param (field name), not 4th
             r'\\ctmmCheckBox\[([^\]]+)\]',
         ]
         
