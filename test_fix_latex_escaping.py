@@ -37,10 +37,10 @@ class TestLaTeXDeEscaper(unittest.TestCase):
     def test_basic_command_escaping(self):
         """Test fixing of basic over-escaped LaTeX commands."""
         content = r"\textbackslash{}hypertarget\textbackslash{}{some-target}"
-        
+
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
-        
+
         result = test_file.read_text(encoding='utf-8')
         self.assertTrue(changed)
         self.assertGreater(count, 0)
@@ -50,10 +50,10 @@ class TestLaTeXDeEscaper(unittest.TestCase):
     def test_section_header_escaping(self):
         """Test fixing of over-escaped section headers."""
         content = r"\textbackslash{}section\textbackslash{}\textbackslash{}\textbackslash{}texorpdfstring\textbackslash{}{Title}{Plain Title}"
-        
+
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
-        
+
         result = test_file.read_text(encoding='utf-8')
         self.assertTrue(changed)
         self.assertGreater(count, 0)
@@ -68,13 +68,13 @@ class TestLaTeXDeEscaper(unittest.TestCase):
             (r"\textbackslash{}ul\textbackslash{}", r"\ul"),
             (r"\textbackslash{}texttt\textbackslash{}", r"\texttt"),
         ]
-        
+
         for escaped, expected in test_cases:
             with self.subTest(escaped=escaped):
                 content = f"{escaped}{{Some text}}"
                 test_file = self.create_test_file(content)
                 changed, count = self.de_escaper.process_file(test_file)
-                
+
                 result = test_file.read_text(encoding='utf-8')
                 self.assertTrue(changed)
                 self.assertIn(expected, result)
@@ -88,13 +88,13 @@ class TestLaTeXDeEscaper(unittest.TestCase):
             (r"\textbackslash{}enumerate\textbackslash{}", r"enumerate"),
             (r"\textbackslash{}itemize\textbackslash{}", r"itemize"),
         ]
-        
+
         for escaped, expected in test_cases:
             with self.subTest(escaped=escaped):
                 content = f"{escaped}{{itemize}}"
                 test_file = self.create_test_file(content)
                 changed, count = self.de_escaper.process_file(test_file)
-                
+
                 result = test_file.read_text(encoding='utf-8')
                 self.assertTrue(changed)
                 self.assertIn(expected, result)
@@ -104,12 +104,12 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         # The parameter braces pattern might not be implemented exactly as expected
         # Focus on testing that the escaping tool has the functionality
         # even if specific patterns don't match our expectations
-        
+
         # Test that some form of brace fixing exists
         content = r"Some content with braces"  # Valid content
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
-        
+
         # This test validates the functionality exists
         # The specific patterns may vary in implementation
         self.assertIsInstance(changed, bool)
@@ -122,12 +122,12 @@ class TestLaTeXDeEscaper(unittest.TestCase):
             (r"\textbackslash{}%", r"%"),
             # Note: \$ and \& patterns may not be implemented yet
         ]
-        
+
         for escaped, expected in test_cases:
             with self.subTest(escaped=escaped):
                 test_file = self.create_test_file(escaped)
                 changed, count = self.de_escaper.process_file(test_file)
-                
+
                 result = test_file.read_text(encoding='utf-8')
                 self.assertTrue(changed)
                 self.assertIn(expected, result)
@@ -143,14 +143,14 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         \textbackslash{}item More content with \textbackslash{}emph\textbackslash{}{emphasis\textbackslash{}}
         \textbackslash{}end\textbackslash{}{itemize\textbackslash{}}
         """
-        
+
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
-        
+
         result = test_file.read_text(encoding='utf-8')
         self.assertTrue(changed)
         self.assertGreater(count, 10)  # Should have many replacements
-        
+
         # Verify key structures are fixed
         self.assertIn(r"\hypertarget", result)
         self.assertIn(r"\section", result)
@@ -158,7 +158,7 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         self.assertIn(r"\textbf{", result)
         self.assertIn(r"\emph{", result)
         self.assertIn(r"\end{itemize}", result)
-        
+
         # Verify over-escaping is removed
         self.assertNotIn(r"\textbackslash{}", result)
 
@@ -166,14 +166,14 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         """Test that multi-pass cleanup works correctly."""
         # Test with a known working pattern - multiple consecutive braces
         content = r"{{{}}"  # This should trigger cleanup patterns
-        
+
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
-        
+
         # Verify the functionality exists even if this specific pattern doesn't trigger
         self.assertIsInstance(changed, bool)
         self.assertIsInstance(count, int)
-        
+
         # Test that the multi-pass functionality exists in the tool
         self.assertGreater(len(self.de_escaper.cleanup_patterns), 0)
 
@@ -185,16 +185,16 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         \item First item with \textbf{bold} text
         \item Second item with \emph{emphasis}
         \end{itemize}
-        
+
         Some math: $x = y + z$
-        
+
         \hypertarget{valid-target}{%
         \subsection{Valid Subsection}
         """
-        
+
         test_file = self.create_test_file(content)
         changed, count = self.de_escaper.process_file(test_file)
-        
+
         # Should not change valid LaTeX (allow for some minor cleanup)
         # The escaping tool may still find some patterns to clean
         if changed:
@@ -209,13 +209,13 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         # Create a file with known issues
         content = r"\textbackslash{}section\textbackslash{}{Test}"
         test_file = self.create_test_file(content)
-        
+
         # Fix the file
         self.de_escaper.process_file(test_file)
-        
+
         # Validate the fixed file
         issues = self.de_escaper.validate_latex_syntax(test_file)
-        
+
         # Should have no remaining textbackslash issues
         textbackslash_issues = [issue for issue in issues if 'textbackslash' in issue.lower()]
         self.assertEqual(len(textbackslash_issues), 0)
@@ -229,13 +229,13 @@ class TestLaTeXDeEscaper(unittest.TestCase):
             "file3.tex": r"Valid LaTeX content",
             "not_tex.txt": r"Not a LaTeX file"
         }
-        
+
         for filename, content in files_content.items():
             (self.temp_path / filename).write_text(content, encoding='utf-8')
-        
+
         # Process the directory
         stats = self.de_escaper.process_directory(self.temp_path)
-        
+
         # Should process only .tex files
         self.assertEqual(stats['files_processed'], 3)
         self.assertEqual(stats['files_changed'], 2)  # file1 and file2 should change
@@ -246,18 +246,18 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         content = r"\textbackslash{}section\textbackslash{}{Test}"
         test_file = self.create_test_file(content)
         backup_file = test_file.with_suffix('.tex.bak')
-        
+
         # Create backup manually (simulating --backup option)
         shutil.copy2(test_file, backup_file)
-        
+
         # Process the file
         self.de_escaper.process_file(test_file)
-        
+
         # Verify backup exists and contains original content
         self.assertTrue(backup_file.exists())
         backup_content = backup_file.read_text(encoding='utf-8')
         self.assertIn(r"\textbackslash{}", backup_content)
-        
+
         # Verify original file is fixed
         result_content = test_file.read_text(encoding='utf-8')
         self.assertNotIn(r"\textbackslash{}", result_content)
@@ -279,29 +279,29 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         """Test patterns specific to CTMM therapeutic content."""
         ctmm_test_cases = [
             # Tool numbering patterns
-            (r"\textbackslash{}textbf\textbackslash{}{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}", 
+            (r"\textbackslash{}textbf\textbackslash{}{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}",
              r"\textbf{TOOL 23: TRIGGER-MANAGEMENT}"),
-            
+
             # German therapeutic terms
-            (r"\textbackslash{}emph\textbackslash{}{Selbstreflexion\textbackslash{}}", 
+            (r"\textbackslash{}emph\textbackslash{}{Selbstreflexion\textbackslash{}}",
              r"\emph{Selbstreflexion}"),
-            
+
             # Navigation elements
-            (r"\textbackslash{}hypertarget\textbackslash{}{navigation-system\textbackslash{}}", 
+            (r"\textbackslash{}hypertarget\textbackslash{}{navigation-system\textbackslash{}}",
              r"\hypertarget{navigation-system}"),
         ]
-        
+
         for escaped, expected_pattern in ctmm_test_cases:
             with self.subTest(escaped=escaped):
                 test_file = self.create_test_file(escaped)
                 changed, count = self.de_escaper.process_file(test_file)
-                
+
                 result = test_file.read_text(encoding='utf-8')
                 self.assertTrue(changed)
                 self.assertGreater(count, 0)
                 # Check that the result contains the expected command structure
-                self.assertIn("\\textbf{" if "textbf" in expected_pattern else 
-                             "\\emph{" if "emph" in expected_pattern else 
+                self.assertIn("\\textbf{" if "textbf" in expected_pattern else
+                             "\\emph{" if "emph" in expected_pattern else
                              "\\hypertarget{", result)
 
 
@@ -323,29 +323,29 @@ class TestLaTeXDeEscaperIntegration(unittest.TestCase):
     def test_stats_tracking(self):
         """Test that statistics are properly tracked during processing."""
         de_escaper = LaTeXDeEscaper()
-        
+
         # Initial stats should be zero
         self.assertEqual(de_escaper.stats['files_processed'], 0)
         self.assertEqual(de_escaper.stats['files_changed'], 0)
         self.assertEqual(de_escaper.stats['total_replacements'], 0)
-        
+
         # Process a test directory (created in previous test)
         temp_dir = tempfile.mkdtemp()
         temp_path = Path(temp_dir)
-        
+
         try:
             # Create test file
             test_file = temp_path / "test.tex"
             test_file.write_text(r"\textbackslash{}section\textbackslash{}{Test}", encoding='utf-8')
-            
+
             # Process directory
             stats = de_escaper.process_directory(temp_path)
-            
+
             # Verify stats are updated
             self.assertEqual(stats['files_processed'], 1)
             self.assertEqual(stats['files_changed'], 1)
             self.assertGreater(stats['total_replacements'], 0)
-            
+
         finally:
             shutil.rmtree(temp_dir)
 

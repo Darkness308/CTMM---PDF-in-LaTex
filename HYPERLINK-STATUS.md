@@ -1,9 +1,7 @@
 # 🔗 **HYPERLINK-STATUS-BERICHT - CTMM-SYSTEM**
-<<<<<<< HEAD
+**Datum:** 3. August 2024
 **Datum:** 3. August 2024  
-=======
-**Datum:** 3. August 2025  
->>>>>>> pr-653
+main
 **Status:** Alle Links überprüft und korrigiert
 
 ---
@@ -12,7 +10,7 @@
 
 ### **Hauptnavigation:**
 - `sec:navigation` → Navigations-System (Seite 2-3)
-- `sec:depression` → Depression-Modul (Seite 4-5)  
+- `sec:depression` → Depression-Modul (Seite 4-5)
 - `sec:bindungsleitfaden` → Bindungsleitfaden (Seite 5)
 - `sec:triggermanagement` → Trigger-Management (Seite 6-7)
 - `sec:notfallkarten` → Notfallkarten (Seite 8)
@@ -33,7 +31,7 @@
 
 ### **Externe Links (YouTube Videos):**
 - ✅ 4-7-8 Atemtechnik: `https://youtube.com/watch?v=YRPh_GaiL8s`
-- ✅ 5-4-3-2-1 Grounding: `https://youtube.com/watch?v=utUVx0ayoYw` 
+- ✅ 5-4-3-2-1 Grounding: `https://youtube.com/watch?v=utUVx0ayoYw`
 - ✅ DBT Skills Demo: `https://youtube.com/watch?v=q15eTySnWxc`
 - ✅ Trigger-Management: `https://youtube.com/watch?v=Mz3Mi_OZYno`
 - ✅ Paartherapie: `https://youtube.com/watch?v=2s9ACDMcpjA`
@@ -70,9 +68,9 @@ Diese werden **optisch als Platzhalter** dargestellt und **nicht als klickbare L
 ## 🎯 **NAVIGATION-FLUSS BESTÄTIGT:**
 
 ### **Hauptnavigation (Sequential):**
-1. Navigation-System → Depression 
+1. Navigation-System → Depression
 2. Depression → Bindungsleitfaden
-3. Bindungsleitfaden → Trigger-Management  
+3. Bindungsleitfaden → Trigger-Management
 4. Trigger-Management → Notfallkarten
 5. Notfallkarten → Safe-Words
 6. Safe-Words → Interactive Tools
@@ -83,7 +81,7 @@ Diese werden **optisch als Platzhalter** dargestellt und **nicht als klickbare L
 
 ### **Arbeitsblätter-Navigation:**
 1. Check-In (5.1) → Trigger-Tagebuch (5.2)
-2. Trigger-Tagebuch (5.2) → Depression-Monitor (5.3) 
+2. Trigger-Tagebuch (5.2) → Depression-Monitor (5.3)
 3. Depression-Monitor (5.3) → Demo Interactive
 4. Demo Interactive → [Ende]
 

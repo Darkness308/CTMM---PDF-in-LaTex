@@ -97,7 +97,7 @@
 }
 
 % =====================================================
-% CTMM-Specific Form Elements  
+% CTMM-Specific Form Elements
 % =====================================================
 
 % Date input
@@ -110,7 +110,7 @@
     \textbf{#2:} \ctmmTextField[3cm]{#3}{#1}%
 }
 
-% Time input  
+% Time input
 \newcommand{\ctmmTime}[1]{%
     \textbf{Zeit:} \ctmmTextField[2cm]{}{time#1} Uhr%
 }
@@ -168,18 +168,18 @@
 \newcommand{\ctmmDailyTracker}[1]{%
     \begin{ctmmGreenBox}[title=Täglicher CTMM-Tracker]
     \ctmmDate{#1dt} \quad \ctmmTime{#1dt}\\[0.3cm]
-    
+
     \ctmmEmotionScale{Morgenstimmung}{#1morning}\\[0.3cm]
     \ctmmEmotionScale{Abendstimmung}{#1evening}\\[0.3cm]
-    
+
     \ctmmTriggerScale{#1dt}\\[0.3cm]
-    
+
     \textbf{Strategien angewendet:}\\
-    \ctmmCheckBox{#1breathing}{Atemtechnik} \quad 
-    \ctmmCheckBox{#1grounding}{Grounding} \quad 
-    \ctmmCheckBox{#1pause}{Pause} \quad 
+    \ctmmCheckBox{#1breathing}{Atemtechnik} \quad
+    \ctmmCheckBox{#1grounding}{Grounding} \quad
+    \ctmmCheckBox{#1pause}{Pause} \quad
     \ctmmCheckBox{#1talk}{Gespräch}\\[0.3cm]
-    
+
     \textbf{Reflexion:}\\
     \ctmmTextArea[14cm]{3}{#1reflection}{}
     \end{ctmmGreenBox}%
@@ -189,10 +189,10 @@
 \newcommand{\ctmmCrisisForm}[1]{%
     \begin{ctmmRedBox}[title=\textcolor{white}{Krisen-Protokoll}]
     \textcolor{white}{\textbf{Zeitpunkt:}} \textcolor{white}{\ctmmDate{#1cr}} \textcolor{white}{\ctmmTime{#1cr}}\\[0.3cm]
-    
+
     \textcolor{white}{\textbf{Safe-Word verwendet:}}\\
     \textcolor{white}{\ctmmCheckBox{#1anker}{Anker} \quad \ctmmCheckBox{#1reset}{Reset} \quad \ctmmCheckBox{#1pause}{Pause}}\\[0.3cm]
-    
+
     \textcolor{white}{\textbf{Maßnahmen:}}\\
     \textcolor{white}{\ctmmTextArea[14cm]{2}{#1measures}{}}
     \end{ctmmRedBox}%

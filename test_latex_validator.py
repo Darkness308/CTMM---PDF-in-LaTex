@@ -73,17 +73,17 @@ class TestLaTeXValidator(unittest.TestCase):
         clean_content = r"""
         \section{Test Section}
         \label{sec:test}
-        
+
         This is a properly formatted LaTeX file with no escaping issues.
-        
+
         \subsection{Test Subsection}
         Some content here.
         """
-        
+
         test_file = Path(self.temp_dir) / "clean_test.tex"
         with open(test_file, 'w', encoding='utf-8') as f:
             f.write(clean_content)
-        
+
         is_valid, issues, _ = self.validator.validate_file(test_file)
         self.assertTrue(is_valid)
         self.assertEqual(len(issues), 0)
@@ -93,14 +93,14 @@ class TestLaTeXValidator(unittest.TestCase):
         problematic_content = r"""
         \hypertarget{tool-23-trigger-management}{%
         \section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
-        
+
         Text with \textbackslash{} escaping issues.
         """
-        
+
         test_file = Path(self.temp_dir) / "problematic_test.tex"
         with open(test_file, 'w', encoding='utf-8') as f:
             f.write(problematic_content)
-        
+
         is_valid, issues, _ = self.validator.validate_file(test_file)
         self.assertFalse(is_valid)
         self.assertGreater(len(issues), 0)
@@ -110,19 +110,19 @@ class TestLaTeXValidator(unittest.TestCase):
         problematic_content = r"""
         Text with multiple \textbackslash{} sequences that need \textbackslash{} fixing.
         """
-        
+
         test_file = Path(self.temp_dir) / "fix_test.tex"
         with open(test_file, 'w', encoding='utf-8') as f:
             f.write(problematic_content)
-        
+
         # First validation should find issues
         is_valid, issues, cleaned_content = self.validator.validate_file(test_file)
         self.assertFalse(is_valid)
-        
+
         # Write cleaned content back
         with open(test_file, 'w', encoding='utf-8') as f:
             f.write(cleaned_content)
-        
+
         # Second validation should be cleaner (may still have some complex patterns)
         is_valid_after, issues_after, _ = self.validator.validate_file(test_file)
         self.assertLessEqual(len(issues_after), len(issues))
@@ -137,7 +137,7 @@ class TestLaTeXValidator(unittest.TestCase):
         \item Second item with \& ampersand
         \end{itemize}
         """
-        
+
         cleaned = self.validator.clean_excessive_escaping(valid_content)
         self.assertIn(r'\textbf{Bold text}', cleaned)
         self.assertIn(r'\emph{emphasized text}', cleaned)
@@ -168,12 +168,12 @@ class TestLaTeXValidatorIntegration(unittest.TestCase):
         validator = LaTeXValidator()
         expected_patterns = [
             'textbackslash_escape',
-            'hypertarget_overuse', 
+            'hypertarget_overuse',
             'texorpdfstring_overuse',
             'excessive_backslashes',
             'auto_generated_labels'
         ]
-        
+
         for pattern in expected_patterns:
             self.assertIn(pattern, validator.problematic_patterns)
 
@@ -189,11 +189,11 @@ class TestSanitizePkgName(unittest.TestCase):
             ('2_test', 'pkg2Test'),
             ('999-name', 'pkg999Name'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
-                self.assertEqual(result, expected, 
+                self.assertEqual(result, expected,
                                f"Expected '{expected}' but got '{result}' for input '{input_name}'")
 
     def test_basic_functionality(self):
@@ -205,7 +205,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('test-name', 'pkgTestName'),
             ('test_name', 'pkgTestName'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -218,7 +218,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('my_test-package', 'pkgMyTestPackage'),
             ('complex-test_name-package', 'pkgComplexTestNamePackage'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -232,7 +232,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('v1-test-v2', 'pkgV1TestV2'),
             ('package-42-name', 'pkgPackage42Name'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -245,7 +245,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('42', 'pkg42'),
             ('999', 'pkg999'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -259,7 +259,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('test-_package', 'pkgTestPackage'),
             ('test_-package', 'pkgTestPackage'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -275,7 +275,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('123-', 'pkg123'),  # Trailing separator
             ('-123', 'pkg123'),  # Leading separator
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -289,7 +289,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('test-PACKAGE', 'pkgTestPackage'),
             ('MyGreat_Package', 'pkgMygreatPackage'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)
@@ -303,7 +303,7 @@ class TestSanitizePkgName(unittest.TestCase):
             ('document-style_2024', 'pkgDocumentStyle2024'),
             ('ctmm-design-1_2_3', 'pkgCtmmDesign123'),
         ]
-        
+
         for input_name, expected in test_cases:
             with self.subTest(input_name=input_name):
                 result = sanitize_pkg_name(input_name)

@@ -121,7 +121,7 @@ pr-653
         timeout-minutes: 5
         run: |
           echo "🔍 Enhanced PDF verification and analysis..."
-          
+
           # Check for PDF in current directory (xu-cheng/latex-action output location)
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated in current directory"
@@ -160,16 +160,16 @@ pr-653
 
             exit 1
           fi
-          
+
           # Detailed file analysis
           echo "📊 PDF File Analysis:"
           ls -la "$PDF_LOCATION"
           file "$PDF_LOCATION"
-          
+
           # Check PDF size (should be substantial for a complete document)
           PDF_SIZE=$(stat -c%s "$PDF_LOCATION")
           echo "📄 PDF Size: $PDF_SIZE bytes"
-          
+
           if [ "$PDF_SIZE" -lt 10000 ]; then
             echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
           elif [ "$PDF_SIZE" -gt 100000 ]; then
@@ -177,7 +177,7 @@ pr-653
           else
             echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
           fi
-          
+
           # Verify FontAwesome package support
           echo "🔍 Checking FontAwesome package support..."
           if grep -q "fontawesome5" main.log 2>/dev/null; then
@@ -185,13 +185,13 @@ pr-653
           else
             echo "⚠️  FontAwesome5 package loading status unknown"
           fi
-          
+
           # Try to extract basic PDF info if available
           if command -v pdfinfo &> /dev/null; then
             echo "📋 PDF Information:"
             pdfinfo "$PDF_LOCATION" || echo "Unable to extract PDF info"
           fi
-          
+
           echo "✅ Enhanced PDF verification completed successfully"
 
       - name: Upload PDF artifact
