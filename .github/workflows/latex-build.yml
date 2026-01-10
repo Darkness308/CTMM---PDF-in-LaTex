@@ -74,7 +74,7 @@ jobs:
         run: |
           echo "🔍 Assessing GitHub Actions runner environment..."
           echo "Runner OS: $RUNNER_OS"
-          echo "Runner Architecture: $RUNNER_ARCH" 
+          echo "Runner Architecture: $RUNNER_ARCH"
           echo "GitHub Actions Runner: $RUNNER_NAME"
           df -h / | head -2
           free -h | head -2
@@ -112,7 +112,6 @@ jobs:
             texlive-pstricks
             py3-pygments
             ghostscript
-            
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
@@ -125,35 +124,35 @@ jobs:
           else
             echo "❌ PDF generation failed"
             echo "🔍 Comprehensive error analysis..."
-            
+
             # Check for LaTeX log files
             echo "📄 Searching for LaTeX log files..."
             find . -name "*.log" -type f | head -10
-            
+
             # Display recent log content with better formatting
             echo ""
             echo "📋 LaTeX Log Analysis:"
             echo "====================="
             find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
-            
+
             # Check for FontAwesome related errors
             echo ""
             echo "🔍 FontAwesome Error Check:"
             echo "=========================="
             find . -name "*.log" -exec grep -i "fontawesome\|font.*not.*found" {} \; 2>/dev/null || echo "No FontAwesome-related errors found"
-            
+
             # Check for aux files and other intermediate files
             echo ""
             echo "📁 Intermediate Files Check:"
             echo "============================="
             ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
-            
+
             # Check disk space
             echo ""
             echo "💾 Disk Space Analysis:"
             echo "======================"
             df -h .
-            
+
             exit 1
           fi
           
