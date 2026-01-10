@@ -9,7 +9,7 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \end{ctmmYellowBox}
 
 \vspace{0.5cm}
-\textbf{Datum/Zeit:} \ctmmTextField[8cm]{}{trigger\_mm
+\textbf{Datum/Zeit:} \ctmmTextField[8cm]{}{trigger_datetime}
 \vspace{0.5cm}
 
 \subsection*{\faUserFriends~TRIGGER-SITUATION}
@@ -19,7 +19,7 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \ctmmCheckBox{with_partner}{Partner} \quad
 \ctmmCheckBox{with_friends}{Freunden} \quad
 \ctmmCheckBox{with_family}{Familie} \quad
-\ctmmCheckBox{with_others}{Anderen:} \ctmmTextField[3cm]{}{with_others\_mm
+\ctmmCheckBox{with_others}{Anderen:} \ctmmTextField[3cm]{}{with_others_name}
 
 \vspace{0.5cm}
 \textbf{Triggermoment war:} \\
@@ -31,7 +31,7 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \ctmmCheckBox{trigger_memory}{Erinnerung/Flashback} \\
 \ctmmCheckBox{trigger_change}{Planänderung} \quad
 \ctmmCheckBox{trigger_overwhelm}{Reizüberflutung} \\
-\ctmmCheckBox{trigger_other}{Andere:} \ctmmTextField[3cm]{}{trigger_other\_mm
+\ctmmCheckBox{trigger_other}{Andere:} \ctmmTextField[3cm]{}{trigger_other_detail}
 
 \vspace{0.5cm}
 \textbf{Beschreibe die Situation:} \\
@@ -50,7 +50,7 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \ctmmCheckBox{feeling_hilflosigkeit}{Hilflosigkeit} \quad
 \ctmmCheckBox{feeling_scham}{Scham} \quad
 \ctmmCheckBox{feeling_verwirrung}{Verwirrung} \\
-\ctmmCheckBox{feeling_other}{Andere:} \ctmmTextField[3cm]{}{feeling_other\_mm
+\ctmmCheckBox{feeling_other}{Andere:} \ctmmTextField[3cm]{}{feeling_other_detail}
 
 \subsection*{\faSync~REAKTIONEN}
 \textit{Ehrlich sein hilft - wir urteilen nicht!}
@@ -61,14 +61,14 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \vspace{0.5cm}
 \textbf{Stress-Level (1-10):} \\
 \textit{1=total entspannt, 10=extremer Notfall} \\
-ER: \ctmmTextField[2cm]{}{stress_er} \quad SIE: \ctmmTextField[2cm]{}{stress\_mm
+ER: \ctmmTextField[2cm]{}{stress_er} \quad SIE: \ctmmTextField[2cm]{}{stress_sie}
 
 \subsection*{\faTools~WAS HALF}
-\ctmmCheckBox{half_safeword}{Safe-Word benutzt:} \ctmmTextField[5cm]{}{half_safeword\_mm \\
-\ctmmCheckBox{half_skills}{Skills angewendet:} \ctmmTextField[5cm]{}{half_skills\_mm \\
-\ctmmCheckBox{half_friends}{Freunde geholt:} \ctmmTextField[5cm]{}{half_friends\_mm \\
-\ctmmCheckBox{half_pause}{Pause gemacht:} \ctmmTextField[5cm]{}{half_pause\_mm \\
-\ctmmCheckBox{half_other}{Andere:} \ctmmTextField[5cm]{}{half_other\_mm
+\ctmmCheckBox{half_safeword}{Safe-Word benutzt:} \ctmmTextField[5cm]{}{half_safeword_detail} \\
+\ctmmCheckBox{half_skills}{Skills angewendet:} \ctmmTextField[5cm]{}{half_skills_detail} \\
+\ctmmCheckBox{half_friends}{Freunde geholt:} \ctmmTextField[5cm]{}{half_friends_detail} \\
+\ctmmCheckBox{half_pause}{Pause gemacht:} \ctmmTextField[5cm]{}{half_pause_detail} \\
+\ctmmCheckBox{half_other}{Andere:} \ctmmTextField[5cm]{}{half_other_detail}
 
 \subsection*{\faChartLine~LERNPUNKT}
 \textbf{Nächstes Mal besser machen:} \\
