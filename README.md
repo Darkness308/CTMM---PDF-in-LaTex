@@ -8,7 +8,6 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 - Trigger-Management
 - Bindungsdynamik
 - Formularelemente für therapeutische Dokumentation
-<<<<<<< HEAD
 - **🌙 NEU: Therapeutisch fundiertes Dark Theme** (wissenschaftlich optimiert für neurodivergente Nutzer)
 
 ## 🌙 Dark Theme - Therapeutisch fundiertes Farbsystem
@@ -62,8 +61,6 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 Alle Farben erfüllen **mindestens WCAG Level AA**:
 - 11 Farben (55%) erreichen sogar **AAA** (>7:1 Kontrast)
 - Validiert mit `validate_dark_theme_contrast.py`
-=======
->>>>>>> pr-653
 
 ## Verwendung
 1. Klone das Repository
