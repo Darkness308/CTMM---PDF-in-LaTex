@@ -28,6 +28,7 @@ jobs:
         run: |
           # Find all usepackage lines excluding comments
           packages=$(grep '\usepackage' main.tex | grep -v '^%')
+<<<<<<< HEAD
 
           # Check that hyperref appears before the end and before any bookmark package
           echo "$packages" | grep -q 'hyperref' || (echo "::error ::hyperref package not found in main.tex" && exit 1)
@@ -39,24 +40,49 @@ jobs:
           echo "Debug: hyperref at line $hyperref_line"
           echo "Debug: bookmark at line $bookmark_line"
 
+=======
+          
+          # Check that hyperref appears before the end and before any bookmark package
+          echo "$packages" | grep -q 'hyperref' || (echo "::error ::hyperref package not found in main.tex" && exit 1)
+          
+          # Get position of hyperref and bookmark (if exists)
+          hyperref_line=$(echo "$packages" | grep -n 'hyperref' | head -1 | cut -d: -f1)
+          bookmark_line=$(echo "$packages" | grep -n 'bookmark' | head -1 | cut -d: -f1)
+          
+          echo "Debug: hyperref at line $hyperref_line"
+          echo "Debug: bookmark at line $bookmark_line"
+          
+>>>>>>> pr-653
           # If bookmark exists, it should come after hyperref
           if [ -n "$bookmark_line" ] && [ "$bookmark_line" -lt "$hyperref_line" ]; then
             echo "::error ::bookmark package should come after hyperref"
             exit 1
           fi
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> pr-653
           # Check that no critical packages come after hyperref (except bookmark)
           # Use more robust arithmetic to avoid potential shell issues
           next_line=$((hyperref_line + 1))
           echo "Debug: checking from line $next_line onward"
           packages_after_hyperref=$(echo "$packages" | tail -n +$next_line | grep -v 'bookmark')
           echo "Debug: packages after hyperref (filtered): '$packages_after_hyperref'"
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> pr-653
           if [ -n "$packages_after_hyperref" ]; then
             echo "::error ::Core packages found after hyperref (only bookmark is allowed): $packages_after_hyperref"
             exit 1
           fi
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> pr-653
           echo "✅ hyperref package ordering is correct"
 
       - name: Check all \ctmmRef labels exist
@@ -79,7 +105,10 @@ jobs:
             texlive-latex-extra
             texlive-science
             texlive-pstricks
+<<<<<<< HEAD
             py3-pygments
+=======
+>>>>>>> pr-653
             ghostscript
 
       - name: Check PDF output
@@ -95,7 +124,11 @@ jobs:
         with:
           python-version: '3.x'
 
+<<<<<<< HEAD
       - name: Install Python dependencies
+=======
+      - name: Install Python dependencies  
+>>>>>>> pr-653
         timeout-minutes: 5
         run: |
           echo "📦 Installing Python dependencies..."
@@ -121,7 +154,11 @@ jobs:
         run: |
           echo "🔍 Assessing GitHub Actions runner environment..."
           echo "Runner OS: $RUNNER_OS"
+<<<<<<< HEAD
           echo "Runner Architecture: $RUNNER_ARCH"
+=======
+          echo "Runner Architecture: $RUNNER_ARCH" 
+>>>>>>> pr-653
           df -h / | head -2
           free -h | head -2
           echo "✅ Environment assessment complete"
