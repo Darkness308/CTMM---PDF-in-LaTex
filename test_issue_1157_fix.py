@@ -116,8 +116,6 @@ def test_hyperref_bookmark_validation():
         if success:
             print("✅ hyperref/bookmark validation passed")
         else:
-            print("✅ hyperref/bookmark validation passed")
-        else:
             print("❌ hyperref/bookmark validation failed")
             
         return success
