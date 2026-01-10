@@ -1,7 +1,5 @@
 # 🔗 **HYPERLINK-STATUS-BERICHT - CTMM-SYSTEM**
-**Datum:** 3. August 2024
-**Datum:** 3. August 2024  
-main
+**Datum:** 3. August 2025  
 **Status:** Alle Links überprüft und korrigiert
 
 ---

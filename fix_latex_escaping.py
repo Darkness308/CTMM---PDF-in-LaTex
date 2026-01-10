@@ -177,16 +177,10 @@ class LaTeXDeEscaper:
                 except Exception as e2:
                     logger.error(f"Failed to read {input_path} even with error handling: {e2}")
                     return False, 0
-
-            original_content = content
-            replacements_made = 0
-
             
             original_content = content
             replacements_made = 0
             
-HEAD
-main
             # Apply all escaping pattern fixes with error handling
             for i, (pattern, replacement) in enumerate(self.escaping_patterns):
                 try:
@@ -214,7 +208,6 @@ main
                 except Exception as e:
                     logger.warning(f"Error applying cleanup pattern {i+1}: {e}")
                     continue
-
             
 main
             # Check if content changed
@@ -243,15 +236,13 @@ main
                 logger.info(f"No changes needed for {input_path}")
 
             return content_changed, replacements_made
-
+            
         except FileNotFoundError as e:
             logger.error(f"File not found: {e}")
             return False, 0
         except PermissionError as e:
             logger.error(f"Permission denied: {e}")
             return False, 0
-
-pr-653
         except Exception as e:
             logger.error(f"Error processing {input_path}: {e}")
             return False, 0

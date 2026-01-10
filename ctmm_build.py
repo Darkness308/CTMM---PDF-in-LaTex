@@ -332,6 +332,18 @@ def main():
         build_data["latex_validation"]["errors"].append(str(e))
         latex_valid = False
 
+    # Step 1a: Validate form fields
+    step_a = f"{step}a"
+    print(f"\n{step_a}. Validating form fields...")
+    try:
+        form_valid = validate_form_fields()
+        build_data["form_validation"] = {"passed": form_valid, "errors": []}
+        print(f"✓ Form field validation: {'PASS' if form_valid else 'ISSUES FOUND'}")
+    except Exception as e:
+        logger.error("Form field validation failed: %s", e)
+        build_data["form_validation"] = {"passed": False, "errors": [str(e)]}
+        form_valid = False
+
     # Step 2: Scan for references
     step += 1
     print(f"\n{step}. Scanning file references...")
@@ -420,15 +432,12 @@ def main():
     print(f"\n{step}. Generating build report...")
     form_valid = build_data.get("form_validation", {}).get("passed", True)
     _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok,
-main
                            len(style_files), len(module_files), total_missing, missing_files)
 
     return _generate_exit_code(build_data)
 
 
 def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok,
-def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
-main
                            style_count, module_count, total_missing, missing_files):
     """Generate and display the build summary."""
     print("\n" + "="*50)
@@ -451,14 +460,11 @@ main
         print("\nLATEX VALIDATION:")
         print("- Escaping issues found in LaTeX files")
         print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
-
         
     if not form_valid:
         print("\nFORM FIELD VALIDATION:")
         print("- Form field issues found in LaTeX files")
         print("- Run 'python3 validate_form_fields.py' to detect and fix issues")
-
-pr-653
 
 
 def _generate_exit_code(build_data):
