@@ -7,7 +7,7 @@
 This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
 
 - Depression and mood disorders
-- Trigger management 
+- Trigger management
 - Borderline Personality Disorder (BPD)
 - ADHD, Autism Spectrum Disorder (ASD)
 - Complex PTSD (CPTSD)
@@ -102,7 +102,7 @@ python3 test_latex_validator.py  # 21 validator tests
 
 **Test Coverage**:
 - `filename_to_title()` function (29 test cases)
-- Build system core functions (27+ test cases)  
+- Build system core functions (27+ test cases)
 - LaTeX validator functions (21 test cases)
 
 ### LaTeX Validation & Escaping Issues
@@ -128,7 +128,7 @@ python3 validate_pr.py
 
 **PR Requirements for Copilot Review**:
 - At least 1 file with meaningful changes
-- Substantive content changes (not just whitespace)  
+- Substantive content changes (not just whitespace)
 - Successful CTMM build system validation
 - Use provided PR template
 
@@ -139,7 +139,7 @@ python3 validate_pr.py
 ├── main.tex                    # Main LaTeX document (entry point)
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── ctmm-form-elements.sty # Interactive form components  
+│   ├── ctmm-form-elements.sty # Interactive form components
 │   └── ctmm-navigation.sty    # Navigation system
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
@@ -229,7 +229,7 @@ python3 ctmm_build.py
 # Expected: All checks pass, files exist or templates created
 ```
 
-### 2. Unit Test Validation  
+### 2. Unit Test Validation
 ```bash
 # Comprehensive test suite
 make unit-test
@@ -259,7 +259,7 @@ When LaTeX compilation is working:
 
 ### Build Errors
 - `Undefined control sequence` → Check if macro is defined in `main.tex` preamble
-- `Can be used only in preamble` → Move `\usepackage` to `main.tex` preamble  
+- `Can be used only in preamble` → Move `\usepackage` to `main.tex` preamble
 - Missing file errors → Run `python3 ctmm_build.py` to auto-generate templates
 - Form element errors → Check `\ctmmTextField` syntax and escaping
 
@@ -268,7 +268,7 @@ When LaTeX compilation is working:
 # FontAwesome missing
 sudo apt-get install texlive-fonts-extra
 
-# German language support missing  
+# German language support missing
 sudo apt-get install texlive-lang-german
 
 # Complete package installation
@@ -287,7 +287,7 @@ sudo apt-get install texlive-full
 # 1. ALWAYS start here - primary build validation
 python3 ctmm_build.py                    # 1.9s, timeout: 5min
 
-# 2. Test changes thoroughly  
+# 2. Test changes thoroughly
 make unit-test                          # 0.2s, timeout: 3min
 
 # 3. Validate before PR
@@ -305,7 +305,7 @@ make validate-fix                       # Fix with backups
 - `.github/workflows/` - CI/CD pipelines with proper timeouts
 
 ### Timing Expectations - NEVER CANCEL
-- **Build system check**: 1.9 seconds  
+- **Build system check**: 1.9 seconds
 - **Unit tests**: 0.2 seconds
 - **LaTeX package installation**: 4-5 minutes
 - **PR validation**: 0.1 seconds
