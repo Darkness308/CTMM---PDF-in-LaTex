@@ -125,7 +125,7 @@ class MergeConflictFixer:
                     text = raw.decode(encoding)
                     self.stats['encoding_fixes'] += 1
                     fixed = True
-                except:
+                except Exception:
                     text = raw.decode('latin-1', errors='ignore')
                     self.stats['encoding_fixes'] += 1
                     fixed = True
