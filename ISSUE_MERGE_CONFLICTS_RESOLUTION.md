@@ -36,7 +36,6 @@ All checked files are clean:
   • No obvious LaTeX escaping issues
 
 ✅ Repository is ready for merge
-```
 
 ---
 
