@@ -43,17 +43,17 @@ def resolve_conflicts_in_file(file_path: str) -> Tuple[bool, str]:
         return False, f"Failed to read file: {e}"
     
     # Check if file has conflict markers using regex for better detection
-    # This pattern matches any conflict start marker regardless of branch name
-    conflict_pattern = r'^<{7}\s'
+    # This pattern matches conflict start marker: exactly 7 '<' chars followed by space or EOL
+    conflict_pattern = r'^<{7}(\s|$)'
     if not re.search(conflict_pattern, content, re.MULTILINE):
         return True, "No conflicts found"
     
     # Pattern to match conflict blocks
-    # <<<<<<< HEAD (or any branch name)
+    # <<<<<<< HEAD (or any branch name) - exactly 7 '<' chars
     # ... content from HEAD ...
-    # =======
+    # ======= - exactly 7 '=' chars
     # ... content from incoming branch ...
-    # >>>>>>> branch-name
+    # >>>>>>> branch-name - exactly 7 '>' chars
     
     lines = content.split('\n')
     resolved_lines = []
@@ -61,18 +61,23 @@ def resolve_conflicts_in_file(file_path: str) -> Tuple[bool, str]:
     in_head_section = False
     conflict_count = 0
     
+    # Compile regex patterns for conflict markers (exactly 7 chars)
+    conflict_start_re = re.compile(r'^<{7}(\s|$)')
+    conflict_sep_re = re.compile(r'^={7}(\s|$)')
+    conflict_end_re = re.compile(r'^>{7}(\s|$)')
+    
     for i, line in enumerate(lines):
-        if line.startswith('<<<<<<< '):
+        if conflict_start_re.match(line):
             # Start of conflict - we want to keep what follows
             in_conflict = True
             in_head_section = True
             conflict_count += 1
             continue
-        elif line.startswith('=======') and in_conflict:
-            # End of HEAD section, start of main section (which we discard)
+        elif conflict_sep_re.match(line) and in_conflict:
+            # End of HEAD section, start of incoming section (which we discard)
             in_head_section = False
             continue
-        elif line.startswith('>>>>>>> ') and in_conflict:
+        elif conflict_end_re.match(line) and in_conflict:
             # End of conflict
             in_conflict = False
             in_head_section = False
