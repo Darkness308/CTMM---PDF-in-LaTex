@@ -256,7 +256,7 @@ This file was automatically created by the CTMM Build System because it was refe
             # Create content with modules 0 to i enabled
             modified_content = original_content
             for j, module in enumerate(module_list):
-                module_pattern = "modules/%s" % Path(module).stem
+                module_pattern = f"modules/{Path(module).stem}"
                 
                 if j <= i:
                     # Keep this module enabled
