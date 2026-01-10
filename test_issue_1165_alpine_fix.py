@@ -23,7 +23,8 @@ def test_alpine_compatibility():
     ]
 
     # Packages that are NOT available in Alpine Linux with xu-cheng/latex-action
-    # Only texlive-lang-german is known to be unavailable
+    # Currently only texlive-lang-german is known to be unavailable
+    # This is a list to allow for easy extension if other packages are found to be unavailable
     unavailable_packages = [
         'texlive-lang-german',  # NOT available in Alpine - use texlive-lang-european instead
     ]
@@ -73,7 +74,8 @@ def test_alpine_compatibility():
                         elif alpine_german_found:
                             print(f"✅ xu-cheng/latex-action uses Alpine-compatible German support: {alpine_german_found}")
                         else:
-                            print("✅ xu-cheng/latex-action configuration looks good")
+                            # No German language package specified - this is acceptable if German support is not needed
+                            print("✅ xu-cheng/latex-action found (no German language package specified)")
 
         except Exception as e:
             print(f"❌ Error checking {workflow_file}: {e}")
