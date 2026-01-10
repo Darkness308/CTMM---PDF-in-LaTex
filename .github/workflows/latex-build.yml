@@ -42,7 +42,7 @@ jobs:
           echo ""
           echo "📋 Required Scripts (workflow will fail if missing):"
           echo "  - ctmm_build.py: $([ -f 'ctmm_build.py' ] && echo '✅ Found' || echo '❌ MISSING')"
-          
+
           echo ""
           echo "📋 Optional Scripts (workflow continues if missing):"
           echo "  - validate_latex_syntax.py: $([ -f 'validate_latex_syntax.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
@@ -50,14 +50,14 @@ jobs:
           echo "  - test_issue_761_fix.py: $([ -f 'test_issue_761_fix.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
           echo "  - validate_ci_environment.py: $([ -f 'validate_ci_environment.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
           echo "  - ci_failure_prevention.py: $([ -f 'ci_failure_prevention.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
-          
+
           echo ""
           # Verify required scripts exist
           if [ ! -f "ctmm_build.py" ]; then
             echo "❌ ERROR: Required script ctmm_build.py is missing!"
             exit 1
           fi
-          
+
           echo "✅ Validation script verification completed"
 
       - name: Run LaTeX syntax validation (optional)
@@ -163,19 +163,19 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "🔍 Enhanced PDF verification and analysis..."
-          
+
           if [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated"
-            
+
             # Detailed file analysis
             echo "📊 PDF File Analysis:"
             ls -la main.pdf
             file main.pdf
-            
+
             # Check PDF size (should be substantial for a complete document)
             PDF_SIZE=$(stat -c%s "main.pdf")
             echo "📄 PDF Size: $PDF_SIZE bytes"
-            
+
             if [ "$PDF_SIZE" -lt 10000 ]; then
               echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
             elif [ "$PDF_SIZE" -gt 100000 ]; then
@@ -183,7 +183,7 @@ jobs:
             else
               echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
             fi
-            
+
             # Verify FontAwesome package support
             echo "🔍 Checking FontAwesome package support..."
             if grep -q "fontawesome5" main.log 2>/dev/null; then
@@ -191,46 +191,46 @@ jobs:
             else
               echo "⚠️  FontAwesome5 package loading status unknown"
             fi
-            
+
             # Try to extract basic PDF info if available
             if command -v pdfinfo &> /dev/null; then
               echo "📋 PDF Information:"
               pdfinfo main.pdf || echo "Unable to extract PDF info"
             fi
-            
+
             echo "✅ Enhanced PDF verification completed successfully"
           else
             echo "❌ PDF generation failed"
             echo "🔍 Comprehensive error analysis..."
-            
+
             # Check for LaTeX log files
             echo "📄 Searching for LaTeX log files..."
             find . -name "*.log" -type f | head -10
-            
+
             # Display recent log content with better formatting
             echo ""
             echo "📋 LaTeX Log Analysis:"
             echo "====================="
             find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
-            
+
             # Check for FontAwesome related errors
             echo ""
             echo "🔍 FontAwesome Error Check:"
             echo "=========================="
             find . -name "*.log" -exec grep -i "fontawesome\|font.*not.*found" {} \; 2>/dev/null || echo "No FontAwesome-related errors found"
-            
+
             # Check for aux files and other intermediate files
             echo ""
             echo "📁 Intermediate Files Check:"
             echo "============================="
             ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
-            
+
             # Check disk space
             echo ""
             echo "💾 Disk Space Analysis:"
             echo "======================"
             df -h .
-            
+
             exit 1
           fi
 
