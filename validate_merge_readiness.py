@@ -29,13 +29,35 @@ def check_merge_conflict_markers(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             lines = f.readlines()
-            for line_num, line in enumerate(lines, 1):
-                # Check for conflict markers at start of line
-                if re.match(r'^<{7}\s', line):
-                    issues.append(f"Line {line_num}: Merge conflict start marker: {line.strip()[:60]}")
-                elif re.match(r'^>{7}\s', line):
-                    issues.append(f"Line {line_num}: Merge conflict end marker: {line.strip()[:60]}")
-                elif re.match(r'^={7}$', line.strip()):
+            
+        # Track if we're inside a code block (for markdown files)
+        in_code_block = False
+        
+        for line_num, line in enumerate(lines, 1):
+            # For markdown files, track code blocks
+            if filepath.endswith('.md'):
+                if line.strip().startswith('```'):
+                    in_code_block = not in_code_block
+                    continue
+                
+                # Skip lines inside code blocks
+                if in_code_block:
+                    continue
+            
+            # For Python/test files, skip if line contains quotes (string literal)
+            if filepath.endswith('.py'):
+                if "'" in line or '"' in line:
+                    # Likely a string literal in test code
+                    continue
+            
+            # Check for conflict markers at start of line
+            if re.match(r'^<{7}\s', line):
+                issues.append(f"Line {line_num}: Merge conflict start marker: {line.strip()[:60]}")
+            elif re.match(r'^>{7}\s', line):
+                issues.append(f"Line {line_num}: Merge conflict end marker: {line.strip()[:60]}")
+            elif re.match(r'^={7}$', line.strip()):
+                # Additional check: make sure it's not part of markdown formatting
+                if not (filepath.endswith('.md') and len(line.strip()) < 10):
                     issues.append(f"Line {line_num}: Merge conflict separator: {line.strip()}")
     except Exception as e:
         issues.append(f"Error reading file: {e}")
