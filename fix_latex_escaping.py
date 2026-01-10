@@ -225,14 +225,11 @@ class LaTeXDeEscaper:
                 except PermissionError as e:
                     logger.error(f"Permission denied writing to {output_path}: {e}")
                     return False, 0
-                except Exception as e:
-                    logger.error(f"Error writing file: {e}")
-                    return False, 0
                 except IOError as e:
                     logger.error(f"IO error writing to {output_path}: {e}")
                     return False, 0
                 except Exception as e:
-                    logger.error(f"Unexpected error writing to {output_path}: {e}")
+                    logger.error(f"Error writing file {output_path}: {e}")
                     return False, 0
             else:
                 logger.info(f"No changes needed for {input_path}")
