@@ -17,14 +17,13 @@ def test_alpine_compatibility():
     print("=" * 60)
 
     workflow_files = [
-        '.github/workflows/latex-validation.yml',
-        '.github/workflows/latex-build.yml',
-        '.github/workflows/automated-pr-merge-test.yml'
+        '.github/workflows/latex-validation.yml',  # Uses dante-ev, skip
+        '.github/workflows/latex-build.yml',       # Uses xu-cheng - this is what we test
+        '.github/workflows/automated-pr-merge-test.yml'  # Uses dante-ev, skip
     ]
 
     # Packages that are NOT available in Alpine Linux with xu-cheng/latex-action
     # Currently only texlive-lang-german is known to be unavailable
-    # This is a list to allow for easy extension if other packages are found to be unavailable
     unavailable_packages = [
         'texlive-lang-german',  # NOT available in Alpine - use texlive-lang-european instead
     ]
@@ -35,6 +34,7 @@ def test_alpine_compatibility():
     ]
 
     success = True
+    xu_cheng_workflows_found = 0
 
     for workflow_file in workflow_files:
         if not os.path.exists(workflow_file):
@@ -52,6 +52,7 @@ def test_alpine_compatibility():
                 steps = job_data.get('steps', [])
                 for step in steps:
                     if step.get('uses', '').startswith('xu-cheng/latex-action'):
+                        xu_cheng_workflows_found += 1
                         step_with = step.get('with', {})
                         extra_packages = step_with.get('extra_system_packages', '')
 
@@ -68,18 +69,23 @@ def test_alpine_compatibility():
                                 alpine_german_found.append(alpine_pkg)
 
                         if unavailable_found:
-                            print(f"❌ Found unavailable packages in xu-cheng/latex-action: {unavailable_found}")
-                            print(f"   Replace with: texlive-lang-european")
+                            print(f"   ❌ Found unavailable packages: {unavailable_found}")
+                            print(f"   💡 Replace with: texlive-lang-european")
                             success = False
                         elif alpine_german_found:
-                            print(f"✅ xu-cheng/latex-action uses Alpine-compatible German support: {alpine_german_found}")
+                            print(f"   ✅ Uses Alpine-compatible German support: {alpine_german_found}")
                         else:
-                            # No German language package specified - this is acceptable if German support is not needed
-                            print("✅ xu-cheng/latex-action found (no German language package specified)")
+                            # No German language package specified - acceptable if German support not needed
+                            print("   ℹ️  No German language package specified")
 
         except Exception as e:
             print(f"❌ Error checking {workflow_file}: {e}")
             success = False
+
+    # Check if we found any xu-cheng/latex-action workflows
+    if xu_cheng_workflows_found == 0:
+        print("\nℹ️  Note: No xu-cheng/latex-action workflows found in checked files")
+        print("   This is acceptable if all workflows use dante-ev/latex-action instead")
 
     return success
 
