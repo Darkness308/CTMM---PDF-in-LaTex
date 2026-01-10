@@ -144,23 +144,40 @@ def validate_latex_packages():
 
     # Essential package validation
     required_packages = [
-        'texlive-lang-german',       # German language support
-        'texlive-fonts-recommended', # Recommended fonts
-        'texlive-latex-recommended', # Recommended LaTeX packages
-        'texlive-latex-extra',       # Extra LaTeX packages
-        'texlive-fonts-extra',       # Extra fonts
-        'texlive-science',           # Scientific packages
-        'texlive-pstricks'           # PostScript tricks (contains pifont)
+        ('texlive-lang-german', 'texlive-lang-european'),  # German language support (either package is acceptable)
+        ('texlive-fonts-recommended',),                     # Recommended fonts
+        ('texlive-latex-recommended',),                     # Recommended LaTeX packages
+        ('texlive-latex-extra',),                           # Extra LaTeX packages
+        ('texlive-fonts-extra',),                           # Extra fonts
+        ('texlive-science',),                               # Scientific packages
+        ('texlive-pstricks',)                               # PostScript tricks (contains pifont)
     ]
 
     all_passed = True
     print("\n🔍 Validating essential packages...")
 
-    for pkg in required_packages:
-        if pkg in extra_packages:
-            print(f"✅ FOUND: {pkg}")
+    for pkg_options in required_packages:
+        # Check if any of the alternative package names is present
+        found = False
+        found_pkg = None
+        for pkg in pkg_options:
+            if pkg in extra_packages:
+                found = True
+                found_pkg = pkg
+                break
+        
+        if found:
+            if len(pkg_options) > 1:
+                alternatives = ' or '.join(pkg_options)
+                print(f"✅ FOUND: {found_pkg} (satisfies: {alternatives})")
+            else:
+                print(f"✅ FOUND: {found_pkg}")
         else:
-            print(f"❌ MISSING: {pkg}")
+            if len(pkg_options) > 1:
+                alternatives = ' or '.join(pkg_options)
+                print(f"❌ MISSING: {alternatives}")
+            else:
+                print(f"❌ MISSING: {pkg_options[0]}")
             all_passed = False
 
     # Specific pifont validation (Issue #739 compliance)
