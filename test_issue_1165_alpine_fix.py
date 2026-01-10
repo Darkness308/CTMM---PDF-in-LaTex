@@ -67,7 +67,8 @@ def test_alpine_compatibility():
                                 print(f"   These packages don't exist in Alpine Linux and will cause build failures.")
                                 success = False
                             else:
-                                print(f"⚠️  extra_system_packages is present but doesn't contain known problematic packages")
+                                print("ℹ️  extra_system_packages is present and does not contain known problematic packages,")
+                                print("    but it is unnecessary because the texlive-full image already includes all required packages.")
                         else:
                             print("✅ No extra_system_packages specified (texlive-full image has everything needed)")
 
