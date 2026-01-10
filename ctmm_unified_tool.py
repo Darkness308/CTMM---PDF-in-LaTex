@@ -91,13 +91,13 @@ class CTMMUnifiedTool:
                     try:
                         create_template(file_path)
                         self.stats['missing_files_created'] += 1
-                        logger.info(f"✓ Created template: {file_path}")
+                        logger.info(f"[OK] Created template: {file_path}")
                     except Exception as e:
-                        logger.error(f"✗ Failed to create {file_path}: {e}")
+                        logger.error(f"[X] Failed to create {file_path}: {e}")
             else:
                 logger.warning("Templates not created (create_templates=False)")
         else:
-            logger.info("✓ All referenced files exist")
+            logger.info("[OK] All referenced files exist")
 
         # 3. Test builds
         logger.info("\n3. Testing build system...")
@@ -108,9 +108,9 @@ class CTMMUnifiedTool:
         self.stats['build_success'] = build_success
 
         if build_success:
-            logger.info("✓ Build system validation PASSED")
+            logger.info("[OK] Build system validation PASSED")
         else:
-            logger.error("✗ Build system validation FAILED")
+            logger.error("[X] Build system validation FAILED")
 
         return build_success
 
@@ -145,7 +145,7 @@ class CTMMUnifiedTool:
                 backup_file = tex_file.with_suffix('.tex.bak')
                 if not backup_file.exists():
                     tex_file.rename(backup_file)
-                    logger.info(f"✓ Backup created: {backup_file}")
+                    logger.info(f"[OK] Backup created: {backup_file}")
 
         # Process files
         logger.info(f"Processing LaTeX files in {input_dir}...")
@@ -153,7 +153,7 @@ class CTMMUnifiedTool:
 
         self.stats['files_de_escaped'] = stats['files_changed']
 
-        logger.info(f"\n✓ De-escaping completed:")
+        logger.info(f"\n[OK] De-escaping completed:")
         logger.info(f"  Files processed: {stats['files_processed']}")
         logger.info(f"  Files changed: {stats['files_changed']}")
         logger.info(f"  Total replacements: {stats['total_replacements']}")
@@ -181,7 +181,7 @@ class CTMMUnifiedTool:
         if not Path(self.main_tex).exists():
             issues.append(f"Main file {self.main_tex} not found")
         else:
-            logger.info("✓ Main file exists")
+            logger.info("[OK] Main file exists")
 
         # 2. Validate build system
         logger.info("\n2. Validating build system...")
@@ -191,7 +191,7 @@ class CTMMUnifiedTool:
             if missing:
                 issues.append(f"Missing files: {missing}")
             else:
-                logger.info("✓ All referenced files exist")
+                logger.info("[OK] All referenced files exist")
         except Exception as e:
             issues.append(f"Build system validation failed: {e}")
 
@@ -206,7 +206,7 @@ class CTMMUnifiedTool:
                         issues.extend([f"{tex_file.name}: {issue}" for issue in file_issues])
 
                 if not any("converted" in issue for issue in issues):
-                    logger.info("✓ Converted files validation passed")
+                    logger.info("[OK] Converted files validation passed")
             else:
                 logger.info("3. No converted directory found - skipping converted files validation")
 
@@ -217,7 +217,7 @@ class CTMMUnifiedTool:
             for issue in issues:
                 logger.warning(f"  - {issue}")
         else:
-            logger.info("✓ Project validation PASSED")
+            logger.info("[OK] Project validation PASSED")
 
         return issues
 
@@ -264,15 +264,15 @@ class CTMMUnifiedTool:
         logger.info("\n" + "="*60)
         logger.info("WORKFLOW SUMMARY")
         logger.info("="*60)
-        logger.info(f"Build system: {'✓ PASS' if self.stats['build_success'] else '✗ FAIL'}")
+        logger.info(f"Build system: {'[OK] PASS' if self.stats['build_success'] else '[X] FAIL'}")
         logger.info(f"Templates created: {self.stats['missing_files_created']}")
         logger.info(f"Files de-escaped: {self.stats['files_de_escaped']}")
         logger.info(f"Validation issues: {len(self.stats['validation_issues'])}")
 
         if success:
-            logger.info("✓ WORKFLOW COMPLETED SUCCESSFULLY")
+            logger.info("[OK] WORKFLOW COMPLETED SUCCESSFULLY")
         else:
-            logger.error("✗ WORKFLOW COMPLETED WITH ERRORS")
+            logger.error("[X] WORKFLOW COMPLETED WITH ERRORS")
 
         return success
 

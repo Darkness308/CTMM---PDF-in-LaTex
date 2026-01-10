@@ -27,7 +27,7 @@ import re
 
 def test_yaml_syntax_fixes():
     """Test that all workflow files have properly quoted 'on:' keywords."""
-    print("\n🔍 Testing YAML Syntax Fixes")
+    print("\n[SEARCH] Testing YAML Syntax Fixes")
     print("=" * 50)
 
     workflow_dir = ".github/workflows"
@@ -35,14 +35,14 @@ def test_yaml_syntax_fixes():
     fixes_verified = []
 
     if not os.path.exists(workflow_dir):
-        issues_found.append("❌ Workflow directory not found")
+        issues_found.append("[FAIL] Workflow directory not found")
         return issues_found, fixes_verified
 
     for filename in os.listdir(workflow_dir):
         if filename.endswith('.yml') or filename.endswith('.yaml'):
             filepath = os.path.join(workflow_dir, filename)
 
-            print(f"📄 Checking {filename}...")
+            print(f"[FILE] Checking {filename}...")
 
             try:
                 # Test YAML parsing
@@ -52,22 +52,22 @@ def test_yaml_syntax_fixes():
 
                 # Check for properly quoted "on:" keyword
                 if '"on":' in content or "'on':" in content:
-                    fixes_verified.append(f"✅ {filename}: Properly quoted 'on:' keyword")
+                    fixes_verified.append(f"[PASS] {filename}: Properly quoted 'on:' keyword")
                 elif 'on:' in content and not re.search(r'^\s*["\']?on["\']?\s*:', content, re.MULTILINE):
-                    issues_found.append(f"❌ {filename}: 'on:' keyword should be quoted")
+                    issues_found.append(f"[FAIL] {filename}: 'on:' keyword should be quoted")
                 else:
-                    fixes_verified.append(f"✅ {filename}: YAML syntax valid")
+                    fixes_verified.append(f"[PASS] {filename}: YAML syntax valid")
 
             except yaml.YAMLError as e:
-                issues_found.append(f"❌ {filename}: YAML syntax error - {e}")
+                issues_found.append(f"[FAIL] {filename}: YAML syntax error - {e}")
             except Exception as e:
-                issues_found.append(f"❌ {filename}: Error reading file - {e}")
+                issues_found.append(f"[FAIL] {filename}: Error reading file - {e}")
 
     return issues_found, fixes_verified
 
 def test_latex_action_configuration():
     """Test that LaTeX action configuration is correct and robust."""
-    print("\n🔍 Testing LaTeX Action Configuration")
+    print("\n[SEARCH] Testing LaTeX Action Configuration")
     print("=" * 50)
 
     issues_found = []
@@ -85,20 +85,20 @@ def test_latex_action_configuration():
         if not os.path.exists(workflow_file):
             continue
 
-        print(f"📄 Checking {workflow_file}...")
+        print(f"[FILE] Checking {workflow_file}...")
 
         with open(workflow_file, 'r', encoding='utf-8') as f:
             content = f.read()
 
         # Check for xu-cheng/latex-action usage
         if expected_action in content:
-            fixes_verified.append(f"✅ {workflow_file}: Using robust {expected_action}")
+            fixes_verified.append(f"[PASS] {workflow_file}: Using robust {expected_action}")
         else:
             # Check for problematic dante-ev/latex-action
             if "dante-ev/latex-action" in content:
-                issues_found.append(f"❌ {workflow_file}: Still using unreliable dante-ev/latex-action")
+                issues_found.append(f"[FAIL] {workflow_file}: Still using unreliable dante-ev/latex-action")
             else:
-                issues_found.append(f"❌ {workflow_file}: No LaTeX action found")
+                issues_found.append(f"[FAIL] {workflow_file}: No LaTeX action found")
 
         # Check for proper compilation arguments
         if "args:" in content:
@@ -108,22 +108,22 @@ def test_latex_action_configuration():
                 all_args_present = all(arg in args_line for arg in expected_args)
 
                 if all_args_present:
-                    fixes_verified.append(f"✅ {workflow_file}: Proper compilation arguments")
+                    fixes_verified.append(f"[PASS] {workflow_file}: Proper compilation arguments")
                 else:
                     missing_args = [arg for arg in expected_args if arg not in args_line]
-                    issues_found.append(f"❌ {workflow_file}: Missing arguments: {missing_args}")
+                    issues_found.append(f"[FAIL] {workflow_file}: Missing arguments: {missing_args}")
 
         # Check for fallback mechanism
         if "fallback" in content.lower() and "manual" in content.lower():
-            fixes_verified.append(f"✅ {workflow_file}: Two-tier fallback mechanism implemented")
+            fixes_verified.append(f"[PASS] {workflow_file}: Two-tier fallback mechanism implemented")
         else:
-            issues_found.append(f"❌ {workflow_file}: Missing fallback mechanism")
+            issues_found.append(f"[FAIL] {workflow_file}: Missing fallback mechanism")
 
     return issues_found, fixes_verified
 
 def test_latex_package_dependencies():
     """Test that comprehensive LaTeX package dependencies are included."""
-    print("\n🔍 Testing LaTeX Package Dependencies")
+    print("\n[SEARCH] Testing LaTeX Package Dependencies")
     print("=" * 50)
 
     issues_found = []
@@ -148,22 +148,22 @@ def test_latex_package_dependencies():
         if not os.path.exists(workflow_file):
             continue
 
-        print(f"📄 Checking {workflow_file}...")
+        print(f"[FILE] Checking {workflow_file}...")
 
         with open(workflow_file, 'r', encoding='utf-8') as f:
             content = f.read()
 
         for package in required_packages:
             if package in content:
-                fixes_verified.append(f"✅ {workflow_file}: Package {package} included")
+                fixes_verified.append(f"[PASS] {workflow_file}: Package {package} included")
             else:
-                issues_found.append(f"❌ {workflow_file}: Missing package {package}")
+                issues_found.append(f"[FAIL] {workflow_file}: Missing package {package}")
 
     return issues_found, fixes_verified
 
 def test_build_system_robustness():
     """Test that build system gracefully handles missing LaTeX installations."""
-    print("\n🔍 Testing Build System Robustness")
+    print("\n[SEARCH] Testing Build System Robustness")
     print("=" * 50)
 
     issues_found = []
@@ -171,7 +171,7 @@ def test_build_system_robustness():
 
     try:
         # Test that build system works without LaTeX
-        print("🧪 Running CTMM build system...")
+        print("[TEST] Running CTMM build system...")
         result = subprocess.run(
             [sys.executable, 'ctmm_build.py'],
             capture_output=True,
@@ -182,7 +182,7 @@ def test_build_system_robustness():
         output = result.stdout + result.stderr
 
         if result.returncode == 0:
-            fixes_verified.append("✅ Build system handles missing LaTeX gracefully")
+            fixes_verified.append("[PASS] Build system handles missing LaTeX gracefully")
 
             # Check for specific robustness indicators
             robustness_indicators = [
@@ -194,21 +194,21 @@ def test_build_system_robustness():
 
             for indicator in robustness_indicators:
                 if indicator in output:
-                    fixes_verified.append(f"✅ Robustness: {indicator}")
+                    fixes_verified.append(f"[PASS] Robustness: {indicator}")
                     break
             else:
-                issues_found.append("⚠️  Build system may not have proper fallback messaging")
+                issues_found.append("[WARN]  Build system may not have proper fallback messaging")
         else:
-            issues_found.append(f"❌ Build system failed (exit code: {result.returncode})")
+            issues_found.append(f"[FAIL] Build system failed (exit code: {result.returncode})")
 
     except subprocess.TimeoutExpired:
-        issues_found.append("❌ Build system check timed out")
+        issues_found.append("[FAIL] Build system check timed out")
     except Exception as e:
-        issues_found.append(f"❌ Error running build system: {e}")
+        issues_found.append(f"[FAIL] Error running build system: {e}")
 
     # Test LaTeX syntax validation
     try:
-        print("🧪 Running LaTeX syntax validation...")
+        print("[TEST] Running LaTeX syntax validation...")
         result = subprocess.run(
             [sys.executable, 'validate_latex_syntax.py'],
             capture_output=True,
@@ -217,18 +217,18 @@ def test_build_system_robustness():
         )
 
         if result.returncode == 0:
-            fixes_verified.append("✅ LaTeX syntax validation works correctly")
+            fixes_verified.append("[PASS] LaTeX syntax validation works correctly")
         else:
-            issues_found.append("❌ LaTeX syntax validation failed")
+            issues_found.append("[FAIL] LaTeX syntax validation failed")
 
     except Exception as e:
-        issues_found.append(f"❌ Error running LaTeX validation: {e}")
+        issues_found.append(f"[FAIL] Error running LaTeX validation: {e}")
 
     return issues_found, fixes_verified
 
 def test_critical_files_exist():
     """Test that all critical files exist for proper CI operation."""
-    print("\n🔍 Testing Critical Files Existence")
+    print("\n[SEARCH] Testing Critical Files Existence")
     print("=" * 50)
 
     issues_found = []
@@ -247,15 +247,15 @@ def test_critical_files_exist():
 
     for file_path in critical_files:
         if os.path.exists(file_path):
-            fixes_verified.append(f"✅ Critical file exists: {file_path}")
+            fixes_verified.append(f"[PASS] Critical file exists: {file_path}")
         else:
-            issues_found.append(f"❌ Missing critical file: {file_path}")
+            issues_found.append(f"[FAIL] Missing critical file: {file_path}")
 
     return issues_found, fixes_verified
 
 def test_workflow_timeout_configuration():
     """Test that workflows have proper timeout configuration to prevent CI hangs."""
-    print("\n🔍 Testing Workflow Timeout Configuration")
+    print("\n[SEARCH] Testing Workflow Timeout Configuration")
     print("=" * 50)
 
     issues_found = []
@@ -271,7 +271,7 @@ def test_workflow_timeout_configuration():
         if not os.path.exists(workflow_file):
             continue
 
-        print(f"📄 Checking {workflow_file}...")
+        print(f"[FILE] Checking {workflow_file}...")
 
         with open(workflow_file, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -280,25 +280,25 @@ def test_workflow_timeout_configuration():
         timeout_count = content.count('timeout-minutes:')
 
         if timeout_count > 0:
-            fixes_verified.append(f"✅ {workflow_file}: Has {timeout_count} timeout configurations")
+            fixes_verified.append(f"[PASS] {workflow_file}: Has {timeout_count} timeout configurations")
         else:
-            issues_found.append(f"❌ {workflow_file}: Missing timeout configurations")
+            issues_found.append(f"[FAIL] {workflow_file}: Missing timeout configurations")
 
         # Check for reasonable timeout values
         timeout_matches = re.findall(r'timeout-minutes:\s*(\d+)', content)
         if timeout_matches:
             max_timeout = max(int(t) for t in timeout_matches)
             if max_timeout <= 30:  # Reasonable maximum
-                fixes_verified.append(f"✅ {workflow_file}: Reasonable timeout values (max: {max_timeout})")
+                fixes_verified.append(f"[PASS] {workflow_file}: Reasonable timeout values (max: {max_timeout})")
             else:
-                issues_found.append(f"⚠️  {workflow_file}: High timeout value detected ({max_timeout} minutes)")
+                issues_found.append(f"[WARN]  {workflow_file}: High timeout value detected ({max_timeout} minutes)")
 
     return issues_found, fixes_verified
 
 def main():
     """Run all validation tests for Issue #1128 CI fixes."""
     print("============================================================")
-    print("🚀 Issue #1128 CI LaTeX Build Failure Fix Validation")
+    print("[LAUNCH] Issue #1128 CI LaTeX Build Failure Fix Validation")
     print("============================================================")
     print("Validating fixes for CI LaTeX build failures...")
     print()
@@ -322,32 +322,32 @@ def main():
             all_issues.extend(issues)
             all_fixes.extend(fixes)
         except Exception as e:
-            all_issues.append(f"❌ Test function {test_func.__name__} failed: {e}")
+            all_issues.append(f"[FAIL] Test function {test_func.__name__} failed: {e}")
 
     # Generate summary
     print("\n" + "=" * 60)
-    print("📊 VALIDATION SUMMARY")
+    print("[SUMMARY] VALIDATION SUMMARY")
     print("=" * 60)
 
     if all_fixes:
-        print(f"\n✅ FIXES VERIFIED ({len(all_fixes)}):")
+        print(f"\n[PASS] FIXES VERIFIED ({len(all_fixes)}):")
         for fix in all_fixes:
             print(f"  {fix}")
 
     if all_issues:
-        print(f"\n❌ ISSUES FOUND ({len(all_issues)}):")
+        print(f"\n[FAIL] ISSUES FOUND ({len(all_issues)}):")
         for issue in all_issues:
             print(f"  {issue}")
 
-    print(f"\n🎯 OVERALL RESULT:")
+    print(f"\n[TARGET] OVERALL RESULT:")
     if not all_issues:
-        print("✅ ALL CHECKS PASSED - CI fixes are properly implemented!")
+        print("[PASS] ALL CHECKS PASSED - CI fixes are properly implemented!")
         return 0
     elif len(all_fixes) > len(all_issues):
-        print("⚠️  MOSTLY GOOD - Minor issues found but fixes are working")
+        print("[WARN]  MOSTLY GOOD - Minor issues found but fixes are working")
         return 0
     else:
-        print("❌ SIGNIFICANT ISSUES - Review and fix the identified problems")
+        print("[FAIL] SIGNIFICANT ISSUES - Review and fix the identified problems")
         return 1
 
 if __name__ == "__main__":

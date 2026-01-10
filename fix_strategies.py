@@ -473,7 +473,7 @@ def main():
 
     strategies = FixStrategies()
 
-    print("🔧 Testing Fix Strategies")
+    print("[FIX] Testing Fix Strategies")
     print("=" * 50)
 
     # Create a sample error analysis for testing
@@ -513,12 +513,12 @@ def main():
     mock_analysis = MockAnalysis()
 
     # Test fix application
-    print("📝 Testing fix application...")
+    print("[NOTE] Testing fix application...")
     results = strategies.apply_fixes(mock_analysis)
 
-    print(f"✅ Applied {len(results)} fix strategies:")
+    print(f"[PASS] Applied {len(results)} fix strategies:")
     for i, result in enumerate(results, 1):
-        status = "✅" if result.success else "❌"
+        status = "[PASS]" if result.success else "[FAIL]"
         print(f"   {i}. {status} {result.description}")
         if result.files_modified:
             print(f"      Files: {', '.join(result.files_modified)}")
@@ -526,7 +526,7 @@ def main():
             for change in result.changes_made:
                 print(f"      - {change}")
 
-    print("\n✅ Fix strategies test completed")
+    print("\n[PASS] Fix strategies test completed")
 
 if __name__ == "__main__":
     main()

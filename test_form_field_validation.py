@@ -324,7 +324,7 @@ class TestFormFieldStandardization(unittest.TestCase):
 
 def run_tests():
     """Run all form field validation tests."""
-    print("🧪 Running CTMM Form Field Validation Tests")
+    print("[TEST] Running CTMM Form Field Validation Tests")
     print("=" * 60)
 
     # Create test suite
@@ -342,10 +342,10 @@ def run_tests():
     # Print summary
     print("\n" + "=" * 60)
     if result.wasSuccessful():
-        print("✅ ALL TESTS PASSED!")
+        print("[PASS] ALL TESTS PASSED!")
         print(f"Ran {result.testsRun} tests successfully")
     else:
-        print("❌ SOME TESTS FAILED!")
+        print("[FAIL] SOME TESTS FAILED!")
         print(f"Ran {result.testsRun} tests, {len(result.failures)} failures, {len(result.errors)} errors")
 
     return result.wasSuccessful()

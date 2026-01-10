@@ -29,16 +29,16 @@ def run_command(cmd, description="", capture_output=True):
             result = subprocess.run(cmd, shell=True, timeout=120)
             return result.returncode == 0, "", ""
     except subprocess.TimeoutExpired:
-        print(f"⏰ Command timed out: {cmd}")
+        print(f"[SYM] Command timed out: {cmd}")
         return False, "", "Command timed out"
     except Exception as e:
-        print(f"❌ Command failed: {cmd}, Error: {e}")
+        print(f"[FAIL] Command failed: {cmd}, Error: {e}")
         return False, "", str(e)
 
 
 def validate_ci_configuration():
     """Validate GitHub Actions CI configuration and workflow syntax."""
-    print("\n🔧 CI CONFIGURATION VALIDATION")
+    print("\n[FIX] CI CONFIGURATION VALIDATION")
     print("-" * 50)
 
     all_passed = True
@@ -50,63 +50,63 @@ def validate_ci_configuration():
         '.github/workflows/static.yml'
     ]
 
-    print("📂 Checking workflow files...")
+    print("[FOLDER] Checking workflow files...")
     for workflow_file in workflow_files:
         if not os.path.exists(workflow_file):
-            print(f"❌ FAIL: Workflow file missing: {workflow_file}")
+            print(f"[FAIL] FAIL: Workflow file missing: {workflow_file}")
             all_passed = False
         else:
-            print(f"✅ FOUND: {workflow_file}")
+            print(f"[PASS] FOUND: {workflow_file}")
 
     # Validate YAML syntax
-    print("\n📝 Validating YAML syntax...")
+    print("\n[NOTE] Validating YAML syntax...")
     for workflow_file in workflow_files:
         if os.path.exists(workflow_file):
             try:
                 with open(workflow_file, 'r') as f:
                     yaml.safe_load(f)
-                print(f"✅ VALID: {workflow_file} has correct YAML syntax")
+                print(f"[PASS] VALID: {workflow_file} has correct YAML syntax")
             except yaml.YAMLError as e:
-                print(f"❌ INVALID: {workflow_file} has YAML syntax error: {e}")
+                print(f"[FAIL] INVALID: {workflow_file} has YAML syntax error: {e}")
                 all_passed = False
             except Exception as e:
-                print(f"❌ ERROR: Failed to read {workflow_file}: {e}")
+                print(f"[FAIL] ERROR: Failed to read {workflow_file}: {e}")
                 all_passed = False
 
     # Check for quoted "on:" syntax (Issue #458/#532 compliance)
-    print("\n🔤 Checking 'on:' keyword syntax...")
+    print("\n[EMOJI] Checking 'on:' keyword syntax...")
     for workflow_file in workflow_files:
         if os.path.exists(workflow_file):
             with open(workflow_file, 'r') as f:
                 content = f.read()
 
             if '"on":' in content:
-                print(f"✅ CORRECT: {workflow_file} uses quoted 'on:' syntax")
+                print(f"[PASS] CORRECT: {workflow_file} uses quoted 'on:' syntax")
             elif 'on:' in content and '"on":' not in content:
-                print(f"❌ INCORRECT: {workflow_file} uses unquoted 'on:' syntax")
+                print(f"[FAIL] INCORRECT: {workflow_file} uses unquoted 'on:' syntax")
                 all_passed = False
             else:
-                print(f"⚠️  WARNING: No 'on:' keyword found in {workflow_file}")
+                print(f"[WARN]  WARNING: No 'on:' keyword found in {workflow_file}")
 
     return all_passed
 
 
 def validate_latex_packages():
     """Validate LaTeX package dependencies in GitHub Actions workflow."""
-    print("\n📦 LATEX PACKAGE DEPENDENCIES VALIDATION")
+    print("\n[PACKAGE] LATEX PACKAGE DEPENDENCIES VALIDATION")
     print("-" * 50)
 
     workflow_path = '.github/workflows/latex-build.yml'
 
     if not os.path.exists(workflow_path):
-        print(f"❌ ERROR: Main workflow file {workflow_path} not found")
+        print(f"[FAIL] ERROR: Main workflow file {workflow_path} not found")
         return False
 
     try:
         with open(workflow_path, 'r') as f:
             workflow_content = yaml.safe_load(f)
     except Exception as e:
-        print(f"❌ ERROR: Failed to parse {workflow_path}: {e}")
+        print(f"[FAIL] ERROR: Failed to parse {workflow_path}: {e}")
         return False
 
     # Find the LaTeX action step
@@ -123,21 +123,21 @@ def validate_latex_packages():
                 break
 
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step with xu-cheng/latex-action or dante-ev/latex-action not found in workflow")
+        print("[FAIL] ERROR: 'Set up LaTeX' step with xu-cheng/latex-action or dante-ev/latex-action not found in workflow")
         return False
 
     # Check that a supported action is used
     action_uses = latex_step.get('uses', '')
     if 'dante-ev/latex-action@v0.2.0' in action_uses:
-        print("✅ CORRECT: Using dante-ev/latex-action@v0.2.0")
+        print("[PASS] CORRECT: Using dante-ev/latex-action@v0.2.0")
     elif 'xu-cheng/latex-action@v3' in action_uses:
-        print("✅ CORRECT: Using xu-cheng/latex-action@v3")
+        print("[PASS] CORRECT: Using xu-cheng/latex-action@v3")
     else:
-        print(f"❌ ERROR: Expected dante-ev/latex-action@v0.2.0 or xu-cheng/latex-action@v3, found: {action_uses}")
+        print(f"[FAIL] ERROR: Expected dante-ev/latex-action@v0.2.0 or xu-cheng/latex-action@v3, found: {action_uses}")
         return False
 
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
-    print(f"📋 Found LaTeX packages configuration:")
+    print(f"[TEST] Found LaTeX packages configuration:")
     for line in extra_packages.strip().split('\n'):
         if line.strip():
             print(f"   - {line.strip()}")
@@ -154,25 +154,25 @@ def validate_latex_packages():
     ]
 
     all_passed = True
-    print("\n🔍 Validating essential packages...")
+    print("\n[SEARCH] Validating essential packages...")
 
     for pkg in required_packages:
         if pkg in extra_packages:
-            print(f"✅ FOUND: {pkg}")
+            print(f"[PASS] FOUND: {pkg}")
         else:
-            print(f"❌ MISSING: {pkg}")
+            print(f"[FAIL] MISSING: {pkg}")
             all_passed = False
 
     # Specific pifont validation (Issue #739 compliance)
-    print("\n🎯 Validating pifont package availability...")
+    print("\n[TARGET] Validating pifont package availability...")
     pifont_providers = ['texlive-pstricks', 'texlive-latex-extra', 'texlive-fonts-extra']
     pifont_available = any(pkg in extra_packages for pkg in pifont_providers)
 
     if pifont_available:
         found_providers = [pkg for pkg in pifont_providers if pkg in extra_packages]
-        print(f"✅ PIFONT AVAILABLE: Found providers: {', '.join(found_providers)}")
+        print(f"[PASS] PIFONT AVAILABLE: Found providers: {', '.join(found_providers)}")
     else:
-        print("❌ PIFONT MISSING: No packages found that provide pifont")
+        print("[FAIL] PIFONT MISSING: No packages found that provide pifont")
         all_passed = False
 
     return all_passed
@@ -180,7 +180,7 @@ def validate_latex_packages():
 
 def validate_workflow_structure():
     """Validate the structure and ordering of workflow steps."""
-    print("\n🏗️  WORKFLOW STRUCTURE VALIDATION")
+    print("\n[EMOJI]  WORKFLOW STRUCTURE VALIDATION")
     print("-" * 50)
 
     workflow_path = '.github/workflows/latex-build.yml'
@@ -189,7 +189,7 @@ def validate_workflow_structure():
         with open(workflow_path, 'r') as f:
             workflow_content = yaml.safe_load(f)
     except Exception as e:
-        print(f"❌ ERROR: Failed to parse {workflow_path}: {e}")
+        print(f"[FAIL] ERROR: Failed to parse {workflow_path}: {e}")
         return False
 
     # Get build job steps
@@ -198,7 +198,7 @@ def validate_workflow_structure():
     steps = build_job.get('steps', [])
 
     if not steps:
-        print("❌ ERROR: No steps found in build job")
+        print("[FAIL] ERROR: No steps found in build job")
         return False
 
     # Expected step order for validation (core validation steps, LaTeX can be later)
@@ -217,7 +217,7 @@ def validate_workflow_structure():
         'Set up LaTeX'
     ]
 
-    print("📋 Checking workflow step structure...")
+    print("[TEST] Checking workflow step structure...")
 
     step_names = [step.get('name', 'Unknown') for step in steps]
     all_passed = True
@@ -226,11 +226,11 @@ def validate_workflow_structure():
         if i < len(step_names):
             actual_step = step_names[i]
             if expected_step == actual_step:
-                print(f"✅ STEP {i+1}: {expected_step}")
+                print(f"[PASS] STEP {i+1}: {expected_step}")
             else:
-                print(f"⚠️  STEP {i+1}: Expected '{expected_step}', found '{actual_step}'")
+                print(f"[WARN]  STEP {i+1}: Expected '{expected_step}', found '{actual_step}'")
         else:
-            print(f"❌ MISSING STEP {i+1}: {expected_step}")
+            print(f"[FAIL] MISSING STEP {i+1}: {expected_step}")
             all_passed = False
 
     # Check validation steps are before LaTeX compilation
@@ -243,47 +243,47 @@ def validate_workflow_structure():
         if any(keyword in step_name.lower() for keyword in ['validation', 'check', 'validate']):
             validation_steps_indices.append(i)
 
-    print(f"\n🔍 Validation step ordering check...")
+    print(f"\n[SEARCH] Validation step ordering check...")
     if latex_step_index is not None:
         properly_ordered = all(idx < latex_step_index for idx in validation_steps_indices)
         if properly_ordered and validation_steps_indices:
-            print("✅ CORRECT: All validation steps run before LaTeX compilation")
+            print("[PASS] CORRECT: All validation steps run before LaTeX compilation")
         elif not validation_steps_indices:
-            print("⚠️  WARNING: No validation steps found")
+            print("[WARN]  WARNING: No validation steps found")
         else:
-            print("❌ INCORRECT: Some validation steps run after LaTeX compilation")
+            print("[FAIL] INCORRECT: Some validation steps run after LaTeX compilation")
             all_passed = False
     else:
-        print("⚠️  WARNING: LaTeX setup step not found")
+        print("[WARN]  WARNING: LaTeX setup step not found")
 
     return all_passed
 
 
 def validate_ctmm_integration():
     """Validate CTMM build system integration and functionality."""
-    print("\n🎯 CTMM BUILD SYSTEM INTEGRATION")
+    print("\n[TARGET] CTMM BUILD SYSTEM INTEGRATION")
     print("-" * 50)
 
     # Check if CTMM build system exists
     ctmm_build_path = 'ctmm_build.py'
     if not os.path.exists(ctmm_build_path):
-        print(f"❌ ERROR: CTMM build system not found: {ctmm_build_path}")
+        print(f"[FAIL] ERROR: CTMM build system not found: {ctmm_build_path}")
         return False
 
-    print(f"✅ FOUND: {ctmm_build_path}")
+    print(f"[PASS] FOUND: {ctmm_build_path}")
 
     # Test CTMM build system
-    print("\n🔧 Testing CTMM build system...")
+    print("\n[FIX] Testing CTMM build system...")
     success, stdout, stderr = run_command("python3 ctmm_build.py", "CTMM build test")
 
     if success:
-        print("✅ CTMM build system executed successfully")
+        print("[PASS] CTMM build system executed successfully")
 
         # Check for key indicators in output
         success_indicators = [
-            "✓ All referenced files exist",
-            "✓ Basic structure test passed",
-            "✓ Full structure test passed",
+            "[OK] All referenced files exist",
+            "[OK] Basic structure test passed",
+            "[OK] Full structure test passed",
             "CTMM BUILD SYSTEM SUMMARY"
         ]
 
@@ -291,16 +291,16 @@ def validate_ctmm_integration():
         for indicator in success_indicators:
             if indicator in stdout:
                 found_indicators.append(indicator)
-                print(f"✅ FOUND: {indicator}")
+                print(f"[PASS] FOUND: {indicator}")
 
         if len(found_indicators) >= 3:
-            print("✅ CTMM build system validation passed")
+            print("[PASS] CTMM build system validation passed")
             return True
         else:
-            print("⚠️  WARNING: CTMM build system completed but some indicators missing")
+            print("[WARN]  WARNING: CTMM build system completed but some indicators missing")
             return True  # Don't fail on missing indicators
     else:
-        print("❌ CTMM build system failed")
+        print("[FAIL] CTMM build system failed")
         if stderr:
             print(f"Error details: {stderr}")
         return False
@@ -308,16 +308,16 @@ def validate_ctmm_integration():
 
 def validate_form_elements_integration():
     """Validate form elements integration with pifont package."""
-    print("\n📝 FORM ELEMENTS INTEGRATION VALIDATION")
+    print("\n[NOTE] FORM ELEMENTS INTEGRATION VALIDATION")
     print("-" * 50)
 
     form_elements_path = 'style/form-elements.sty'
 
     if not os.path.exists(form_elements_path):
-        print(f"❌ ERROR: Form elements style file not found: {form_elements_path}")
+        print(f"[FAIL] ERROR: Form elements style file not found: {form_elements_path}")
         return False
 
-    print(f"✅ FOUND: {form_elements_path}")
+    print(f"[PASS] FOUND: {form_elements_path}")
 
     try:
         with open(form_elements_path, 'r', encoding='utf-8') as f:
@@ -325,16 +325,16 @@ def validate_form_elements_integration():
 
         # Check for pifont requirement
         if '\\RequirePackage{pifont}' in content:
-            print("✅ CORRECT: form-elements.sty requires pifont package")
+            print("[PASS] CORRECT: form-elements.sty requires pifont package")
         else:
-            print("❌ MISSING: form-elements.sty does not require pifont package")
+            print("[FAIL] MISSING: form-elements.sty does not require pifont package")
             return False
 
         # Check for pifont usage in checkboxes
         if '\\ding{' in content:
-            print("✅ CORRECT: form-elements.sty uses pifont symbols (\\ding commands)")
+            print("[PASS] CORRECT: form-elements.sty uses pifont symbols (\\ding commands)")
         else:
-            print("⚠️  INFO: No direct pifont symbol usage found")
+            print("[WARN]  INFO: No direct pifont symbol usage found")
 
         # Check for CTMM form elements
         ctmm_elements = [
@@ -349,19 +349,19 @@ def validate_form_elements_integration():
             if element in content:
                 found_elements.append(element)
 
-        print(f"📋 CTMM form elements found: {len(found_elements)}/{len(ctmm_elements)}")
+        print(f"[TEST] CTMM form elements found: {len(found_elements)}/{len(ctmm_elements)}")
         for element in found_elements:
-            print(f"   ✅ {element}")
+            print(f"   [PASS] {element}")
 
         if len(found_elements) >= 2:
-            print("✅ Form elements validation passed")
+            print("[PASS] Form elements validation passed")
             return True
         else:
-            print("⚠️  WARNING: Limited form elements found")
+            print("[WARN]  WARNING: Limited form elements found")
             return True
 
     except Exception as e:
-        print(f"❌ ERROR: Failed to read {form_elements_path}: {e}")
+        print(f"[FAIL] ERROR: Failed to read {form_elements_path}: {e}")
         return False
 
 
@@ -388,7 +388,7 @@ def run_comprehensive_validation():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"❌ ERROR: Test '{test_name}' failed with exception: {e}")
+            print(f"[FAIL] ERROR: Test '{test_name}' failed with exception: {e}")
             results.append((test_name, False))
 
     # Summary report
@@ -400,7 +400,7 @@ def run_comprehensive_validation():
     total = len(results)
 
     for test_name, result in results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status} {test_name}")
         if result:
             passed += 1
@@ -408,16 +408,16 @@ def run_comprehensive_validation():
     print(f"\nOverall Result: {passed}/{total} tests passed")
 
     if passed == total:
-        print("\n🎉 ALL VALIDATION TESTS PASSED!")
+        print("\n[SUCCESS] ALL VALIDATION TESTS PASSED!")
         print("\nThe CI configuration is robust and ready for:")
-        print("  ✓ Early detection of configuration issues")
-        print("  ✓ Proper LaTeX package dependency handling")
-        print("  ✓ Comprehensive validation before compilation")
-        print("  ✓ Integration with CTMM build system")
-        print("  ✓ Form elements with pifont support")
+        print("  [OK] Early detection of configuration issues")
+        print("  [OK] Proper LaTeX package dependency handling")
+        print("  [OK] Comprehensive validation before compilation")
+        print("  [OK] Integration with CTMM build system")
+        print("  [OK] Form elements with pifont support")
         return True
     else:
-        print(f"\n❌ {total - passed} validation test(s) failed")
+        print(f"\n[FAIL] {total - passed} validation test(s) failed")
         print("Please address the issues above before proceeding.")
         return False
 
@@ -426,7 +426,7 @@ def main():
     """Main entry point for Issue #743 validation."""
     # Ensure we're in the right directory
     if not Path('main.tex').exists():
-        print("❌ ERROR: This script must be run from the CTMM repository root")
+        print("[FAIL] ERROR: This script must be run from the CTMM repository root")
         print("Expected to find main.tex in current directory")
         sys.exit(1)
 
@@ -434,10 +434,10 @@ def main():
 
     print("\n" + "=" * 70)
     if success:
-        print("ISSUE #743 VALIDATION: SUCCESS ✅")
+        print("ISSUE #743 VALIDATION: SUCCESS [PASS]")
         print("CI pipeline is ready for robust validation and error detection.")
     else:
-        print("ISSUE #743 VALIDATION: NEEDS ATTENTION ❌")
+        print("ISSUE #743 VALIDATION: NEEDS ATTENTION [FAIL]")
         print("Please resolve the validation issues before proceeding.")
     print("=" * 70)
 

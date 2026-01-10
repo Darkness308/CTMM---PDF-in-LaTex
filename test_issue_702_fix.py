@@ -11,7 +11,7 @@ import os
 def test_workflow_args():
     """Test that the GitHub Actions workflow arguments are correct"""
 
-    print("🧪 Testing GitHub Actions workflow arguments...")
+    print("[TEST] Testing GitHub Actions workflow arguments...")
 
     # Read the workflow file
     with open(".github/workflows/latex-build.yml", "r") as f:
@@ -22,10 +22,10 @@ def test_workflow_args():
         lines = content.split('\n')
         for line in lines:
             if "args:" in line and "-pdf" in line:
-                print(f"❌ FAILED: Found problematic -pdf argument in: {line.strip()}")
+                print(f"[FAIL] FAILED: Found problematic -pdf argument in: {line.strip()}")
                 return False
 
-    print("✅ SUCCESS: No problematic -pdf argument found in workflow")
+    print("[PASS] SUCCESS: No problematic -pdf argument found in workflow")
 
     # Check that the corrected arguments are present
     expected_args = ["-interaction=nonstopmode", "-halt-on-error", "-shell-escape"]
@@ -37,23 +37,23 @@ def test_workflow_args():
             break
 
     if not args_line:
-        print("❌ FAILED: No args line found in workflow")
+        print("[FAIL] FAILED: No args line found in workflow")
         return False
 
-    print(f"📋 Found args line: {args_line}")
+    print(f"[TEST] Found args line: {args_line}")
 
     for arg in expected_args:
         if arg not in args_line:
-            print(f"❌ FAILED: Missing expected argument: {arg}")
+            print(f"[FAIL] FAILED: Missing expected argument: {arg}")
             return False
 
-    print("✅ SUCCESS: All expected arguments found")
+    print("[PASS] SUCCESS: All expected arguments found")
     return True
 
 def test_pdflatex_compilation():
     """Test that pdflatex can compile with the corrected arguments"""
 
-    print("\n🧪 Testing pdflatex compilation with corrected arguments...")
+    print("\n[TEST] Testing pdflatex compilation with corrected arguments...")
 
     # Create a test file
     test_content = "\\documentclass{article}\\begin{document}Hello World\\end{document}"
@@ -70,10 +70,10 @@ def test_pdflatex_compilation():
         )
 
         if result.returncode == 0 and os.path.exists("test_compile.pdf"):
-            print("✅ SUCCESS: pdflatex compilation works with corrected arguments")
+            print("[PASS] SUCCESS: pdflatex compilation works with corrected arguments")
             return True
         else:
-            print(f"❌ FAILED: pdflatex compilation failed: {result.stderr}")
+            print(f"[FAIL] FAILED: pdflatex compilation failed: {result.stderr}")
             return False
 
     finally:
@@ -86,7 +86,7 @@ def test_pdflatex_compilation():
 
 def main():
     """Main test function"""
-    print("🔧 GitHub Actions LaTeX Argument Fix Test - Issue #702")
+    print("[FIX] GitHub Actions LaTeX Argument Fix Test - Issue #702")
     print("=" * 60)
 
     all_passed = True
@@ -101,11 +101,11 @@ def main():
 
     print("\n" + "=" * 60)
     if all_passed:
-        print("🎉 All tests passed! Issue #702 is fixed.")
-        print("✅ GitHub Actions workflow should now build successfully")
+        print("[SUCCESS] All tests passed! Issue #702 is fixed.")
+        print("[PASS] GitHub Actions workflow should now build successfully")
         sys.exit(0)
     else:
-        print("❌ Some tests failed!")
+        print("[FAIL] Some tests failed!")
         sys.exit(1)
 
 if __name__ == "__main__":
