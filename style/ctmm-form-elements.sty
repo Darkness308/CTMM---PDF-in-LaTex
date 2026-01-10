@@ -16,12 +16,12 @@
 
 % Check if hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
-    % hyperref is already loaded - just enable interactive mode
+    % hyperref is already loaded - enable interactive mode
     \renewcommand{\@ctmmInteractive}{true}%
 }{%
-    % hyperref not loaded - load it and enable interactive mode
-    \RequirePackage{hyperref}%
-    \renewcommand{\@ctmmInteractive}{true}%
+    % hyperref not loaded - disable interactive mode and give warning
+    \PackageWarning{ctmm-form-elements}{hyperref package not loaded. Interactive forms disabled.}%
+    \renewcommand{\@ctmmInteractive}{false}%
 }
 
 \makeatother
