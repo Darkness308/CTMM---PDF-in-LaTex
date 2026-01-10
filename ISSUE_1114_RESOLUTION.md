@@ -17,7 +17,7 @@ The repository contains 27+ Python validation scripts that import the `yaml` mod
 ### Files Affected
 The issue impacted validation across multiple workflow files:
 - `.github/workflows/latex-validation.yml`
-- `.github/workflows/latex-build.yml` 
+- `.github/workflows/latex-build.yml`
 - `.github/workflows/automated-pr-merge-test.yml`
 
 ## Solution Implemented

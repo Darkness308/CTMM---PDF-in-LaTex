@@ -27,13 +27,13 @@ def check_git_status():
     if not success:
         print(f"❌ Error checking git status: {stderr}")
         return False
-    
+
     if stdout.strip():
         print("⚠️  Uncommitted changes detected:")
         print(stdout)
         print("Consider committing these changes before creating a PR.")
         return False
-    
+
     print("✅ No uncommitted changes")
     return True
 
@@ -42,11 +42,11 @@ def check_file_changes(base_branch="main"):
     # First try to find a suitable base branch
     success, stdout, stderr = run_command("git branch -r")
     available_branches = stdout.split('\n') if success else []
-    
+
     # Try different base branch options
     base_options = [f"origin/{base_branch}", base_branch, "origin/main", "main"]
     actual_base = None
-    
+
     # Only check base_options that are present in available_branches or match base_branch
     filtered_options = [opt for opt in base_options if any(opt in branch for branch in available_branches) or opt == base_branch]
     if filtered_options:
@@ -60,7 +60,7 @@ def check_file_changes(base_branch="main"):
                 if h.strip() and not h.startswith("fatal:"):
                     actual_base = base_opt
                     break
-    
+
     if not actual_base:
         # If no base branch found, compare with HEAD~1 or show staged changes
         success, stdout, stderr = run_command("git diff --cached --name-only")
@@ -75,7 +75,7 @@ def check_file_changes(base_branch="main"):
                 print("⚠️  Cannot determine base for comparison, checking working directory changes...")
                 success, stdout, stderr = run_command("git diff --name-only")
                 actual_base = ""
-    
+
     # Get file changes
     if actual_base == "--cached":
         success, stdout, stderr = run_command("git diff --cached --name-only")
@@ -83,13 +83,13 @@ def check_file_changes(base_branch="main"):
         success, stdout, stderr = run_command("git diff --name-only")
     else:
         success, stdout, stderr = run_command(f"git diff --name-only {actual_base}..HEAD")
-    
+
     if not success:
         print(f"❌ Error checking file changes: {stderr}")
         return False, 0, 0, 0
-    
+
     changed_files = len(stdout.split('\n')) if stdout.strip() else 0
-    
+
     # Get line statistics
     if actual_base == "--cached":
         success, stdout, stderr = run_command("git diff --cached --numstat")
@@ -97,10 +97,10 @@ def check_file_changes(base_branch="main"):
         success, stdout, stderr = run_command("git diff --numstat")
     else:
         success, stdout, stderr = run_command(f"git diff --numstat {actual_base}..HEAD")
-    
+
     added_lines = 0
     deleted_lines = 0
-    
+
     if success and stdout.strip():
         for line in stdout.split('\n'):
             if line.strip():
@@ -111,20 +111,20 @@ def check_file_changes(base_branch="main"):
                         deleted_lines += int(parts[1]) if parts[1] != '-' else 0
                     except ValueError:
                         continue
-    
+
     return True, changed_files, added_lines, deleted_lines
 
 def check_ctmm_build():
     """Run the CTMM build system to validate the project."""
     print("\n🔧 Running CTMM build system...")
     success, stdout, stderr = run_command("python3 ctmm_build.py")
-    
+
     if not success:
         print(f"❌ CTMM build failed")
         if stderr:
             print(f"Error details: {stderr}")
         return False
-    
+
     # Check the output for success indicators
     if stdout and ("PASS" in stdout or "✓" in stdout):
         print("✅ CTMM build system passed")
@@ -138,34 +138,34 @@ def validate_latex_files():
     success, stdout, stderr = run_command("git diff --name-only HEAD~1..HEAD")
     if not success:
         return True  # Skip if we can't get changed files
-    
+
     latex_files = [f for f in stdout.split('\n') if f.endswith('.tex')]
-    
+
     if not latex_files:
         return True
-    
+
     print(f"\n📄 Checking {len(latex_files)} LaTeX file(s)...")
-    
+
     issues_found = False
     for file_path in latex_files:
         if not os.path.exists(file_path):
             continue
-            
+
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-            
+
         # Check for common LaTeX issues
         if '\\usepackage{' in content and 'modules/' in file_path:
             print(f"⚠️  {file_path}: Contains \\usepackage - should be in main.tex preamble")
             issues_found = True
-            
+
         if '\\Box' in content or '\\blacksquare' in content:
             print(f"⚠️  {file_path}: Uses \\Box or \\blacksquare - use \\checkbox/\\checkedbox macros")
             issues_found = True
-    
+
     if not issues_found:
         print("✅ No LaTeX issues detected")
-    
+
     return not issues_found
 
 def main():
@@ -173,23 +173,23 @@ def main():
     parser.add_argument('--base-branch', default='main', help='Base branch to compare against')
     parser.add_argument('--skip-build', action='store_true', help='Skip CTMM build check')
     parser.add_argument('--verbose', action='store_true', help='Verbose output')
-    
+
     args = parser.parse_args()
-    
+
     print("🔍 CTMM PR Validation")
     print("=" * 50)
-    
+
     # Check if we're in a git repository
     if not os.path.exists('.git'):
         print("❌ Not in a git repository")
         sys.exit(1)
-    
+
     all_checks_passed = True
-    
+
     # Check git status
     if not check_git_status():
         all_checks_passed = False
-    
+
     # Check for file changes
     success, changed_files, added_lines, deleted_lines = check_file_changes(args.base_branch)
     if not success:
@@ -199,7 +199,7 @@ def main():
         print(f"  - Files changed: {changed_files}")
         print(f"  - Lines added: {added_lines}")
         print(f"  - Lines deleted: {deleted_lines}")
-        
+
         if changed_files == 0:
             print("❌ No file changes detected - Copilot cannot review empty PRs")
             print("   💡 To fix: Add meaningful changes to files (documentation, code, etc.)")
@@ -214,16 +214,16 @@ def main():
             all_checks_passed = False
         else:
             print("✅ Meaningful changes detected - Copilot should be able to review")
-    
+
     # Validate LaTeX files
     if not validate_latex_files():
         all_checks_passed = False
-    
+
     # Run CTMM build system
     if not args.skip_build:
         if not check_ctmm_build():
             all_checks_passed = False
-    
+
     print("\n" + "=" * 50)
     if all_checks_passed:
         print("🎉 All validation checks passed!")

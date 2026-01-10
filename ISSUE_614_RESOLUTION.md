@@ -14,7 +14,7 @@
 
 **Files Examined:**
 - `main.tex` - 6 textcolor commands (all proper)
-- `style/ctmm-design.sty` - 3 textcolor commands (all proper) 
+- `style/ctmm-design.sty` - 3 textcolor commands (all proper)
 - `style/form-elements.sty` - 1 textcolor command (all proper)
 - All module files in `modules/` - 83 textcolor commands (all proper)
 

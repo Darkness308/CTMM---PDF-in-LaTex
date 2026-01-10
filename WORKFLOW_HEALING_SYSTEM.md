@@ -221,19 +221,19 @@ python3 fix_strategies.py
 ## Limitations
 
 ### What the System CAN Do
-✅ Fix common workflow configuration issues  
-✅ Update action versions automatically  
-✅ Install missing packages  
-✅ Adjust timeouts intelligently  
-✅ Create detailed PRs for review  
-✅ Validate fixes before applying  
+✅ Fix common workflow configuration issues
+✅ Update action versions automatically
+✅ Install missing packages
+✅ Adjust timeouts intelligently
+✅ Create detailed PRs for review
+✅ Validate fixes before applying
 
 ### What the System CANNOT Do
-❌ Fix complex logic errors in code  
-❌ Resolve authentication/permission issues  
-❌ Handle custom or proprietary actions  
-❌ Merge PRs automatically (safety feature)  
-❌ Fix fundamental architecture problems  
+❌ Fix complex logic errors in code
+❌ Resolve authentication/permission issues
+❌ Handle custom or proprietary actions
+❌ Merge PRs automatically (safety feature)
+❌ Fix fundamental architecture problems
 
 ## Safety Mechanisms
 

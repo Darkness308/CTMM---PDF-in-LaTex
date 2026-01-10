@@ -241,18 +241,18 @@ The PR analysis report shows:
 - **No direct main branch changes**: All fixes via PR
 
 ### What Won't Be Auto-Fixed
-❌ Authentication/permission errors  
-❌ Complex logic bugs  
-❌ Custom action failures  
-❌ Fundamental architecture issues  
-❌ Manual review required items  
+❌ Authentication/permission errors
+❌ Complex logic bugs
+❌ Custom action failures
+❌ Fundamental architecture issues
+❌ Manual review required items
 
 ### What Will Be Auto-Fixed
-✅ LaTeX action version issues  
-✅ Missing package installations  
-✅ Timeout configuration  
-✅ Workflow syntax errors  
-✅ Common CI patterns  
+✅ LaTeX action version issues
+✅ Missing package installations
+✅ Timeout configuration
+✅ Workflow syntax errors
+✅ Common CI patterns
 
 ## 📚 Additional Resources
 
