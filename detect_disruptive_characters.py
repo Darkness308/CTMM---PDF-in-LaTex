@@ -29,17 +29,34 @@ class CharacterValidator:
         self.files_with_issues = 0
 
     def detect_encoding(self, file_path: Path) -> Dict[str, any]:
-        """Detect the encoding of a file."""
+        """Detect the encoding of a file.
+        
+        For LaTeX files, we prefer UTF-8 if the file is valid UTF-8,
+        regardless of what chardet thinks the encoding is.
+        """
         try:
             with open(file_path, 'rb') as f:
                 raw_data = f.read()
-                result = chardet.detect(raw_data)
-                return {
-                    'encoding': result['encoding'],
-                    'confidence': result['confidence'],
-                    'has_bom': raw_data.startswith(b'\xef\xbb\xbf'),  # UTF-8 BOM
-                    'raw_data': raw_data
-                }
+                
+                # First check if file is valid UTF-8
+                try:
+                    raw_data.decode('utf-8')
+                    # File is valid UTF-8, use that
+                    return {
+                        'encoding': 'UTF-8',
+                        'confidence': 1.0,
+                        'has_bom': raw_data.startswith(b'\xef\xbb\xbf'),
+                        'raw_data': raw_data
+                    }
+                except UnicodeDecodeError:
+                    # Not valid UTF-8, use chardet
+                    result = chardet.detect(raw_data)
+                    return {
+                        'encoding': result['encoding'],
+                        'confidence': result['confidence'],
+                        'has_bom': raw_data.startswith(b'\xef\xbb\xbf'),
+                        'raw_data': raw_data
+                    }
         except Exception as e:
             return {
                 'encoding': 'ERROR',
@@ -81,10 +98,16 @@ class CharacterValidator:
         return issues
 
     def find_problematic_non_ascii(self, content: str, file_path: Path) -> List[Dict]:
-        """Find potentially problematic non-ASCII characters."""
+        """Find potentially problematic non-ASCII characters.
+        
+        Note: German umlauts (ä, ö, ü, ß) and other common European characters
+        are NOT problematic with modern LaTeX UTF-8 support and are excluded from checks.
+        """
         issues = []
 
         # Characters that should typically be escaped in LaTeX
+        # NOTE: German letters (ä, ö, ü, ß, etc.) and other European characters
+        # are handled correctly by modern pdfLaTeX with UTF-8 and are NOT included here
         problematic_chars = {
             '§': r'\S',
             '°': r'\degree',
@@ -201,8 +224,9 @@ class CharacterValidator:
             result['issues'].extend(utf8_issues)
 
         # Try to read file content for further analysis
+        # Always use UTF-8 for LaTeX files since that's what modern pdfLaTeX expects
         try:
-            with open(file_path, 'r', encoding=encoding_info['encoding'] or 'utf-8', errors='replace') as f:
+            with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
                 content = f.read()
 
             # Find control characters
