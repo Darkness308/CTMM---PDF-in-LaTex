@@ -9,11 +9,11 @@ from pathlib import Path
 
 def validate_pr_suggestions():
     """Validate that our fixes match the PR review suggestions."""
-    
+
     print("="*60)
     print("VALIDATING FIXES AGAINST PR REVIEW SUGGESTIONS")
     print("="*60)
-    
+
     # Expected content from PR comments
     expected_tool23_start = r"""\hypertarget{tool-23-trigger-management}{%
 \section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}}\label{tool-23-trigger-management}
@@ -68,70 +68,70 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
     # Read our actual files
     tool23_file = Path('converted/Tool 23 Trigger Management.tex')
     matching_file = Path('converted/Matching Matrix Trigger Reaktion Intervention CTMM.tex')
-    
+
     print("\n1. Checking Tool 23 Trigger Management file...")
     if tool23_file.exists():
         with open(tool23_file, 'r', encoding='utf-8') as f:
             actual_content = f.read()
-        
+
         # Check key patterns are fixed
         issues = []
         if r'\textbackslash{}' in actual_content:
             issues.append("Still contains over-escaped commands")
-        
+
         # Check specific improvements
         if r'\hypertarget{tool-23-trigger-management}{%' in actual_content:
             print("   ✅ Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed properly")
-        
+
         if r'\section{\texorpdfstring{' in actual_content:
             print("   ✅ Section commands cleaned")
         else:
             issues.append("Section commands not fixed")
-        
+
         if issues:
             print(f"   ⚠️  Issues found: {', '.join(issues)}")
         else:
             print("   ✅ File looks good!")
-    
+
     print("\n2. Checking Matching Matrix file...")
     if matching_file.exists():
         with open(matching_file, 'r', encoding='utf-8') as f:
             actual_content = f.read()
-        
+
         issues = []
         if r'\textbackslash{}' in actual_content:
             issues.append("Still contains over-escaped commands")
-        
+
         if r'\hypertarget{matching-matrix}{%' in actual_content:
             print("   ✅ Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed")
-        
+
         if r'\texttt{Kap.\ ' in actual_content:
             print("   ✅ Texttt commands cleaned")
         else:
             issues.append("Texttt commands not fixed")
-        
+
         if issues:
             print(f"   ⚠️  Issues found: {', '.join(issues)}")
         else:
             print("   ✅ File looks good!")
-    
+
     print("\n3. Summary of improvements:")
     print(r"   ✅ Removed excessive \textbackslash{} escaping")
     print("   ✅ Fixed hypertarget commands")
-    print("   ✅ Cleaned section/subsection commands")  
+    print("   ✅ Cleaned section/subsection commands")
     print("   ✅ Fixed text formatting commands")
     print("   ✅ Preserved content structure and meaning")
     print("   ✅ Made LaTeX code readable and maintainable")
-    
+
     print("\n4. Comparison with PR suggestions:")
     print("   Our solution successfully transforms over-escaped LaTeX")
     print("   into clean, readable code as requested in the PR comments.")
     print("   The systematic over-escaping issue has been resolved.")
-    
+
     print("\n" + "="*60)
     print("VALIDATION COMPLETE - SOLUTION IS EFFECTIVE")
     print("="*60)
