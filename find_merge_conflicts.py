@@ -82,7 +82,7 @@ def find_conflicts_in_file(file_path: Path) -> List[Dict[str, Any]]:
                     'content': line.rstrip()
                 })
     
-    except Exception as e:
+    except (IOError, OSError, UnicodeDecodeError) as e:
         print(f"Error reading {file_path}: {e}")
     
     return conflicts

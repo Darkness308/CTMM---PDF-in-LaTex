@@ -75,20 +75,23 @@ class DisruptiveCharacterFinder:
                     'severity': 'medium'
                 })
             
-            # Check for null bytes
+            # Check for null bytes (indicates binary file)
+            # Early return here is intentional: if file contains null bytes,
+            # it's likely binary and further text analysis would be meaningless
             if b'\x00' in content_bytes:
                 issues.append({
                     'type': 'null_byte',
                     'description': 'Null bytes found (file may be binary)',
                     'severity': 'high'
                 })
-                # Don't continue checking if null bytes found (likely binary)
-                return issues
+                return issues  # Early return: no point checking text in binary files
             
             # Decode and check text content
+            # Try UTF-8 first, then fall back to latin-1
             try:
                 content = content_bytes.decode('utf-8')
             except UnicodeDecodeError:
+                # UTF-8 failed, try latin-1
                 try:
                     content = content_bytes.decode('latin-1')
                     issues.append({
@@ -96,10 +99,11 @@ class DisruptiveCharacterFinder:
                         'description': 'File is not UTF-8 encoded',
                         'severity': 'low'
                     })
-                except UnicodeDecodeError:
+                except (UnicodeDecodeError, LookupError):
+                    # Both encodings failed
                     issues.append({
                         'type': 'encoding',
-                        'description': 'Unable to decode file',
+                        'description': 'Unable to decode file with UTF-8 or latin-1',
                         'severity': 'high'
                     })
                     return issues
