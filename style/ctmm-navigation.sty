@@ -1,0 +1,16 @@
+% CTMM Navigation Abstraction Layer
+\ProvidesPackage{style/ctmm-navigation}[2025/08/05 Navigation Layer]
+
+
+% Navigation-Makro (neue API)
+\newcommand{\ctmmNavTo}[2]{%
+  \hyperref[ctmm:#1]{\textcolor{ctmmBlue}{\faLink~#2}}%
+
+% Backward-Compatibility: Alte API weiterleiten
+% Backward compatibility: \ctmmRef als Alias für \ctmmNavTo, nur definieren wenn nicht vorhanden
+\providecommand{\ctmmRef}[2][]{\ctmmNavTo[#1]{#2}}
+}
+
+% Beispiel für zentrale Registry (optional, erweiterbar)
+% \newcommand{\ctmmRegisterNav}[2]{...}
+% ...

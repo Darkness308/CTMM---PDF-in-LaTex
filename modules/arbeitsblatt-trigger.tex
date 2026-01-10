@@ -16,22 +16,22 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \textit{Einfach ankreuzen was passt - kombinieren ist ok!}
 
 \textbf{Ich war zusammen mit:} \\
-\ctmmCheckBox[with_partner]{Partner} \quad
-\ctmmCheckBox[with_friends]{Freunden} \quad
-\ctmmCheckBox[with_family]{Familie} \quad
-\ctmmCheckBox[with_others]{Anderen:} \ctmmTextField[3cm]{}{with_others_text}
+\ctmmCheckBox{with_partner}{Partner} \quad
+\ctmmCheckBox{with_friends}{Freunden} \quad
+\ctmmCheckBox{with_family}{Familie} \quad
+\ctmmCheckBox{with_others}{Anderen:} \ctmmTextField[3cm]{}{with_others_name}
 
 \vspace{0.5cm}
 \textbf{Triggermoment war:} \\
-\ctmmCheckBox[trigger_sound]{Geräusch (laut/plötzlich)} \quad
-\ctmmCheckBox[trigger_words]{Bestimmte Wörter/Sätze} \\
-\ctmmCheckBox[trigger_tone]{Tonfall/Betonung} \quad
-\ctmmCheckBox[trigger_bodylanguage]{Körpersprache} \\
-\ctmmCheckBox[trigger_crowd]{Menschenmenge} \quad
-\ctmmCheckBox[trigger_memory]{Erinnerung/Flashback} \\
-\ctmmCheckBox[trigger_change]{Planänderung} \quad
-\ctmmCheckBox[trigger_overwhelm]{Reizüberflutung} \\
-\ctmmCheckBox[trigger_other]{Andere:} \ctmmTextField[3cm]{}{trigger_other_text}
+\ctmmCheckBox{trigger_sound}{Geräusch (laut/plötzlich)} \quad
+\ctmmCheckBox{trigger_words}{Bestimmte Wörter/Sätze} \\
+\ctmmCheckBox{trigger_tone}{Tonfall/Betonung} \quad
+\ctmmCheckBox{trigger_bodylanguage}{Körpersprache} \\
+\ctmmCheckBox{trigger_crowd}{Menschenmenge} \quad
+\ctmmCheckBox{trigger_memory}{Erinnerung/Flashback} \\
+\ctmmCheckBox{trigger_change}{Planänderung} \quad
+\ctmmCheckBox{trigger_overwhelm}{Reizüberflutung} \\
+\ctmmCheckBox{trigger_other}{Andere:} \ctmmTextField[3cm]{}{trigger_other_detail}
 
 \vspace{0.5cm}
 \textbf{Beschreibe die Situation:} \\
@@ -42,21 +42,21 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 \vspace{0.5cm}
 \textbf{Welche Gefühle hat das bei mir ausgelöst:} \\
 \textit{Du darfst mehrere ankreuzen - Gefühle sind oft gemischt!} \\
-\ctmmCheckBox[feeling_angst]{Angst} \quad
-\ctmmCheckBox[feeling_wut]{Wut} \quad
-\ctmmCheckBox[feeling_trauer]{Trauer} \quad
-\ctmmCheckBox[feeling_verlassenheit]{Verlassenheit} \\
-\ctmmCheckBox[feeling_ueberforderung]{Überforderung} \quad
-\ctmmCheckBox[feeling_hilflosigkeit]{Hilflosigkeit} \quad
-\ctmmCheckBox[feeling_scham]{Scham} \quad
-\ctmmCheckBox[feeling_verwirrung]{Verwirrung} \\
-\ctmmCheckBox[feeling_other]{Andere:} \ctmmTextField[3cm]{}{feeling_other_text}
+\ctmmCheckBox{feeling_angst}{Angst} \quad
+\ctmmCheckBox{feeling_wut}{Wut} \quad
+\ctmmCheckBox{feeling_trauer}{Trauer} \quad
+\ctmmCheckBox{feeling_verlassenheit}{Verlassenheit} \\
+\ctmmCheckBox{feeling_ueberforderung}{Überforderung} \quad
+\ctmmCheckBox{feeling_hilflosigkeit}{Hilflosigkeit} \quad
+\ctmmCheckBox{feeling_scham}{Scham} \quad
+\ctmmCheckBox{feeling_verwirrung}{Verwirrung} \\
+\ctmmCheckBox{feeling_other}{Andere:} \ctmmTextField[3cm]{}{feeling_other_detail}
 
 \subsection*{\faSync~REAKTIONEN}
 \textit{Ehrlich sein hilft - wir urteilen nicht!}
 
-\textbf{ER:} \ctmmCheckBox[reaktion_er_rueckzug]{Rückzug} \quad \ctmmCheckBox[reaktion_er_shutdown]{Shutdown} \quad \ctmmCheckBox[reaktion_er_panik]{Panik} \quad \ctmmCheckBox[reaktion_er_verwirrt]{Verwirrt} \\
-\textbf{SIE:} \ctmmCheckBox[reaktion_sie_vorwuerfe]{Vorwürfe} \quad \ctmmCheckBox[reaktion_sie_klammern]{Klammern} \quad \ctmmCheckBox[reaktion_sie_weinen]{Weinen} \quad \ctmmCheckBox[reaktion_sie_wut]{Wut}
+\textbf{ER:} \ctmmCheckBox{reaktion_er_rueckzug}{Rückzug} \quad \ctmmCheckBox{reaktion_er_shutdown}{Shutdown} \quad \ctmmCheckBox{reaktion_er_panik}{Panik} \quad \ctmmCheckBox{reaktion_er_verwirrt}{Verwirrt} \\
+\textbf{SIE:} \ctmmCheckBox{reaktion_sie_vorwuerfe}{Vorwürfe} \quad \ctmmCheckBox{reaktion_sie_klammern}{Klammern} \quad \ctmmCheckBox{reaktion_sie_weinen}{Weinen} \quad \ctmmCheckBox{reaktion_sie_wut}{Wut}
 
 \vspace{0.5cm}
 \textbf{Stress-Level (1-10):} \\
@@ -64,11 +64,11 @@ Auch kleine Trigger zählen! Jedes Ausfüllen hilft uns beide besser zu verstehe
 ER: \ctmmTextField[2cm]{}{stress_er} \quad SIE: \ctmmTextField[2cm]{}{stress_sie}
 
 \subsection*{\faTools~WAS HALF}
-\ctmmCheckBox[half_safeword]{Safe-Word benutzt:} \ctmmTextField[5cm]{}{half_safeword_text} \\
-\ctmmCheckBox[half_skills]{Skills angewendet:} \ctmmTextField[5cm]{}{half_skills_text} \\
-\ctmmCheckBox[half_friends]{Freunde geholt:} \ctmmTextField[5cm]{}{half_friends_text} \\
-\ctmmCheckBox[half_pause]{Pause gemacht:} \ctmmTextField[5cm]{}{half_pause_text} \\
-\ctmmCheckBox[half_other]{Andere:} \ctmmTextField[5cm]{}{half_other_text}
+\ctmmCheckBox{half_safeword}{Safe-Word benutzt:} \ctmmTextField[5cm]{}{half_safeword_detail} \\
+\ctmmCheckBox{half_skills}{Skills angewendet:} \ctmmTextField[5cm]{}{half_skills_detail} \\
+\ctmmCheckBox{half_friends}{Freunde geholt:} \ctmmTextField[5cm]{}{half_friends_detail} \\
+\ctmmCheckBox{half_pause}{Pause gemacht:} \ctmmTextField[5cm]{}{half_pause_detail} \\
+\ctmmCheckBox{half_other}{Andere:} \ctmmTextField[5cm]{}{half_other_detail}
 
 \subsection*{\faChartLine~LERNPUNKT}
 \textbf{Nächstes Mal besser machen:} \\

@@ -20,6 +20,10 @@ main_basic_test.*
 *.temp.*
 *.test_*.*
 
+## Workflow Healing System files:
+workflow_healing.log
+workflow_healing.log.*
+
 ## Python cache files:
 __pycache__/
 *.py[cod]
@@ -32,7 +36,7 @@ __pycache__/
 # these rules might exclude image files for figures etc.
 # *.ps
 # *.eps
-# *.pdf
+*.pdf
 
 ## Generated if empty string is given at "Please type another file name for output:"
 .pdf
@@ -291,6 +295,14 @@ pythontex-files-*/
 # Latexian
 TSWLatexianTemp*
 
+## Binary document files:
+*.docx
+*.doc
+*.xlsx
+*.xls
+*.ppt
+*.pptx
+
 ## Editors:
 # WinEdt
 *.bak
@@ -337,3 +349,4 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+*.backup
