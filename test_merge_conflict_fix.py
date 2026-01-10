@@ -251,7 +251,7 @@ class TestRepositoryStats(unittest.TestCase):
                             line_count += len(lines)
 
                         size_bytes += filepath.stat().st_size
-                    except:
+                    except Exception:
                         pass
 
         print(f"\n{'='*60}")
