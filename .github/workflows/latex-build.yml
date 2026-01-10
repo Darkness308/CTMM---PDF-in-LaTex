@@ -102,6 +102,14 @@ jobs:
         with:
           root_file: main.tex
           args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-latex-extra
+            texlive-fonts-extra
+            texlive-science
+            texlive-pstricks
       - name: Verify PDF generation with enhanced analysis
         timeout-minutes: 5
         run: |
