@@ -8,7 +8,7 @@ This directory is intended for binary therapy material files such as Word docume
 
 - **Word Documents (.docx)**: Original therapy materials in editable format
 - **PDF Files (.pdf)**: Generated output documents
-- **Excel Files (.xlsx, .xls)**: Spreadsheets and data files  
+- **Excel Files (.xlsx, .xls)**: Spreadsheets and data files
 - **PowerPoint Files (.pptx, .ppt)**: Presentation materials
 
 ## Why Binary Files Are Excluded

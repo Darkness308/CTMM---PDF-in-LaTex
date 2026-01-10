@@ -27,7 +27,7 @@ jobs:
   automated-merge-test:
     runs-on: ubuntu-latest
     name: Test merge all open PRs
-    
+
     steps:
     - name: Checkout repository
       timeout-minutes: 5
@@ -35,20 +35,20 @@ jobs:
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
-    
+
     - name: Set up Python
       timeout-minutes: 5
       uses: actions/setup-python@v4
       with:
         python-version: '3.x'
-    
+
     - name: Install dependencies
       timeout-minutes: 5
       run: |
         echo "📦 Installing dependencies..."
         pip install chardet requests pyyaml
         echo "✅ Dependencies installed successfully"
-        
+
     - name: Configure git
       timeout-minutes: 3
       run: |
@@ -56,7 +56,7 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         echo "✅ Git configuration completed"
-        
+
     - name: Create test branch
       timeout-minutes: 5
       id: create_branch
@@ -64,41 +64,41 @@ jobs:
         BASE_BRANCH="${{ inputs.base_branch || 'main' }}"
         TIMESTAMP=$(date +%Y%m%d-%H%M%S)
         TEST_BRANCH="automated-merge-test-${TIMESTAMP}"
-        
+
         echo "base_branch=$BASE_BRANCH" >> $GITHUB_OUTPUT
         echo "test_branch=$TEST_BRANCH" >> $GITHUB_OUTPUT
-        
+
         echo "🌿 Creating test branch: $TEST_BRANCH from $BASE_BRANCH"
         git checkout $BASE_BRANCH
         git pull origin $BASE_BRANCH
         git checkout -b $TEST_BRANCH
         git push origin $TEST_BRANCH
-        
+
         echo "✅ Test branch created successfully"
-        
+
     - name: Fetch open PRs
       timeout-minutes: 5
       id: fetch_prs
       run: |
         echo "🔍 Fetching open pull requests..."
-        
+
         # Get open PRs using GitHub API
         OPEN_PRS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           "https://api.github.com/repos/${{ github.repository }}/pulls?state=open" | \
           jq -r '.[].number' | head -n ${{ inputs.max_prs || 10 }})
-        
+
         echo "Found open PRs: $OPEN_PRS"
-        
+
         # Convert to space-separated list
         PR_LIST=$(echo $OPEN_PRS | tr '\n' ' ')
         echo "pr_list=$PR_LIST" >> $GITHUB_OUTPUT
-        
+
         # Count PRs
         PR_COUNT=$(echo $OPEN_PRS | wc -w)
         echo "pr_count=$PR_COUNT" >> $GITHUB_OUTPUT
-        
+
         echo "📊 Found $PR_COUNT open PRs to test"
-        
+
     - name: Initialize test results
       timeout-minutes: 3
       run: |
@@ -112,81 +112,81 @@ jobs:
         echo "" >> test_results/summary.md
         echo "## Individual PR Test Results" >> test_results/summary.md
         echo "" >> test_results/summary.md
-        
+
         # Initialize counters
         echo "0" > test_results/successful_merges.count
         echo "0" > test_results/failed_merges.count
         echo "0" > test_results/successful_builds.count
         echo "0" > test_results/failed_builds.count
-        
+
     - name: Test merge and build each PR
       timeout-minutes: 30
       if: steps.fetch_prs.outputs.pr_count > 0
       run: |
         echo "🚀 Starting individual PR merge and build testing..."
-        
+
         TEST_BRANCH="${{ steps.create_branch.outputs.test_branch }}"
         git checkout $TEST_BRANCH
-        
+
         for PR_NUMBER in ${{ steps.fetch_prs.outputs.pr_list }}; do
           echo ""
           echo "============================================"
           echo "🔄 Testing PR #$PR_NUMBER"
           echo "============================================"
-          
+
           # Get PR details
           PR_INFO=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/$PR_NUMBER")
-          
+
           PR_TITLE=$(echo "$PR_INFO" | jq -r '.title')
           PR_HEAD_SHA=$(echo "$PR_INFO" | jq -r '.head.sha')
           PR_HEAD_REF=$(echo "$PR_INFO" | jq -r '.head.ref')
           PR_HEAD_REPO=$(echo "$PR_INFO" | jq -r '.head.repo.full_name')
-          
+
           echo "📋 PR #$PR_NUMBER: $PR_TITLE"
           echo "🎯 Head: $PR_HEAD_SHA ($PR_HEAD_REF)"
           echo "📦 Repository: $PR_HEAD_REPO"
-          
+
           # Log to summary
           echo "### PR #$PR_NUMBER: $PR_TITLE" >> test_results/summary.md
           echo "- **Head SHA:** $PR_HEAD_SHA" >> test_results/summary.md
           echo "- **Head Ref:** $PR_HEAD_REF" >> test_results/summary.md
           echo "- **Repository:** $PR_HEAD_REPO" >> test_results/summary.md
-          
+
           # Try to fetch and merge the PR
           MERGE_SUCCESS=false
           BUILD_SUCCESS=false
-          
+
           if [ "$PR_HEAD_REPO" = "${{ github.repository }}" ]; then
             # Same repository - can merge directly
             echo "🔀 Attempting to merge PR #$PR_NUMBER (same repository)..."
-            
+
             if git fetch origin pull/$PR_NUMBER/head:pr-$PR_NUMBER 2>test_results/pr_${PR_NUMBER}_fetch.log; then
               if git merge pr-$PR_NUMBER --no-edit -m "Test merge PR #$PR_NUMBER: $PR_TITLE" 2>test_results/pr_${PR_NUMBER}_merge.log; then
                 echo "✅ Successfully merged PR #$PR_NUMBER"
                 MERGE_SUCCESS=true
                 echo "- **Merge Status:** ✅ SUCCESS" >> test_results/summary.md
-                
+
                 # Increment successful merge counter
                 SUCCESSFUL_MERGES=$(cat test_results/successful_merges.count)
                 echo $((SUCCESSFUL_MERGES + 1)) > test_results/successful_merges.count
               else
                 echo "❌ Failed to merge PR #$PR_NUMBER - merge conflicts"
                 echo "- **Merge Status:** ❌ FAILED (merge conflicts)" >> test_results/summary.md
-                
+
                 # Log merge conflict details
                 echo "Merge conflict details:" >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
                 git status >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
                 git reset --hard HEAD >> test_results/pr_${PR_NUMBER}_merge_conflicts.log
-                
-                # Increment failed merge counter  
+
+                # Increment failed merge counter
                 FAILED_MERGES=$(cat test_results/failed_merges.count)
                 echo $((FAILED_MERGES + 1)) > test_results/failed_merges.count
               fi
             else
               echo "❌ Failed to fetch PR #$PR_NUMBER"
               echo "- **Merge Status:** ❌ FAILED (fetch error)" >> test_results/summary.md
-              
+
               # Increment failed merge counter
               FAILED_MERGES=$(cat test_results/failed_merges.count)
               echo $((FAILED_MERGES + 1)) > test_results/failed_merges.count
@@ -195,29 +195,29 @@ jobs:
             echo "⚠️  Skipping PR #$PR_NUMBER - external repository ($PR_HEAD_REPO)"
             echo "- **Merge Status:** ⚠️ SKIPPED (external repository)" >> test_results/summary.md
           fi
-          
+
           # If merge was successful, test the build
           if [ "$MERGE_SUCCESS" = true ]; then
             echo ""
             echo "🔨 Testing build for PR #$PR_NUMBER..."
-            
+
             # Run CTMM build system check
             if python3 ctmm_build.py > test_results/pr_${PR_NUMBER}_build.log 2>&1; then
               echo "✅ CTMM build system check passed for PR #$PR_NUMBER"
-              
+
               # Run LaTeX syntax validation
               if python3 validate_latex_syntax.py >> test_results/pr_${PR_NUMBER}_build.log 2>&1; then
                 echo "✅ LaTeX syntax validation passed for PR #$PR_NUMBER"
                 BUILD_SUCCESS=true
                 echo "- **Build Status:** ✅ SUCCESS" >> test_results/summary.md
-                
+
                 # Increment successful build counter
                 SUCCESSFUL_BUILDS=$(cat test_results/successful_builds.count)
                 echo $((SUCCESSFUL_BUILDS + 1)) > test_results/successful_builds.count
               else
                 echo "❌ LaTeX syntax validation failed for PR #$PR_NUMBER"
                 echo "- **Build Status:** ❌ FAILED (LaTeX validation)" >> test_results/summary.md
-                
+
                 # Increment failed build counter
                 FAILED_BUILDS=$(cat test_results/failed_builds.count)
                 echo $((FAILED_BUILDS + 1)) > test_results/failed_builds.count
@@ -225,7 +225,7 @@ jobs:
             else
               echo "❌ CTMM build system check failed for PR #$PR_NUMBER"
               echo "- **Build Status:** ❌ FAILED (CTMM build)" >> test_results/summary.md
-              
+
               # Increment failed build counter
               FAILED_BUILDS=$(cat test_results/failed_builds.count)
               echo $((FAILED_BUILDS + 1)) > test_results/failed_builds.count
@@ -233,16 +233,16 @@ jobs:
           else
             echo "- **Build Status:** ⏭️ SKIPPED (merge failed)" >> test_results/summary.md
           fi
-          
+
           echo "" >> test_results/summary.md
-          
+
           # Clean up PR branch
           git branch -D pr-$PR_NUMBER 2>/dev/null || true
         done
-        
+
         echo ""
         echo "✅ Completed individual PR testing"
-        
+
     - name: Test final combined build
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
@@ -251,19 +251,19 @@ jobs:
         echo "============================================"
         echo "🏗️  Testing final combined build"
         echo "============================================"
-        
+
         TEST_BRANCH="${{ steps.create_branch.outputs.test_branch }}"
         git checkout $TEST_BRANCH
-        
+
         echo "📊 Current test branch status:"
         git log --oneline -10
-        
+
         echo ""
         echo "🔨 Running final build tests..."
-        
+
         # Run comprehensive build validation
         FINAL_BUILD_SUCCESS=true
-        
+
         echo "1. CTMM Build System Check..."
         if python3 ctmm_build.py > test_results/final_ctmm_build.log 2>&1; then
           echo "✅ CTMM build system check passed"
@@ -271,7 +271,7 @@ jobs:
           echo "❌ CTMM build system check failed"
           FINAL_BUILD_SUCCESS=false
         fi
-        
+
         echo "2. LaTeX Syntax Validation..."
         if python3 validate_latex_syntax.py > test_results/final_latex_validation.log 2>&1; then
           echo "✅ LaTeX syntax validation passed"
@@ -279,7 +279,7 @@ jobs:
           echo "❌ LaTeX syntax validation failed"
           FINAL_BUILD_SUCCESS=false
         fi
-        
+
         echo "3. Enhanced Build Management..."
         if python3 ctmm_build.py --enhanced > test_results/final_enhanced_build.log 2>&1; then
           echo "✅ Enhanced build management passed"
@@ -287,12 +287,12 @@ jobs:
           echo "❌ Enhanced build management failed"
           FINAL_BUILD_SUCCESS=false
         fi
-        
+
         # Update summary with final results
         echo "" >> test_results/summary.md
         echo "## Final Combined Build Results" >> test_results/summary.md
         echo "" >> test_results/summary.md
-        
+
         if [ "$FINAL_BUILD_SUCCESS" = true ]; then
           echo "- **Final Build Status:** ✅ SUCCESS" >> test_results/summary.md
           echo "✅ Final combined build completed successfully"
@@ -300,7 +300,7 @@ jobs:
           echo "- **Final Build Status:** ❌ FAILED" >> test_results/summary.md
           echo "❌ Final combined build failed"
         fi
-        
+
     - name: Set up LaTeX with dante-ev action (if PRs were processed)
       timeout-minutes: 15
       if: steps.fetch_prs.outputs.pr_count > 0
@@ -325,7 +325,7 @@ jobs:
       if: steps.fetch_prs.outputs.pr_count > 0 && steps.latex_primary_pr.outcome == 'failure'
       run: |
         echo "🔄 Primary LaTeX action failed for PR testing, attempting fallback..."
-        
+
         # Install TeX Live manually
         echo "📦 Installing TeX Live packages manually..."
         sudo apt-get update
@@ -337,23 +337,23 @@ jobs:
           texlive-fonts-extra \
           texlive-science \
           texlive-pstricks
-        
+
         echo "✅ TeX Live packages installed"
-        
+
         # Verify pdflatex is available
         if ! command -v pdflatex &> /dev/null; then
           echo "❌ pdflatex still not available after manual installation"
           exit 1
         fi
-        
+
         echo "🔨 Compiling LaTeX document with fallback..."
         # First pass
         pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-        # Second pass for references  
+        # Second pass for references
         pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
-        
+
         echo "✅ Fallback LaTeX compilation completed"
-      
+
     - name: Verify PDF generation with enhanced analysis (if PRs were processed)
       timeout-minutes: 5
       if: steps.fetch_prs.outputs.pr_count > 0
@@ -362,19 +362,19 @@ jobs:
         echo "============================================"
         echo "📄 Enhanced PDF generation verification"
         echo "============================================"
-        
+
         if [ -f "main.pdf" ]; then
           echo "✅ PDF successfully generated"
-          
+
           # Detailed file analysis
           echo "📊 PDF File Analysis:"
           ls -la main.pdf
           file main.pdf
-          
+
           # Check PDF size
           PDF_SIZE=$(stat -c%s "main.pdf")
           echo "📄 PDF Size: $PDF_SIZE bytes"
-          
+
           if [ "$PDF_SIZE" -lt 10000 ]; then
             echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
             echo "- **PDF Generation:** ⚠️ SUCCESS (but small size)" >> test_results/summary.md
@@ -385,38 +385,38 @@ jobs:
             echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
             echo "- **PDF Generation:** ✅ SUCCESS" >> test_results/summary.md
           fi
-          
+
           # Try to extract basic PDF info
           if command -v pdfinfo &> /dev/null; then
             echo "📋 PDF Information:"
             pdfinfo main.pdf || echo "Unable to extract PDF info"
           fi
-          
+
           # Save PDF as test artifact
           cp main.pdf test_results/combined_test.pdf
           echo "✅ Enhanced PDF verification completed"
-          
+
         else
           echo "❌ PDF generation failed"
           echo "- **PDF Generation:** ❌ FAILED" >> test_results/summary.md
-          
+
           echo "🔍 Comprehensive error analysis..."
-          
+
           # Check for LaTeX log files with enhanced formatting
           echo "📄 Searching for LaTeX log files..."
           find . -name "*.log" -type f | head -10
-          
+
           echo ""
           echo "📋 LaTeX Log Analysis:"
           echo "====================="
           find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -50 {} \; >> test_results/latex_error.log 2>/dev/null
-          
+
           # Check intermediate files
           echo ""
           echo "📁 Intermediate Files:"
           echo "====================="
           ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
-          
+
           # System resource check
           echo ""
           echo "💾 System Resources:"
@@ -424,7 +424,7 @@ jobs:
           df -h .
           free -h
         fi
-        
+
     - name: Generate final summary
       timeout-minutes: 5
       if: always()
@@ -433,14 +433,14 @@ jobs:
         echo "============================================"
         echo "📊 Generating final summary"
         echo "============================================"
-        
+
         # Read counters
         SUCCESSFUL_MERGES=$(cat test_results/successful_merges.count 2>/dev/null || echo "0")
         FAILED_MERGES=$(cat test_results/failed_merges.count 2>/dev/null || echo "0")
         SUCCESSFUL_BUILDS=$(cat test_results/successful_builds.count 2>/dev/null || echo "0")
         FAILED_BUILDS=$(cat test_results/failed_builds.count 2>/dev/null || echo "0")
         TOTAL_PRS="${{ steps.fetch_prs.outputs.pr_count || 0 }}"
-        
+
         # Add summary statistics
         echo "" >> test_results/summary.md
         echo "## Summary Statistics" >> test_results/summary.md
@@ -453,28 +453,28 @@ jobs:
         echo "| Successful Builds | $SUCCESSFUL_BUILDS |" >> test_results/summary.md
         echo "| Failed Builds | $FAILED_BUILDS |" >> test_results/summary.md
         echo "" >> test_results/summary.md
-        
+
         # Add recommendations
         echo "## Recommendations for Manual Review" >> test_results/summary.md
         echo "" >> test_results/summary.md
-        
+
         if [ "$FAILED_MERGES" -gt 0 ]; then
           echo "- 🔍 **Review merge conflicts:** $FAILED_MERGES PR(s) failed to merge" >> test_results/summary.md
         fi
-        
+
         if [ "$FAILED_BUILDS" -gt 0 ]; then
           echo "- 🔧 **Review build failures:** $FAILED_BUILDS PR(s) failed build validation" >> test_results/summary.md
         fi
-        
+
         if [ "$SUCCESSFUL_MERGES" -gt 0 ] && [ "$FAILED_BUILDS" -eq 0 ]; then
           echo "- ✅ **Integration ready:** All successfully merged PRs passed build validation" >> test_results/summary.md
         fi
-        
+
         echo "- 📋 **Next steps:** Review individual PR logs for detailed failure analysis" >> test_results/summary.md
         echo "" >> test_results/summary.md
         echo "---" >> test_results/summary.md
         echo "*Generated by Automated PR Merge and Build Testing workflow*" >> test_results/summary.md
-        
+
         # Display summary in job log
         echo ""
         echo "📊 FINAL SUMMARY:"
@@ -485,7 +485,7 @@ jobs:
         echo "Successful Builds: $SUCCESSFUL_BUILDS"
         echo "Failed Builds: $FAILED_BUILDS"
         echo ""
-        
+
         if [ "$TOTAL_PRS" -eq 0 ]; then
           echo "ℹ️  No open PRs found to test"
         elif [ "$FAILED_MERGES" -eq 0 ] && [ "$FAILED_BUILDS" -eq 0 ]; then
@@ -493,7 +493,7 @@ jobs:
         else
           echo "⚠️  Some issues found - review test results for details"
         fi
-        
+
     - name: Upload test results
       timeout-minutes: 5
       if: always()
@@ -502,7 +502,7 @@ jobs:
       with:
         name: automated-merge-test-results-${{ steps.create_branch.outputs.test_branch }}
         path: test_results/
-        
+
     - name: Clean up test branch
       timeout-minutes: 5
       if: always() && inputs.cleanup_branch != false
@@ -510,25 +510,25 @@ jobs:
       run: |
         echo "🧹 Cleaning up test branch..."
         TEST_BRANCH="${{ steps.create_branch.outputs.test_branch }}"
-        
+
         # Switch to base branch before deleting test branch
         git checkout ${{ steps.create_branch.outputs.base_branch }}
-        
+
         # Delete local test branch
         git branch -D $TEST_BRANCH 2>/dev/null || true
-        
+
         # Delete remote test branch
         git push origin --delete $TEST_BRANCH 2>/dev/null || true
-        
+
         echo "✅ Test branch cleanup completed"
-        
+
     - name: Job summary
       timeout-minutes: 3
       if: always()
       run: |
         echo "# Automated PR Merge and Build Test Results" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
-        
+
         if [ -f "test_results/summary.md" ]; then
           cat test_results/summary.md >> $GITHUB_STEP_SUMMARY
         else

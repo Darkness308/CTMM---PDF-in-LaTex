@@ -28,7 +28,7 @@ uses: dante-ev/latex-action@latest
 
 **Change**: Updated the version reference from `v2` to `latest`, which points to the most recent stable version of the action that is guaranteed to exist.
 
-**Rationale**: 
+**Rationale**:
 - `@latest` is always available and points to the most recent stable release
 - Provides automatic updates to newer stable versions
 - Follows GitHub Actions best practices for active maintenance scenarios
@@ -45,7 +45,7 @@ $ python3 test_issue_867_fix.py
 
 Tests passed: 3/3
 ✅ LaTeX Action Version: PASS
-✅ Workflow YAML Syntax: PASS  
+✅ Workflow YAML Syntax: PASS
 ✅ Action Configuration: PASS
 ```
 
@@ -78,7 +78,7 @@ $ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/latex-build.ym
 ## Technical Details
 The `dante-ev/latex-action` GitHub Action version availability:
 - ❌ `@v2` - Does not exist (Issue #867)
-- ❌ `@v2.0.0` - Does not exist (Issue #735)  
+- ❌ `@v2.0.0` - Does not exist (Issue #735)
 - ✅ `@latest` - Always available, points to current stable release
 - ✅ `@v0.2` - Specific version that exists (used in Issue #607)
 

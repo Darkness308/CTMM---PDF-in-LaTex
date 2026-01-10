@@ -10,7 +10,7 @@ This tool provides a unified interface for the complete CTMM workflow:
 
 Usage:
     python3 ctmm_unified_tool.py [command] [options]
-    
+
 Commands:
     build           - Run complete build system check
     de-escape       - Fix over-escaped LaTeX files
@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 class CTMMUnifiedTool:
     """Unified tool for comprehensive CTMM project management."""
-    
+
     def __init__(self):
         self.main_tex = "main.tex"
         self.de_escaper = LaTeXDeEscaper()
@@ -50,39 +50,39 @@ class CTMMUnifiedTool:
             'files_de_escaped': 0,
             'validation_issues': []
         }
-    
+
     def run_build_system(self, create_templates: bool = True) -> bool:
         """
         Run the complete CTMM build system check.
-        
+
         Args:
             create_templates: Whether to create missing template files
-            
+
         Returns:
             True if build system passes, False otherwise
         """
         logger.info("="*60)
         logger.info("CTMM UNIFIED TOOL - BUILD SYSTEM")
         logger.info("="*60)
-        
+
         # 1. Scan references
         logger.info("1. Scanning file references...")
         try:
             refs = scan_references(self.main_tex)
             style_files = refs['style_files']
             module_files = refs['module_files']
-            
+
             logger.info(f"Found {len(style_files)} style packages")
             logger.info(f"Found {len(module_files)} module inputs")
         except Exception as e:
             logger.error(f"Failed to scan references: {e}")
             return False
-        
+
         # 2. Check missing files
         logger.info("\n2. Checking file existence...")
         all_files = style_files + module_files
         missing_files = check_missing_files(all_files)
-        
+
         if missing_files:
             logger.info(f"Found {len(missing_files)} missing files")
             if create_templates:
@@ -98,46 +98,46 @@ class CTMMUnifiedTool:
                 logger.warning("Templates not created (create_templates=False)")
         else:
             logger.info("✓ All referenced files exist")
-        
+
         # 3. Test builds
         logger.info("\n3. Testing build system...")
         basic_success = test_basic_build(self.main_tex)
         full_success = test_full_build(self.main_tex)
-        
+
         build_success = basic_success and full_success
         self.stats['build_success'] = build_success
-        
+
         if build_success:
             logger.info("✓ Build system validation PASSED")
         else:
             logger.error("✗ Build system validation FAILED")
-        
+
         return build_success
-    
-    def run_de_escaping(self, input_dir: str, output_dir: Optional[str] = None, 
+
+    def run_de_escaping(self, input_dir: str, output_dir: Optional[str] = None,
                        backup: bool = False) -> Dict:
         """
         Run LaTeX de-escaping on specified directory.
-        
+
         Args:
             input_dir: Directory containing .tex files to fix
             output_dir: Output directory (optional, default: in-place)
             backup: Whether to create backup files
-            
+
         Returns:
             Statistics dictionary with processing results
         """
         logger.info("="*60)
         logger.info("CTMM UNIFIED TOOL - DE-ESCAPING")
         logger.info("="*60)
-        
+
         input_path = Path(input_dir)
         if not input_path.exists():
             logger.error(f"Input directory {input_dir} does not exist")
             return {}
-        
+
         output_path = Path(output_dir) if output_dir else input_path
-        
+
         # Create backups if requested
         if backup and output_path == input_path:
             logger.info("Creating backup files...")
@@ -146,43 +146,43 @@ class CTMMUnifiedTool:
                 if not backup_file.exists():
                     tex_file.rename(backup_file)
                     logger.info(f"✓ Backup created: {backup_file}")
-        
+
         # Process files
         logger.info(f"Processing LaTeX files in {input_dir}...")
         stats = self.de_escaper.process_directory(input_path, output_path)
-        
+
         self.stats['files_de_escaped'] = stats['files_changed']
-        
+
         logger.info(f"\n✓ De-escaping completed:")
         logger.info(f"  Files processed: {stats['files_processed']}")
         logger.info(f"  Files changed: {stats['files_changed']}")
         logger.info(f"  Total replacements: {stats['total_replacements']}")
-        
+
         return stats
-    
+
     def validate_project(self, check_converted: bool = True) -> List[str]:
         """
         Comprehensive project validation.
-        
+
         Args:
             check_converted: Whether to validate converted directory
-            
+
         Returns:
             List of validation issues found
         """
         logger.info("="*60)
         logger.info("CTMM UNIFIED TOOL - VALIDATION")
         logger.info("="*60)
-        
+
         issues = []
-        
+
         # 1. Validate main.tex structure
         logger.info("1. Validating main.tex structure...")
         if not Path(self.main_tex).exists():
             issues.append(f"Main file {self.main_tex} not found")
         else:
             logger.info("✓ Main file exists")
-        
+
         # 2. Validate build system
         logger.info("\n2. Validating build system...")
         try:
@@ -194,7 +194,7 @@ class CTMMUnifiedTool:
                 logger.info("✓ All referenced files exist")
         except Exception as e:
             issues.append(f"Build system validation failed: {e}")
-        
+
         # 3. Validate converted files if requested
         if check_converted:
             converted_dir = Path('converted')
@@ -204,46 +204,46 @@ class CTMMUnifiedTool:
                     file_issues = self.de_escaper.validate_latex_syntax(tex_file)
                     if file_issues:
                         issues.extend([f"{tex_file.name}: {issue}" for issue in file_issues])
-                
+
                 if not any("converted" in issue for issue in issues):
                     logger.info("✓ Converted files validation passed")
             else:
                 logger.info("3. No converted directory found - skipping converted files validation")
-        
+
         self.stats['validation_issues'] = issues
-        
+
         if issues:
             logger.warning(f"Validation found {len(issues)} issues:")
             for issue in issues:
                 logger.warning(f"  - {issue}")
         else:
             logger.info("✓ Project validation PASSED")
-        
+
         return issues
-    
+
     def run_complete_workflow(self, converted_dir: Optional[str] = None) -> bool:
         """
         Run the complete CTMM integration workflow.
-        
+
         Args:
             converted_dir: Directory with converted files to process
-            
+
         Returns:
             True if workflow completes successfully
         """
         logger.info("="*60)
         logger.info("CTMM UNIFIED TOOL - COMPLETE WORKFLOW")
         logger.info("="*60)
-        
+
         success = True
-        
+
         # Step 1: Build system validation
         logger.info("STEP 1: Build System Validation")
         build_success = self.run_build_system()
         if not build_success:
             logger.error("Build system validation failed")
             success = False
-        
+
         # Step 2: De-escape converted files if provided
         if converted_dir and Path(converted_dir).exists():
             logger.info(f"\nSTEP 2: De-escaping converted files from {converted_dir}")
@@ -252,14 +252,14 @@ class CTMMUnifiedTool:
                 logger.warning("No files processed in de-escaping step")
         else:
             logger.info("\nSTEP 2: Skipping de-escaping (no converted directory specified)")
-        
+
         # Step 3: Project validation
         logger.info("\nSTEP 3: Complete Project Validation")
         issues = self.validate_project()
         if issues:
             logger.warning("Project validation found issues")
             # Don't fail workflow for validation warnings
-        
+
         # Step 4: Final summary
         logger.info("\n" + "="*60)
         logger.info("WORKFLOW SUMMARY")
@@ -268,12 +268,12 @@ class CTMMUnifiedTool:
         logger.info(f"Templates created: {self.stats['missing_files_created']}")
         logger.info(f"Files de-escaped: {self.stats['files_de_escaped']}")
         logger.info(f"Validation issues: {len(self.stats['validation_issues'])}")
-        
+
         if success:
             logger.info("✓ WORKFLOW COMPLETED SUCCESSFULLY")
         else:
             logger.error("✗ WORKFLOW COMPLETED WITH ERRORS")
-        
+
         return success
 
 
@@ -285,10 +285,10 @@ def main():
         epilog="""
 Commands:
   build           Run build system check and create templates
-  de-escape       Fix over-escaped LaTeX files  
+  de-escape       Fix over-escaped LaTeX files
   validate        Validate complete project state
   workflow        Run complete integration workflow
-  
+
 Examples:
   %(prog)s build                           # Build system check
   %(prog)s de-escape converted/            # Fix converted files
@@ -296,11 +296,11 @@ Examples:
   %(prog)s workflow --converted converted/ # Complete workflow
         """
     )
-    
-    parser.add_argument('command', 
+
+    parser.add_argument('command',
                        choices=['build', 'de-escape', 'validate', 'workflow'],
                        help='Command to execute')
-    parser.add_argument('--converted', '-c', 
+    parser.add_argument('--converted', '-c',
                        help='Directory with converted files (for de-escape/workflow)')
     parser.add_argument('--output', '-o',
                        help='Output directory for de-escape (default: in-place)')
@@ -310,34 +310,34 @@ Examples:
                        help='Do not create template files in build command')
     parser.add_argument('--verbose', '-v', action='store_true',
                        help='Enable verbose output')
-    
+
     args = parser.parse_args()
-    
+
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     tool = CTMMUnifiedTool()
-    
+
     try:
         if args.command == 'build':
             success = tool.run_build_system(create_templates=not args.no_templates)
             sys.exit(0 if success else 1)
-            
+
         elif args.command == 'de-escape':
             if not args.converted:
                 logger.error("--converted directory required for de-escape command")
                 sys.exit(1)
             stats = tool.run_de_escaping(args.converted, args.output, args.backup)
             sys.exit(0 if stats else 1)
-            
+
         elif args.command == 'validate':
             issues = tool.validate_project()
             sys.exit(0 if not issues else 1)
-            
+
         elif args.command == 'workflow':
             success = tool.run_complete_workflow(args.converted)
             sys.exit(0 if success else 1)
-            
+
     except KeyboardInterrupt:
         logger.info("\nOperation cancelled by user")
         sys.exit(1)

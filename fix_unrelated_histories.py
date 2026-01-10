@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Resolve "unrelated histories" merge conflicts for all open PRs
-This addresses the specific issue found in the analysis where PRs fail with 
+This addresses the specific issue found in the analysis where PRs fail with
 "fatal: refusing to merge unrelated histories"
 
 Based on the repository's MERGIFY_SHA_CONFLICT_RESOLUTION.md guidance.
@@ -46,10 +46,10 @@ def fix_unrelated_histories_pr(pr_info):
     pr_number = pr_info['number']
     pr_title = pr_info['title']
     head_ref = pr_info['head_ref']
-    
+
     print(f"\n🔧 Fixing PR #{pr_number}: {pr_title}")
     print(f"   Branch: {head_ref}")
-    
+
     result = {
         'pr_number': pr_number,
         'pr_title': pr_title,
@@ -60,7 +60,7 @@ def fix_unrelated_histories_pr(pr_info):
         'new_sha': '',
         'error_message': ''
     }
-    
+
     try:
         # Checkout the PR branch
         print(f"   📥 Checking out PR branch...")
@@ -69,27 +69,27 @@ def fix_unrelated_histories_pr(pr_info):
             # Try fetching first
             run_command(f"git fetch origin {head_ref}")
             success, stdout, stderr = run_command(f"git checkout {head_ref}")
-        
+
         if not success:
             result['error_message'] = f"Could not checkout branch: {stderr}"
             print(f"   ❌ Failed to checkout branch: {stderr}")
             return result
-        
+
         # Get current commit SHA
         success, current_sha, _ = run_command("git rev-parse HEAD")
         if success:
             current_sha = current_sha.strip()
             print(f"   📍 Current SHA: {current_sha}")
-        
+
         # Check if we can rebase onto main to fix the unrelated histories
         print(f"   🔄 Attempting rebase onto main...")
         success, stdout, stderr = run_command("git rebase main")
-        
+
         if success:
             print(f"   ✅ Rebase successful")
             result['fix_attempted'] = True
             result['fix_successful'] = True
-            
+
             # Get new SHA after rebase
             success, new_sha, _ = run_command("git rev-parse HEAD")
             if success:
@@ -103,23 +103,23 @@ def fix_unrelated_histories_pr(pr_info):
         else:
             # Rebase failed, try a different approach
             print(f"   ⚠️  Rebase failed: {stderr}")
-            
+
             # Try reset to main and cherry-pick changes
             print(f"   🔄 Attempting alternative fix: reset to main and cherry-pick...")
-            
+
             # First, save the current changes
             run_command("git stash")
-            
+
             # Reset to main
             run_command("git reset --hard origin/main")
-            
+
             # Try to apply stashed changes
             success, stdout, stderr = run_command("git stash pop")
             if success:
                 # Commit the changes with a new message to create unique SHA
                 timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
                 commit_msg = f"Resolve unrelated histories for PR #{pr_number}: {pr_title} ({timestamp})"
-                
+
                 # Run 'git add .' first
                 success, stdout, stderr = run_command(['git', 'add', '.'])
                 if not success:
@@ -132,7 +132,7 @@ def fix_unrelated_histories_pr(pr_info):
                         result['fix_attempted'] = True
                         result['fix_successful'] = True
                         result['new_commit_created'] = True
-                        
+
                         # Get new SHA
                         success, new_sha, _ = run_command(['git', 'rev-parse', 'HEAD'])
                         if success:
@@ -144,7 +144,7 @@ def fix_unrelated_histories_pr(pr_info):
                     result['fix_attempted'] = True
                     result['fix_successful'] = True
                     result['new_commit_created'] = True
-                    
+
                     # Get new SHA
                     success, new_sha, _ = run_command("git rev-parse HEAD")
                     if success:
@@ -156,7 +156,7 @@ def fix_unrelated_histories_pr(pr_info):
             else:
                 result['error_message'] = f"Failed to apply stashed changes: {stderr}"
                 print(f"   ❌ Failed to apply stashed changes: {stderr}")
-        
+
         # If fix was successful, try to push the changes
         if result['fix_successful'] and result['new_commit_created']:
             print(f"   📤 Pushing fixed branch...")
@@ -166,35 +166,35 @@ def fix_unrelated_histories_pr(pr_info):
             else:
                 print(f"   ⚠️  Warning: Could not push (but fix was applied): {stderr}")
                 # Don't mark as failed since the fix itself worked
-        
+
     except Exception as e:
         result['error_message'] = str(e)
         print(f"   ❌ Exception during fix: {e}")
-    
+
     return result
 
 def test_fixed_pr(pr_info):
     """Test if a fixed PR now merges successfully"""
     pr_number = pr_info['number']
     head_ref = pr_info['head_ref']
-    
+
     print(f"   🧪 Testing fixed PR #{pr_number}...")
-    
+
     # Create a temporary test branch
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     test_branch = f"test-fix-{pr_number}-{timestamp}"
-    
+
     # Checkout main and create test branch
     run_command("git checkout main")
     run_command(f"git checkout -b {test_branch}")
-    
+
     # Try to merge the fixed PR branch
     success, stdout, stderr = run_command(f"git merge {head_ref} --no-edit -m 'Test merge fixed PR #{pr_number}'")
-    
+
     # Clean up test branch
     run_command("git checkout main")
     run_command(f"git branch -D {test_branch}")
-    
+
     if success:
         print(f"   ✅ Fixed PR #{pr_number} now merges successfully!")
         return True
@@ -205,16 +205,16 @@ def test_fixed_pr(pr_info):
 def generate_fix_report(results):
     """Generate a report of the fix attempts"""
     print(f"\n📊 Generating unrelated histories fix report...")
-    
+
     # Create results directory
     os.makedirs("merge_conflict_resolution", exist_ok=True)
-    
+
     successful_fixes = len([r for r in results if r['fix_successful']])
     new_commits_created = len([r for r in results if r['new_commit_created']])
     failed_fixes = len([r for r in results if r['fix_attempted'] and not r['fix_successful']])
-    
+
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC")
-    
+
     # Generate markdown report
     report_content = f"""# Unrelated Histories Resolution Report
 
@@ -240,15 +240,15 @@ Based on the repository's `MERGIFY_SHA_CONFLICT_RESOLUTION.md` guidance, this sc
 ## Individual PR Fix Results
 
 """
-    
+
     for result in results:
         pr_num = result['pr_number']
         pr_title = result['pr_title']
         head_ref = result['head_ref']
-        
+
         report_content += f"### PR #{pr_num}: {pr_title}\n"
         report_content += f"- **Branch:** `{head_ref}`\n"
-        
+
         if result['fix_successful']:
             report_content += f"- **Status:** ✅ FIXED\n"
             if result['new_commit_created']:
@@ -260,9 +260,9 @@ Based on the repository's `MERGIFY_SHA_CONFLICT_RESOLUTION.md` guidance, this sc
             report_content += f"- **Status:** ❌ FIX FAILED\n"
             if result['error_message']:
                 report_content += f"- **Error:** {result['error_message'][:200]}...\n"
-        
+
         report_content += "\n"
-    
+
     # Add next steps
     report_content += """## Next Steps
 
@@ -297,11 +297,11 @@ This resolution follows the same pattern as documented in:
 *Generated by unrelated histories resolution script*
 *Based on repository's established conflict resolution patterns*
 """
-    
+
     # Write report
     with open("merge_conflict_resolution/unrelated_histories_fix_report.md", "w") as f:
         f.write(report_content)
-    
+
     # Write JSON data
     with open("merge_conflict_resolution/fix_results.json", "w") as f:
         json.dump({
@@ -314,10 +314,10 @@ This resolution follows the same pattern as documented in:
             },
             'results': results
         }, f, indent=2)
-    
+
     print(f"📄 Fix report saved to merge_conflict_resolution/unrelated_histories_fix_report.md")
     print(f"📄 JSON data saved to merge_conflict_resolution/fix_results.json")
-    
+
     return report_content
 
 def main():
@@ -327,38 +327,38 @@ def main():
     print("Fixing 'unrelated histories' issues in all problematic PRs...")
     print("(Behebung von 'unrelated histories' Problemen in allen problematischen Pull Requests)")
     print(f"\nProcessing {len(PROBLEMATIC_PRS)} PRs with unrelated histories issues...")
-    
+
     # First, make sure we're on main and up to date
     print("📥 Updating main branch...")
     run_command("git fetch origin")
     run_command("git checkout main")
     run_command("git pull origin main")
-    
+
     # Process each problematic PR
     results = []
     for i, pr in enumerate(PROBLEMATIC_PRS, 1):
         print(f"\n[{i}/{len(PROBLEMATIC_PRS)}] Processing PR #{pr['number']}...")
         result = fix_unrelated_histories_pr(pr)
         results.append(result)
-        
+
         # Test the fix if it was successful
         if result['fix_successful']:
             test_successful = test_fixed_pr(pr)
             result['test_passed'] = test_successful
-    
+
     # Generate report
     generate_fix_report(results)
-    
+
     # Display summary
     successful_fixes = len([r for r in results if r['fix_successful']])
     failed_fixes = len([r for r in results if not r['fix_successful']])
-    
+
     print(f"\n📊 UNRELATED HISTORIES FIX SUMMARY:")
     print(f"=====================================")
     print(f"Total PRs Processed: {len(results)}")
     print(f"✅ Successfully Fixed: {successful_fixes}")
     print(f"❌ Failed to Fix: {failed_fixes}")
-    
+
     if successful_fixes > 0:
         print(f"\n✅ SUCCESSFULLY FIXED PRS:")
         for result in results:
@@ -367,17 +367,17 @@ def main():
                 print(f"   {status} PR #{result['pr_number']}: {result['pr_title']}")
                 if result['new_commit_created']:
                     print(f"      New SHA: {result['new_sha']}")
-    
+
     if failed_fixes > 0:
         print(f"\n❌ FAILED TO FIX:")
         for result in results:
             if not result['fix_successful']:
                 print(f"   - PR #{result['pr_number']}: {result['pr_title']}")
                 print(f"     Error: {result['error_message']}")
-    
+
     print("\n✅ Unrelated histories resolution completed!")
     print("📄 Check merge_conflict_resolution/unrelated_histories_fix_report.md for detailed results")
-    
+
     # Return to main branch
     run_command("git checkout main")
 

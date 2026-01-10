@@ -12,39 +12,39 @@ def test_no_problematic_dante_versions():
     """Test that no problematic dante-ev/latex-action versions are used."""
     print("🔍 Testing for problematic dante-ev/latex-action versions")
     print("=" * 60)
-    
+
     # List of known problematic versions that don't exist or cause issues
     problematic_versions = [
         'v2.3.0',    # Never existed - Issue #1062
-        'v2.0.0',    # Never existed - Issue #1076  
+        'v2.0.0',    # Never existed - Issue #1076
         'v2',        # Doesn't exist - Issue #867
         '@latest'    # Can be unstable
     ]
-    
+
     workflow_dir = Path(".github/workflows")
     if not workflow_dir.exists():
         print("❌ .github/workflows directory not found")
         return False
-        
+
     found_issues = False
-    
+
     for workflow_file in workflow_dir.glob("*.yml"):
         print(f"\n📋 Checking {workflow_file.name}...")
-        
+
         try:
             with open(workflow_file, 'r') as f:
                 content = f.read()
-                
+
             # Check for each problematic version
             for version in problematic_versions:
                 if f'dante-ev/latex-action@{version}' in content:
                     print(f"❌ Found problematic version {version} in {workflow_file.name}")
                     found_issues = True
-                    
+
         except Exception as e:
             print(f"❌ Error reading {workflow_file.name}: {e}")
             found_issues = True
-            
+
     if found_issues:
         print("\n❌ FAILED: Found problematic dante-ev/latex-action versions")
         return False
@@ -56,25 +56,25 @@ def test_current_dante_version_is_valid():
     """Test that current dante-ev/latex-action version is valid and working."""
     print("\n🔧 Testing current dante-ev/latex-action version")
     print("=" * 60)
-    
+
     # Known working versions
     valid_versions = {
         'v0.2.0',    # Current recommended - verified working
         'v0.1.0',    # Older but valid
         '2025-A',    # Year-based tags that exist
-        '2024-B', 
+        '2024-B',
         '2024-A',
         '2023-A'
     }
-    
+
     workflow_dir = Path(".github/workflows")
     found_dante_action = False
     all_valid = True
-    
+
     for workflow_file in workflow_dir.glob("*.yml"):
         with open(workflow_file, 'r') as f:
             content = f.read()
-            
+
         lines = content.split('\n')
         for line_num, line in enumerate(lines, 1):
             if 'dante-ev/latex-action@' in line:
@@ -83,19 +83,19 @@ def test_current_dante_version_is_valid():
                 version_start = line.find('dante-ev/latex-action@') + len('dante-ev/latex-action@')
                 remaining = line[version_start:]
                 version = remaining.split()[0].rstrip()
-                
+
                 print(f"📦 Found: {workflow_file.name}:{line_num} - dante-ev/latex-action@{version}")
-                
+
                 if version in valid_versions:
                     print(f"   ✅ Version {version} is valid")
                 else:
                     print(f"   ❌ Version {version} is not in known valid list")
                     all_valid = False
-                    
+
     if not found_dante_action:
         print("⚠️  No dante-ev/latex-action found in workflows")
         return False
-        
+
     if all_valid:
         print("\n✅ PASSED: All dante-ev/latex-action versions are valid")
         return True
@@ -108,10 +108,10 @@ def test_issue_1082_resolution():
     print("🧪 Issue #1082 Validation: Dante version 2.3 klappt nicht")
     print("Fix dante-ev/latex-action version issues")
     print("=" * 70)
-    
+
     test1 = test_no_problematic_dante_versions()
     test2 = test_current_dante_version_is_valid()
-    
+
     print("\n" + "=" * 70)
     if test1 and test2:
         print("🎉 ALL TESTS PASSED - Issue #1082 resolved!")
@@ -119,7 +119,7 @@ def test_issue_1082_resolution():
         print("✅ Current versions are valid and should work")
         print("\n📋 SUMMARY:")
         print("   - dante-ev/latex-action@v2.3.0 issue already resolved")
-        print("   - Current workflows use valid v0.2.0 version") 
+        print("   - Current workflows use valid v0.2.0 version")
         print("   - CI builds should work correctly")
         return True
     else:

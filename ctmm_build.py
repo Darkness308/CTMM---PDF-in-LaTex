@@ -42,7 +42,7 @@ def scan_references(main_tex_path="main.tex"):
     # Split content into lines and filter out commented lines
     lines = content.split('\n')
     active_lines = []
-    
+
     for line in lines:
         # Find the first % not preceded by \ (to handle \% which is escaped)
         comment_pos = -1
@@ -50,13 +50,13 @@ def scan_references(main_tex_path="main.tex"):
             if char == '%' and (i == 0 or line[i-1] != '\\'):
                 comment_pos = i
                 break
-        
+
         # If comment found, only keep part before comment
         if comment_pos >= 0:
             active_lines.append(line[:comment_pos])
         else:
             active_lines.append(line)
-    
+
     active_content = '\n'.join(active_lines)
 
     # Find style and module references in non-commented content
@@ -171,10 +171,10 @@ def test_basic_build(main_tex_path="main.tex"):
         temp_pdf = Path(temp_file).with_suffix('.pdf')
         pdf_exists = temp_pdf.exists()
         pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
-        
+
         # Validate PDF generation success by file existence and size rather than just return codes
         success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
-        
+
         if success:
             logger.info("✓ Basic build successful")
             logger.info("✓ Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
@@ -226,10 +226,10 @@ def test_full_build(main_tex_path="main.tex"):
         pdf_path = Path('main.pdf')
         pdf_exists = pdf_path.exists()
         pdf_size = pdf_path.stat().st_size if pdf_exists else 0
-        
+
         # Validate PDF generation success by file existence and size rather than just return codes
         success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
-        
+
         if success:
             logger.info("✓ Full build successful")
             logger.info("✓ PDF generated successfully (%.2f KB)", pdf_size / 1024)
@@ -255,17 +255,17 @@ def validate_latex_files():
     if not VALIDATOR_AVAILABLE:
         logger.debug("Skipping LaTeX validation - validator not available")
         return True
-        
+
     logger.info("Validating LaTeX files for escaping issues...")
     validator = LaTeXValidator()
-    
+
     # Check main.tex and modules directory
     issues_found = False
-    
+
     for path in [Path("main.tex"), Path("modules")]:
         if not path.exists():
             continue
-            
+
         if path.is_file():
             is_valid, issues, _ = validator.validate_file(path)
             if not is_valid:
@@ -277,10 +277,10 @@ def validate_latex_files():
                 if not result['valid']:
                     logger.warning(f"LaTeX escaping issues found in {file_path}: {list(result['issues'].keys())}")
                     issues_found = True
-    
+
     if not issues_found:
         logger.info("✓ No LaTeX escaping issues found")
-    
+
     return not issues_found
 
 
@@ -316,10 +316,10 @@ def main():
         references = scan_references()
         style_files = references["style_files"]
         module_files = references["module_files"]
-        
+
         build_data["file_scanning"]["style_files"] = style_files
         build_data["file_scanning"]["module_files"] = module_files
-        
+
         logger.info("Found %d style files and %d module files",
                     len(style_files), len(module_files))
         print(f"Found {len(style_files)} style packages")
@@ -328,7 +328,7 @@ def main():
         logger.error("File scanning failed: %s", e)
         style_files = []
         module_files = []
-    
+
     # Step 3: Check file existence
     step += 1
     print(f"\n{step}. Checking file existence...")
@@ -336,10 +336,10 @@ def main():
         all_files = style_files + module_files
         missing_files = check_missing_files(all_files)
         total_missing = len(missing_files)
-        
+
         build_data["file_existence"]["missing_files"] = missing_files
         build_data["file_existence"]["total_missing"] = total_missing
-        
+
         if total_missing > 0:
             print(f"Found {total_missing} missing files")
         else:
@@ -348,7 +348,7 @@ def main():
         logger.error("File existence check failed: %s", e)
         missing_files = []
         total_missing = 0
-    
+
     # Step 4: Create templates for missing files (if any)
     if total_missing > 0:
         step += 1
@@ -360,19 +360,19 @@ def main():
                 create_template(file_path)
                 created_count += 1
                 build_data["template_creation"]["created_files"].append(file_path)
-            
+
             build_data["template_creation"]["created_count"] = created_count
             print(f"✓ Created {created_count} template files")
         except Exception as e:
             logger.error("Template creation failed: %s", e)
-    
+
     # Step 5: Test basic framework
     step += 1
     print(f"\n{step}. Testing basic framework...")
     try:
         basic_ok = test_basic_build()
         build_data["build_testing"]["basic_passed"] = basic_ok
-        
+
         if not basic_ok:
             print("⚠️  Basic framework has issues. Please fix before testing modules.")
             return _generate_exit_code(build_data)
@@ -380,7 +380,7 @@ def main():
         logger.error("Basic build test failed: %s", e)
         basic_ok = False
         build_data["build_testing"]["basic_passed"] = False
-    
+
     # Step 6: Test modules incrementally
     step += 1
     print(f"\n{step}. Testing modules incrementally...")
@@ -391,17 +391,17 @@ def main():
         logger.error("Full build test failed: %s", e)
         full_ok = False
         build_data["build_testing"]["full_passed"] = False
-    
+
     # Step 7: Generate build report
     step += 1
     print(f"\n{step}. Generating build report...")
-    _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
+    _generate_build_summary(build_data, latex_valid, basic_ok, full_ok,
                            len(style_files), len(module_files), total_missing, missing_files)
 
     return _generate_exit_code(build_data)
 
 
-def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok, 
+def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok,
                            style_count, module_count, total_missing, missing_files):
     """Generate and display the build summary."""
     print("\n" + "="*50)
@@ -418,7 +418,7 @@ def _generate_build_summary(build_data, latex_valid, basic_ok, full_ok,
         print("\nNEXT STEPS:")
         print("- Review and complete the created template files")
         print("- Remove TODO_*.md files when content is complete")
-    
+
     if not latex_valid:
         print("\nLATEX VALIDATION:")
         print("- Escaping issues found in LaTeX files")
@@ -430,7 +430,7 @@ def _generate_exit_code(build_data):
     basic_passed = build_data["build_testing"]["basic_passed"]
     full_passed = build_data["build_testing"]["full_passed"]
     latex_passed = build_data["latex_validation"]["passed"]
-    
+
     # Return 0 only if all critical tests pass
     if basic_passed and full_passed and latex_passed:
         return 0
@@ -441,29 +441,29 @@ def _generate_exit_code(build_data):
 def enhanced_build_management():
     """Enhanced build management with comprehensive automation and error recovery."""
     logger.info("Enhanced Build Management System - Starting comprehensive check...")
-    
+
     build_results = {
         "validation_passed": False,
         "files_created": 0,
         "errors_fixed": 0,
         "automation_improvements": []
     }
-    
+
     try:
         # Run standard build check
         exit_code = main()
         build_results["validation_passed"] = (exit_code == 0)
-        
+
         # Additional enhancements
         build_results["automation_improvements"].extend([
             "Enhanced file resource management implemented",
             "Improved error detection and recovery systems",
             "Comprehensive build automation validated"
         ])
-        
+
         logger.info("Enhanced build management completed successfully")
         return build_results
-        
+
     except Exception as e:
         logger.error(f"Enhanced build management failed: {e}")
         build_results["validation_passed"] = False
@@ -473,10 +473,10 @@ def enhanced_build_management():
 def comprehensive_build_workflow():
     """Run the complete comprehensive build workflow for CI/CD reliability."""
     logger.info("=== CTMM Comprehensive Build Workflow ===")
-    
+
     # Run enhanced build management
     results = enhanced_build_management()
-    
+
     # Provide detailed reporting
     if results["validation_passed"]:
         logger.info("✓ Comprehensive build workflow completed successfully")

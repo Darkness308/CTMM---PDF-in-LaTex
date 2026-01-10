@@ -12,27 +12,27 @@ from typing import Dict, List, Tuple
 
 class PRConflictDeepAnalyzer:
     """Deep analysis tool for PR merge conflicts."""
-    
+
     def __init__(self, repo_path: str = "/home/runner/work/CTMM---PDF-in-LaTex/CTMM---PDF-in-LaTex"):
         self.repo_path = repo_path
-        
+
         # PRs that need deep analysis (from comprehensive report)
         self.needs_recheck = [555, 232, 3]
         self.manual_review = [572, 571, 569, 489, 423, 653]
-        
+
     def analyze_unknown_status_prs(self) -> Dict:
         """Analyze PRs with unknown merge status."""
         print("🔍 Deep analysis of PRs with unknown merge status...")
-        
+
         results = {}
-        
+
         for pr_number in self.needs_recheck:
             print(f"\n📋 Analyzing PR #{pr_number}...")
             analysis = self._deep_analyze_pr(pr_number)
             results[pr_number] = analysis
-            
+
         return results
-    
+
     def _deep_analyze_pr(self, pr_number: int) -> Dict:
         """Perform deep analysis on a specific PR."""
         analysis = {
@@ -43,7 +43,7 @@ class PRConflictDeepAnalyzer:
             "complexity": "medium",
             "estimated_effort": "30-60 minutes"
         }
-        
+
         # Simulate analysis based on PR characteristics
         if pr_number == 555:  # Copilot/fix 300
             analysis.update({
@@ -74,13 +74,13 @@ class PRConflictDeepAnalyzer:
                 "complexity": "high",
                 "estimated_effort": "2-4 hours"
             })
-            
+
         return analysis
-    
+
     def create_sequential_merge_plan(self) -> Dict:
         """Create a plan for sequential merging of conflicted PRs."""
         print("\n📋 Creating sequential merge plan...")
-        
+
         # Group PRs by type and complexity
         plan = {
             "phase_1_immediate": [1185],  # Ready to merge
@@ -91,16 +91,16 @@ class PRConflictDeepAnalyzer:
             "estimated_total_time": "4-6 hours",
             "recommended_approach": "incremental_testing"
         }
-        
+
         return plan
-    
+
     def generate_specific_resolution_instructions(self) -> str:
         """Generate specific instructions for resolving each PR."""
         instructions = []
         instructions.append("# Specific PR Resolution Instructions")
         instructions.append(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         instructions.append("")
-        
+
         # Phase 1: Immediate merges
         instructions.append("## Phase 1: Immediate Merges (No Conflicts)")
         instructions.append("**Time estimate: 5-10 minutes**")
@@ -114,12 +114,12 @@ class PRConflictDeepAnalyzer:
         instructions.append("gh pr merge 1185 --squash --delete-branch")
         instructions.append("```")
         instructions.append("")
-        
+
         # Phase 2: Simple fixes
         instructions.append("## Phase 2: Simple Syntax/Workflow Fixes")
         instructions.append("**Time estimate: 30-45 minutes**")
         instructions.append("")
-        
+
         instructions.append("### PR #307 - LaTeX syntax error fix")
         instructions.append("```bash")
         instructions.append("# Simple syntax fix - minimal conflicts expected")
@@ -131,7 +131,7 @@ class PRConflictDeepAnalyzer:
         instructions.append("gh pr merge 307 --squash --delete-branch")
         instructions.append("```")
         instructions.append("")
-        
+
         instructions.append("### PR #232 - YAML syntax error fix")
         instructions.append("```bash")
         instructions.append("# YAML syntax fix for workflow")
@@ -144,7 +144,7 @@ class PRConflictDeepAnalyzer:
         instructions.append("gh pr merge 232 --squash --delete-branch")
         instructions.append("```")
         instructions.append("")
-        
+
         instructions.append("### PR #555 - Copilot/fix 300")
         instructions.append("```bash")
         instructions.append("# Unknown changes - needs investigation")
@@ -156,12 +156,12 @@ class PRConflictDeepAnalyzer:
         instructions.append("git rebase main  # or merge if rebase too complex")
         instructions.append("```")
         instructions.append("")
-        
+
         # Phase 3: Workflow updates
         instructions.append("## Phase 3: GitHub Actions Workflow Updates")
         instructions.append("**Time estimate: 45-90 minutes**")
         instructions.append("")
-        
+
         for pr_num, title in [(653, "dante-ev action version"), (489, "LaTeX package naming"), (423, "German support packages")]:
             instructions.append(f"### PR #{pr_num} - {title}")
             instructions.append("```bash")
@@ -177,12 +177,12 @@ class PRConflictDeepAnalyzer:
             instructions.append(f"git push --force-with-lease")
             instructions.append("```")
             instructions.append("")
-        
+
         # Phase 4: Code changes
         instructions.append("## Phase 4: Code Modification PRs")
         instructions.append("**Time estimate: 60-90 minutes**")
         instructions.append("")
-        
+
         for pr_num in [572, 571, 569]:
             instructions.append(f"### PR #{pr_num} - Copilot fix")
             instructions.append("```bash")
@@ -196,12 +196,12 @@ class PRConflictDeepAnalyzer:
             instructions.append(f"# If changes are superseded, consider closing PR")
             instructions.append("```")
             instructions.append("")
-        
+
         # Phase 5: Major features
         instructions.append("## Phase 5: Major Feature Additions")
         instructions.append("**Time estimate: 2-4 hours**")
         instructions.append("")
-        
+
         instructions.append("### PR #3 - Comprehensive LaTeX workflow system")
         instructions.append("```bash")
         instructions.append("# Large feature PR - significant conflicts expected")
@@ -223,7 +223,7 @@ class PRConflictDeepAnalyzer:
         instructions.append("# - Comprehensive testing")
         instructions.append("```")
         instructions.append("")
-        
+
         # Testing and validation
         instructions.append("## Testing and Validation")
         instructions.append("**After each phase:**")
@@ -238,7 +238,7 @@ class PRConflictDeepAnalyzer:
         instructions.append("python3 -m pytest test_*.py -v")
         instructions.append("```")
         instructions.append("")
-        
+
         # Emergency procedures
         instructions.append("## Emergency Procedures")
         instructions.append("**If merge causes issues:**")
@@ -250,9 +250,9 @@ class PRConflictDeepAnalyzer:
         instructions.append("git reset --hard HEAD~1")
         instructions.append("git push --force-with-lease")
         instructions.append("```")
-        
+
         return "\n".join(instructions)
-    
+
     def estimate_total_effort(self) -> Dict:
         """Estimate total effort required for all PR resolutions."""
         return {
@@ -262,7 +262,7 @@ class PRConflictDeepAnalyzer:
                 "phase_1": 0.2,  # 10 minutes
                 "phase_2": 0.75,  # 45 minutes
                 "phase_3": 1.5,   # 90 minutes
-                "phase_4": 1.5,   # 90 minutes  
+                "phase_4": 1.5,   # 90 minutes
                 "phase_5": 3.0,   # 3 hours
                 "testing": 1.0,   # 1 hour total
                 "total": 8.0      # 8 hours total
@@ -284,31 +284,31 @@ def main():
     """Main execution function."""
     print("🔍 CTMM PR Conflict Deep Analysis Tool")
     print("=" * 50)
-    
+
     analyzer = PRConflictDeepAnalyzer()
-    
+
     # Deep analysis of unknown status PRs
     unknown_analysis = analyzer.analyze_unknown_status_prs()
-    
+
     # Create sequential merge plan
     merge_plan = analyzer.create_sequential_merge_plan()
-    
+
     # Generate specific instructions
     instructions = analyzer.generate_specific_resolution_instructions()
-    
+
     # Save instructions
     with open("SPECIFIC_PR_RESOLUTION_INSTRUCTIONS.md", 'w', encoding='utf-8') as f:
         f.write(instructions)
-    
+
     # Estimate effort
     effort = analyzer.estimate_total_effort()
-    
+
     print("\n📊 Analysis Results:")
     print(f"   • Total estimated time: {effort['estimated_hours']['total']} hours")
     print(f"   • Phases: 5 sequential phases")
     print(f"   • Confidence level: {effort['confidence_level']}")
     print(f"\n📄 Detailed instructions saved to: SPECIFIC_PR_RESOLUTION_INSTRUCTIONS.md")
-    
+
     return {
         "unknown_analysis": unknown_analysis,
         "merge_plan": merge_plan,

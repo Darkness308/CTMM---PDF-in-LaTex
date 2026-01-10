@@ -14,7 +14,7 @@
 2. **Direkt:**
    ```bash
    node module-generator.js arbeitsblatt "Mein neues Arbeitsblatt"
-   node module-generator.js tool "Neue Atemtechnik"  
+   node module-generator.js tool "Neue Atemtechnik"
    node module-generator.js notfallkarte "Angst-Protokoll"
    ```
 
