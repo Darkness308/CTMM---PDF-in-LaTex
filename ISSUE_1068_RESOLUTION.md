@@ -63,7 +63,7 @@ uses: xu-cheng/latex-action@v3
     # Manual TeX Live installation
     sudo apt-get update
     sudo apt-get install -y texlive-latex-base texlive-latex-extra ...
-    
+
     # Manual compilation
     pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
     pdflatex -interaction=nonstopmode -halt-on-error -shell-escape main.tex
@@ -166,7 +166,7 @@ python3 test_issue_1068_latex_robustness.py
 
 # Expected output:
 # 🎉 ALL TESTS PASSED! LaTeX robustness migration validated successfully.
-# 
+#
 # Key improvements confirmed:
 # • Migration to xu-cheng/latex-action@v3 ✅
 # • Fallback mechanism with manual TeX Live installation ✅

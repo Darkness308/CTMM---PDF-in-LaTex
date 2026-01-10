@@ -10,13 +10,13 @@ The repository was using `@latest` tag for `dante-ev/latex-action` in the LaTeX 
 
 ## Files Changed
 1. `.github/workflows/latex-build.yml` - Line 35: Fixed version pinning
-2. `validate_workflow_versions.py` - New validation script 
+2. `validate_workflow_versions.py` - New validation script
 3. `test_workflow_versions.py` - Unit tests for validation
 
 ## Validation Results
 All GitHub Actions workflows now use specific version tags:
 - ✅ `actions/checkout@v4`
-- ✅ `actions/setup-python@v4` 
+- ✅ `actions/setup-python@v4`
 - ✅ `dante-ev/latex-action@v0.2` (fixed)
 - ✅ `actions/upload-artifact@v4`
 - ✅ `actions/github-script@v7`

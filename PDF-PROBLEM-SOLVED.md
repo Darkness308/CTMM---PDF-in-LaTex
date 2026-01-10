@@ -22,7 +22,7 @@
 
 ### **📁 Nur noch EINE PDF:** `/build/main.pdf`
 - **✅ Perfekte Qualität** (434 KB, 27 Seiten)
-- **✅ Alle Hyperlinks funktionieren** 
+- **✅ Alle Hyperlinks funktionieren**
 - **✅ Alle Quick-Links aktiv**
 - **✅ Inhaltsverzeichnis verlinkt**
 - **✅ CTMM-Navigation funktional**
@@ -59,7 +59,7 @@ python3 latex-helper.py validate
 ## 🎉 **Ergebnis:**
 - **Keine doppelten PDFs mehr**
 - **Alle Links funktionieren**
-- **Beste Qualität** 
+- **Beste Qualität**
 - **Automatischer Workflow**
 
 ---
