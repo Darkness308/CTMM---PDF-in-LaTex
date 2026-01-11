@@ -103,7 +103,7 @@ Scanned for ASCII control characters (0x00-0x1F) except:
 - `CHARACTER_CHECKER.md` ✅
 - `HYPERLINK-STATUS.md` ✅
 - `.github/copilot-instructions.md` ✅
-- `modules/# Code Citations.md` ✅
+- `modules/Code-Citations.md` ✅
 
 ### Configuration (2)
 - `.github/workflows/latex-build.yml` ✅
