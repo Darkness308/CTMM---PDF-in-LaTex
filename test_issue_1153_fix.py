@@ -18,7 +18,7 @@ import re
 
 def test_ctmm_ref_label_consistency():
     """Test that all \ctmmRef references have corresponding labels."""
-    print("\n🔍 Testing ctmmRef and label consistency (Issue #1153 Fix)")
+    print("\n[SEARCH] Testing ctmmRef and label consistency (Issue #1153 Fix)")
     print("=" * 70)
 
     # Find all \ctmmRef references
@@ -28,7 +28,7 @@ def test_ctmm_ref_label_consistency():
         ], capture_output=True, text=True)
 
         if result.returncode != 0:
-            print("✅ No ctmmRef references found (which is also valid)")
+            print("[PASS] No ctmmRef references found (which is also valid)")
             return True
 
         refs_raw = result.stdout.strip().split('\n') if result.stdout.strip() else []
@@ -44,9 +44,9 @@ def test_ctmm_ref_label_consistency():
         refs = list(set(refs))  # Remove duplicates
         refs.sort()
 
-        print(f"📋 Found {len(refs)} unique ctmmRef references:")
+        print(f"[TEST] Found {len(refs)} unique ctmmRef references:")
         for ref in refs:
-            print(f"   • {ref}")
+            print(f"   * {ref}")
 
         # Check that each reference has a corresponding label
         missing_labels = []
@@ -68,21 +68,21 @@ def test_ctmm_ref_label_consistency():
                 missing_labels.append(ref)
 
         if missing_labels:
-            print(f"\n❌ MISSING LABELS ({len(missing_labels)}):")
+            print(f"\n[FAIL] MISSING LABELS ({len(missing_labels)}):")
             for label in missing_labels:
-                print(f"   • {label}")
+                print(f"   * {label}")
             return False
         else:
-            print(f"\n✅ ALL LABELS FOUND: All {len(refs)} ctmmRef references have corresponding labels")
+            print(f"\n[PASS] ALL LABELS FOUND: All {len(refs)} ctmmRef references have corresponding labels")
             return True
 
     except Exception as e:
-        print(f"❌ Error during test: {e}")
+        print(f"[FAIL] Error during test: {e}")
         return False
 
 def test_ci_validation_logic():
     """Test the exact validation logic used in the CI workflow."""
-    print("\n🔧 Testing CI workflow validation logic")
+    print("\n[FIX] Testing CI workflow validation logic")
     print("=" * 70)
 
     try:
@@ -98,12 +98,12 @@ def test_ci_validation_logic():
                               capture_output=True, text=True, cwd='.')
 
         if result.returncode == 0:
-            print("✅ CI validation logic passes - no missing labels")
+            print("[PASS] CI validation logic passes - no missing labels")
             if result.stdout.strip():
                 print(f"Output: {result.stdout.strip()}")
             return True
         else:
-            print("❌ CI validation logic fails:")
+            print("[FAIL] CI validation logic fails:")
             print(f"Exit code: {result.returncode}")
             if result.stdout:
                 print(f"Stdout: {result.stdout}")
@@ -112,12 +112,12 @@ def test_ci_validation_logic():
             return False
 
     except Exception as e:
-        print(f"❌ Error during CI validation test: {e}")
+        print(f"[FAIL] Error during CI validation test: {e}")
         return False
 
 def test_specific_fixed_labels():
     """Test the specific labels that were fixed in this issue."""
-    print("\n🎯 Testing specific labels fixed in Issue #1153")
+    print("\n[TARGET] Testing specific labels fixed in Issue #1153")
     print("=" * 70)
 
     labels_to_check = [
@@ -133,16 +133,16 @@ def test_specific_fixed_labels():
         ])
 
         if result.returncode == 0:
-            print(f"✅ Found label {label} in {expected_file}")
+            print(f"[PASS] Found label {label} in {expected_file}")
         else:
-            print(f"❌ Missing label {label} in {expected_file}")
+            print(f"[FAIL] Missing label {label} in {expected_file}")
             all_passed = False
 
     return all_passed
 
 def main():
     """Run all tests for Issue #1153 fix."""
-    print("🧪 Issue #1153 Fix Validation Tests")
+    print("[TEST] Issue #1153 Fix Validation Tests")
     print("=" * 70)
     print("Testing CI failure fix for missing label references")
 
@@ -158,7 +158,7 @@ def main():
             result = test_func()
             results.append((test_name, result))
         except Exception as e:
-            print(f"❌ Test '{test_name}' failed with exception: {e}")
+            print(f"[FAIL] Test '{test_name}' failed with exception: {e}")
             results.append((test_name, False))
 
     # Summary
@@ -170,19 +170,19 @@ def main():
     total = len(results)
 
     for test_name, result in results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status} {test_name}")
 
     if passed == total:
-        print(f"\n🎉 ALL TESTS PASSED! ({passed}/{total})")
-        print("✅ Issue #1153 fix validated successfully")
+        print(f"\n[SUCCESS] ALL TESTS PASSED! ({passed}/{total})")
+        print("[PASS] Issue #1153 fix validated successfully")
         print("\nKey improvements confirmed:")
-        print("• All ctmmRef references have corresponding labels ✅")
-        print("• CI validation logic passes without errors ✅")
-        print("• Specific missing labels (sec:selbstreflexion) are now present ✅")
+        print("* All ctmmRef references have corresponding labels [PASS]")
+        print("* CI validation logic passes without errors [PASS]")
+        print("* Specific missing labels (sec:selbstreflexion) are now present [PASS]")
         return 0
     else:
-        print(f"\n❌ SOME TESTS FAILED ({passed}/{total} passed)")
+        print(f"\n[FAIL] SOME TESTS FAILED ({passed}/{total} passed)")
         return 1
 
 if __name__ == '__main__':

@@ -54,7 +54,7 @@ class CIFailureAnalyzer:
 
     def analyze_workflow_timeouts(self) -> List[str]:
         """Analyze workflow timeout configurations."""
-        print("🕐 Analyzing workflow timeout configurations...")
+        print("[TIME] Analyzing workflow timeout configurations...")
 
         issues = []
         workflow_dir = Path('.github/workflows')
@@ -64,7 +64,7 @@ class CIFailureAnalyzer:
             return issues
 
         for workflow_file in workflow_dir.glob('*.yml'):
-            print(f"   📄 Checking {workflow_file.name}...")
+            print(f"   [FILE] Checking {workflow_file.name}...")
 
             try:
                 with open(workflow_file, 'r') as f:
@@ -78,11 +78,11 @@ class CIFailureAnalyzer:
                     timeout_matches = re.findall(r'timeout-minutes:\s*(\d+)', content)
                     for timeout in timeout_matches:
                         if int(timeout) > 20:  # Flag very long timeouts
-                            print(f"   ⚠️  Long timeout found: {timeout} minutes")
+                            print(f"   [WARN]  Long timeout found: {timeout} minutes")
                         elif int(timeout) < 3:  # Flag very short timeouts
-                            print(f"   ⚠️  Short timeout found: {timeout} minutes")
+                            print(f"   [WARN]  Short timeout found: {timeout} minutes")
                         else:
-                            print(f"   ✅ Reasonable timeout: {timeout} minutes")
+                            print(f"   [PASS] Reasonable timeout: {timeout} minutes")
 
             except Exception as e:
                 issues.append(f"{workflow_file.name}: Error reading file - {e}")
@@ -91,7 +91,7 @@ class CIFailureAnalyzer:
 
     def check_action_versions(self) -> List[str]:
         """Check for problematic action versions."""
-        print("📦 Checking GitHub Actions versions...")
+        print("[PACKAGE] Checking GitHub Actions versions...")
 
         issues = []
         workflow_dir = Path('.github/workflows')
@@ -104,7 +104,7 @@ class CIFailureAnalyzer:
         }
 
         for workflow_file in workflow_dir.glob('*.yml'):
-            print(f"   📄 Checking {workflow_file.name}...")
+            print(f"   [FILE] Checking {workflow_file.name}...")
 
             try:
                 with open(workflow_file, 'r') as f:
@@ -119,7 +119,7 @@ class CIFailureAnalyzer:
                         if version in problematic_versions[action]:
                             issues.append(f"{workflow_file.name}: {action}@{version} is problematic")
                         else:
-                            print(f"   ✅ {action}@{version} looks good")
+                            print(f"   [PASS] {action}@{version} looks good")
 
             except Exception as e:
                 issues.append(f"{workflow_file.name}: Error checking actions - {e}")
@@ -128,7 +128,7 @@ class CIFailureAnalyzer:
 
     def analyze_resource_usage_patterns(self) -> List[str]:
         """Analyze potential resource usage issues."""
-        print("💾 Analyzing resource usage patterns...")
+        print("[SAVE] Analyzing resource usage patterns...")
 
         issues = []
 
@@ -144,19 +144,19 @@ class CIFailureAnalyzer:
                     pass
 
         if large_files:
-            print("   📊 Large files found:")
+            print("   [SUMMARY] Large files found:")
             for file_path, size in large_files:
-                print(f"     • {file_path}: {size / (1024*1024):.1f}MB")
+                print(f"     * {file_path}: {size / (1024*1024):.1f}MB")
                 if size > 50 * 1024 * 1024:  # 50MB
                     issues.append(f"Very large file may cause CI issues: {file_path}")
         else:
-            print("   ✅ No large files detected")
+            print("   [PASS] No large files detected")
 
         return issues
 
     def check_latex_dependencies(self) -> List[str]:
         """Check LaTeX-specific dependency issues."""
-        print("📝 Checking LaTeX dependencies...")
+        print("[NOTE] Checking LaTeX dependencies...")
 
         issues = []
 
@@ -164,7 +164,7 @@ class CIFailureAnalyzer:
         workflow_dir = Path('.github/workflows')
         for workflow_file in workflow_dir.glob('*.yml'):
             if 'latex' in workflow_file.name.lower():
-                print(f"   📄 Checking LaTeX config in {workflow_file.name}...")
+                print(f"   [FILE] Checking LaTeX config in {workflow_file.name}...")
 
                 try:
                     with open(workflow_file, 'r') as f:
@@ -179,7 +179,7 @@ class CIFailureAnalyzer:
 
                     for package in essential_packages:
                         if package in content:
-                            print(f"   ✅ Found essential package: {package}")
+                            print(f"   [PASS] Found essential package: {package}")
                         else:
                             issues.append(f"Missing essential LaTeX package: {package}")
 
@@ -190,7 +190,7 @@ class CIFailureAnalyzer:
 
     def generate_prevention_recommendations(self, all_issues: List[str]) -> Dict[str, List[str]]:
         """Generate recommendations based on identified issues."""
-        print("\n💡 Generating prevention recommendations...")
+        print("\n[TIP] Generating prevention recommendations...")
 
         recommendations = {
             'immediate_fixes': [],
@@ -232,7 +232,7 @@ class CIFailureAnalyzer:
 
     def run_proactive_checks(self) -> Dict[str, any]:
         """Run all proactive CI failure checks."""
-        print("🔍 Running proactive CI failure checks...")
+        print("[SEARCH] Running proactive CI failure checks...")
         print("=" * 60)
 
         all_issues = []
@@ -260,7 +260,7 @@ class CIFailureAnalyzer:
 def main():
     """Main analysis function."""
     print("=" * 70)
-    print("🛡️  CI FAILURE PREVENTION ANALYSIS")
+    print("[SHIELD]  CI FAILURE PREVENTION ANALYSIS")
     print("Issue #1084: CI Insights Report Build Failures")
     print("=" * 70)
 
@@ -268,27 +268,27 @@ def main():
     results = analyzer.run_proactive_checks()
 
     print("\n" + "=" * 60)
-    print("📊 ANALYSIS SUMMARY")
+    print("[SUMMARY] ANALYSIS SUMMARY")
     print("=" * 60)
 
-    print(f"🔍 Issues identified: {results['total_issues']}")
-    print(f"🎯 Status: {results['status'].upper()}")
+    print(f"[SEARCH] Issues identified: {results['total_issues']}")
+    print(f"[TARGET] Status: {results['status'].upper()}")
 
     if results['issues']:
-        print("\n❌ Issues found:")
+        print("\n[FAIL] Issues found:")
         for i, issue in enumerate(results['issues'], 1):
             print(f"   {i}. {issue}")
     else:
-        print("\n✅ No major issues detected!")
+        print("\n[PASS] No major issues detected!")
 
-    print(f"\n💡 Recommendations:")
+    print(f"\n[TIP] Recommendations:")
     for category, items in results['recommendations'].items():
         if items:
             print(f"\n   {category.replace('_', ' ').title()}:")
             for item in items:
-                print(f"   • {item}")
+                print(f"   * {item}")
 
-    print(f"\n🎯 Prevention Strategy:")
+    print(f"\n[TARGET] Prevention Strategy:")
     print("   1. Implement enhanced monitoring and diagnostics")
     print("   2. Add proactive environment validation")
     print("   3. Improve error handling and recovery")

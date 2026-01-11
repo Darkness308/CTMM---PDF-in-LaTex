@@ -156,7 +156,7 @@ class TestCharacterValidator(unittest.TestCase):
 
     def test_special_character_detection(self):
         """Test detection of LaTeX special characters that might need escaping."""
-        content = "\\documentclass{article}\n\\begin{document}\n§ © ® ™\n\\end{document}".encode('utf-8')
+        content = "\\documentclass{article}\n\\begin{document}\n§ © ® (TM)\n\\end{document}".encode('utf-8')
         filepath = self.create_temp_file('test.tex', content)
 
         result = self.validator.scan_file(filepath)

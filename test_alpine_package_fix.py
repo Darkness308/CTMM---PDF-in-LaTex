@@ -22,7 +22,7 @@ def test_latex_build_workflow():
     print("=" * 70)
 
     if not os.path.exists(workflow_file):
-        print(f"❌ Workflow file not found: {workflow_file}")
+        print(f"[FAIL] Workflow file not found: {workflow_file}")
         return False
 
     # Read the workflow file
@@ -33,7 +33,7 @@ def test_latex_build_workflow():
     try:
         workflow = yaml.safe_load(content)
     except yaml.YAMLError as e:
-        print(f"❌ YAML parsing error: {e}")
+        print(f"[FAIL] YAML parsing error: {e}")
         return False
 
     print(f"✅ Successfully parsed {workflow_file}")
@@ -48,18 +48,18 @@ def test_latex_build_workflow():
                     break
 
     if not latex_setup_step:
-        print("❌ 'Set up LaTeX' step not found in workflow")
+        print("[FAIL] 'Set up LaTeX' step not found in workflow")
         return False
 
     print("✅ Found 'Set up LaTeX' step")
 
     # Check if the step uses xu-cheng/latex-action@v3
     if 'uses' not in latex_setup_step:
-        print("❌ 'uses' field not found in LaTeX setup step")
+        print("[FAIL] 'uses' field not found in LaTeX setup step")
         return False
 
     if 'xu-cheng/latex-action@v3' not in latex_setup_step['uses']:
-        print(f"⚠️  Warning: Using action {latex_setup_step['uses']}, expected xu-cheng/latex-action@v3")
+        print(f"[WARN]  Warning: Using action {latex_setup_step['uses']}, expected xu-cheng/latex-action@v3")
     else:
         print("✅ Using xu-cheng/latex-action@v3")
 
@@ -68,7 +68,7 @@ def test_latex_build_workflow():
         with_config = latex_setup_step['with']
 
         if 'extra_system_packages' in with_config:
-            print("❌ FAIL: extra_system_packages found in LaTeX setup step")
+            print("[FAIL] FAIL: extra_system_packages found in LaTeX setup step")
             print("   This will cause Alpine package errors!")
             print(f"   Found packages: {with_config['extra_system_packages']}")
             return False
@@ -78,14 +78,14 @@ def test_latex_build_workflow():
     # Verify required fields are present
     required_fields = ['root_file', 'args']
     if 'with' not in latex_setup_step:
-        print("❌ 'with' configuration missing")
+        print("[FAIL] 'with' configuration missing")
         return False
 
     with_config = latex_setup_step['with']
     missing_fields = [field for field in required_fields if field not in with_config]
 
     if missing_fields:
-        print(f"❌ Missing required fields in 'with': {missing_fields}")
+        print(f"[FAIL] Missing required fields in 'with': {missing_fields}")
         return False
 
     print(f"✅ Required fields present: {required_fields}")
@@ -95,12 +95,12 @@ def test_latex_build_workflow():
     # Check timeout
     if 'timeout-minutes' in latex_setup_step:
         timeout = latex_setup_step['timeout-minutes']
-        print(f"✅ Timeout configured: {timeout} minutes")
+        print(f"[PASS] Timeout configured: {timeout} minutes")
         if timeout < 10:
             print("⚠️  Warning: Timeout might be too short for LaTeX compilation")
 
     print("\n" + "=" * 70)
-    print("✅ ALL TESTS PASSED - Workflow configuration is correct")
+    print("[PASS] ALL TESTS PASSED - Workflow configuration is correct")
     print("=" * 70)
     return True
 

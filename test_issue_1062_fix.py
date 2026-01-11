@@ -10,7 +10,7 @@ from pathlib import Path
 
 def test_latex_action_versions():
     """Test that all workflow files use valid dante-ev/latex-action versions."""
-    print("🔧 Testing dante-ev/latex-action versions")
+    print("[FIX] Testing dante-ev/latex-action versions")
     print("=" * 60)
 
     # Valid versions from dante-ev/latex-action repository
@@ -30,7 +30,7 @@ def test_latex_action_versions():
 
     workflow_dir = Path(".github/workflows")
     if not workflow_dir.exists():
-        print("❌ .github/workflows directory not found")
+        print("[FAIL] .github/workflows directory not found")
         return False
 
     found_issues = False
@@ -38,7 +38,7 @@ def test_latex_action_versions():
 
     # Check all workflow files
     for workflow_file in workflow_dir.glob("*.yml"):
-        print(f"\n📋 Checking {workflow_file.name}...")
+        print(f"\n[TEST] Checking {workflow_file.name}...")
 
         try:
             with open(workflow_file, 'r') as f:
@@ -63,41 +63,41 @@ def test_latex_action_versions():
                     print(f"   Line {line_num}: Found dante-ev/latex-action@{version}")
 
                     if version in valid_versions:
-                        print(f"   ✅ Version {version} is valid")
+                        print(f"   [PASS] Version {version} is valid")
                     else:
-                        print(f"   ❌ Version {version} is INVALID")
+                        print(f"   [FAIL] Version {version} is INVALID")
                         print(f"      Valid versions: {', '.join(sorted(valid_versions))}")
                         found_issues = True
 
         except Exception as e:
-            print(f"❌ Error reading {workflow_file}: {e}")
+            print(f"[FAIL] Error reading {workflow_file}: {e}")
             found_issues = True
 
     # Summary
-    print(f"\n📊 Summary")
+    print(f"\n[SUMMARY] Summary")
     print("=" * 60)
     print(f"Total dante-ev/latex-action references found: {len(latex_action_references)}")
 
     if not latex_action_references:
-        print("⚠️  No dante-ev/latex-action references found")
+        print("[WARN]  No dante-ev/latex-action references found")
         return True
 
     print("\nAll references:")
     for ref in latex_action_references:
-        status = "✅ VALID" if ref['version'] in valid_versions else "❌ INVALID"
+        status = "[PASS] VALID" if ref['version'] in valid_versions else "[FAIL] INVALID"
         print(f"  {ref['file']}:{ref['line']} - {ref['version']} - {status}")
 
     if found_issues:
-        print("\n❌ FOUND INVALID VERSIONS - CI will fail")
+        print("\n[FAIL] FOUND INVALID VERSIONS - CI will fail")
         return False
     else:
-        print("\n✅ ALL VERSIONS ARE VALID - CI should work")
+        print("\n[PASS] ALL VERSIONS ARE VALID - CI should work")
         return True
 
 
 def test_specific_version_fix():
     """Test that the specific problematic version v2.3.0 is not present."""
-    print("\n🎯 Testing for specific issue: v2.3.0 removal")
+    print("\n[TARGET] Testing for specific issue: v2.3.0 removal")
     print("=" * 60)
 
     problematic_version = "v2.3.0"
@@ -110,20 +110,20 @@ def test_specific_version_fix():
             content = f.read()
 
         if f'dante-ev/latex-action@{problematic_version}' in content:
-            print(f"❌ Found problematic version {problematic_version} in {workflow_file.name}")
+            print(f"[FAIL] Found problematic version {problematic_version} in {workflow_file.name}")
             found_problematic = True
 
     if found_problematic:
-        print(f"❌ FAILED: Problematic version {problematic_version} still present")
+        print(f"[FAIL] FAILED: Problematic version {problematic_version} still present")
         return False
     else:
-        print(f"✅ PASSED: Problematic version {problematic_version} successfully removed")
+        print(f"[PASS] PASSED: Problematic version {problematic_version} successfully removed")
         return True
 
 
 def main():
     """Main test function."""
-    print("🧪 Issue #1062 Fix Validation")
+    print("[TEST] Issue #1062 Fix Validation")
     print("Fix dante-ev/latex-action version references in GitHub Actions workflows")
     print("=" * 70)
 
@@ -139,10 +139,10 @@ def main():
 
     print("\n" + "=" * 70)
     if all_tests_passed:
-        print("🎉 ALL TESTS PASSED - Issue #1062 fix validated successfully!")
+        print("[SUCCESS] ALL TESTS PASSED - Issue #1062 fix validated successfully!")
         return 0
     else:
-        print("❌ TESTS FAILED - Issue #1062 fix needs more work")
+        print("[FAIL] TESTS FAILED - Issue #1062 fix needs more work")
         return 1
 
 
