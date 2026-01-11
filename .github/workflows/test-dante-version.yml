@@ -18,8 +18,8 @@ jobs:
         timeout-minutes: 3
         run: |
           if [ "${{ steps.test_version.outcome }}" = "success" ]; then
-            echo "✅ 2025-A exists and works"
+            echo "[PASS] 2025-A exists and works"
           else
-            echo "❌ 2025-A does not exist or failed"
+            echo "[FAIL] 2025-A does not exist or failed"
             echo "Previous step outcome: ${{ steps.test_version.outcome }}"
           fi

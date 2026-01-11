@@ -60,7 +60,7 @@ jobs:
             exit 1
           fi
 
-          echo "✅ hyperref package ordering is correct"
+          echo "[PASS] hyperref package ordering is correct"
 
       - name: Check all \ctmmRef labels exist
         timeout-minutes: 3
@@ -103,33 +103,33 @@ jobs:
       - name: Install Python dependencies
         timeout-minutes: 5
         run: |
-          echo "📦 Installing Python dependencies..."
+          echo "[PACKAGE] Installing Python dependencies..."
           pip install chardet pyyaml
-          echo "✅ Python dependencies installed successfully"
+          echo "[PASS] Python dependencies installed successfully"
 
       - name: Run LaTeX syntax validation
         timeout-minutes: 5
         run: |
-          echo "🔍 Starting LaTeX syntax validation..."
+          echo "[SEARCH] Starting LaTeX syntax validation..."
           python3 validate_latex_syntax.py
-          echo "✅ LaTeX syntax validation completed successfully"
+          echo "[PASS] LaTeX syntax validation completed successfully"
 
       - name: Run CTMM Build System Check
         timeout-minutes: 10
         run: |
-          echo "🔧 Starting CTMM build system check..."
+          echo "[FIX] Starting CTMM build system check..."
           python3 ctmm_build.py
-          echo "✅ CTMM build system check completed successfully"
+          echo "[PASS] CTMM build system check completed successfully"
 
       - name: Assess GitHub Actions runner environment
         timeout-minutes: 3
         run: |
-          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "[SEARCH] Assessing GitHub Actions runner environment..."
           echo "Runner OS: $RUNNER_OS"
           echo "Runner Architecture: $RUNNER_ARCH"
           df -h / | head -2
           free -h | head -2
-          echo "✅ Environment assessment complete"
+          echo "[PASS] Environment assessment complete"
 
       - name: Upload validation logs (on failure)
         if: failure()

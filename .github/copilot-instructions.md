@@ -164,7 +164,7 @@ python3 validate_pr.py
 
 ## LaTeX Architecture & Conventions
 
-### 🔧 Build System Usage
+### [FIX] Build System Usage
 
 **Primary Build Command:**
 ```bash
@@ -210,7 +210,7 @@ python3 test_ctmm_build.py -v
 ```
 Tests cover filename-to-title conversion (23 test cases), German therapy terminology, and build system integration (56 total tests).
 
-### 📄 LaTeX Best Practices
+### [FILE] LaTeX Best Practices
 
 #### Package Loading Rules
 - **CRITICAL**: All `\usepackage{...}` commands MUST be in the preamble of `main.tex`
@@ -233,7 +233,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 - Use existing macros and commands defined in preamble/style files
 - Keep modules focused on single therapeutic concepts
 
-### 🎨 CTMM Design System
+### [DESIGN] CTMM Design System
 
 **Color Scheme:**
 - `ctmmBlue` (#003087) - Primary blue for headers and structure
@@ -292,7 +292,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 
 ## Content Guidelines
 
-### 🧠 Therapeutic Content
+###  Therapeutic Content
 
 **Sensitive Material**: This repository contains mental health resources. When contributing:
 
@@ -307,7 +307,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 - **Psychoeducation**: Information about mental health conditions
 - **Relationship Tools**: Communication and binding pattern resources
 
-### 🇩🇪 German Language Context
+###  German Language Context
 
 - Use formal therapeutic German (Sie-Form for clients)
 - Medical/psychological terminology should be accurate

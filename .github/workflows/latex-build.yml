@@ -24,9 +24,9 @@ jobs:
       - name: Install Python dependencies
         timeout-minutes: 5
         run: |
-          echo "📦 Installing Python dependencies..."
+          echo "[PACKAGE] Installing Python dependencies..."
           pip install chardet pyyaml
-          echo "✅ Python dependencies installed successfully"
+          echo "[PASS] Python dependencies installed successfully"
 
       - name: Install LaTeX and dependencies
         run: |
@@ -42,57 +42,57 @@ jobs:
       - name: Run CTMM Build System Check
         timeout-minutes: 10
         run: |
-          echo "🔧 Starting CTMM build system check..."
+          echo "[FIX] Starting CTMM build system check..."
           python3 ctmm_build.py
-          echo "✅ CTMM build system check completed successfully"
+          echo "[PASS] CTMM build system check completed successfully"
       - name: Run comprehensive CI validation
         timeout-minutes: 10
         run: |
-          echo "📋 Starting comprehensive CI validation..."
+          echo "[TEST] Starting comprehensive CI validation..."
           python3 test_issue_743_validation.py
-          echo "✅ Comprehensive CI validation completed successfully"
+          echo "[PASS] Comprehensive CI validation completed successfully"
       - name: Enhanced pre-build validation
         timeout-minutes: 8
         continue-on-error: true
         run: |
-          echo "🔍 Running enhanced pre-build validation..."
-          python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
-          echo "✅ Enhanced pre-build validation completed"
+          echo "[SEARCH] Running enhanced pre-build validation..."
+          python3 test_issue_761_fix.py || echo "[WARN]  Warning: Some robustness checks failed but continuing..."
+          echo "[PASS] Enhanced pre-build validation completed"
 
       - name: Check system resources before LaTeX compilation
         timeout-minutes: 3
         run: |
-          echo "📊 Checking system resources..."
+          echo "[SUMMARY] Checking system resources..."
           df -h
           free -h
-          echo "✅ System resources checked"
+          echo "[PASS] System resources checked"
 
       - name: Assess GitHub Actions runner environment
         timeout-minutes: 3
         run: |
-          echo "🔍 Assessing GitHub Actions runner environment..."
+          echo "[SEARCH] Assessing GitHub Actions runner environment..."
           echo "Runner OS: $RUNNER_OS"
           echo "Runner Architecture: $RUNNER_ARCH"
           echo "GitHub Actions Runner: $RUNNER_NAME"
           df -h / | head -2
           free -h | head -2
           echo "CPU Info:" && nproc
-          echo "✅ Environment assessment complete"
+          echo "[PASS] Environment assessment complete"
 
       - name: Enhanced CI environment validation
         timeout-minutes: 5
         run: |
-          echo "🔧 Running enhanced CI environment validation..."
+          echo "[FIX] Running enhanced CI environment validation..."
           python3 validate_ci_environment.py
-          echo "✅ Enhanced CI environment validation completed"
+          echo "[PASS] Enhanced CI environment validation completed"
 
       - name: CI failure prevention analysis
         timeout-minutes: 5
         continue-on-error: true
         run: |
-          echo "🛡️ Running CI failure prevention analysis..."
-          python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
-          echo "✅ CI failure prevention analysis completed"
+          echo " Running CI failure prevention analysis..."
+          python3 ci_failure_prevention.py || echo "[WARN] Some prevention checks flagged potential issues but continuing..."
+          echo "[PASS] CI failure prevention analysis completed"
 
       - name: Set up LaTeX
         timeout-minutes: 15
@@ -163,14 +163,14 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ -f "main.pdf" ]; then
-            echo "✅ **PDF Generated Successfully**" >> $GITHUB_STEP_SUMMARY
+            echo "[PASS] **PDF Generated Successfully**" >> $GITHUB_STEP_SUMMARY
             echo "- Main PDF: \`main.pdf\`" >> $GITHUB_STEP_SUMMARY
           else
-            echo "❌ **PDF Generation Failed**" >> $GITHUB_STEP_SUMMARY
+            echo "[FAIL] **PDF Generation Failed**" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Fix Status" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Over-escaping issue in LaTeX conversion pipeline has been fixed" >> $GITHUB_STEP_SUMMARY
-          echo "✅ All converted files now use proper LaTeX syntax" >> $GITHUB_STEP_SUMMARY
-          echo "✅ Conversion script updated to prevent future over-escaping" >> $GITHUB_STEP_SUMMARY
+          echo "[PASS] Over-escaping issue in LaTeX conversion pipeline has been fixed" >> $GITHUB_STEP_SUMMARY
+          echo "[PASS] All converted files now use proper LaTeX syntax" >> $GITHUB_STEP_SUMMARY
+          echo "[PASS] Conversion script updated to prevent future over-escaping" >> $GITHUB_STEP_SUMMARY
