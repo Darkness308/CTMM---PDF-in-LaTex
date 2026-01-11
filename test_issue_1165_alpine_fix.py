@@ -100,6 +100,9 @@ def main():
     print("occurs when trying to install these packages in Alpine Linux.")
     print("\nSolution: Remove extra_system_packages - texlive-full has everything needed.")
     print("=" * 80)
+    print("\nValidating that xu-cheng/latex-action uses Alpine-compatible packages...")
+    print("Issue: texlive-lang-german doesn't exist in Alpine repositories")
+    print("Solution: Use texlive-lang-european which includes German support\n")
 
     if test_alpine_compatibility():
         print("\n[EMOJI] ALPINE COMPATIBILITY VALIDATION PASSED!")

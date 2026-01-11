@@ -311,7 +311,7 @@ jobs:
         root_file: main.tex
         args: -interaction=nonstopmode -halt-on-error -shell-escape
         extra_system_packages: |
-          texlive-lang-german
+          texlive-lang-european
           texlive-fonts-recommended
           texlive-latex-recommended
           texlive-fonts-extra
@@ -334,7 +334,7 @@ jobs:
           texlive-latex-base \
           texlive-latex-extra \
           texlive-fonts-recommended \
-          texlive-lang-german \
+          texlive-lang-european \
           texlive-fonts-extra \
           texlive-science \
           texlive-pstricks
