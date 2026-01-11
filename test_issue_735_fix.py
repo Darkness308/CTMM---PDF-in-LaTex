@@ -14,14 +14,14 @@ def test_dante_action_version():
     workflow_path = '.github/workflows/latex-build.yml'
 
     if not os.path.exists(workflow_path):
-        print(f"❌ ERROR: Workflow file {workflow_path} not found")
+        print(f"[FAIL] ERROR: Workflow file {workflow_path} not found")
         return False
 
     try:
         with open(workflow_path, 'r') as f:
             workflow_content = yaml.safe_load(f)
     except Exception as e:
-        print(f"❌ ERROR: Failed to parse {workflow_path}: {e}")
+        print(f"[FAIL] ERROR: Failed to parse {workflow_path}: {e}")
         return False
 
     # Find the LaTeX action step
@@ -36,7 +36,7 @@ def test_dante_action_version():
             break
 
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
+        print("[FAIL] ERROR: 'Set up LaTeX' step not found in workflow")
         return False
 
     uses_action = latex_step.get('uses', '')
@@ -45,19 +45,19 @@ def test_dante_action_version():
 
     # Check that it's using the correct version
     if uses_action == 'dante-ev/latex-action@v2.0.0':
-        print("❌ FAIL: Still using problematic version v2.0.0")
+        print("[FAIL] FAIL: Still using problematic version v2.0.0")
         print("This version doesn't exist and will cause CI failure:")
         print("'Unable to resolve action `dante-ev/latex-action@v2.0.0`, unable to find version `v2.0.0`'")
         return False
     elif uses_action == 'dante-ev/latex-action@v2':
-        print("✅ PASS: Using correct version v2")
+        print("[PASS] PASS: Using correct version v2")
         return True
     elif uses_action.startswith('dante-ev/latex-action@'):
-        print(f"⚠️  WARNING: Using version {uses_action}")
+        print(f"[WARN]  WARNING: Using version {uses_action}")
         print("Expected: dante-ev/latex-action@v2")
         return False
     else:
-        print(f"❌ ERROR: Unexpected action: {uses_action}")
+        print(f"[FAIL] ERROR: Unexpected action: {uses_action}")
         return False
 
 def test_workflow_syntax():
@@ -68,10 +68,10 @@ def test_workflow_syntax():
     try:
         with open(workflow_path, 'r') as f:
             yaml.safe_load(f)
-        print("✅ PASS: Workflow YAML syntax is valid")
+        print("[PASS] PASS: Workflow YAML syntax is valid")
         return True
     except yaml.YAMLError as e:
-        print(f"❌ FAIL: Invalid YAML syntax: {e}")
+        print(f"[FAIL] FAIL: Invalid YAML syntax: {e}")
         return False
 
 def main():
@@ -103,14 +103,14 @@ def main():
     total = len(results)
 
     for i, (test_name, _) in enumerate(tests):
-        status = "✅ PASS" if results[i] else "❌ FAIL"
+        status = "[PASS] PASS" if results[i] else "[FAIL] FAIL"
         print(f"{status} {test_name}")
 
     print()
     print(f"Tests passed: {passed}/{total}")
 
     if all(results):
-        print("🎉 ALL TESTS PASSED - Issue #735 fix is working correctly!")
+        print("[SUCCESS] ALL TESTS PASSED - Issue #735 fix is working correctly!")
         print()
         print("The GitHub Actions workflow should now be able to:")
         print("- Resolve the dante-ev/latex-action@v2 action successfully")
@@ -118,7 +118,7 @@ def main():
         print("- Complete the LaTeX PDF build process")
         return True
     else:
-        print("❌ SOME TESTS FAILED - Issue #735 fix needs more work")
+        print("[FAIL] SOME TESTS FAILED - Issue #735 fix needs more work")
         return False
 
 if __name__ == '__main__':

@@ -24,7 +24,7 @@ from pathlib import Path
 
 def test_latex_action_migration():
     """Test that workflows have been migrated to xu-cheng/latex-action@v3."""
-    print("🔄 Testing LaTeX Action Migration")
+    print("[SYNC] Testing LaTeX Action Migration")
     print("=" * 60)
 
     workflow_files = [
@@ -35,10 +35,10 @@ def test_latex_action_migration():
     migration_success = True
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Checking {workflow_file}...")
+        print(f"\n[FILE] Checking {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             migration_success = False
             continue
 
@@ -47,18 +47,18 @@ def test_latex_action_migration():
 
         # Check for migration from dante-ev to xu-cheng
         if 'dante-ev/latex-action' in content:
-            print(f"❌ Found old dante-ev/latex-action in {workflow_file}")
+            print(f"[FAIL] Found old dante-ev/latex-action in {workflow_file}")
             migration_success = False
         elif 'xu-cheng/latex-action@v3' in content:
-            print(f"✅ Successfully migrated to xu-cheng/latex-action@v3")
+            print(f"[PASS] Successfully migrated to xu-cheng/latex-action@v3")
         else:
-            print(f"⚠️  No LaTeX action found in {workflow_file}")
+            print(f"[WARN]  No LaTeX action found in {workflow_file}")
 
     return migration_success
 
 def test_fallback_mechanism():
     """Test that workflows include fallback mechanism for LaTeX installation."""
-    print("\n🔄 Testing Fallback Mechanism Implementation")
+    print("\n[SYNC] Testing Fallback Mechanism Implementation")
     print("=" * 60)
 
     workflow_files = [
@@ -69,10 +69,10 @@ def test_fallback_mechanism():
     fallback_success = True
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Analyzing fallback in {workflow_file}...")
+        print(f"\n[FILE] Analyzing fallback in {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             fallback_success = False
             continue
 
@@ -89,16 +89,16 @@ def test_fallback_mechanism():
 
         for check_name, pattern in fallback_checks.items():
             if pattern in content:
-                print(f"✅ {check_name}: Found")
+                print(f"[PASS] {check_name}: Found")
             else:
-                print(f"❌ {check_name}: Missing")
+                print(f"[FAIL] {check_name}: Missing")
                 fallback_success = False
 
     return fallback_success
 
 def test_enhanced_pdf_verification():
     """Test that workflows include enhanced PDF verification with detailed analysis."""
-    print("\n📊 Testing Enhanced PDF Verification")
+    print("\n[SUMMARY] Testing Enhanced PDF Verification")
     print("=" * 60)
 
     workflow_files = [
@@ -109,10 +109,10 @@ def test_enhanced_pdf_verification():
     verification_success = True
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Checking enhanced verification in {workflow_file}...")
+        print(f"\n[FILE] Checking enhanced verification in {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             verification_success = False
             continue
 
@@ -132,16 +132,16 @@ def test_enhanced_pdf_verification():
 
         for check_name, pattern in verification_checks.items():
             if pattern in content:
-                print(f"✅ {check_name}: Implemented")
+                print(f"[PASS] {check_name}: Implemented")
             else:
-                print(f"❌ {check_name}: Missing")
+                print(f"[FAIL] {check_name}: Missing")
                 verification_success = False
 
     return verification_success
 
 def test_workflow_yaml_syntax():
     """Test that workflow YAML files have correct syntax and structure."""
-    print("\n🔍 Testing Workflow YAML Syntax")
+    print("\n[SEARCH] Testing Workflow YAML Syntax")
     print("=" * 60)
 
     workflow_files = [
@@ -152,10 +152,10 @@ def test_workflow_yaml_syntax():
     syntax_success = True
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Validating YAML syntax in {workflow_file}...")
+        print(f"\n[FILE] Validating YAML syntax in {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             syntax_success = False
             continue
 
@@ -167,30 +167,30 @@ def test_workflow_yaml_syntax():
             required_keys = ['name', 'on', 'jobs']
             for key in required_keys:
                 if key in workflow_data:
-                    print(f"✅ Required key '{key}': Found")
+                    print(f"[PASS] Required key '{key}': Found")
                 else:
-                    print(f"❌ Required key '{key}': Missing")
+                    print(f"[FAIL] Required key '{key}': Missing")
                     syntax_success = False
 
             # Check that 'on' is properly quoted (string, not boolean)
             if isinstance(workflow_data.get('on'), dict):
-                print("✅ 'on' key properly structured as dictionary")
+                print("[PASS] 'on' key properly structured as dictionary")
             else:
-                print("❌ 'on' key has incorrect type")
+                print("[FAIL] 'on' key has incorrect type")
                 syntax_success = False
 
         except yaml.YAMLError as e:
-            print(f"❌ YAML syntax error: {e}")
+            print(f"[FAIL] YAML syntax error: {e}")
             syntax_success = False
         except Exception as e:
-            print(f"❌ Error reading file: {e}")
+            print(f"[FAIL] Error reading file: {e}")
             syntax_success = False
 
     return syntax_success
 
 def test_timeout_configuration():
     """Test that all steps have appropriate timeout configurations."""
-    print("\n⏱️  Testing Timeout Configuration")
+    print("\n[TIMER]  Testing Timeout Configuration")
     print("=" * 60)
 
     workflow_files = [
@@ -201,10 +201,10 @@ def test_timeout_configuration():
     timeout_success = True
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Checking timeouts in {workflow_file}...")
+        print(f"\n[FILE] Checking timeouts in {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             timeout_success = False
             continue
 
@@ -229,22 +229,22 @@ def test_timeout_configuration():
                         latex_steps_with_adequate_timeout += 1
 
                 if steps_without_timeout:
-                    print(f"⚠️  Steps without timeout in {job_name}: {len(steps_without_timeout)}")
+                    print(f"[WARN]  Steps without timeout in {job_name}: {len(steps_without_timeout)}")
                 else:
-                    print(f"✅ All steps have timeout configuration in {job_name}")
+                    print(f"[PASS] All steps have timeout configuration in {job_name}")
 
                 if latex_steps_with_adequate_timeout > 0:
-                    print(f"✅ LaTeX steps have adequate timeouts: {latex_steps_with_adequate_timeout}")
+                    print(f"[PASS] LaTeX steps have adequate timeouts: {latex_steps_with_adequate_timeout}")
 
         except Exception as e:
-            print(f"❌ Error analyzing timeouts: {e}")
+            print(f"[FAIL] Error analyzing timeouts: {e}")
             timeout_success = False
 
     return timeout_success
 
 def test_error_recovery_mechanisms():
     """Test that workflows have proper error recovery and continue-on-error settings."""
-    print("\n🛡️ Testing Error Recovery Mechanisms")
+    print("\n[SHIELD] Testing Error Recovery Mechanisms")
     print("=" * 60)
 
     workflow_files = [
@@ -255,10 +255,10 @@ def test_error_recovery_mechanisms():
     recovery_success = True
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Analyzing error recovery in {workflow_file}...")
+        print(f"\n[FILE] Analyzing error recovery in {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             recovery_success = False
             continue
 
@@ -270,24 +270,24 @@ def test_error_recovery_mechanisms():
             'Continue on error for primary action': 'continue-on-error: true',
             'Conditional fallback execution': 'if:.*outcome.*failure',
             'Error log collection': 'upload.*artifact.*logs',
-            'Graceful error handling': 'echo.*❌.*failed'
+            'Graceful error handling': 'echo.*[FAIL].*failed'
         }
 
         for pattern_name, pattern in recovery_patterns.items():
             if pattern in content:
-                print(f"✅ {pattern_name}: Implemented")
+                print(f"[PASS] {pattern_name}: Implemented")
             else:
-                print(f"⚠️  {pattern_name}: Not found (may be optional)")
+                print(f"[WARN]  {pattern_name}: Not found (may be optional)")
 
     return recovery_success
 
 def validate_ctmm_build_system():
     """Validate that the CTMM build system works correctly with current setup."""
-    print("\n🔧 Testing CTMM Build System Integration")
+    print("\n[FIX] Testing CTMM Build System Integration")
     print("=" * 60)
 
     try:
-        print("🚀 Running CTMM build system check...")
+        print("[LAUNCH] Running CTMM build system check...")
         result = subprocess.run(
             [sys.executable, 'ctmm_build.py'],
             capture_output=True,
@@ -298,38 +298,38 @@ def validate_ctmm_build_system():
         output = result.stdout + result.stderr
 
         if result.returncode == 0:
-            print("✅ CTMM build system check passed")
+            print("[PASS] CTMM build system check passed")
 
             # Check for key indicators of successful validation
             success_indicators = [
-                'LaTeX validation: ✓ PASS',
+                'LaTeX validation: [OK] PASS',
                 'All referenced files exist',
-                'Basic build: ✓ PASS',
-                'Full build: ✓ PASS'
+                'Basic build: [OK] PASS',
+                'Full build: [OK] PASS'
             ]
 
             for indicator in success_indicators:
                 if indicator in output:
-                    print(f"✅ Found: {indicator}")
+                    print(f"[PASS] Found: {indicator}")
                 else:
-                    print(f"⚠️  Missing: {indicator}")
+                    print(f"[WARN]  Missing: {indicator}")
 
             return True
         else:
-            print(f"❌ CTMM build system check failed (exit code: {result.returncode})")
+            print(f"[FAIL] CTMM build system check failed (exit code: {result.returncode})")
             print("Output:", output[-500:])  # Show last 500 chars
             return False
 
     except subprocess.TimeoutExpired:
-        print("❌ CTMM build system check timed out")
+        print("[FAIL] CTMM build system check timed out")
         return False
     except Exception as e:
-        print(f"❌ Error running CTMM build system: {e}")
+        print(f"[FAIL] Error running CTMM build system: {e}")
         return False
 
 def main():
     """Run all validation tests."""
-    print("🎯 Issue #1068 LaTeX Robustness Validation")
+    print("[TARGET] Issue #1068 LaTeX Robustness Validation")
     print("=" * 60)
     print("Testing migration from dante-ev/latex-action to xu-cheng/latex-action@v3")
     print("with enhanced fallback mechanisms and improved error recovery")
@@ -355,38 +355,38 @@ def main():
             elapsed = time.time() - start_time
 
             results[test_name] = result
-            status = "✅ PASS" if result else "❌ FAIL"
+            status = "[PASS] PASS" if result else "[FAIL] FAIL"
             print(f"\n{status} {test_name} (completed in {elapsed:.1f}s)")
 
         except Exception as e:
             results[test_name] = False
-            print(f"\n❌ FAIL {test_name} (exception: {e})")
+            print(f"\n[FAIL] FAIL {test_name} (exception: {e})")
 
     # Summary
     print(f"\n{'='*60}")
-    print("📊 VALIDATION SUMMARY")
+    print("[SUMMARY] VALIDATION SUMMARY")
     print(f"{'='*60}")
 
     passed_tests = sum(1 for result in results.values() if result)
     total_tests = len(results)
 
     for test_name, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status} {test_name}")
 
     print(f"\nTests passed: {passed_tests}/{total_tests}")
 
     if passed_tests == total_tests:
-        print("\n🎉 ALL TESTS PASSED! LaTeX robustness migration validated successfully.")
+        print("\n[SUCCESS] ALL TESTS PASSED! LaTeX robustness migration validated successfully.")
         print("\nKey improvements confirmed:")
-        print("• Migration to xu-cheng/latex-action@v3 ✅")
-        print("• Fallback mechanism with manual TeX Live installation ✅")
-        print("• Enhanced PDF verification with detailed analysis ✅")
-        print("• Comprehensive error recovery mechanisms ✅")
-        print("• Two-tier LaTeX compilation approach ✅")
+        print("* Migration to xu-cheng/latex-action@v3 [PASS]")
+        print("* Fallback mechanism with manual TeX Live installation [PASS]")
+        print("* Enhanced PDF verification with detailed analysis [PASS]")
+        print("* Comprehensive error recovery mechanisms [PASS]")
+        print("* Two-tier LaTeX compilation approach [PASS]")
         return True
     else:
-        print(f"\n⚠️  {total_tests - passed_tests} test(s) failed. Review the issues above.")
+        print(f"\n[WARN]  {total_tests - passed_tests} test(s) failed. Review the issues above.")
         return False
 
 if __name__ == "__main__":

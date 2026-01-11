@@ -19,31 +19,31 @@ def validate_latex_syntax(main_tex_path="main.tex"):
     # Check main.tex exists and is readable
     main_file = Path(main_tex_path)
     if not main_file.exists():
-        print(f'❌ {main_tex_path} not found')
+        print(f'[FAIL] {main_tex_path} not found')
         return False
 
     try:
         content = main_file.read_text(encoding='utf-8')
-        print(f'✅ {main_tex_path} readable')
+        print(f'[PASS] {main_tex_path} readable')
     except Exception as e:
-        print(f'❌ Error reading {main_tex_path}: {e}')
+        print(f'[FAIL] Error reading {main_tex_path}: {e}')
         return False
 
     # Check for basic LaTeX structure
     if r'\documentclass' not in content:
-        print('❌ No \\documentclass found')
+        print('[FAIL] No \\documentclass found')
         return False
-    print('✅ \\documentclass found')
+    print('[PASS] \\documentclass found')
 
     if r'\begin{document}' not in content:
-        print('❌ No \\begin{document} found')
+        print('[FAIL] No \\begin{document} found')
         return False
-    print('✅ \\begin{document} found')
+    print('[PASS] \\begin{document} found')
 
     if r'\end{document}' not in content:
-        print('❌ No \\end{document} found')
+        print('[FAIL] No \\end{document} found')
         return False
-    print('✅ \\end{document} found')
+    print('[PASS] \\end{document} found')
 
     # Check referenced files exist
     style_pattern = r'\\usepackage\{style/([^}]+)\}'
@@ -62,23 +62,23 @@ def validate_latex_syntax(main_tex_path="main.tex"):
             missing.append(f)
 
     if missing:
-        print(f'❌ Missing files: {missing}')
+        print(f'[FAIL] Missing files: {missing}')
         return False
 
-    print(f'✅ All {len(style_files + module_files)} referenced files exist')
+    print(f'[PASS] All {len(style_files + module_files)} referenced files exist')
 
     # Check for obvious syntax errors
     if content.count(r'\begin{document}') != content.count(r'\end{document}'):
-        print('❌ Mismatched \\begin{document} and \\end{document}')
+        print('[FAIL] Mismatched \\begin{document} and \\end{document}')
         return False
 
     # Basic brace matching (simplified)
     open_braces = content.count('{')
     close_braces = content.count('}')
     if abs(open_braces - close_braces) > BRACE_TOLERANCE:  # Allow some tolerance
-        print(f'⚠️  Potential brace mismatch: {open_braces} open, {close_braces} close')
+        print(f'[WARN]  Potential brace mismatch: {open_braces} open, {close_braces} close')
 
-    print('✅ Basic LaTeX syntax validation passed')
+    print('[PASS] Basic LaTeX syntax validation passed')
     return True
 
 
@@ -91,10 +91,10 @@ def main():
     success = validate_latex_syntax()
 
     if success:
-        print("\n✅ All validation checks passed!")
+        print("\n[PASS] All validation checks passed!")
         return 0
     else:
-        print("\n❌ Validation failed!")
+        print("\n[FAIL] Validation failed!")
         return 1
 
 

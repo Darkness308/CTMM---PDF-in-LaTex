@@ -12,7 +12,7 @@ from pathlib import Path
 
 def test_latex_action_consistency():
     """Test that all LaTeX action references use the same version."""
-    print("🔍 Testing LaTeX Action Version Consistency")
+    print("[SEARCH] Testing LaTeX Action Version Consistency")
     print("=" * 60)
 
     workflow_files = glob.glob(".github/workflows/*.yml")
@@ -38,14 +38,14 @@ def test_latex_action_consistency():
                             'uses': uses
                         })
         except Exception as e:
-            print(f"❌ Error parsing {workflow_file}: {e}")
+            print(f"[FAIL] Error parsing {workflow_file}: {e}")
             return False
 
     if not latex_actions:
-        print("❌ No LaTeX actions found in any workflow")
+        print("[FAIL] No LaTeX actions found in any workflow")
         return False
 
-    print(f"✅ Found {len(latex_actions)} LaTeX action(s):")
+    print(f"[PASS] Found {len(latex_actions)} LaTeX action(s):")
     versions = set()
     for action in latex_actions:
         print(f"   {action['file']} -> {action['uses']}")
@@ -54,25 +54,25 @@ def test_latex_action_consistency():
     # Check for version consistency
     if len(versions) == 1:
         version = versions.pop()
-        print(f"✅ All LaTeX actions use consistent version: {version}")
+        print(f"[PASS] All LaTeX actions use consistent version: {version}")
 
         # Check that it's not a problematic version
         if version.endswith('@v2'):
-            print("❌ Using problematic @v2 version")
+            print("[FAIL] Using problematic @v2 version")
             return False
         if version.endswith('@v2.0.0'):
-            print("❌ Using problematic @v2.0.0 version")
+            print("[FAIL] Using problematic @v2.0.0 version")
             return False
 
         return True
     else:
-        print(f"❌ Inconsistent versions found: {versions}")
+        print(f"[FAIL] Inconsistent versions found: {versions}")
         return False
 
 
 def test_no_merge_conflict_markers():
     """Test that no workflow files contain merge conflict markers."""
-    print("\n🔍 Testing for Merge Conflict Markers")
+    print("\n[SEARCH] Testing for Merge Conflict Markers")
     print("=" * 60)
 
     workflow_files = glob.glob(".github/workflows/*.yml")
@@ -96,11 +96,11 @@ def test_no_merge_conflict_markers():
                 stripped_line = line.strip()
                 for pattern, description in conflict_patterns:
                     if stripped_line.startswith(pattern):
-                        print(f"❌ {description} found in {workflow_file}:{line_num}: {line.strip()}")
+                        print(f"[FAIL] {description} found in {workflow_file}:{line_num}: {line.strip()}")
                         issues_found = True
 
     if not issues_found:
-        print("✅ No merge conflict markers found")
+        print("[PASS] No merge conflict markers found")
         return True
     else:
         return False
@@ -108,7 +108,7 @@ def test_no_merge_conflict_markers():
 
 def test_no_duplicate_action_entries():
     """Test that there are no duplicate or conflicting action entries."""
-    print("\n🔍 Testing for Duplicate Action Entries")
+    print("\n[SEARCH] Testing for Duplicate Action Entries")
     print("=" * 60)
 
     workflow_files = glob.glob(".github/workflows/*.yml")
@@ -129,23 +129,23 @@ def test_no_duplicate_action_entries():
                         latex_steps.append((i, uses))
 
                 if len(latex_steps) > 1:
-                    print(f"⚠️  Multiple LaTeX actions in {workflow_file}, job {job_name}:")
+                    print(f"[WARN]  Multiple LaTeX actions in {workflow_file}, job {job_name}:")
                     for step_num, uses in latex_steps:
                         print(f"    Step {step_num}: {uses}")
                 elif len(latex_steps) == 1:
-                    print(f"✅ Single LaTeX action in {workflow_file}, job {job_name}: {latex_steps[0][1]}")
+                    print(f"[PASS] Single LaTeX action in {workflow_file}, job {job_name}: {latex_steps[0][1]}")
 
         except Exception as e:
-            print(f"❌ Error parsing {workflow_file}: {e}")
+            print(f"[FAIL] Error parsing {workflow_file}: {e}")
             return False
 
-    print("✅ No conflicting duplicate entries found")
+    print("[PASS] No conflicting duplicate entries found")
     return True
 
 
 def test_workflow_yaml_validity():
     """Test that all workflow YAML files are syntactically valid."""
-    print("\n📋 Testing Workflow YAML Validity")
+    print("\n[TEST] Testing Workflow YAML Validity")
     print("=" * 60)
 
     workflow_files = glob.glob(".github/workflows/*.yml")
@@ -155,12 +155,12 @@ def test_workflow_yaml_validity():
         try:
             with open(workflow_file, 'r') as f:
                 yaml.safe_load(f)
-            print(f"✅ {workflow_file}: Valid YAML syntax")
+            print(f"[PASS] {workflow_file}: Valid YAML syntax")
         except yaml.YAMLError as e:
-            print(f"❌ {workflow_file}: YAML syntax error: {e}")
+            print(f"[FAIL] {workflow_file}: YAML syntax error: {e}")
             all_valid = False
         except Exception as e:
-            print(f"❌ {workflow_file}: Error: {e}")
+            print(f"[FAIL] {workflow_file}: Error: {e}")
             all_valid = False
 
     return all_valid
@@ -168,7 +168,7 @@ def test_workflow_yaml_validity():
 
 def main():
     """Run all validation tests for Issue #1054 fix."""
-    print("🧪 Issue #1054 Fix Validation")
+    print("[TEST] Issue #1054 Fix Validation")
     print("=" * 60)
     print("Testing fix for corrupted merge markers and conflicting LaTeX action configurations")
 
@@ -185,21 +185,21 @@ def main():
     for test_name, test_func in tests:
         try:
             if test_func():
-                print(f"✅ {test_name}: PASS\n")
+                print(f"[PASS] {test_name}: PASS\n")
                 passed += 1
             else:
-                print(f"❌ {test_name}: FAIL\n")
+                print(f"[FAIL] {test_name}: FAIL\n")
         except Exception as e:
-            print(f"💥 {test_name}: ERROR - {e}\n")
+            print(f"[ERROR] {test_name}: ERROR - {e}\n")
 
     print("=" * 60)
     print(f"Test Results: {passed} passed, {total - passed} failed")
 
     if passed == total:
-        print("🎉 ALL TESTS PASSED! Issue #1054 has been resolved.")
+        print("[SUCCESS] ALL TESTS PASSED! Issue #1054 has been resolved.")
         return 0
     else:
-        print("💥 Some tests failed. Please review the configuration.")
+        print("[ERROR] Some tests failed. Please review the configuration.")
         return 1
 
 

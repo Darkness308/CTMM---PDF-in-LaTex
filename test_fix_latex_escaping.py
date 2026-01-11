@@ -136,7 +136,7 @@ class TestLaTeXDeEscaper(unittest.TestCase):
         """Test fixing of a complex document with multiple escaping issues."""
         content = r"""
         \textbackslash{}hypertarget\textbackslash{}{tool-23-trigger-management\textbackslash{}}{\textbackslash{}%
-        \textbackslash{}section\textbackslash{}{\textbackslash{}texorpdfstring\textbackslash{}{📄 \textbackslash{}textbf\textbackslash{}{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\textbackslash{}label\textbackslash{}{tool-23-trigger-management\textbackslash{}}}
+        \textbackslash{}section\textbackslash{}{\textbackslash{}texorpdfstring\textbackslash{}{[FILE] \textbackslash{}textbf\textbackslash{}{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}\textbackslash{}label\textbackslash{}{tool-23-trigger-management\textbackslash{}}}
 
         \textbackslash{}begin\textbackslash{}{itemize\textbackslash{}}
         \textbackslash{}item Some \textbackslash{}textbf\textbackslash{}{bold\textbackslash{}} text
