@@ -2,8 +2,8 @@
 
 ## Zusammenfassung
 
-**Datum:** 2026-01-10  
-**PR:** #572 (Branch: `copilot/fix-314` → `main`)  
+**Datum:** 2026-01-10
+**PR:** #572 (Branch: `copilot/fix-314` → `main`)
 **Status:** Beide Branches sind sauber - keine merge-störende Zeichen gefunden
 
 ---
@@ -115,8 +115,8 @@ git cherry-pick <commit-hash-2>
 
 ## Fazit
 
-✅ **Repository ist sauber** - keine merge-störenden Zeichen gefunden  
-⚠️  **Problem:** Unrelated Git histories zwischen Branches  
+✅ **Repository ist sauber** - keine merge-störenden Zeichen gefunden
+⚠️  **Problem:** Unrelated Git histories zwischen Branches
 📋 **Empfehlung:** Branch neu erstellen basierend auf `main`
 
 ---
