@@ -7,6 +7,7 @@ Handles missing files and basic build testing with robust error handling.
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 import logging
 
@@ -147,6 +148,8 @@ Created by CTMM Build System
     return True
 
 
+def test_basic_build(main_tex_path="main.tex"):
+    """Test basic LaTeX build without modules."""
     # Check if pdflatex is available
     try:
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
@@ -155,17 +158,22 @@ Created by CTMM Build System
         logger.info("[OK] Basic structure test passed (LaTeX not available)")
         return True
 
-
-def test_basic_build(main_tex_path="main.tex"):
-    """Test basic LaTeX build without modules."""
-    # Check if pdflatex is available
     try:
-        with open(temp_file, 'w', encoding='utf-8') as f:
-            f.write(modified_content)
+        # Read main.tex and create a minimal test version without modules
+        with open(main_tex_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Remove all \input{modules/...} lines to test basic framework
+        modified_content = re.sub(r'\\input\{modules/[^}]+\}', '', content)
+        
+        # Create temporary test file
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.tex', delete=False, encoding='utf-8') as temp_file:
+            temp_file_path = temp_file.name
+            temp_file.write(modified_content)
 
         # Test build with limited output capture to avoid encoding issues
         result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', temp_file],
+            ['pdflatex', '-interaction=nonstopmode', temp_file_path],
             capture_output=True,
             text=True,
             errors='replace',  # Handle encoding issues
@@ -173,12 +181,21 @@ def test_basic_build(main_tex_path="main.tex"):
         )
 
         # Enhanced PDF validation: check both return code and file existence/size
-        temp_pdf = Path(temp_file).with_suffix('.pdf')
+        temp_pdf = Path(temp_file_path).with_suffix('.pdf')
         pdf_exists = temp_pdf.exists()
         pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
 
         # Validate PDF generation success by file existence and size rather than just return codes
         success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
+
+        # Cleanup temporary files
+        try:
+            Path(temp_file_path).unlink(missing_ok=True)
+            temp_pdf.unlink(missing_ok=True)
+            Path(temp_file_path).with_suffix('.log').unlink(missing_ok=True)
+            Path(temp_file_path).with_suffix('.aux').unlink(missing_ok=True)
+        except Exception:
+            pass
 
         if success:
             logger.info("[OK] Basic build successful")
@@ -191,16 +208,12 @@ def test_basic_build(main_tex_path="main.tex"):
                 logger.error("Test PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
-            logger.error("LaTeX errors detected (check %s.log for details)", temp_file)
 
         return success
 
     except Exception as e:
-        print(f"✗ Error checking for pdflatex: {e}")
+        logger.error("Error in basic build test: %s", e)
         return False
-
-    print("Testing basic build (without modules)...")
-    return True  # Placeholder
 
 
 def test_full_build(main_tex_path="main.tex"):
@@ -246,11 +259,8 @@ def test_full_build(main_tex_path="main.tex"):
         return success
 
     except Exception as e:
-        print(f"✗ Error checking for pdflatex: {e}")
+        logger.error("Error in full build test: %s", e)
         return False
-
-    print("Testing full build (with modules)...")
-    return True  # Placeholder
 
 
 def validate_latex_files():
@@ -294,7 +304,8 @@ def validate_form_fields():
         return True
 
     try:
-        validator = FormFieldValidator()
+        # Pass current directory as repo_root
+        validator = FormFieldValidator(repo_root='.')
         results = validator.validate_all()
         return results.get("passed", True)
     except Exception as e:
