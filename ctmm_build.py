@@ -86,12 +86,17 @@ def check_missing_files(files):
 
 
 def create_template(file_path):
-    """Create a minimal template for a missing file."""
-    path = Path(file_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
+    """Create a minimal template for a missing file.
+    
+    Returns:
+        bool: True if template creation succeeded, False otherwise
+    """
+    try:
+        path = Path(file_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
 
-    if file_path.endswith('.sty'):
-        content = f"""% {path.name} - CTMM Style Package
+        if file_path.endswith('.sty'):
+            content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
 \\NeedsTeXFormat{{LaTeX2e}}
@@ -101,8 +106,8 @@ def create_template(file_path):
 
 % End of package
 """
-    else:
-        content = f"""% {path.name} - CTMM Module
+        else:
+            content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 
 \\section{{TODO: {filename_to_title(path.stem)}}}
@@ -115,12 +120,12 @@ def create_template(file_path):
 % TODO: Complete implementation
 """
 
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write(content)
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(content)
 
-    # Create TODO file
-    todo_path = path.parent / f"TODO_{path.stem}.md"
-    todo_content = f"""# TODO: Complete {path.name}
+        # Create TODO file
+        todo_path = path.parent / f"TODO_{path.stem}.md"
+        todo_content = f"""# TODO: Complete {path.name}
 
 **Status:** Template created, needs content
 
@@ -131,8 +136,13 @@ def create_template(file_path):
 
 Created by CTMM Build System
 """
-    with open(todo_path, 'w', encoding='utf-8') as f:
-        f.write(todo_content)
+        with open(todo_path, 'w', encoding='utf-8') as f:
+            f.write(todo_content)
+        
+        return True
+    except Exception as e:
+        logger.error("Failed to create template for %s: %s", file_path, e)
+        return False
 
 
 def test_basic_build(main_tex_path="main.tex"):
@@ -391,11 +401,10 @@ def main():
         try:
             created_count = 0
             for file_path in missing_files:
-                logger.info("Creating template: %s", file_path)
-                create_template(file_path)
-                created_count += 1
-                build_data["template_creation"]["created_files"].append(file_path)
-
+                if create_template(file_path):
+                    created_count += 1
+                    build_data["template_creation"]["created_files"].append(file_path)
+            
             build_data["template_creation"]["created_count"] = created_count
             print(f"[OK] Created {created_count} template files")
         except Exception as e:
