@@ -156,7 +156,7 @@ class CTMMLaTeXHelper:
         modules_dir = Path(modules_dir)
         tex_files = list(modules_dir.rglob('*.tex'))
 
-        print(f"🔍 Scanning {len(tex_files)} .tex files in {modules_dir}")
+        print(f"[SEARCH] Scanning {len(tex_files)} .tex files in {modules_dir}")
 
         for tex_file in tex_files:
             analysis = self.analyze_tex_file(tex_file)
@@ -221,25 +221,25 @@ class CTMMLaTeXHelper:
         if output_path:
             with open(output_path, 'w', encoding='utf-8') as f:
                 json.dump(report, f, indent=2, ensure_ascii=False)
-            print(f"📊 Report saved to: {output_path}")
+            print(f"[SUMMARY] Report saved to: {output_path}")
 
         return report
 
     def print_summary(self):
         """Print a nice summary to console"""
-        print("\n🧩 CTMM LaTeX Project Analysis")
+        print("\n[EMOJI] CTMM LaTeX Project Analysis")
         print("=" * 50)
 
         total_modules = sum(len(modules) for modules in self.stats['modules'].values())
-        print(f"📁 Module gefunden: {total_modules}")
-        print(f"📝 Wörter gesamt: {self.stats['total_words']:,}")
-        print(f"📦 Packages verwendet: {len(self.stats['packages'])}")
+        print(f"[EMOJI] Module gefunden: {total_modules}")
+        print(f"[NOTE] Wörter gesamt: {self.stats['total_words']:,}")
+        print(f"[PACKAGE] Packages verwendet: {len(self.stats['packages'])}")
 
-        print(f"\n📂 Module nach Kategorien:")
+        print(f"\n[FOLDER] Module nach Kategorien:")
         for category, modules in self.stats['modules'].items():
             total_words = sum(m['words'] for m in modules)
             total_forms = sum(m['form_elements'] for m in modules)
-            print(f"  • {category}: {len(modules)} Module, {total_words:,} Wörter, {total_forms} Formularfelder")
+            print(f"  * {category}: {len(modules)} Module, {total_words:,} Wörter, {total_forms} Formularfelder")
 
         # Color usage analysis
         all_colors = defaultdict(int)
@@ -249,14 +249,14 @@ class CTMMLaTeXHelper:
                     all_colors[color] += count
 
         if all_colors:
-            print(f"\n🎨 CTMM-Farben Verwendung:")
+            print(f"\n[EMOJI] CTMM-Farben Verwendung:")
             for color, count in sorted(all_colors.items(), key=lambda x: x[1], reverse=True):
-                print(f"  • {color}: {count}x")
+                print(f"  * {color}: {count}x")
 
         if self.stats['errors']:
-            print(f"\n❌ Fehler gefunden: {len(self.stats['errors'])}")
+            print(f"\n[FAIL] Fehler gefunden: {len(self.stats['errors'])}")
             for error in self.stats['errors']:
-                print(f"  • {error}")
+                print(f"  * {error}")
 
 def main():
     parser = argparse.ArgumentParser(description='CTMM LaTeX Helper Tool')
@@ -276,7 +276,7 @@ def main():
     helper = CTMMLaTeXHelper()
 
     if args.command == 'analyze':
-        print("🔍 Analyzing CTMM LaTeX project...")
+        print("[SEARCH] Analyzing CTMM LaTeX project...")
         helper.scan_modules_directory(args.modules_dir)
         helper.print_summary()
 
@@ -286,33 +286,33 @@ def main():
     elif args.command == 'check-errors':
         log_files = list(Path(args.build_dir).glob('*.log'))
         if not log_files:
-            print(f"❌ No log files found in {args.build_dir}")
+            print(f"[FAIL] No log files found in {args.build_dir}")
             return
 
-        print(f"🔍 Checking {len(log_files)} log files for errors...")
+        print(f"[SEARCH] Checking {len(log_files)} log files for errors...")
         for log_file in log_files:
             log_analysis = helper.analyze_log_file(log_file)
             if log_analysis.get('errors'):
-                print(f"\n❌ Errors in {log_file.name}:")
+                print(f"\n[FAIL] Errors in {log_file.name}:")
                 for error in log_analysis['errors']:
-                    print(f"  • {error}")
+                    print(f"  * {error}")
             if log_analysis.get('warnings'):
-                print(f"\n⚠️  Warnings in {log_file.name}:")
+                print(f"\n[WARN]  Warnings in {log_file.name}:")
                 for warning in log_analysis['warnings'][:5]:  # Limit to 5 warnings
-                    print(f"  • {warning}")
+                    print(f"  * {warning}")
 
     elif args.command == 'stats':
         helper.scan_modules_directory(args.modules_dir)
         report = helper.generate_report(args.output)
 
-        print("\n📊 Detailed Statistics:")
+        print("\n[SUMMARY] Detailed Statistics:")
         print(f"Total LaTeX words: {report['summary']['total_words']:,}")
         print(f"Total form elements: {report['form_elements_total']}")
         print(f"Most used color: {max(report['ctmm_color_usage'].items(), key=lambda x: x[1]) if report['ctmm_color_usage'] else 'None'}")
 
     elif args.command == 'module-detail':
         if not args.module:
-            print("❌ Please specify --module <name> for detail analysis")
+            print("[FAIL] Please specify --module <name> for detail analysis")
             return
 
         helper.scan_modules_directory(args.modules_dir)
@@ -328,55 +328,55 @@ def main():
                 break
 
         if not found_module:
-            print(f"❌ Module '{args.module}' not found")
+            print(f"[FAIL] Module '{args.module}' not found")
             return
 
-        print(f"\n🔍 Detailed Analysis: {Path(found_module['filepath']).stem}")
+        print(f"\n[SEARCH] Detailed Analysis: {Path(found_module['filepath']).stem}")
         print("=" * 60)
-        print(f"📄 File: {found_module['filepath']}")
-        print(f"📝 Words: {found_module['words']}")
-        print(f"📏 Lines: {found_module['lines']}")
-        print(f"📋 Sections: {len(found_module['sections'])}")
-        print(f"🎨 Form elements: {found_module['form_elements']}")
-        print(f"📦 tcolorboxes: {found_module['tcolorboxes']}")
+        print(f"[FILE] File: {found_module['filepath']}")
+        print(f"[NOTE] Words: {found_module['words']}")
+        print(f"[EMOJI] Lines: {found_module['lines']}")
+        print(f"[TEST] Sections: {len(found_module['sections'])}")
+        print(f"[EMOJI] Form elements: {found_module['form_elements']}")
+        print(f"[PACKAGE] tcolorboxes: {found_module['tcolorboxes']}")
 
         if found_module['sections']:
-            print(f"\n📑 Sections found:")
+            print(f"\n[EMOJI] Sections found:")
             for i, section in enumerate(found_module['sections'], 1):
                 print(f"  {i}. {section}")
 
         if found_module['colors']:
-            print(f"\n🎨 CTMM Colors used:")
+            print(f"\n[EMOJI] CTMM Colors used:")
             for color, count in sorted(found_module['colors'].items(), key=lambda x: x[1], reverse=True):
-                print(f"  • {color}: {count}x")
+                print(f"  * {color}: {count}x")
 
         if found_module['packages']:
-            print(f"\n📦 Packages used:")
+            print(f"\n[PACKAGE] Packages used:")
             for package in found_module['packages']:
-                print(f"  • {package}")
+                print(f"  * {package}")
 
         # Quality suggestions
-        print(f"\n💡 Quality Assessment:")
+        print(f"\n[TIP] Quality Assessment:")
         if found_module['form_elements'] > 0:
-            print(f"  ✅ Interactive elements present ({found_module['form_elements']} form fields)")
+            print(f"  [PASS] Interactive elements present ({found_module['form_elements']} form fields)")
         else:
-            print(f"  ⚠️  No form elements found - consider adding interactive elements")
+            print(f"  [WARN]  No form elements found - consider adding interactive elements")
 
         if found_module['colors']:
-            print(f"  ✅ CTMM color system used consistently")
+            print(f"  [PASS] CTMM color system used consistently")
         else:
-            print(f"  ⚠️  No CTMM colors found - check color consistency")
+            print(f"  [WARN]  No CTMM colors found - check color consistency")
 
         if found_module['tcolorboxes'] > 0:
-            print(f"  ✅ Structured content with {found_module['tcolorboxes']} colored boxes")
+            print(f"  [PASS] Structured content with {found_module['tcolorboxes']} colored boxes")
 
         words_per_section = found_module['words'] / max(len(found_module['sections']), 1)
         if words_per_section > 200:
-            print(f"  ⚠️  Sections might be too long (avg {words_per_section:.0f} words/section)")
+            print(f"  [WARN]  Sections might be too long (avg {words_per_section:.0f} words/section)")
         elif words_per_section > 100:
-            print(f"  ✅ Good section length (avg {words_per_section:.0f} words/section)")
+            print(f"  [PASS] Good section length (avg {words_per_section:.0f} words/section)")
         else:
-            print(f"  ✅ Concise sections (avg {words_per_section:.0f} words/section)")
+            print(f"  [PASS] Concise sections (avg {words_per_section:.0f} words/section)")
 
     elif args.command == 'validate':
         if args.module:
@@ -393,39 +393,39 @@ def main():
                     break
 
             if not found_module:
-                print(f"❌ Module '{args.module}' not found")
+                print(f"[FAIL] Module '{args.module}' not found")
                 return
 
-            print(f"\n🔍 LaTeX Syntax Validation: {Path(found_module['filepath']).stem}")
+            print(f"\n[SEARCH] LaTeX Syntax Validation: {Path(found_module['filepath']).stem}")
             print("=" * 60)
 
             if not found_module.get('syntax_issues'):
-                print("✅ No syntax issues found! Clean LaTeX code.")
+                print("[PASS] No syntax issues found! Clean LaTeX code.")
             else:
-                print(f"⚠️  Found {len(found_module['syntax_issues'])} potential issues:")
+                print(f"[WARN]  Found {len(found_module['syntax_issues'])} potential issues:")
                 for issue in found_module['syntax_issues']:
-                    print(f"  • {issue}")
+                    print(f"  * {issue}")
 
             # Additional validation checks
-            print(f"\n📋 CTMM Compliance Check:")
+            print(f"\n[TEST] CTMM Compliance Check:")
             if found_module['form_elements'] > 0:
-                print(f"  ✅ Interactive elements: {found_module['form_elements']} form fields")
+                print(f"  [PASS] Interactive elements: {found_module['form_elements']} form fields")
             else:
-                print(f"  ⚠️  No interactive elements found")
+                print(f"  [WARN]  No interactive elements found")
 
             if found_module['colors']:
-                print(f"  ✅ CTMM colors used: {len(found_module['colors'])} different colors")
+                print(f"  [PASS] CTMM colors used: {len(found_module['colors'])} different colors")
             else:
-                print(f"  ⚠️  No CTMM colors found")
+                print(f"  [WARN]  No CTMM colors found")
 
             if found_module['tcolorboxes'] > 0:
-                print(f"  ✅ Structured content: {found_module['tcolorboxes']} colored boxes")
+                print(f"  [PASS] Structured content: {found_module['tcolorboxes']} colored boxes")
             else:
-                print(f"  ⚠️  No structured colored boxes found")
+                print(f"  [WARN]  No structured colored boxes found")
 
         else:
             # Validate all modules
-            print("🔍 Validating all modules...")
+            print("[SEARCH] Validating all modules...")
             helper.scan_modules_directory(args.modules_dir)
 
             total_issues = 0
@@ -440,19 +440,19 @@ def main():
                             'issues': module['syntax_issues']
                         })
 
-            print(f"\n📊 Validation Summary:")
+            print(f"\n[SUMMARY] Validation Summary:")
             print(f"Total modules checked: {sum(len(modules) for modules in helper.stats['modules'].values())}")
             print(f"Modules with issues: {len(modules_with_issues)}")
             print(f"Total issues found: {total_issues}")
 
             if modules_with_issues:
-                print(f"\n⚠️  Modules with syntax issues:")
+                print(f"\n[WARN]  Modules with syntax issues:")
                 for module_info in modules_with_issues:
-                    print(f"\n📄 {module_info['name']}:")
+                    print(f"\n[FILE] {module_info['name']}:")
                     for issue in module_info['issues']:
-                        print(f"  • {issue}")
+                        print(f"  * {issue}")
             else:
-                print(f"\n✅ All modules passed validation! Clean codebase.")
+                print(f"\n[PASS] All modules passed validation! Clean codebase.")
 
 if __name__ == '__main__':
     main()

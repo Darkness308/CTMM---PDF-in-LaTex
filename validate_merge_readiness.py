@@ -176,7 +176,7 @@ def validate_file(filepath):
 
 def main():
     """Main validation function."""
-    print("🔍 CTMM Merge Readiness Validation")
+    print("[SEARCH] CTMM Merge Readiness Validation")
     print("=" * 70)
     print("Task: Identify conflicts and disturbing characters in files")
     print("      (German: 'störenden zeichen')")
@@ -200,7 +200,7 @@ def main():
     # Filter out .git directory
     files_to_check = [f for f in files_to_check if '.git' not in str(f)]
 
-    print(f"📊 Checking {len(files_to_check)} files...")
+    print(f"[SUMMARY] Checking {len(files_to_check)} files...")
     print()
 
     files_with_issues = []
@@ -215,55 +215,55 @@ def main():
 
     # Print results
     print("=" * 70)
-    print("📋 VALIDATION RESULTS")
+    print("[TEST] VALIDATION RESULTS")
     print("=" * 70)
     print(f"Total files checked: {total_checked}")
     print(f"Files with issues: {len(files_with_issues)}")
     print()
 
     if files_with_issues:
-        print("⚠️  ISSUES FOUND:")
+        print("[WARN]  ISSUES FOUND:")
         print()
 
         for result in files_with_issues:
-            print(f"📄 {result['filepath']}")
+            print(f"[FILE] {result['filepath']}")
             print("-" * 70)
 
             if result['merge_conflicts']:
-                print("  ❌ MERGE CONFLICTS:")
+                print("  [FAIL] MERGE CONFLICTS:")
                 for issue in result['merge_conflicts']:
-                    print(f"     • {issue}")
+                    print(f"     * {issue}")
                 print()
 
             if result['problematic_chars']:
-                print("  ⚠️  PROBLEMATIC CHARACTERS:")
+                print("  [WARN]  PROBLEMATIC CHARACTERS:")
                 for issue in result['problematic_chars']:
-                    print(f"     • {issue}")
+                    print(f"     * {issue}")
                 print()
 
             if result['latex_issues']:
-                print("  ⚠️  LATEX ISSUES:")
+                print("  [WARN]  LATEX ISSUES:")
                 for issue in result['latex_issues']:
-                    print(f"     • {issue}")
+                    print(f"     * {issue}")
                 print()
 
             print()
 
         print("=" * 70)
-        print("❌ VALIDATION FAILED")
+        print("[FAIL] VALIDATION FAILED")
         print(f"Found issues in {len(files_with_issues)} file(s)")
         print()
         print("Action required: Review and fix the issues listed above")
         return 1
     else:
-        print("✅ NO ISSUES FOUND")
+        print("[PASS] NO ISSUES FOUND")
         print()
         print("All checked files are clean:")
-        print("  • No merge conflict markers")
-        print("  • No problematic characters (BOM, control chars, zero-width)")
-        print("  • No obvious LaTeX escaping issues")
+        print("  * No merge conflict markers")
+        print("  * No problematic characters (BOM, control chars, zero-width)")
+        print("  * No obvious LaTeX escaping issues")
         print()
-        print("✅ Repository is ready for merge")
+        print("[PASS] Repository is ready for merge")
         return 0
 
 

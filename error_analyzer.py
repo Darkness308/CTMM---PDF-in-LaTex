@@ -346,7 +346,7 @@ def main():
 
     analyzer = ErrorAnalyzer()
 
-    print("🔍 Testing Error Analyzer")
+    print("[SEARCH] Testing Error Analyzer")
     print("=" * 50)
 
     # Test with sample log content
@@ -374,21 +374,21 @@ def main():
     analysis = analyzer.analyze_logs(12345, "latex-build.yml", sample_logs)
 
     # Print results
-    print(f"✅ Analysis completed:")
+    print(f"[PASS] Analysis completed:")
     print(f"   - Total errors: {analysis.total_errors}")
     print(f"   - Categories: {', '.join(analysis.error_categories)}")
     print(f"   - Solvable: {analysis.is_solvable}")
 
-    print("\n📋 Error Summary:")
+    print("\n[TEST] Error Summary:")
     print(analyzer.get_error_summary(analysis))
 
-    print("\n🔧 Testing specific value extraction:")
+    print("\n[FIX] Testing specific value extraction:")
     for category in analysis.error_categories:
         values = analyzer.extract_specific_values(analysis, category)
         if values:
             print(f"   - {category}: {', '.join(values)}")
 
-    print("\n✅ Error analyzer test completed")
+    print("\n[PASS] Error analyzer test completed")
 
 if __name__ == "__main__":
     main()

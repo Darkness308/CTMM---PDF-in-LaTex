@@ -86,12 +86,17 @@ def check_missing_files(files):
 
 
 def create_template(file_path):
-    """Create a minimal template for a missing file."""
-    path = Path(file_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
+    """Create a minimal template for a missing file.
+    
+    Returns:
+        bool: True if template creation succeeded, False otherwise
+    """
+    try:
+        path = Path(file_path)
+        path.parent.mkdir(parents=True, exist_ok=True)
 
-    if file_path.endswith('.sty'):
-        content = f"""% {path.name} - CTMM Style Package
+        if file_path.endswith('.sty'):
+            content = f"""% {path.name} - CTMM Style Package
 % TODO: Add content for this style package
 
 \\NeedsTeXFormat{{LaTeX2e}}
@@ -101,8 +106,8 @@ def create_template(file_path):
 
 % End of package
 """
-    else:
-        content = f"""% {path.name} - CTMM Module
+        else:
+            content = f"""% {path.name} - CTMM Module
 % TODO: Add content for this module
 
 \\section{{TODO: {filename_to_title(path.stem)}}}
@@ -115,12 +120,12 @@ def create_template(file_path):
 % TODO: Complete implementation
 """
 
-    with open(path, 'w', encoding='utf-8') as f:
-        f.write(content)
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(content)
 
-    # Create TODO file
-    todo_path = path.parent / f"TODO_{path.stem}.md"
-    todo_content = f"""# TODO: Complete {path.name}
+        # Create TODO file
+        todo_path = path.parent / f"TODO_{path.stem}.md"
+        todo_content = f"""# TODO: Complete {path.name}
 
 **Status:** Template created, needs content
 
@@ -131,8 +136,13 @@ def create_template(file_path):
 
 Created by CTMM Build System
 """
-    with open(todo_path, 'w', encoding='utf-8') as f:
-        f.write(todo_content)
+        with open(todo_path, 'w', encoding='utf-8') as f:
+            f.write(todo_content)
+        
+        return True
+    except Exception as e:
+        logger.error("Failed to create template for %s: %s", file_path, e)
+        return False
 
 
 def test_basic_build(main_tex_path="main.tex"):
@@ -144,7 +154,7 @@ def test_basic_build(main_tex_path="main.tex"):
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
     except (subprocess.CalledProcessError, FileNotFoundError):
         logger.warning("pdflatex not found - skipping LaTeX compilation test")
-        logger.info("✓ Basic structure test passed (LaTeX not available)")
+        logger.info("[OK] Basic structure test passed (LaTeX not available)")
         return True
 
     try:
@@ -184,10 +194,10 @@ def test_basic_build(main_tex_path="main.tex"):
         success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
 
         if success:
-            logger.info("✓ Basic build successful")
-            logger.info("✓ Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
+            logger.info("[OK] Basic build successful")
+            logger.info("[OK] Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
         else:
-            logger.error("✗ Basic build failed")
+            logger.error("[X] Basic build failed")
             if result.returncode != 0:
                 logger.error("LaTeX compilation returned error code: %d", result.returncode)
             if not pdf_exists:
@@ -218,7 +228,7 @@ def test_full_build(main_tex_path="main.tex"):
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
     except (subprocess.CalledProcessError, FileNotFoundError):
         logger.warning("pdflatex not found - skipping LaTeX compilation test")
-        logger.info("✓ Full structure test passed (LaTeX not available)")
+        logger.info("[OK] Full structure test passed (LaTeX not available)")
         return True
 
     try:
@@ -239,10 +249,10 @@ def test_full_build(main_tex_path="main.tex"):
         success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
 
         if success:
-            logger.info("✓ Full build successful")
-            logger.info("✓ PDF generated successfully (%.2f KB)", pdf_size / 1024)
+            logger.info("[OK] Full build successful")
+            logger.info("[OK] PDF generated successfully (%.2f KB)", pdf_size / 1024)
         else:
-            logger.error("✗ Full build failed")
+            logger.error("[X] Full build failed")
             if result.returncode != 0:
                 logger.error("LaTeX compilation returned error code: %d", result.returncode)
             if not pdf_exists:
@@ -287,7 +297,7 @@ def validate_latex_files():
                     issues_found = True
 
     if not issues_found:
-        logger.info("✓ No LaTeX escaping issues found")
+        logger.info("[OK] No LaTeX escaping issues found")
 
     return not issues_found
 
@@ -326,7 +336,7 @@ def main():
     try:
         latex_valid = validate_latex_files()
         build_data["latex_validation"]["passed"] = latex_valid
-        print(f"✓ LaTeX validation: {'PASS' if latex_valid else 'ISSUES FOUND'}")
+        print(f"[OK] LaTeX validation: {'PASS' if latex_valid else 'ISSUES FOUND'}")
     except Exception as e:
         logger.error("LaTeX validation failed: %s", e)
         build_data["latex_validation"]["errors"].append(str(e))
@@ -338,7 +348,7 @@ def main():
     try:
         form_valid = validate_form_fields()
         build_data["form_validation"] = {"passed": form_valid, "errors": []}
-        print(f"✓ Form field validation: {'PASS' if form_valid else 'ISSUES FOUND'}")
+        print(f"[OK] Form field validation: {'PASS' if form_valid else 'ISSUES FOUND'}")
     except Exception as e:
         logger.error("Form field validation failed: %s", e)
         build_data["form_validation"] = {"passed": False, "errors": [str(e)]}
@@ -378,7 +388,7 @@ def main():
         if total_missing > 0:
             print(f"Found {total_missing} missing files")
         else:
-            print("✓ All referenced files exist")
+            print("[OK] All referenced files exist")
     except Exception as e:
         logger.error("File existence check failed: %s", e)
         missing_files = []
@@ -391,13 +401,12 @@ def main():
         try:
             created_count = 0
             for file_path in missing_files:
-                logger.info("Creating template: %s", file_path)
-                create_template(file_path)
-                created_count += 1
-                build_data["template_creation"]["created_files"].append(file_path)
-
+                if create_template(file_path):
+                    created_count += 1
+                    build_data["template_creation"]["created_files"].append(file_path)
+            
             build_data["template_creation"]["created_count"] = created_count
-            print(f"✓ Created {created_count} template files")
+            print(f"[OK] Created {created_count} template files")
         except Exception as e:
             logger.error("Template creation failed: %s", e)
 
@@ -409,7 +418,7 @@ def main():
         build_data["build_testing"]["basic_passed"] = basic_ok
 
         if not basic_ok:
-            print("⚠️  Basic framework has issues. Please fix before testing modules.")
+            print("[WARN]  Basic framework has issues. Please fix before testing modules.")
             return _generate_exit_code(build_data)
     except Exception as e:
         logger.error("Basic build test failed: %s", e)
@@ -443,13 +452,13 @@ def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_
     print("\n" + "="*50)
     print("CTMM BUILD SYSTEM SUMMARY")
     print("="*50)
-    print(f"LaTeX validation: {'✓ PASS' if latex_valid else '✗ ISSUES FOUND'}")
-    print(f"Form field validation: {'✓ PASS' if form_valid else '✗ ISSUES FOUND'}")
+    print(f"LaTeX validation: {'[OK] PASS' if latex_valid else '[X] ISSUES FOUND'}")
+    print(f"Form field validation: {'[OK] PASS' if form_valid else '[X] ISSUES FOUND'}")
     print(f"Style files: {style_count}")
     print(f"Module files: {module_count}")
     print(f"Missing files: {total_missing} (templates created)")
-    print(f"Basic build: {'✓ PASS' if basic_ok else '✗ FAIL'}")
-    print(f"Full build: {'✓ PASS' if full_ok else '✗ FAIL'}")
+    print(f"Basic build: {'[OK] PASS' if basic_ok else '[X] FAIL'}")
+    print(f"Full build: {'[OK] PASS' if full_ok else '[X] FAIL'}")
 
     if missing_files:
         print("\nNEXT STEPS:")
@@ -521,20 +530,20 @@ def comprehensive_build_workflow():
 
     # Provide detailed reporting
     if results["validation_passed"]:
-        logger.info("✓ Comprehensive build workflow completed successfully")
+        logger.info("[OK] Comprehensive build workflow completed successfully")
         print("\n" + "="*60)
         print("COMPREHENSIVE BUILD MANAGEMENT SUMMARY")
         print("="*60)
-        print("✅ Enhanced automation: OPERATIONAL")
-        print("✅ Error detection: ACTIVE")
-        print("✅ File management: OPTIMIZED")
-        print("✅ CI/CD reliability: VERIFIED")
+        print("[PASS] Enhanced automation: OPERATIONAL")
+        print("[PASS] Error detection: ACTIVE")
+        print("[PASS] File management: OPTIMIZED")
+        print("[PASS] CI/CD reliability: VERIFIED")
         for improvement in results["automation_improvements"]:
-            print(f"   • {improvement}")
+            print(f"   * {improvement}")
         print("="*60)
         return True
     else:
-        logger.error("✗ Comprehensive build workflow failed")
+        logger.error("[X] Comprehensive build workflow failed")
         return False
 
 

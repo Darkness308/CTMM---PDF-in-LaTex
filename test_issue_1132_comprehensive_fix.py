@@ -55,7 +55,7 @@ class TestLaTeXEscapingFixTool(unittest.TestCase):
         self.assertGreaterEqual(escaping_patterns, 25,
                                f"Escaping patterns alone should be 25+, found {escaping_patterns}")
 
-        print(f"✓ Pattern count verification: {escaping_patterns} escaping + {cleanup_patterns} cleanup = {total_patterns} total patterns")
+        print(f"[OK] Pattern count verification: {escaping_patterns} escaping + {cleanup_patterns} cleanup = {total_patterns} total patterns")
 
     def test_comprehensive_over_escaping_patterns(self):
         """Test comprehensive over-escaping patterns that occur with pandoc conversion."""
@@ -117,16 +117,16 @@ class TestLaTeXEscapingFixTool(unittest.TestCase):
                         self.assertLessEqual(output_backslash_count, input_backslash_count,
                                            f"Should reduce textbackslash occurrences for: {test_case['description']}")
 
-                print(f"✓ Test case {i}: {test_case['description']} - {replacements} replacements")
+                print(f"[OK] Test case {i}: {test_case['description']} - {replacements} replacements")
 
     def test_multi_pass_processing(self):
         """Test that the multi-pass processing algorithm works correctly."""
         # Create a complex over-escaped document
         complex_content = r"""
 \textbackslash{}hypertarget\textbackslash{}\{tool-23\textbackslash{}\}\textbackslash{}\{%
-\textbackslash{}section\textbackslash{}\{\textbackslash{}texorpdfstring\textbackslash{}\{📄 \textbackslash{}textbf\textbackslash{}\{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}\textbackslash{}\{📄 TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}
+\textbackslash{}section\textbackslash{}\{\textbackslash{}texorpdfstring\textbackslash{}\{[FILE] \textbackslash{}textbf\textbackslash{}\{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}\textbackslash{}\{[FILE] TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}
 
-🧩 \textbackslash{}emph\textbackslash{}\{\textbackslash{}textbf\textbackslash{}\{Modul zur Selbsthilfe \textbackslash{}\textbackslash{}\& Co-Regulation\textbackslash{}\}\textbackslash{}\}
+[EMOJI] \textbackslash{}emph\textbackslash{}\{\textbackslash{}textbf\textbackslash{}\{Modul zur Selbsthilfe \textbackslash{}\textbackslash{}\& Co-Regulation\textbackslash{}\}\textbackslash{}\}
 
 \textbackslash{}begin\textbackslash{}\{itemize\textbackslash{}\}
 \textbackslash{}item Test item
@@ -157,7 +157,7 @@ class TestLaTeXEscapingFixTool(unittest.TestCase):
         self.assertIn(r'\hypertarget', output)
         self.assertIn(r'\section', output)
 
-        print(f"✓ Multi-pass processing: {replacements} replacements made, reduced \\textbackslash{{}} from {initial_backslash_count} to {final_backslash_count}")
+        print(f"[OK] Multi-pass processing: {replacements} replacements made, reduced \\textbackslash{{}} from {initial_backslash_count} to {final_backslash_count}")
 
     def test_file_statistics_tracking(self):
         """Test that the tool properly tracks processing statistics."""
@@ -194,7 +194,7 @@ class TestLaTeXEscapingFixTool(unittest.TestCase):
         self.assertGreaterEqual(files_changed, 1, "At least one file should have been changed")
         self.assertGreater(total_replacements, 0, "Should have made some replacements")
 
-        print(f"✓ Statistics tracking: {len(test_files)} files processed, {files_changed} changed, {total_replacements} total replacements")
+        print(f"[OK] Statistics tracking: {len(test_files)} files processed, {files_changed} changed, {total_replacements} total replacements")
 
 
 class TestEnhancedPDFValidation(unittest.TestCase):
@@ -260,7 +260,7 @@ This is a test document for PDF validation.
             self.assertIn(pattern, full_build_source,
                          f"Enhanced validation pattern '{pattern}' not found in full build")
 
-        print("✓ Enhanced PDF validation logic verified in build functions")
+        print("[OK] Enhanced PDF validation logic verified in build functions")
 
     def test_pdf_size_validation_logic(self):
         """Test that PDF size validation logic works correctly."""
@@ -285,7 +285,7 @@ This is a test document for PDF validation.
         success = small_pdf.exists() and pdf_size > 1024
         self.assertTrue(success, "Large PDF should pass enhanced validation")
 
-        print(f"✓ PDF size validation: small PDF failed, large PDF ({pdf_size} bytes) passed")
+        print(f"[OK] PDF size validation: small PDF failed, large PDF ({pdf_size} bytes) passed")
 
     def test_build_function_integration(self):
         """Test that build functions integrate enhanced validation correctly."""
@@ -301,12 +301,12 @@ This is a test document for PDF validation.
             full_result = test_full_build()
             self.assertIsInstance(full_result, bool, "test_full_build should return boolean")
 
-            print("✓ Build function integration: Functions callable and return expected types")
+            print("[OK] Build function integration: Functions callable and return expected types")
 
         except Exception as e:
             # If functions fail due to missing pdflatex, that's expected
             if "pdflatex not found" in str(e) or "FileNotFoundError" in str(e):
-                print("✓ Build function integration: Functions properly handle missing pdflatex")
+                print("[OK] Build function integration: Functions properly handle missing pdflatex")
             else:
                 raise
 
@@ -317,7 +317,7 @@ class TestComprehensiveValidation(unittest.TestCase):
     def test_latex_validator_integration(self):
         """Test that LaTeX validator integration works correctly."""
         self.assertTrue(validate_latex_files(), "LaTeX validation should pass for clean repository")
-        print("✓ LaTeX validator integration working")
+        print("[OK] LaTeX validator integration working")
 
     def test_error_handling_robustness(self):
         """Test that error handling is robust and comprehensive."""
@@ -329,7 +329,7 @@ class TestComprehensiveValidation(unittest.TestCase):
         self.assertFalse(changed, "Non-existent file should not be changed")
         self.assertEqual(replacements, 0, "Non-existent file should have 0 replacements")
 
-        print("✓ Error handling robustness verified")
+        print("[OK] Error handling robustness verified")
 
     def test_comprehensive_functionality_integration(self):
         """Test that all components work together comprehensively."""
@@ -356,11 +356,11 @@ class TestComprehensiveValidation(unittest.TestCase):
         except Exception as e:
             # Handle expected failures when pdflatex is not available
             if "pdflatex" in str(e).lower():
-                print("✓ Build system handles missing pdflatex correctly")
+                print("[OK] Build system handles missing pdflatex correctly")
             else:
                 raise
 
-        print("✓ Comprehensive functionality integration verified")
+        print("[OK] Comprehensive functionality integration verified")
 
 
 def main():
@@ -410,10 +410,10 @@ def main():
     print(f"\nSuccess rate: {success_rate:.1f}%")
 
     if result.wasSuccessful():
-        print("\n✅ ALL TESTS PASSED - Issue #1132 implementation validated successfully!")
+        print("\n[PASS] ALL TESTS PASSED - Issue #1132 implementation validated successfully!")
         return 0
     else:
-        print("\n❌ SOME TESTS FAILED - Check implementation")
+        print("\n[FAIL] SOME TESTS FAILED - Check implementation")
         return 1
 
 

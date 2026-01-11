@@ -16,18 +16,18 @@ from pathlib import Path
 
 def run_command(cmd, description=""):
     """Run a command and return success status and output."""
-    print(f"🔧 {description}")
+    print(f"[FIX] {description}")
     try:
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=Path.cwd())
         return result.returncode == 0, result.stdout, result.stderr
     except Exception as e:
-        print(f"❌ Error running command: {e}")
+        print(f"[FAIL] Error running command: {e}")
         return False, "", str(e)
 
 def check_file_exists(filepath, description=""):
     """Check if a file exists and report status."""
     exists = os.path.exists(filepath)
-    status = "✅" if exists else "❌"
+    status = "[PASS]" if exists else "[FAIL]"
     print(f"{status} {description}: {filepath}")
     return exists
 
@@ -40,12 +40,12 @@ def validate_issue_708_resolution():
     all_checks_passed = True
 
     # 1. Check that resolution documentation exists
-    print("\n📄 Resolution Documentation Check:")
+    print("\n[FILE] Resolution Documentation Check:")
     if not check_file_exists("ISSUE_708_RESOLUTION.md", "Issue #708 specific documentation"):
         all_checks_passed = False
 
     # 2. Verify meaningful changes for Copilot review
-    print("\n📊 Change Analysis:")
+    print("\n[SUMMARY] Change Analysis:")
     # Try different base comparison options
     base_options = ["main..HEAD", "origin/main..HEAD", "HEAD~2..HEAD"]
     comparison_base = None
@@ -55,13 +55,13 @@ def validate_issue_708_resolution():
         if success and stdout.strip():
             comparison_base = base_option
             changed_files = stdout.strip().split('\n')
-            print(f"✅ Files changed: {len(changed_files)} (compared to {base_option})")
+            print(f"[PASS] Files changed: {len(changed_files)} (compared to {base_option})")
             for file in changed_files:
                 print(f"   - {file}")
             break
 
     if not comparison_base:
-        print("❌ No file changes detected in any comparison")
+        print("[FAIL] No file changes detected in any comparison")
         all_checks_passed = False
 
     # 3. Check line statistics
@@ -81,35 +81,35 @@ def validate_issue_708_resolution():
                     total_deleted += deleted
                 except ValueError:
                     pass
-        print(f"✅ Lines added: {total_added}")
-        print(f"✅ Lines deleted: {total_deleted}")
+        print(f"[PASS] Lines added: {total_added}")
+        print(f"[PASS] Lines deleted: {total_deleted}")
 
         if total_added > 0 or total_deleted > 0:
-            print("✅ Meaningful changes detected for Copilot review")
+            print("[PASS] Meaningful changes detected for Copilot review")
         else:
-            print("❌ No meaningful content changes")
+            print("[FAIL] No meaningful content changes")
             all_checks_passed = False
 
     # 4. Validate existing infrastructure still works
-    print("\n🔧 Infrastructure Validation:")
+    print("\n[FIX] Infrastructure Validation:")
 
     # Check PR validation system
     success, stdout, stderr = run_command("python3 validate_pr.py --skip-build", "PR validation system")
     if success:
-        print("✅ PR validation system operational")
+        print("[PASS] PR validation system operational")
     else:
-        print("⚠️  PR validation system check completed (exit code indicates validation state)")
+        print("[WARN]  PR validation system check completed (exit code indicates validation state)")
         # This is expected if there are changes to validate
 
     # Check CTMM build system
     success, stdout, stderr = run_command("python3 ctmm_build.py", "CTMM build system")
     if success:
-        print("✅ CTMM build system operational")
+        print("[PASS] CTMM build system operational")
     else:
-        print("⚠️  CTMM build system check (may be expected without LaTeX)")
+        print("[WARN]  CTMM build system check (may be expected without LaTeX)")
 
     # 5. Verify integration with previous resolutions
-    print("\n📚 Previous Resolution Integration:")
+    print("\n[BOOKS] Previous Resolution Integration:")
     previous_resolutions = [
         "COPILOT_ISSUE_RESOLUTION.md",
         "ISSUE_667_RESOLUTION.md",
@@ -124,7 +124,7 @@ def validate_issue_708_resolution():
             all_checks_passed = False
 
     # 6. Validation tools check
-    print("\n🛠️  Validation Tools Check:")
+    print("\n[TOOL]  Validation Tools Check:")
     validation_tools = [
         "validate_pr.py",
         "verify_copilot_fix.py",
@@ -152,16 +152,16 @@ def validate_copilot_readiness():
     for base_option in base_options:
         success, stdout, stderr = run_command(f"git diff --stat {base_option}", f"Change statistics ({base_option})")
         if success and stdout.strip():
-            print(f"✅ Diff statistics available ({base_option}):")
+            print(f"[PASS] Diff statistics available ({base_option}):")
             print(stdout.strip())
             return True
 
-    print("❌ No diff statistics available")
+    print("[FAIL] No diff statistics available")
     return False
 
 def main():
     """Main verification function."""
-    print("🎯 Issue #708 Resolution Verification")
+    print("[TARGET] Issue #708 Resolution Verification")
     print("=" * 70)
     print("Verifying that 'Copilot wasn't able to review any files in this pull request' has been resolved.")
     print()
@@ -178,25 +178,25 @@ def main():
     print("=" * 70)
 
     if resolution_valid and copilot_ready:
-        print("🎉 SUCCESS: Issue #708 Resolution Verified")
+        print("[SUCCESS] SUCCESS: Issue #708 Resolution Verified")
         print()
-        print("✅ Resolution documentation created")
-        print("✅ Meaningful changes implemented")
-        print("✅ All validation systems operational")
-        print("✅ Integration with previous fixes maintained")
-        print("✅ Copilot review readiness confirmed")
+        print("[PASS] Resolution documentation created")
+        print("[PASS] Meaningful changes implemented")
+        print("[PASS] All validation systems operational")
+        print("[PASS] Integration with previous fixes maintained")
+        print("[PASS] Copilot review readiness confirmed")
         print()
-        print("🎯 GitHub Copilot can now review this PR successfully")
+        print("[TARGET] GitHub Copilot can now review this PR successfully")
         return True
     else:
-        print("❌ INCOMPLETE: Some verification checks failed")
+        print("[FAIL] INCOMPLETE: Some verification checks failed")
         print()
         if not resolution_valid:
-            print("❌ Resolution validation failed")
+            print("[FAIL] Resolution validation failed")
         if not copilot_ready:
-            print("❌ Copilot readiness check failed")
+            print("[FAIL] Copilot readiness check failed")
         print()
-        print("⚠️  Please address the issues above")
+        print("[WARN]  Please address the issues above")
         return False
 
 if __name__ == "__main__":

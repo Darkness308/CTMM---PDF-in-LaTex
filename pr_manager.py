@@ -231,13 +231,13 @@ class PRManager:
         """Generate the body content for the pull request."""
         lines = []
 
-        lines.append("## 🔧 Automated Workflow Healing")
+        lines.append("## [FIX] Automated Workflow Healing")
         lines.append("")
         lines.append("This PR contains automated fixes for workflow errors identified by the healing system.")
         lines.append("")
 
         # Workflow information
-        lines.append("### 📋 Workflow Information")
+        lines.append("### [TEST] Workflow Information")
         lines.append(f"- **Workflow**: {analysis.workflow_name}")
         lines.append(f"- **Run ID**: {analysis.workflow_run_id}")
         lines.append(f"- **Error Categories**: {', '.join(analysis.error_categories)}")
@@ -245,7 +245,7 @@ class PRManager:
         lines.append("")
 
         # Applied fixes
-        lines.append("### ✅ Applied Fixes")
+        lines.append("### [PASS] Applied Fixes")
         lines.append("")
 
         successful_fixes = [r for r in fix_results if r.success]
@@ -258,11 +258,11 @@ class PRManager:
             if result.changes_made:
                 for change in result.changes_made:
                     lines.append(f"   - {change}")
-            lines.append(f"   - Validation: {'✅ Passed' if result.validation_passed else '⚠️ Skipped'}")
+            lines.append(f"   - Validation: {'[PASS] Passed' if result.validation_passed else '[WARN] Skipped'}")
             lines.append("")
 
         if failed_fixes:
-            lines.append("### ❌ Failed Fixes")
+            lines.append("### [FAIL] Failed Fixes")
             lines.append("")
             for i, result in enumerate(failed_fixes, 1):
                 lines.append(f"**{i}. {result.description}**")
@@ -271,18 +271,18 @@ class PRManager:
                 lines.append("")
 
         # Recommendations
-        lines.append("### 📝 Recommendations")
+        lines.append("### [NOTE] Recommendations")
         lines.append("")
         if analysis.recommended_fixes:
             for i, fix in enumerate(analysis.recommended_fixes, 1):
-                status = "✅" if any(fix.lower() in r.description.lower() for r in successful_fixes) else "🔄"
+                status = "[PASS]" if any(fix.lower() in r.description.lower() for r in successful_fixes) else "[SYNC]"
                 lines.append(f"{i}. {status} {fix}")
         else:
             lines.append("No specific recommendations generated.")
         lines.append("")
 
         # Testing instructions
-        lines.append("### 🧪 Testing")
+        lines.append("### [TEST] Testing")
         lines.append("")
         lines.append("After merging this PR, the following workflows should be tested:")
         lines.append("")
@@ -296,7 +296,7 @@ class PRManager:
         lines.append("*This PR was created automatically by the CTMM Workflow Healing System.*")
         lines.append(f"*Analysis timestamp: {analysis.analysis_timestamp}*")
         lines.append("")
-        lines.append("**⚠️ Manual Review Required**: Please review all changes before merging.")
+        lines.append("**[WARN] Manual Review Required**: Please review all changes before merging.")
 
         return '\n'.join(lines)
 
@@ -408,7 +408,7 @@ class PRManager:
             response.raise_for_status()
 
             # Add a comment explaining why it was closed
-            self._add_pr_comment(pr_number, f"🤖 {reason}")
+            self._add_pr_comment(pr_number, f"[EMOJI] {reason}")
 
             self.logger.info(f"Closed PR #{pr_number}: {reason}")
             return True
@@ -436,21 +436,21 @@ def main():
 
     pr_manager = PRManager()
 
-    print("🔧 Testing PR Manager")
+    print("[FIX] Testing PR Manager")
     print("=" * 50)
 
     # Test configuration validation
     config_issues = config.validate_config()
     if config_issues:
-        print("❌ Configuration Issues:")
+        print("[FAIL] Configuration Issues:")
         for issue in config_issues:
             print(f"   - {issue}")
         return
 
-    print("✅ Configuration validated")
+    print("[PASS] Configuration validated")
 
     # Check for existing healing PRs
-    print("\n📋 Checking for existing healing PRs...")
+    print("\n[TEST] Checking for existing healing PRs...")
     healing_prs = pr_manager._get_open_healing_prs()
     print(f"Found {len(healing_prs)} existing healing PRs")
 
@@ -458,7 +458,7 @@ def main():
         print(f"   - PR #{pr['number']}: {pr['title']}")
 
     # Test stale PR cleanup (dry run)
-    print("\n🧹 Testing stale PR detection...")
+    print("\n[EMOJI] Testing stale PR detection...")
     if healing_prs:
         for pr in healing_prs:
             created_at = datetime.fromisoformat(pr['created_at'].replace('Z', '+00:00'))
@@ -467,7 +467,7 @@ def main():
     else:
         print("   No healing PRs to check")
 
-    print("\n✅ PR manager test completed")
+    print("\n[PASS] PR manager test completed")
 
 if __name__ == "__main__":
     main()

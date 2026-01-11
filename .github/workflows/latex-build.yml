@@ -98,18 +98,20 @@ jobs:
 
       - name: Set up LaTeX
         timeout-minutes: 15
-        uses: xu-cheng/latex-action@v3
+        uses: dante-ev/latex-action@v0.2.0
         with:
           root_file: main.tex
           args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
           # Required LaTeX packages for CTMM therapeutic materials system:
           # - texlive-lang-european: European languages support including German (babel)
+          # - texlive-lang-german: German language support (required for ngerman babel)
           # - texlive-fonts-recommended/extra: Font packages
           # - texlive-latex-recommended/extra: Core LaTeX packages
           # - texlive-science: Scientific packages
           # - texlive-pstricks: Provides pifont package for form element symbols (Issue #739, #743)
           extra_system_packages: |
             texlive-lang-european
+            texlive-lang-german
             texlive-fonts-recommended
             texlive-latex-recommended
             texlive-latex-extra
@@ -121,8 +123,11 @@ jobs:
         run: |
           echo "🔍 Enhanced PDF verification and analysis..."
 
-          # Check for PDF in current directory (xu-cheng/latex-action output location)
-          if [ -f "main.pdf" ]; then
+          # Check for PDF in build directory (dante-ev/latex-action output location)
+          if [ -f "build/main.pdf" ]; then
+            echo "✅ PDF successfully generated in build directory"
+            PDF_LOCATION="build/main.pdf"
+          elif [ -f "main.pdf" ]; then
             echo "✅ PDF successfully generated in current directory"
             PDF_LOCATION="main.pdf"
           else
@@ -179,7 +184,7 @@ jobs:
 
           # Verify FontAwesome package support
           echo "🔍 Checking FontAwesome package support..."
-          if grep -q "fontawesome5" main.log 2>/dev/null; then
+          if grep -q "fontawesome5" build/main.log 2>/dev/null || grep -q "fontawesome5" main.log 2>/dev/null; then
             echo "✅ FontAwesome5 package was loaded successfully"
           else
             echo "⚠️  FontAwesome5 package loading status unknown"
@@ -198,7 +203,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CTMM_PDF
-          path: main.pdf
+          path: |
+            build/main.pdf
+            main.pdf
 
       - name: Upload build logs (on failure)
         if: failure()
