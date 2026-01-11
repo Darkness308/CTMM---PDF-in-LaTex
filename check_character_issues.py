@@ -31,8 +31,10 @@ PROBLEMATIC_CHARS = {
     # Typographic characters (common in copy-pasted text)
     '\u2018': "Left single quotation mark (U+2018) - use ` in LaTeX",
     '\u2019': "Right single quotation mark (U+2019) - use ' in LaTeX",
+    '\u201A': "German opening single quote (U+201A) - use ` in LaTeX",
     '\u201C': 'Left double quotation mark (U+201C) - use `` in LaTeX',
     '\u201D': 'Right double quotation mark (U+201D) - use \'\' in LaTeX',
+    '\u201E': 'German opening double quote (U+201E) - use `` in LaTeX',
     '\u2013': 'En dash (U+2013) - use -- in LaTeX or regular hyphen',
     '\u2014': 'Em dash (U+2014) - use --- in LaTeX or regular hyphen',
     '\u2026': 'Horizontal ellipsis (U+2026) - use \\ldots in LaTeX',
