@@ -65,8 +65,8 @@ Die folgenden potenziell störenden Zeichen wurden systematisch geprüft:
 ### Typografische Zeichen (Copy-Paste-Artefakte)
 - ✅ Typografische Anführungszeichen - nicht gefunden
 - ✅ Gedankenstriche (En-Dash, Em-Dash) - nicht gefunden
-- ✅ Horizontale Ellipse (…) - nicht gefunden
-- ✅ Aufzählungszeichen (•) - nicht gefunden
+- ✅ Horizontale Ellipse (U+2026) - nicht gefunden
+- ✅ Aufzählungszeichen (U+2022) - nicht gefunden
 
 ### Git-Merge-Konflikt-Markierungen
 - ✅ Keine `<<<<<<<` Markierungen gefunden
