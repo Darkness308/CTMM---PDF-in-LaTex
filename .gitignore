@@ -19,6 +19,7 @@ build_error_*.log
 main_basic_test.*
 *.temp.*
 *.test_*.*
+*.backup
 
 ## Workflow Healing System files:
 workflow_healing.log
