@@ -12,33 +12,33 @@ from pathlib import Path
 def check_file_for_issues(filepath):
     """Check a single file for problematic characters"""
     issues = []
-    
+
     try:
         with open(filepath, 'rb') as f:
             content = f.read()
-        
+
         # Check for null bytes
         if b'\x00' in content:
             issues.append('❌ Contains null bytes')
-        
+
         # Try UTF-8 decode
         try:
             text = content.decode('utf-8')
-            
+
             # Check for BOM
             if text.startswith('\ufeff'):
                 issues.append('⚠️  Has BOM (Byte Order Mark) at start')
-            
+
             # Check for zero-width characters
             zero_width = re.findall(r'[\u200B-\u200D\uFEFF]', text)
             if zero_width:
                 issues.append(f'⚠️  Contains {len(zero_width)} zero-width character(s)')
-            
+
             # Check for control characters (except standard whitespace)
             control_chars = re.findall(r'[\x01-\x08\x0B\x0C\x0E-\x1F]', text)
             if control_chars:
                 issues.append(f'⚠️  Contains {len(control_chars)} control character(s)')
-            
+
             # Check for merge conflict markers at line start
             if re.search(r'^<<<<<<< ', text, re.MULTILINE):
                 issues.append('❌ Contains merge conflict markers (<<<<<<< )')
@@ -46,13 +46,13 @@ def check_file_for_issues(filepath):
                 issues.append('❌ Contains merge conflict markers (>>>>>>> )')
             if re.search(r'^=======$', text, re.MULTILINE):
                 issues.append('❌ Contains merge conflict markers (=======)')
-            
+
         except UnicodeDecodeError as e:
             issues.append(f'❌ Invalid UTF-8 encoding: {e}')
-        
+
     except Exception as e:
         issues.append(f'❌ Error reading file: {e}')
-    
+
     return issues
 
 def main():
@@ -60,25 +60,25 @@ def main():
     print("PR #489 Resolution Verification")
     print("=" * 80)
     print()
-    
+
     # Key files to check that are modified by PR #489
     key_files = [
         '.github/copilot-instructions.md',
         'README.md',
         'main.tex',
     ]
-    
+
     print("🔍 Checking key files for problematic characters...")
     print()
-    
+
     all_clean = True
     for filepath in key_files:
         if not os.path.exists(filepath):
             print(f"⚠️  {filepath}: File not found")
             continue
-        
+
         issues = check_file_for_issues(filepath)
-        
+
         if issues:
             all_clean = False
             print(f"❌ {filepath}:")
@@ -91,13 +91,13 @@ def main():
             text = content.decode('utf-8')
             lines = len(text.splitlines())
             size = len(content)
-            
+
             print(f"✅ {filepath}")
             print(f"   📊 Size: {size:,} bytes, Lines: {lines:,}")
-    
+
     print()
     print("=" * 80)
-    
+
     if all_clean:
         print("✅ VERIFICATION PASSED: All files are clean and ready for merge!")
         print()

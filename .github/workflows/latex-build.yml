@@ -161,14 +161,14 @@ jobs:
         run: |
           echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -f "main.pdf" ]; then
             echo "✅ **PDF Generated Successfully**" >> $GITHUB_STEP_SUMMARY
             echo "- Main PDF: \`main.pdf\`" >> $GITHUB_STEP_SUMMARY
           else
             echo "❌ **PDF Generation Failed**" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Fix Status" >> $GITHUB_STEP_SUMMARY
           echo "✅ Over-escaping issue in LaTeX conversion pipeline has been fixed" >> $GITHUB_STEP_SUMMARY
