@@ -82,7 +82,7 @@ Issues found: 0
 ## Recommendations
 
 ### For Future Development
-1. **Use LaTeX quotation marks:** Always use `` ` `` and `''` for quotes in LaTeX
+1. **Use LaTeX quotation marks:** Always use `` (two backticks) and `''` (two single quotes) for quotes in LaTeX
 2. **Run character checker:** Use `python3 check_character_issues.py` before committing
 3. **Add to CI/CD:** Integrate character checker into GitHub Actions workflow
 4. **Editor configuration:** Configure text editors to avoid smart quotes
