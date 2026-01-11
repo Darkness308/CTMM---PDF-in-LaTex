@@ -182,20 +182,12 @@ def test_basic_build(main_tex_path="main.tex"):
 
         # Enhanced PDF validation: check both return code and file existence/size
         temp_pdf = Path(temp_file_path).with_suffix('.pdf')
+        temp_log = Path(temp_file_path).with_suffix('.log')
         pdf_exists = temp_pdf.exists()
         pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
 
         # Validate PDF generation success by file existence and size rather than just return codes
         success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
-
-        # Cleanup temporary files
-        try:
-            Path(temp_file_path).unlink(missing_ok=True)
-            temp_pdf.unlink(missing_ok=True)
-            Path(temp_file_path).with_suffix('.log').unlink(missing_ok=True)
-            Path(temp_file_path).with_suffix('.aux').unlink(missing_ok=True)
-        except Exception:
-            pass
 
         if success:
             logger.info("[OK] Basic build successful")
@@ -208,6 +200,17 @@ def test_basic_build(main_tex_path="main.tex"):
                 logger.error("Test PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
+            if temp_log.exists():
+                logger.error("Check log file for details: %s", temp_log)
+
+        # Cleanup temporary files
+        try:
+            Path(temp_file_path).unlink(missing_ok=True)
+            temp_pdf.unlink(missing_ok=True)
+            temp_log.unlink(missing_ok=True)
+            Path(temp_file_path).with_suffix('.aux').unlink(missing_ok=True)
+        except Exception:
+            pass
 
         return success
 
