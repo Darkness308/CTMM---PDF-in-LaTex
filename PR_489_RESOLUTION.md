@@ -1,28 +1,28 @@
 # PR #489 Merge Conflict Resolution
 
 **PR Title:** Fix CI workflow: resolve LaTeX package naming issue causing build failures  
-**Branch:** `copilot/fix-488` → `copilot/fix-99` (❌ INCORRECT BASE)  
-**Status:** ⚠️ Requires Resolution  
+**Branch:** `copilot/fix-488` → `copilot/fix-99` ([FAIL] INCORRECT BASE)  
+**Status:** [WARN]️ Requires Resolution  
 **Date:** 2026-01-10
 
 ## Problem Analysis
 
 ### Issues Identified
 
-1. **❌ Wrong Base Branch**
-   - Current target: `copilot/fix-99` 
-   - Should target: `main`
-   - This is preventing the merge from being applied correctly
+1. **[FAIL] Wrong Base Branch**
+  - Current target: `copilot/fix-99` 
+  - Should target: `main`
+  - This is preventing the merge from being applied correctly
 
-2. **⚠️ Unrelated Histories**
-   - The branch has "unrelated histories" when merging to main
-   - Git refuses to merge due to disconnected history trees
+2. **[WARN]️ Unrelated Histories**
+  - The branch has "unrelated histories" when merging to main
+  - Git refuses to merge due to disconnected history trees
 
-3. **✅ Files Are Clean**
-   - No merge conflict markers found in any files
-   - No problematic characters (null bytes, BOMs, control characters)
-   - All files have valid UTF-8 encoding
-   - Scan results: 249 files checked, all clean
+3. **[PASS] Files Are Clean**
+  - No merge conflict markers found in any files
+  - No problematic characters (null bytes, BOMs, control characters)
+  - All files have valid UTF-8 encoding
+  - Scan results: 249 files checked, all clean
 
 ### What PR #489 Changes
 
@@ -107,11 +107,11 @@ git push origin copilot/fix-488
 **Best approach:** Use **Option 1** - Change base branch to `main`
 
 This is the cleanest solution that:
-1. ✅ Fixes the wrong base branch issue
-2. ✅ Allows GitHub to automatically handle merge
-3. ✅ Preserves all commit history
-4. ✅ No risk of data loss
-5. ✅ Simple one-click solution
+1. [PASS] Fixes the wrong base branch issue
+2. [PASS] Allows GitHub to automatically handle merge
+3. [PASS] Preserves all commit history
+4. [PASS] No risk of data loss
+5. [PASS] Simple one-click solution
 
 ## Files Modified by PR #489
 
@@ -129,15 +129,15 @@ After resolution:
 python3 << 'EOF'
 import os
 with open('.github/copilot-instructions.md', 'rb') as f:
-    content = f.read()
-    text = content.decode('utf-8')
-    print("✅ File is valid UTF-8")
-    print(f"📊 File size: {len(content)} bytes")
-    print(f"📊 Lines: {len(text.splitlines())}")
+  content = f.read()
+  text = content.decode('utf-8')
+  print("[PASS] File is valid UTF-8")
+  print(f"[SUMMARY] File size: {len(content)} bytes")
+  print(f"[SUMMARY] Lines: {len(text.splitlines())}")
 EOF
 
 # 2. Check for merge conflict markers
-grep -n "^<<<<<<< \|^=======$\|^>>>>>>> " .github/copilot-instructions.md || echo "✅ No conflict markers"
+grep -n "^<<<<<<< \|^=======$\|^>>>>>>> " .github/copilot-instructions.md || echo "[PASS] No conflict markers"
 
 # 3. Validate build system still works
 python3 ctmm_build.py
@@ -150,12 +150,12 @@ python3 test_ctmm_build.py
 
 | Check | Status | Notes |
 |-------|--------|-------|
-| File Encoding | ✅ PASS | Valid UTF-8 |
-| Problematic Characters | ✅ PASS | None found |
-| Merge Conflict Markers | ✅ PASS | None found |
-| Base Branch | ❌ FAIL | Wrong base (`copilot/fix-99`) |
-| Git History | ⚠️ WARN | Unrelated histories |
-| File Changes | ✅ PASS | Documentation only |
+| File Encoding | [PASS] PASS | Valid UTF-8 |
+| Problematic Characters | [PASS] PASS | None found |
+| Merge Conflict Markers | [PASS] PASS | None found |
+| Base Branch | [FAIL] FAIL | Wrong base (`copilot/fix-99`) |
+| Git History | [WARN]️ WARN | Unrelated histories |
+| File Changes | [PASS] PASS | Documentation only |
 
 ## Conclusion
 

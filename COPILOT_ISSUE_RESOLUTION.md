@@ -65,17 +65,17 @@ make validate-pr  # Quick validation command
 4. Ensures Copilot has substantive content to review
 
 ### Validation Criteria
-✅ **File Changes**: At least 1 file modified  
-✅ **Content Changes**: Meaningful additions/deletions  
-✅ **Build Status**: CTMM system builds successfully  
-✅ **LaTeX Standards**: Follows project conventions  
+[PASS] **File Changes**: At least 1 file modified  
+[PASS] **Content Changes**: Meaningful additions/deletions  
+[PASS] **Build Status**: CTMM system builds successfully  
+[PASS] **LaTeX Standards**: Follows project conventions  
 
 ## Testing Results
-- ✅ All validation components functional
-- ✅ Correctly detects and reports changes
-- ✅ Integrates with existing CTMM build system
-- ✅ Provides clear feedback to users
-- ✅ Prevents empty PRs from reaching Copilot
+- [PASS] All validation components functional
+- [PASS] Correctly detects and reports changes
+- [PASS] Integrates with existing CTMM build system
+- [PASS] Provides clear feedback to users
+- [PASS] Prevents empty PRs from reaching Copilot
 
 ## Impact
 This comprehensive system ensures that all future PRs will contain substantive, reviewable changes, eliminating the "Copilot wasn't able to review any files" issue.
@@ -100,5 +100,5 @@ The validation system is self-contained and requires minimal maintenance:
 - Documentation guides proper usage
 
 ---
-**Resolution Status**: ✅ **COMPLETE**  
+**Resolution Status**: [PASS] **COMPLETE**  
 **Issue #409**: **RESOLVED** - Comprehensive prevention system implemented and tested.

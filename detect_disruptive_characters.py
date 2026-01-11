@@ -74,7 +74,7 @@ class CharacterValidator:
         """Check for line ending types."""
         crlf_count = raw_data.count(b'\r\n')
         lf_count = raw_data.count(b'\n') - crlf_count  # Subtract CRLF's LF
-        cr_count = raw_data.count(b'\r') - crlf_count   # Subtract CRLF's CR
+        cr_count = raw_data.count(b'\r') - crlf_count  # Subtract CRLF's CR
 
         return {
             'crlf': crlf_count,
@@ -322,18 +322,18 @@ class CharacterValidator:
                 continue
 
             print(f"\n[FILE] File: {result['file']}")
-            print(f"   Encoding: {result['info'].get('encoding', 'unknown')} "
+            print(f"  Encoding: {result['info'].get('encoding', 'unknown')} "
                   f"(confidence: {result['info'].get('confidence', 0):.2%})")
 
             # Print issues
             if result.get('issues'):
-                print("\n   [FAIL] CRITICAL ISSUES:")
+                print("\n  [FAIL] CRITICAL ISSUES:")
                 for issue in result['issues']:
                     self._print_issue_details(issue)
 
             # Print warnings
             if result.get('warnings'):
-                print("\n   [WARN]  WARNINGS:")
+                print("\n  [WARN]  WARNINGS:")
                 for warning in result['warnings']:
                     self._print_issue_details(warning)
 
@@ -344,21 +344,21 @@ class CharacterValidator:
         issue_type = issue.get('type', 'unknown')
 
         if issue_type == 'control_character':
-            print(f"      Line {issue['line']}, Col {issue['column']}: "
+            print(f"  Line {issue['line']}, Col {issue['column']}: "
                   f"Control character {issue['char']} (ord={issue['ord']})")
-            print(f"      Context: {repr(issue.get('context', ''))}")
+            print(f"  Context: {repr(issue.get('context', ''))}")
 
         elif issue_type == 'unescaped_special_char':
-            print(f"      Line {issue['line']}, Col {issue['column']}: "
+            print(f"  Line {issue['line']}, Col {issue['column']}: "
                   f"Unescaped '{issue['char']}' (ord={issue['ord']})")
-            print(f"      Suggested LaTeX escape: {issue.get('suggested_escape', 'N/A')}")
-            print(f"      Context: {issue.get('context', '')}")
+            print(f"  Suggested LaTeX escape: {issue.get('suggested_escape', 'N/A')}")
+            print(f"  Context: {issue.get('context', '')}")
 
         elif 'message' in issue:
-            print(f"      {issue['message']}")
+            print(f"  {issue['message']}")
 
         else:
-            print(f"      {issue_type}: {issue}")
+            print(f"  {issue_type}: {issue}")
 
 
 def main():
@@ -370,10 +370,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s                          # Scan all .tex files in current directory
-  %(prog)s --dir modules            # Scan modules directory
-  %(prog)s --verbose                # Show detailed scanning progress
-  %(prog)s --no-detailed-report     # Show only summary
+  %(prog)s  # Scan all .tex files in current directory
+  %(prog)s --dir modules  # Scan modules directory
+  %(prog)s --verbose  # Show detailed scanning progress
+  %(prog)s --no-detailed-report  # Show only summary
         """
     )
     parser.add_argument('--dir', type=str, default='.',

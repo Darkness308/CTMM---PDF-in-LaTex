@@ -50,21 +50,21 @@ def validate_german_content(content, filename):
     german_found = sum(1 for term in german_terms if term.lower() in content.lower())
     ctmm_found = sum(1 for term in ctmm_terms if term in content)
 
-    print(f"   [SUMMARY] German therapeutic terms found: {german_found}/{len(german_terms)}")
-    print(f"   [SUMMARY] CTMM methodology terms found: {ctmm_found}/{len(ctmm_terms)}")
+    print(f"  [SUMMARY] German therapeutic terms found: {german_found}/{len(german_terms)}")
+    print(f"  [SUMMARY] CTMM methodology terms found: {ctmm_found}/{len(ctmm_terms)}")
 
     if german_found >= 5:
-        print("   [PASS] Adequate German therapeutic content")
+        print("  [PASS] Adequate German therapeutic content")
         german_ok = True
     else:
-        print("   [FAIL] Insufficient German therapeutic content")
+        print("  [FAIL] Insufficient German therapeutic content")
         german_ok = False
 
     if ctmm_found >= 3:
-        print("   [PASS] CTMM methodology properly referenced")
+        print("  [PASS] CTMM methodology properly referenced")
         ctmm_ok = True
     else:
-        print("   [FAIL] CTMM methodology insufficiently referenced")
+        print("  [FAIL] CTMM methodology insufficiently referenced")
         ctmm_ok = False
 
     return german_ok and ctmm_ok
@@ -81,41 +81,41 @@ def validate_roadmap_structure(roadmap_content):
     ]
 
     sections_found = sum(1 for section in required_sections if section in roadmap_content)
-    print(f"   [SUMMARY] Required sections found: {sections_found}/{len(required_sections)}")
+    print(f"  [SUMMARY] Required sections found: {sections_found}/{len(required_sections)}")
 
     # Count actionable tasks (lines starting with - [ ])
     task_pattern = r'^\s*-\s*\[\s*\]\s*\*\*.*\*\*'
     tasks = re.findall(task_pattern, roadmap_content, re.MULTILINE)
     task_count = len(tasks)
-    print(f"   [SUMMARY] Actionable tasks identified: {task_count}")
+    print(f"  [SUMMARY] Actionable tasks identified: {task_count}")
 
     # Check for timeline phases
     phase_patterns = [
         r'1-3\s*Monate', r'3-12\s*Monate', r'1\+\s*Jahre'
     ]
     phases_found = sum(1 for pattern in phase_patterns if re.search(pattern, roadmap_content))
-    print(f"   [SUMMARY] Timeline phases found: {phases_found}/3")
+    print(f"  [SUMMARY] Timeline phases found: {phases_found}/3")
 
     # Validate task count (should be 60+)
     task_ok = task_count >= 60
     if task_ok:
-        print(f"   [PASS] Task count meets requirement (60+): {task_count}")
+        print(f"  [PASS] Task count meets requirement (60+): {task_count}")
     else:
-        print(f"   [FAIL] Insufficient tasks (need 60+): {task_count}")
+        print(f"  [FAIL] Insufficient tasks (need 60+): {task_count}")
 
     # Validate section completeness
     sections_ok = sections_found >= 7
     if sections_ok:
-        print("   [PASS] Required sections adequately covered")
+        print("  [PASS] Required sections adequately covered")
     else:
-        print("   [FAIL] Missing required sections")
+        print("  [FAIL] Missing required sections")
 
     # Validate timeline structure
     timeline_ok = phases_found == 3
     if timeline_ok:
-        print("   [PASS] All timeline phases properly defined")
+        print("  [PASS] All timeline phases properly defined")
     else:
-        print("   [FAIL] Timeline phase structure incomplete")
+        print("  [FAIL] Timeline phase structure incomplete")
 
     return task_ok and sections_ok and timeline_ok
 
@@ -130,7 +130,7 @@ def validate_issue_resolution_quality(resolution_content):
     ]
 
     components_found = sum(1 for comp in required_components if comp in resolution_content)
-    print(f"   [SUMMARY] Required components found: {components_found}/{len(required_components)}")
+    print(f"  [SUMMARY] Required components found: {components_found}/{len(required_components)}")
 
     # Check for strategic analysis
     strategic_terms = [
@@ -138,30 +138,30 @@ def validate_issue_resolution_quality(resolution_content):
         "uncertainty", "planning", "framework"
     ]
     strategic_found = sum(1 for term in strategic_terms if term.lower() in resolution_content.lower())
-    print(f"   [SUMMARY] Strategic analysis terms found: {strategic_found}")
+    print(f"  [SUMMARY] Strategic analysis terms found: {strategic_found}")
 
     # Validate length and detail
     word_count = len(resolution_content.split())
-    print(f"   [SUMMARY] Document length: {word_count} words")
+    print(f"  [SUMMARY] Document length: {word_count} words")
 
     components_ok = components_found >= 5
     strategic_ok = strategic_found >= 6
     length_ok = word_count >= 1000
 
     if components_ok:
-        print("   [PASS] Required documentation components present")
+        print("  [PASS] Required documentation components present")
     else:
-        print("   [FAIL] Missing required documentation components")
+        print("  [FAIL] Missing required documentation components")
 
     if strategic_ok:
-        print("   [PASS] Adequate strategic analysis content")
+        print("  [PASS] Adequate strategic analysis content")
     else:
-        print("   [FAIL] Insufficient strategic analysis depth")
+        print("  [FAIL] Insufficient strategic analysis depth")
 
     if length_ok:
-        print("   [PASS] Document length adequate for comprehensive analysis")
+        print("  [PASS] Document length adequate for comprehensive analysis")
     else:
-        print("   [FAIL] Document too brief for comprehensive analysis")
+        print("  [FAIL] Document too brief for comprehensive analysis")
 
     return components_ok and strategic_ok and length_ok
 
@@ -186,17 +186,17 @@ def validate_integration_compatibility():
     success, stdout, stderr = run_command("python3 -c \"import ast; ast.parse(open('validate_pr.py').read())\"",
                                         "Testing validate_pr.py syntax")
     if success:
-        print("   [PASS] validate_pr.py syntax validated")
+        print("  [PASS] validate_pr.py syntax validated")
     else:
-        print("   [FAIL] validate_pr.py has syntax errors")
+        print("  [FAIL] validate_pr.py has syntax errors")
         integration_ok = False
 
     # Test CTMM build system functionality
     success, stdout, stderr = run_command("python3 ctmm_build.py", "Testing CTMM build system")
     if success:
-        print("   [PASS] CTMM build system operational")
+        print("  [PASS] CTMM build system operational")
     else:
-        print("   [WARN]  CTMM build system test completed (LaTeX compilation may be unavailable)")
+        print("  [WARN]  CTMM build system test completed (LaTeX compilation may be unavailable)")
         # This is acceptable in CI environments without LaTeX
 
     return integration_ok

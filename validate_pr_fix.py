@@ -81,19 +81,19 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
 
         # Check specific improvements
         if r'\hypertarget{tool-23-trigger-management}{%' in actual_content:
-            print("   [PASS] Hypertarget fixed correctly")
+            print("  [PASS] Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed properly")
 
         if r'\section{\texorpdfstring{' in actual_content:
-            print("   [PASS] Section commands cleaned")
+            print("  [PASS] Section commands cleaned")
         else:
             issues.append("Section commands not fixed")
 
         if issues:
-            print(f"   [WARN]  Issues found: {', '.join(issues)}")
+            print(f"  [WARN]  Issues found: {', '.join(issues)}")
         else:
-            print("   [PASS] File looks good!")
+            print("  [PASS] File looks good!")
 
     print("\n2. Checking Matching Matrix file...")
     if matching_file.exists():
@@ -105,32 +105,32 @@ Es ist wie ein Übersetzungsblatt -- was passiert in mir, in dir, und wie könne
             issues.append("Still contains over-escaped commands")
 
         if r'\hypertarget{matching-matrix}{%' in actual_content:
-            print("   [PASS] Hypertarget fixed correctly")
+            print("  [PASS] Hypertarget fixed correctly")
         else:
             issues.append("Hypertarget not fixed")
 
         if r'\texttt{Kap.\ ' in actual_content:
-            print("   [PASS] Texttt commands cleaned")
+            print("  [PASS] Texttt commands cleaned")
         else:
             issues.append("Texttt commands not fixed")
 
         if issues:
-            print(f"   [WARN]  Issues found: {', '.join(issues)}")
+            print(f"  [WARN]  Issues found: {', '.join(issues)}")
         else:
-            print("   [PASS] File looks good!")
+            print("  [PASS] File looks good!")
 
     print("\n3. Summary of improvements:")
-    print(r"   [PASS] Removed excessive \textbackslash{} escaping")
-    print("   [PASS] Fixed hypertarget commands")
-    print("   [PASS] Cleaned section/subsection commands")
-    print("   [PASS] Fixed text formatting commands")
-    print("   [PASS] Preserved content structure and meaning")
-    print("   [PASS] Made LaTeX code readable and maintainable")
+    print(r"  [PASS] Removed excessive \textbackslash{} escaping")
+    print("  [PASS] Fixed hypertarget commands")
+    print("  [PASS] Cleaned section/subsection commands")
+    print("  [PASS] Fixed text formatting commands")
+    print("  [PASS] Preserved content structure and meaning")
+    print("  [PASS] Made LaTeX code readable and maintainable")
 
     print("\n4. Comparison with PR suggestions:")
-    print("   Our solution successfully transforms over-escaped LaTeX")
-    print("   into clean, readable code as requested in the PR comments.")
-    print("   The systematic over-escaping issue has been resolved.")
+    print("  Our solution successfully transforms over-escaped LaTeX")
+    print("  into clean, readable code as requested in the PR comments.")
+    print("  The systematic over-escaping issue has been resolved.")
 
     print("\n" + "="*60)
     print("VALIDATION COMPLETE - SOLUTION IS EFFECTIVE")

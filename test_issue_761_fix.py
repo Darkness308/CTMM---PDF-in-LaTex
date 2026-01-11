@@ -49,7 +49,7 @@ def test_enhanced_workflow_error_handling():
 
     print(f"[PASS] Found {len(validation_steps)} validation steps")
     for step in validation_steps:
-        print(f"   - {step}")
+        print(f"  - {step}")
 
     # Verify validation happens before LaTeX compilation
     if latex_step_index is not None and len(validation_steps) > 0:
@@ -106,7 +106,7 @@ def test_comprehensive_dependency_validation():
                 print(f"[PASS] {script} executes successfully")
             else:
                 print(f"[WARN]  {script} returned non-zero exit code: {result.returncode}")
-                print(f"   stderr: {result.stderr[:100]}...")
+                print(f"  stderr: {result.stderr[:100]}...")
         except subprocess.TimeoutExpired:
             print(f"[WARN]  {script} timed out")
         except Exception as e:
@@ -126,11 +126,11 @@ def test_latex_package_dependency_robustness():
 
     # Check for essential packages that have caused issues before
     essential_packages = [
-        'texlive-lang-german',    # Issue #xxx: German language support
-        'texlive-pstricks',       # Issue #739: pifont package provider
-        'texlive-fonts-extra',    # Font support
-        'texlive-latex-extra',    # Extended LaTeX packages
-        'texlive-science'         # Math/science packages
+        'texlive-lang-german',  # Issue #xxx: German language support
+        'texlive-pstricks',  # Issue #739: pifont package provider
+        'texlive-fonts-extra',  # Font support
+        'texlive-latex-extra',  # Extended LaTeX packages
+        'texlive-science'  # Math/science packages
     ]
 
     missing_packages = []

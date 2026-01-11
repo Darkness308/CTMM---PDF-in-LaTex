@@ -30,7 +30,7 @@ def run_command(command, description, timeout=30):
             return True, result.stdout.strip()
         else:
             print(f"[FAIL] {description}: FAILED")
-            print(f"   Error: {result.stderr.strip()}")
+            print(f"  Error: {result.stderr.strip()}")
             return False, result.stderr.strip()
     except subprocess.TimeoutExpired:
         print(f"[SYM] {description}: TIMEOUT after {timeout}s")

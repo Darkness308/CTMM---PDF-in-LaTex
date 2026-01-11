@@ -147,7 +147,7 @@ def test_no_merge_conflict_markers():
             if conflicts_found:
                 print(f"[FAIL] Merge conflict markers found in {workflow_file}:")
                 for conflict in conflicts_found:
-                    print(f"   {conflict}")
+                    print(f"  {conflict}")
                 no_conflicts = False
             else:
                 print(f"[PASS] No merge conflict markers found")
@@ -198,7 +198,7 @@ def test_workflow_action_consistency():
 
     print(f"\n[SUMMARY] LaTeX Action Version Summary:")
     for action, files in latex_actions_found.items():
-        print(f"   {action} used in: {', '.join(files)}")
+        print(f"  {action} used in: {', '.join(files)}")
 
     # Check that all use xu-cheng/latex-action@v3
     expected_action = "xu-cheng/latex-action@v3"

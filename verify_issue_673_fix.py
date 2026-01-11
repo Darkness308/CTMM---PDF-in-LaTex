@@ -33,7 +33,7 @@ def run_command(cmd, description="", capture_output=True):
             if description:
                 print(f"[FAIL] FAILED: {description}")
                 if capture_output and result.stderr:
-                    print(f"   Error: {result.stderr.strip()}")
+                    print(f"  Error: {result.stderr.strip()}")
             return False, result.stderr.strip() if capture_output else ""
     except Exception as e:
         if description:
@@ -52,7 +52,7 @@ def check_repository_health():
 
     if output.strip():
         print(f"[NOTE] Uncommitted changes detected: {len(output.strip().split())} items")
-        print("   This is expected for a work-in-progress PR")
+        print("  This is expected for a work-in-progress PR")
     else:
         print("[TEST] Repository is clean (no uncommitted changes)")
 
@@ -70,9 +70,9 @@ def check_repository_health():
         total_deleted = sum(int(line.split('\t')[1]) for line in lines if line.split('\t')[1].isdigit())
 
         print(f"[SUMMARY] Change Summary:")
-        print(f"   [EMOJI] Files changed: {total_files}")
-        print(f"   [+] Lines added: {total_added}")
-        print(f"   [-] Lines deleted: {total_deleted}")
+        print(f"  [EMOJI] Files changed: {total_files}")
+        print(f"  [+] Lines added: {total_added}")
+        print(f"  [-] Lines deleted: {total_deleted}")
 
         if total_files > 0 and total_added > 0:
             print("[PASS] MEANINGFUL CHANGES: Copilot can review these changes")
@@ -99,30 +99,30 @@ def validate_github_actions_upgrade():
     # Check for the upgraded action
     if "dante-ev/latex-action@v2" in content:
         print("[PASS] UPGRADE CONFIRMED: dante-ev/latex-action@v2 detected")
-        print("   Enhanced LaTeX compilation capabilities active")
+        print("  Enhanced LaTeX compilation capabilities active")
 
         # Extract the full action configuration
         lines = content.split('\n')
         in_latex_step = False
         for i, line in enumerate(lines):
             if "dante-ev/latex-action@v2" in line:
-                print(f"   [FILE] Configuration at line {i+1}:")
+                print(f"  [FILE] Configuration at line {i+1}:")
                 # Show the action and its parameters
                 for j in range(max(0, i-2), min(len(lines), i+8)):
                     if j == i:
-                        print(f"   ->  {lines[j].strip()}")
+                        print(f"  ->  {lines[j].strip()}")
                     else:
-                        print(f"      {lines[j].strip()}")
+                        print(f"  {lines[j].strip()}")
                 break
 
         return True
     elif "dante-ev/latex-action@v0.2" in content:
         print("[FAIL] OLD VERSION: dante-ev/latex-action@v0.2 detected")
-        print("   Upgrade to v2 required for enhanced capabilities")
+        print("  Upgrade to v2 required for enhanced capabilities")
         return False
     elif "dante-ev/latex-action@latest" in content:
         print("[WARN]  UNPINNED VERSION: @latest detected")
-        print("   Consider pinning to specific version for reproducibility")
+        print("  Consider pinning to specific version for reproducibility")
         return True
     else:
         print("[QUESTION] UNKNOWN STATE: dante-ev/latex-action not found")
@@ -147,7 +147,7 @@ def validate_verification_infrastructure():
             success, output = run_command(f"python3 {script}", f"Test {description}")
             if not success:
                 all_passed = False
-                print(f"   [WARN]  {script} reported issues")
+                print(f"  [WARN]  {script} reported issues")
         else:
             print(f"[FAIL] MISSING: {script} not found")
             all_passed = False
@@ -187,11 +187,11 @@ def check_issue_documentation():
     # Check for issue references
     if "#673" in content:
         print("[PASS] DOCUMENTATION COMPLETE: ISSUE_673_RESOLUTION.md found with all required sections")
-        print(f"   [EMOJI] Document size: {len(content)} characters")
+        print(f"  [EMOJI] Document size: {len(content)} characters")
 
         # Count lines for different sections
         lines = content.split('\n')
-        print(f"   [FILE] Document structure: {len(lines)} lines")
+        print(f"  [FILE] Document structure: {len(lines)} lines")
 
         return True
     else:
@@ -253,27 +253,27 @@ def main():
     if all_passed:
         print("\n[SUCCESS] ISSUE #673 SUCCESSFULLY RESOLVED")
         print("\n[NOTE] Summary of Achievements:")
-        print("   [PASS] Infrastructure upgraded (GitHub Actions LaTeX action)")
-        print("   [PASS] Comprehensive verification system implemented")
-        print("   [PASS] Complete documentation provided")
-        print("   [PASS] Meaningful changes created for Copilot review")
-        print("   [PASS] All validation systems operational")
+        print("  [PASS] Infrastructure upgraded (GitHub Actions LaTeX action)")
+        print("  [PASS] Comprehensive verification system implemented")
+        print("  [PASS] Complete documentation provided")
+        print("  [PASS] Meaningful changes created for Copilot review")
+        print("  [PASS] All validation systems operational")
 
         print("\n[EMOJI] COPILOT REVIEW STATUS:")
-        print("   [TARGET] READY FOR REVIEW")
-        print("   [SUMMARY] Meaningful changes detected")
-        print("   [TOOL]  All systems validated")
-        print("   [BOOKS] Complete documentation available")
+        print("  [TARGET] READY FOR REVIEW")
+        print("  [SUMMARY] Meaningful changes detected")
+        print("  [TOOL]  All systems validated")
+        print("  [BOOKS] Complete documentation available")
 
         print("\n[LAUNCH] Next Steps:")
-        print("   1. Submit PR for Copilot review")
-        print("   2. Verify Copilot can successfully analyze changes")
-        print("   3. Apply lessons learned to future PRs")
+        print("  1. Submit PR for Copilot review")
+        print("  2. Verify Copilot can successfully analyze changes")
+        print("  3. Apply lessons learned to future PRs")
 
     else:
         print("\n[WARN]  RESOLUTION INCOMPLETE")
-        print("   Please address the failed tests above")
-        print("   Re-run this script to verify fixes")
+        print("  Please address the failed tests above")
+        print("  Re-run this script to verify fixes")
 
     return all_passed
 

@@ -53,7 +53,7 @@ def main():
             parts = line.split('\t')
             if len(parts) >= 3:
                 added, deleted, filename = parts[0], parts[1], parts[2]
-                print(f"   {filename}: +{added} -{deleted}")
+                print(f"  {filename}: +{added} -{deleted}")
         print("[PASS] COPILOT CAN REVIEW: Meaningful changes detected")
     else:
         print("[FAIL] NO CHANGES: Copilot cannot review empty PRs")
@@ -102,7 +102,7 @@ def main():
         content = workflow_file.read_text()
         if "dante-ev/latex-action@v2" in content:
             print("[PASS] CHANGE VERIFIED: GitHub Action upgraded to @v2")
-            print("   This provides enhanced LaTeX compilation capabilities")
+            print("  This provides enhanced LaTeX compilation capabilities")
         else:
             print("[FAIL] CHANGE NOT FOUND: Expected upgrade not present")
             return False
@@ -121,10 +121,10 @@ def main():
     print("[PASS] Repository functionality improved")
 
     print("\n[TEST] WHAT WAS FIXED:")
-    print("   * Created meaningful, reviewable changes")
-    print("   * Upgraded LaTeX action for better functionality")
-    print("   * Maintained all existing validation systems")
-    print("   * Ensured proper diff calculation for Copilot")
+    print("  * Created meaningful, reviewable changes")
+    print("  * Upgraded LaTeX action for better functionality")
+    print("  * Maintained all existing validation systems")
+    print("  * Ensured proper diff calculation for Copilot")
 
     print("\n[TARGET] COPILOT REVIEW STATUS: READY FOR REVIEW")
 

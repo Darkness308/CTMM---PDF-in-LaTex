@@ -173,8 +173,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 comprehensive_workflow.py           # Basic workflow
-  python3 comprehensive_workflow.py --full    # Include de-escaping demo
+  python3 comprehensive_workflow.py  # Basic workflow
+  python3 comprehensive_workflow.py --full  # Include de-escaping demo
   python3 comprehensive_workflow.py --cleanup # Run with cleanup
         """
     )

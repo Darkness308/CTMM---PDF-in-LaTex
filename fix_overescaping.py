@@ -70,14 +70,14 @@ def process_file(filepath):
         if fixed_content != original_content:
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(fixed_content)
-            print(f"  ✓ Fixed over-escaping in {filepath}")
+            print(f"  [OK] Fixed over-escaping in {filepath}")
             return True
         else:
             print(f"  - No changes needed in {filepath}")
             return False
             
     except Exception as e:
-        print(f"  ✗ Error processing {filepath}: {e}")
+        print(f"  [ERROR] Error processing {filepath}: {e}")
         return False
 
 def main():

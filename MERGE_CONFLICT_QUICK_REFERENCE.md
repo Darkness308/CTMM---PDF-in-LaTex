@@ -80,36 +80,36 @@ For bulk conflict resolution, use the pattern from this resolution:
 
 ```python
 def resolve_conflict_smart(head_content, merge_content, file_path):
-    """Intelligently resolve conflict based on content."""
+  """Intelligently resolve conflict based on content."""
 
-    # Case 1: Empty content
-    if not head_content.strip():
-        return merge_content
-    if not merge_content.strip():
-        return head_content
+  # Case 1: Empty content
+  if not head_content.strip():
+  return merge_content
+  if not merge_content.strip():
+  return head_content
 
-    # Case 2: Identical
-    if head_content.strip() == merge_content.strip():
-        return head_content
+  # Case 2: Identical
+  if head_content.strip() == merge_content.strip():
+  return head_content
 
-    # Case 3: Subset detection
-    if head_content.strip() in merge_content:
-        return merge_content
-    if merge_content.strip() in head_content:
-        return head_content
+  # Case 3: Subset detection
+  if head_content.strip() in merge_content:
+  return merge_content
+  if merge_content.strip() in head_content:
+  return head_content
 
-    # Case 4: File type specific
-    if file_path.endswith('.md'):
-        return head_content  # Prefer newer docs
+  # Case 4: File type specific
+  if file_path.endswith('.md'):
+  return head_content  # Prefer newer docs
 
-    if file_path.endswith('.tex'):
-        # Check if both have complete sections
-        if '\\section' in head_content and '\\section' in merge_content:
-            return head_content + '\n\n' + merge_content
-        return head_content
+  if file_path.endswith('.tex'):
+  # Check if both have complete sections
+  if '\\section' in head_content and '\\section' in merge_content:
+  return head_content + '\n\n' + merge_content
+  return head_content
 
-    # Default: prefer HEAD
-    return head_content
+  # Default: prefer HEAD
+  return head_content
 ```
 
 ## Validation After Resolution
@@ -130,7 +130,7 @@ python3 ctmm_build.py
 ```bash
 # Check LaTeX files
 for f in modules/*.tex; do
-  python3 -c "open('$f').read()" && echo "✓ $f" || echo "✗ $f"
+  python3 -c "open('$f').read()" && echo "[OK] $f" || echo "[ERROR] $f"
 done
 ```
 
@@ -142,13 +142,13 @@ git status
 
 ## Common Pitfalls
 
-### ❌ Don't:
+### [FAIL] Don't:
 1. **Delete conflict markers without reading**: Always understand what's being merged
 2. **Keep both versions blindly**: Can cause duplicate content or logic errors
 3. **Ignore context**: Look at surrounding code to make informed decisions
 4. **Skip validation**: Always test after resolving
 
-### ✅ Do:
+### [PASS] Do:
 1. **Read both versions carefully**: Understand the intent of each change
 2. **Test incrementally**: Resolve a few files, test, continue
 3. **Preserve working code**: When in doubt, keep the version that works

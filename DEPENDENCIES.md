@@ -19,38 +19,38 @@
 
 ### Document Structure & Formatting
 ```latex
-\RequirePackage{geometry}     % v5.9 - Page layout
-\RequirePackage{fancyhdr}     % v4.0.1 - Headers and footers  
-\RequirePackage{titlesec}     % v2.14 - Section formatting
-\RequirePackage{tocloft}      % v2.3i - Table of contents
-\RequirePackage{multicol}     % v1.9a - Multiple columns
-\RequirePackage{enumitem}     % v3.9 - List formatting
+\RequirePackage{geometry}  % v5.9 - Page layout
+\RequirePackage{fancyhdr}  % v4.0.1 - Headers and footers  
+\RequirePackage{titlesec}  % v2.14 - Section formatting
+\RequirePackage{tocloft}  % v2.3i - Table of contents
+\RequirePackage{multicol}  % v1.9a - Multiple columns
+\RequirePackage{enumitem}  % v3.9 - List formatting
 ```
 
 ### Colors & Graphics  
 ```latex
-\RequirePackage{xcolor}       % v2.14 - Color support
-\RequirePackage{tikz}         % v3.1.10 - Graphics and diagrams
-\RequirePackage{tcolorbox}    % v5.1.1 - Colored boxes
-\RequirePackage{graphicx}     % v1.2d - Graphics inclusion
-\RequirePackage{adjustbox}    % v1.3a - Box adjustments
+\RequirePackage{xcolor}  % v2.14 - Color support
+\RequirePackage{tikz}  % v3.1.10 - Graphics and diagrams
+\RequirePackage{tcolorbox}  % v5.1.1 - Colored boxes
+\RequirePackage{graphicx}  % v1.2d - Graphics inclusion
+\RequirePackage{adjustbox}  % v1.3a - Box adjustments
 ```
 
 ### Interactive Forms & PDF Features
 ```latex
-\RequirePackage{hyperref}     % v7.00v - PDF links and forms
-\RequirePackage{insdljs}      % v1.3 - JavaScript in PDF
-\RequirePackage{eforms}       % v2.9h - Enhanced PDF forms
-\RequirePackage{acrotex}      % v1.0 - Advanced AcroForms
+\RequirePackage{hyperref}  % v7.00v - PDF links and forms
+\RequirePackage{insdljs}  % v1.3 - JavaScript in PDF
+\RequirePackage{eforms}  % v2.9h - Enhanced PDF forms
+\RequirePackage{acrotex}  % v1.0 - Advanced AcroForms
 ```
 
 ### Typography & Text Processing
 ```latex
-\RequirePackage{fontenc}      % T1 encoding
-\RequirePackage{inputenc}     % UTF-8 input
-\RequirePackage{babel}        % German language support
-\RequirePackage{microtype}    % v3.0a - Microtypography
-\RequirePackage{setspace}     % v6.7a - Line spacing
+\RequirePackage{fontenc}  % T1 encoding
+\RequirePackage{inputenc}  % UTF-8 input
+\RequirePackage{babel}  % German language support
+\RequirePackage{microtype}  % v3.0a - Microtypography
+\RequirePackage{setspace}  % v6.7a - Line spacing
 ```
 
 ## Installation Commands
@@ -76,9 +76,9 @@ tlmgr install insdljs eforms acrotex
 ```yaml
 - name: Install LaTeX dependencies
   run: |
-    sudo apt-get update
-    sudo apt-get install -y texlive-full texlive-fonts-extra
-    sudo apt-get install -y chktex lacheck
+  sudo apt-get update
+  sudo apt-get install -y texlive-full texlive-fonts-extra
+  sudo apt-get install -y chktex lacheck
 
 - name: LaTeX Syntax Check  
   run: find . -name "*.tex" -exec chktex -q {} \;
@@ -86,8 +86,8 @@ tlmgr install insdljs eforms acrotex
 - name: Compile with 3-pass build
   uses: dante-ev/latex-action@v0.2.0
   with:
-    root_file: main.tex
-    args: "-synctex=1 -interaction=nonstopmode -file-line-error"
+  root_file: main.tex
+  args: "-synctex=1 -interaction=nonstopmode -file-line-error"
 ```
 
 ### Build Validation Steps
@@ -109,7 +109,7 @@ tlmgr install insdljs eforms acrotex
 \RequirePackage{tikz}
 \RequirePackage{xcolor}
 \RequirePackage[unicode]{hyperref}  % Load AFTER graphics
-\RequirePackage{eforms}             % Load AFTER hyperref
+\RequirePackage{eforms}  % Load AFTER hyperref
 ```
 
 ## Version Compatibility Matrix
@@ -126,17 +126,17 @@ tlmgr install insdljs eforms acrotex
 
 ### Common Compilation Errors
 1. **"Package eforms not found"**
-   ```bash
-   tlmgr install eforms
-   ```
+  ```bash
+  tlmgr install eforms
+  ```
 
 2. **"Undefined control sequence 	extcolor"**
-   - Check: `\RequirePackage{xcolor}` is loaded
-   - Verify: No typos like `extcolor`
+  - Check: `\RequirePackage{xcolor}` is loaded
+  - Verify: No typos like `extcolor`
 
 3. **"PDF forms not interactive"**
-   - Ensure: `eforms` package is loaded
-   - Check: PDF viewer supports AcroForms
+  - Ensure: `eforms` package is loaded
+  - Check: PDF viewer supports AcroForms
 
 ### Build Environment Setup
 ```bash
@@ -184,7 +184,7 @@ sudo apt-get install texlive-latex-extra
 # Manuelle Paket-Installation (falls nötig):
 tlmgr install fontawesome5
 tlmgr install tcolorbox
-tlmgr install pgf          # für TikZ
+tlmgr install pgf  # für TikZ
 tlmgr install geometry
 tlmgr install hyperref
 tlmgr install xcolor

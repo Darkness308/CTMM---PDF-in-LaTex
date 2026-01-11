@@ -280,7 +280,7 @@ def main():
     if config_issues:
         print("[FAIL] Configuration Issues:")
         for issue in config_issues:
-            print(f"   - {issue}")
+            print(f"  - {issue}")
         return
 
     print("[PASS] Configuration validated")
@@ -294,7 +294,7 @@ def main():
     else:
         print(f"[WARN]  Found {len(failed_workflows)} failed workflows:")
         for workflow in failed_workflows[:3]:  # Show first 3
-            print(f"   - {workflow.workflow_name} (ID: {workflow.id}, Status: {workflow.conclusion})")
+            print(f"  - {workflow.workflow_name} (ID: {workflow.id}, Status: {workflow.conclusion})")
 
     # Check for healing PRs
     print("\n[FIX] Checking for existing healing PRs...")

@@ -57,7 +57,7 @@ def validate_issue_708_resolution():
             changed_files = stdout.strip().split('\n')
             print(f"[PASS] Files changed: {len(changed_files)} (compared to {base_option})")
             for file in changed_files:
-                print(f"   - {file}")
+                print(f"  - {file}")
             break
 
     if not comparison_base:

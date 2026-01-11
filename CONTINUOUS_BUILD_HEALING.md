@@ -1,4 +1,4 @@
-# 🤖 Continuous Build Healing System
+#  Continuous Build Healing System
 
 ## Overview
 
@@ -6,7 +6,7 @@ Ja, wir haben Automatisierung! (Yes, we have automation!)
 
 This document describes the automated build healing system that continuously monitors failed builds and applies fixes until they turn green.
 
-## 🎯 Purpose
+## [TARGET] Purpose
 
 Addresses the German request:
 > "haben wir keine automatisierung, die bei fehlgeschlagenen builds, die fehlerbehebung vornimmt und den build prozess neu startet bis er auf grün läuft."
@@ -14,7 +14,7 @@ Addresses the German request:
 Translation:
 > "Don't we have automation that fixes failed builds and restarts the build process until it runs green?"
 
-## 🔧 How It Works
+## [FIX] How It Works
 
 The system operates in continuous cycles:
 
@@ -25,7 +25,7 @@ The system operates in continuous cycles:
 5. **Verify** → Check if fixes worked
 6. **Repeat** → Continue until all builds are green
 
-## 📦 Components
+## [PACKAGE] Components
 
 ### 1. Continuous Build Healer (`continuous_build_healer.py`)
 Main orchestration script that runs the healing loop.
@@ -107,7 +107,7 @@ Analyzes and resolves PR merge conflicts.
 python3 comprehensive_pr_merge_resolver.py
 ```
 
-## 🚀 Quick Start
+## [DEPLOY] Quick Start
 
 ### Option 1: Full Automated Healing
 Run the continuous healer for automatic fix application:
@@ -137,7 +137,7 @@ Just analyze open PRs without applying changes:
 python3 generate_pr_report.py
 ```
 
-## 📊 Generated Reports
+## [SUMMARY] Generated Reports
 
 ### PR Analysis Report (`PR_ANALYSIS_REPORT.md`)
 Comprehensive report of all open PRs including:
@@ -153,7 +153,7 @@ Summary of each healing session including:
 - Failed healing attempts
 - Overall success rate
 
-## 🎛️ Configuration
+## ️ Configuration
 
 ### Environment Variables
 ```bash
@@ -169,7 +169,7 @@ Customize healing behavior:
 - PR creation settings
 - Safety limits and timeouts
 
-## 🔍 Monitoring Workflow Status
+## [SEARCH] Monitoring Workflow Status
 
 ### Check Which Workflows Are Failing
 ```bash
@@ -190,10 +190,10 @@ The PR analysis report shows:
 - Direct links to workflow run logs
 - Error categories and patterns
 
-## 🛠️ Troubleshooting
+## [TOOLS]️ Troubleshooting
 
 ### "No failed workflows found"
-✅ This is good! It means all builds are green.
+[PASS] This is good! It means all builds are green.
 
 ### "Healing system timed out"
 - Increase timeout in the script
@@ -210,7 +210,7 @@ The PR analysis report shows:
 - Manual restart: Visit the workflow run page and click "Re-run failed jobs"
 - Or use: `gh run rerun <run-id>`
 
-## 📈 Best Practices
+##  Best Practices
 
 ### For Continuous Healing
 1. **Start with dry-run** to see what will be changed
@@ -231,7 +231,7 @@ The PR analysis report shows:
 3. **Manual intervention** for complex problems
 4. **Document fixes** for future reference
 
-## 🔐 Safety Features
+##  Safety Features
 
 ### Automatic Safety Limits
 - **Max healing attempts**: 5 per workflow
@@ -241,20 +241,20 @@ The PR analysis report shows:
 - **No direct main branch changes**: All fixes via PR
 
 ### What Won't Be Auto-Fixed
-❌ Authentication/permission errors
-❌ Complex logic bugs
-❌ Custom action failures
-❌ Fundamental architecture issues
-❌ Manual review required items
+[FAIL] Authentication/permission errors
+[FAIL] Complex logic bugs
+[FAIL] Custom action failures
+[FAIL] Fundamental architecture issues
+[FAIL] Manual review required items
 
 ### What Will Be Auto-Fixed
-✅ LaTeX action version issues
-✅ Missing package installations
-✅ Timeout configuration
-✅ Workflow syntax errors
-✅ Common CI patterns
+[PASS] LaTeX action version issues
+[PASS] Missing package installations
+[PASS] Timeout configuration
+[PASS] Workflow syntax errors
+[PASS] Common CI patterns
 
-## 📚 Additional Resources
+## [DOCS] Additional Resources
 
 ### Documentation
 - [Workflow Healing System](WORKFLOW_HEALING_SYSTEM.md) - Detailed healing system docs
@@ -268,7 +268,7 @@ The PR analysis report shows:
 - `generate_pr_report.py` - PR analysis report generator
 - `analyze_all_open_prs.py` - Detailed PR analysis tool
 
-## 🎯 Success Metrics
+## [TARGET] Success Metrics
 
 Track the effectiveness of the healing system:
 
@@ -277,7 +277,7 @@ Track the effectiveness of the healing system:
 3. **Manual Intervention**: Issues requiring human review
 4. **PR Backlog**: Number of open PRs over time
 
-## 💡 Next Steps
+## [IDEA] Next Steps
 
 1. **Review the PR Analysis Report** for current status
 2. **Run continuous healer** to fix any failures

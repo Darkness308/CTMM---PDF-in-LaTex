@@ -12,11 +12,11 @@ Usage:
     python3 ctmm_unified_tool.py [command] [options]
 
 Commands:
-    build           - Run complete build system check
-    de-escape       - Fix over-escaped LaTeX files
-    validate        - Validate project state
-    workflow        - Run complete integration workflow
-    help            - Show detailed help
+    build  - Run complete build system check
+    de-escape  - Fix over-escaped LaTeX files
+    validate  - Validate project state
+    workflow  - Run complete integration workflow
+    help  - Show detailed help
 """
 
 import argparse
@@ -284,15 +284,15 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Commands:
-  build           Run build system check and create templates
-  de-escape       Fix over-escaped LaTeX files
-  validate        Validate complete project state
-  workflow        Run complete integration workflow
+  build  Run build system check and create templates
+  de-escape  Fix over-escaped LaTeX files
+  validate  Validate complete project state
+  workflow  Run complete integration workflow
 
 Examples:
-  %(prog)s build                           # Build system check
-  %(prog)s de-escape converted/            # Fix converted files
-  %(prog)s validate                        # Validate project
+  %(prog)s build  # Build system check
+  %(prog)s de-escape converted/  # Fix converted files
+  %(prog)s validate  # Validate project
   %(prog)s workflow --converted converted/ # Complete workflow
         """
     )

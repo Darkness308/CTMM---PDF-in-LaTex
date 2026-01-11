@@ -41,27 +41,27 @@ All validation tools confirmed the fix:
 
 ```bash
 $ python3 test_issue_867_fix.py
-🎉 ALL TESTS PASSED! LaTeX action version issue resolved.
+[SUCCESS] ALL TESTS PASSED! LaTeX action version issue resolved.
 
 Tests passed: 3/3
-✅ LaTeX Action Version: PASS
-✅ Workflow YAML Syntax: PASS  
-✅ Action Configuration: PASS
+[PASS] LaTeX Action Version: PASS
+[PASS] Workflow YAML Syntax: PASS  
+[PASS] Action Configuration: PASS
 ```
 
 ### Build System Validation
 ```bash
 $ python3 ctmm_build.py
-✓ LaTeX validation: PASS
-✓ All referenced files exist
-✓ Basic build: PASS
-✓ Full build: PASS
+[OK] LaTeX validation: PASS
+[OK] All referenced files exist
+[OK] Basic build: PASS
+[OK] Full build: PASS
 ```
 
 ### YAML Syntax Validation
 ```bash
-$ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/latex-build.yml', 'r')); print('✅ YAML syntax is valid')"
-✅ YAML syntax is valid
+$ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/latex-build.yml', 'r')); print('[PASS] YAML syntax is valid')"
+[PASS] YAML syntax is valid
 ```
 
 ## Impact
@@ -77,10 +77,10 @@ $ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/latex-build.ym
 
 ## Technical Details
 The `dante-ev/latex-action` GitHub Action version availability:
-- ❌ `@v2` - Does not exist (Issue #867)
-- ❌ `@v2.0.0` - Does not exist (Issue #735)  
-- ✅ `@latest` - Always available, points to current stable release
-- ✅ `@v0.2` - Specific version that exists (used in Issue #607)
+- [FAIL] `@v2` - Does not exist (Issue #867)
+- [FAIL] `@v2.0.0` - Does not exist (Issue #735)  
+- [PASS] `@latest` - Always available, points to current stable release
+- [PASS] `@v0.2` - Specific version that exists (used in Issue #607)
 
 **Error behavior**: GitHub Actions fails immediately during workflow parsing when it cannot resolve the specified action version, preventing any steps from executing.
 
@@ -90,18 +90,18 @@ The `dante-ev/latex-action` GitHub Action version availability:
 The new `test_issue_867_fix.py` provides comprehensive validation:
 
 ### Test 1: LaTeX Action Version Resolution
-- ✅ Detects problematic versions (`@v2`, `@v2.0.0`)
-- ✅ Validates against known-good version patterns
-- ✅ Specifically checks for the failing `@v2` pattern
+- [PASS] Detects problematic versions (`@v2`, `@v2.0.0`)
+- [PASS] Validates against known-good version patterns
+- [PASS] Specifically checks for the failing `@v2` pattern
 
 ### Test 2: Workflow YAML Syntax
-- ✅ Validates complete YAML structure
-- ✅ Ensures syntax changes don't break workflow parsing
+- [PASS] Validates complete YAML structure
+- [PASS] Ensures syntax changes don't break workflow parsing
 
 ### Test 3: Action Configuration
-- ✅ Verifies required `root_file` parameter
-- ✅ Checks `args` configuration
-- ✅ Validates `extra_system_packages` setup
+- [PASS] Verifies required `root_file` parameter
+- [PASS] Checks `args` configuration
+- [PASS] Validates `extra_system_packages` setup
 
 ## Prevention Guidelines
 
@@ -125,12 +125,12 @@ The new `test_issue_867_fix.py` provides comprehensive validation:
 
 ## Expected Outcome
 After this fix, the GitHub Actions workflow should:
-- ✅ Successfully resolve the `dante-ev/latex-action@latest` action
-- ✅ Proceed through all validation steps without version errors
-- ✅ Complete LaTeX compilation and PDF generation
-- ✅ Upload the generated PDF as an artifact
+- [PASS] Successfully resolve the `dante-ev/latex-action@latest` action
+- [PASS] Proceed through all validation steps without version errors
+- [PASS] Complete LaTeX compilation and PDF generation
+- [PASS] Upload the generated PDF as an artifact
 
-## Status: ✅ RESOLVED
+## Status: [PASS] RESOLVED
 
 Issue #867 has been successfully resolved. The GitHub Actions LaTeX build workflow should now execute without version resolution errors and successfully generate the CTMM PDF documentation.
 

@@ -39,16 +39,16 @@ def demonstrate_healing_system():
     print("-" * 40)
     print(f"Monitored workflows: {len(config.monitored_workflows)}")
     for workflow in config.monitored_workflows:
-        print(f"   - {workflow}")
+        print(f"  - {workflow}")
 
     print(f"Error categories: {len(config.error_patterns)}")
     for category in config.error_patterns.keys():
-        print(f"   - {category}")
+        print(f"  - {category}")
 
     print(f"Fix strategies: {len(config.fix_strategies)}")
     for strategy in config.fix_strategies.keys():
         priority = config.fix_strategies[strategy]['priority']
-        print(f"   - {strategy} (priority {priority})")
+        print(f"  - {strategy} (priority {priority})")
 
     print()
 
@@ -79,12 +79,12 @@ def demonstrate_healing_system():
     analysis = analyzer.analyze_logs(12345, "latex-build.yml", sample_logs)
 
     print(f"Analysis Results:")
-    print(f"   Total Errors: {analysis.total_errors}")
-    print(f"   Error Categories: {', '.join(analysis.error_categories)}")
-    print(f"   Solvable: {'Yes' if analysis.is_solvable else 'No'}")
-    print(f"   Recommended Fixes:")
+    print(f"  Total Errors: {analysis.total_errors}")
+    print(f"  Error Categories: {', '.join(analysis.error_categories)}")
+    print(f"  Solvable: {'Yes' if analysis.is_solvable else 'No'}")
+    print(f"  Recommended Fixes:")
     for i, fix in enumerate(analysis.recommended_fixes, 1):
-        print(f"      {i}. {fix}")
+        print(f"  {i}. {fix}")
 
     print()
 
@@ -95,28 +95,28 @@ def demonstrate_healing_system():
     print("Example fixes that would be applied:")
 
     if 'latex_action_version' in analysis.error_categories:
-        print("   [FIX] LaTeX Action Version Fix:")
-        print("      - Update dante-ev/latex-action@v1.0.0 -> v2.3.0")
-        print("      - Modify .github/workflows/latex-build.yml")
-        print("      - Validate workflow syntax")
+        print("  [FIX] LaTeX Action Version Fix:")
+        print("  - Update dante-ev/latex-action@v1.0.0 -> v2.3.0")
+        print("  - Modify .github/workflows/latex-build.yml")
+        print("  - Validate workflow syntax")
 
     if 'package_missing' in analysis.error_categories:
-        print("   [PACKAGE] Missing Package Fix:")
-        print("      - Add texlive-fonts-extra to extra_system_packages")
-        print("      - Update workflow package installation")
-        print("      - Ensure FontAwesome support")
+        print("  [PACKAGE] Missing Package Fix:")
+        print("  - Add texlive-fonts-extra to extra_system_packages")
+        print("  - Update workflow package installation")
+        print("  - Ensure FontAwesome support")
 
     if 'timeout' in analysis.error_categories:
-        print("   [TIMER] Timeout Fix:")
-        print("      - Increase timeout-minutes from 15 to 23 (1.5x)")
-        print("      - Apply to all workflow steps")
-        print("      - Prevent future timeouts")
+        print("  [TIMER] Timeout Fix:")
+        print("  - Increase timeout-minutes from 15 to 23 (1.5x)")
+        print("  - Apply to all workflow steps")
+        print("  - Prevent future timeouts")
 
     if 'dependency_error' in analysis.error_categories:
-        print("   [PYTHON] Dependency Fix:")
-        print("      - Add --upgrade flag to pip install")
-        print("      - Upgrade pip itself first")
-        print("      - Handle version conflicts")
+        print("  [PYTHON] Dependency Fix:")
+        print("  - Add --upgrade flag to pip install")
+        print("  - Upgrade pip itself first")
+        print("  - Handle version conflicts")
 
     print()
 
@@ -128,27 +128,27 @@ def demonstrate_healing_system():
 
     print("Example PR that would be created:")
     print()
-    print("   Title: [FIX] Automated Workflow Fix: Fix 4 error categories (7 issues) in latex-build.yml")
-    print("   Branch: workflow-healing/run-12345-20240101-120000")
-    print("   Labels: documentation, automated-fix")
+    print("  Title: [FIX] Automated Workflow Fix: Fix 4 error categories (7 issues) in latex-build.yml")
+    print("  Branch: workflow-healing/run-12345-20240101-120000")
+    print("  Labels: documentation, automated-fix")
     print()
-    print("   Body Preview:")
-    print("   +-----------------------------------------------------")
-    print("   | ## [FIX] Automated Workflow Healing")
-    print("   | This PR contains automated fixes for workflow errors...")
-    print("   | ")
-    print("   | ### [TEST] Workflow Information")
-    print("   | - **Workflow**: latex-build.yml")
-    print("   | - **Run ID**: 12345")
-    print("   | - **Error Categories**: latex_action_version, package_missing, timeout, dependency_error")
-    print("   | - **Total Errors**: 7")
-    print("   | ")
-    print("   | ### [PASS] Applied Fixes")
-    print("   | 1. **Updated LaTeX action versions to v2.3.0**")
-    print("   | 2. **Added missing LaTeX packages: texlive-fonts-extra**")
-    print("   | 3. **Increased timeout values by factor of 1.5**")
-    print("   | 4. **Updated Python dependency installation with upgrade flags**")
-    print("   +-----------------------------------------------------")
+    print("  Body Preview:")
+    print("  +-----------------------------------------------------")
+    print("  | ## [FIX] Automated Workflow Healing")
+    print("  | This PR contains automated fixes for workflow errors...")
+    print("  | ")
+    print("  | ### [TEST] Workflow Information")
+    print("  | - **Workflow**: latex-build.yml")
+    print("  | - **Run ID**: 12345")
+    print("  | - **Error Categories**: latex_action_version, package_missing, timeout, dependency_error")
+    print("  | - **Total Errors**: 7")
+    print("  | ")
+    print("  | ### [PASS] Applied Fixes")
+    print("  | 1. **Updated LaTeX action versions to v2.3.0**")
+    print("  | 2. **Added missing LaTeX packages: texlive-fonts-extra**")
+    print("  | 3. **Increased timeout values by factor of 1.5**")
+    print("  | 4. **Updated Python dependency installation with upgrade flags**")
+    print("  +-----------------------------------------------------")
 
     print()
 
@@ -159,23 +159,23 @@ def demonstrate_healing_system():
     healing_system = WorkflowHealingSystem()
 
     print("Workflow Healing Process:")
-    print("   1. [SEARCH] Monitor GitHub Actions for failures")
-    print("   2. [EMOJI] Fetch failed workflow logs via API")
-    print("   3. [EMOJI] Analyze errors and categorize problems")
-    print("   4. [GEAR] Apply appropriate fix strategies")
-    print("   5. [PASS] Validate fixes before committing")
-    print("   6. [NOTE] Create descriptive pull request")
-    print("   7. [EMOJI] Wait for manual review and approval")
-    print("   8. [SYNC] Monitor PR status and workflow success")
+    print("  1. [SEARCH] Monitor GitHub Actions for failures")
+    print("  2. [EMOJI] Fetch failed workflow logs via API")
+    print("  3. [EMOJI] Analyze errors and categorize problems")
+    print("  4. [GEAR] Apply appropriate fix strategies")
+    print("  5. [PASS] Validate fixes before committing")
+    print("  6. [NOTE] Create descriptive pull request")
+    print("  7. [EMOJI] Wait for manual review and approval")
+    print("  8. [SYNC] Monitor PR status and workflow success")
 
     print()
     print("Safety Features:")
-    print("   [PASS] Never modifies main branch directly")
-    print("   [PASS] All changes require manual review")
-    print("   [PASS] Validates fixes before creating PRs")
-    print("   [PASS] Limits concurrent healing PRs")
-    print("   [PASS] Stops at unsolvable errors")
-    print("   [PASS] Automatic cleanup of stale PRs")
+    print("  [PASS] Never modifies main branch directly")
+    print("  [PASS] All changes require manual review")
+    print("  [PASS] Validates fixes before creating PRs")
+    print("  [PASS] Limits concurrent healing PRs")
+    print("  [PASS] Stops at unsolvable errors")
+    print("  [PASS] Automatic cleanup of stale PRs")
 
     print()
 
@@ -184,20 +184,20 @@ def demonstrate_healing_system():
     print("-" * 40)
 
     print("Basic Commands:")
-    print("   # Start healing for last 24 hours")
-    print("   python3 workflow_healing_system.py")
+    print("  # Start healing for last 24 hours")
+    print("  python3 workflow_healing_system.py")
     print()
-    print("   # Dry run (analyze without creating PRs)")
-    print("   python3 workflow_healing_system.py --dry-run")
+    print("  # Dry run (analyze without creating PRs)")
+    print("  python3 workflow_healing_system.py --dry-run")
     print()
-    print("   # Check system status")
-    print("   python3 workflow_healing_system.py --status")
+    print("  # Check system status")
+    print("  python3 workflow_healing_system.py --status")
     print()
-    print("   # Process specific time window")
-    print("   python3 workflow_healing_system.py --hours-back 48")
+    print("  # Process specific time window")
+    print("  python3 workflow_healing_system.py --hours-back 48")
     print()
-    print("   # Enable debug logging")
-    print("   python3 workflow_healing_system.py --debug")
+    print("  # Enable debug logging")
+    print("  python3 workflow_healing_system.py --debug")
 
     print()
 
@@ -206,17 +206,17 @@ def demonstrate_healing_system():
     print("-" * 40)
 
     print("CTMM-Specific Features:")
-    print("   [FILE] LaTeX therapeutic document processing")
-    print("   [EMOJI] FontAwesome icon dependency management")
-    print("   [EMOJI][EMOJI] German language content validation")
-    print("   [SUMMARY] PDF generation workflow maintenance")
-    print("   [FIX] Integration with ctmm_build.py system")
-    print("   [PASS] Validation with existing test scripts")
+    print("  [FILE] LaTeX therapeutic document processing")
+    print("  [EMOJI] FontAwesome icon dependency management")
+    print("  [EMOJI][EMOJI] German language content validation")
+    print("  [SUMMARY] PDF generation workflow maintenance")
+    print("  [FIX] Integration with ctmm_build.py system")
+    print("  [PASS] Validation with existing test scripts")
 
     print()
     print("Monitored CTMM Workflows:")
     for workflow in config.monitored_workflows:
-        print(f"   - {workflow}")
+        print(f"  - {workflow}")
 
     print()
 
@@ -233,11 +233,11 @@ def demonstrate_healing_system():
 
     print()
     print("[SUCCESS] The CTMM Workflow Healing System is ready for deployment!")
-    print("   Next steps:")
-    print("   1. Set up GitHub token: export GITHUB_TOKEN='your_token'")
-    print("   2. Test with dry run: python3 workflow_healing_system.py --dry-run")
-    print("   3. Review and merge healing PRs as they are created")
-    print("   4. Monitor system effectiveness and adjust as needed")
+    print("  Next steps:")
+    print("  1. Set up GitHub token: export GITHUB_TOKEN='your_token'")
+    print("  2. Test with dry run: python3 workflow_healing_system.py --dry-run")
+    print("  3. Review and merge healing PRs as they are created")
+    print("  4. Monitor system effectiveness and adjust as needed")
 
     return True
 
@@ -254,7 +254,7 @@ def run_system_validation():
         if issues:
             print("[WARN]  Configuration issues found:")
             for issue in issues:
-                print(f"   - {issue}")
+                print(f"  - {issue}")
         else:
             print("[PASS] Configuration validation passed")
 
@@ -295,9 +295,9 @@ if __name__ == "__main__":
     print()
     if demo_success and validation_success:
         print("[SUCCESS] Demonstration completed successfully!")
-        print("   The automated workflow healing system is fully implemented and ready to use.")
+        print("  The automated workflow healing system is fully implemented and ready to use.")
         sys.exit(0)
     else:
         print("[FAIL] Demonstration encountered issues.")
-        print("   Please check the error messages above and resolve any problems.")
+        print("  Please check the error messages above and resolve any problems.")
         sys.exit(1)

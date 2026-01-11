@@ -105,11 +105,11 @@ def main():
     # Additional validation
     print("\n" + "=" * 70)
     print("[PASS] Issue #1074 Fix Verification Summary:")
-    print("   - dante-ev/latex-action@v2.0.0 removed (non-existent version)")
-    print("   - dante-ev/latex-action@v0.2.0 used (correct working version)")
-    print("   - Workflow syntax is valid")
-    print("   - Version consistency across workflow files")
-    print("   - No references to problematic v2.0.0 version")
+    print("  - dante-ev/latex-action@v2.0.0 removed (non-existent version)")
+    print("  - dante-ev/latex-action@v0.2.0 used (correct working version)")
+    print("  - Workflow syntax is valid")
+    print("  - Version consistency across workflow files")
+    print("  - No references to problematic v2.0.0 version")
     print("=" * 70)
 
 

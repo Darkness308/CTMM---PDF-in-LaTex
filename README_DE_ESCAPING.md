@@ -10,14 +10,14 @@ When documents are converted from Word (.docx) or Markdown (.md) formats to LaTe
 
 ```latex
 \textbackslash{}hypertarget\textbackslash{}{tool-23-trigger-management\textbackslash{}}\textbackslash{}{\textbackslash{}%
-\textbackslash{}section\textbackslash{}{\textbackslash{}texorpdfstring\textbackslash{}{📄 \textbackslash{}textbf\textbackslash{}{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}\textbackslash{}}{\textbackslash{}{📄 TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}\textbackslash{}}{\textbackslash{}label\textbackslash{}{tool-23-trigger-management\textbackslash{}}\textbackslash{}}
+\textbackslash{}section\textbackslash{}{\textbackslash{}texorpdfstring\textbackslash{}{[FILE] \textbackslash{}textbf\textbackslash{}{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}\textbackslash{}}{\textbackslash{}{[FILE] TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}}\textbackslash{}}{\textbackslash{}label\textbackslash{}{tool-23-trigger-management\textbackslash{}}\textbackslash{}}
 ```
 
 Instead of clean, readable LaTeX:
 
 ```latex
 \hypertarget{tool-23-trigger-management}{%
-\section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}}\label{tool-23-trigger-management}
+\section{\texorpdfstring{[FILE] \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}}\label{tool-23-trigger-management}
 ```
 
 ## Solution Components

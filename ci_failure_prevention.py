@@ -64,7 +64,7 @@ class CIFailureAnalyzer:
             return issues
 
         for workflow_file in workflow_dir.glob('*.yml'):
-            print(f"   [FILE] Checking {workflow_file.name}...")
+            print(f"  [FILE] Checking {workflow_file.name}...")
 
             try:
                 with open(workflow_file, 'r') as f:
@@ -78,11 +78,11 @@ class CIFailureAnalyzer:
                     timeout_matches = re.findall(r'timeout-minutes:\s*(\d+)', content)
                     for timeout in timeout_matches:
                         if int(timeout) > 20:  # Flag very long timeouts
-                            print(f"   [WARN]  Long timeout found: {timeout} minutes")
+                            print(f"  [WARN]  Long timeout found: {timeout} minutes")
                         elif int(timeout) < 3:  # Flag very short timeouts
-                            print(f"   [WARN]  Short timeout found: {timeout} minutes")
+                            print(f"  [WARN]  Short timeout found: {timeout} minutes")
                         else:
-                            print(f"   [PASS] Reasonable timeout: {timeout} minutes")
+                            print(f"  [PASS] Reasonable timeout: {timeout} minutes")
 
             except Exception as e:
                 issues.append(f"{workflow_file.name}: Error reading file - {e}")
@@ -104,7 +104,7 @@ class CIFailureAnalyzer:
         }
 
         for workflow_file in workflow_dir.glob('*.yml'):
-            print(f"   [FILE] Checking {workflow_file.name}...")
+            print(f"  [FILE] Checking {workflow_file.name}...")
 
             try:
                 with open(workflow_file, 'r') as f:
@@ -119,7 +119,7 @@ class CIFailureAnalyzer:
                         if version in problematic_versions[action]:
                             issues.append(f"{workflow_file.name}: {action}@{version} is problematic")
                         else:
-                            print(f"   [PASS] {action}@{version} looks good")
+                            print(f"  [PASS] {action}@{version} looks good")
 
             except Exception as e:
                 issues.append(f"{workflow_file.name}: Error checking actions - {e}")
@@ -144,13 +144,13 @@ class CIFailureAnalyzer:
                     pass
 
         if large_files:
-            print("   [SUMMARY] Large files found:")
+            print("  [SUMMARY] Large files found:")
             for file_path, size in large_files:
-                print(f"     * {file_path}: {size / (1024*1024):.1f}MB")
+                print(f"  * {file_path}: {size / (1024*1024):.1f}MB")
                 if size > 50 * 1024 * 1024:  # 50MB
                     issues.append(f"Very large file may cause CI issues: {file_path}")
         else:
-            print("   [PASS] No large files detected")
+            print("  [PASS] No large files detected")
 
         return issues
 
@@ -164,7 +164,7 @@ class CIFailureAnalyzer:
         workflow_dir = Path('.github/workflows')
         for workflow_file in workflow_dir.glob('*.yml'):
             if 'latex' in workflow_file.name.lower():
-                print(f"   [FILE] Checking LaTeX config in {workflow_file.name}...")
+                print(f"  [FILE] Checking LaTeX config in {workflow_file.name}...")
 
                 try:
                     with open(workflow_file, 'r') as f:
@@ -179,7 +179,7 @@ class CIFailureAnalyzer:
 
                     for package in essential_packages:
                         if package in content:
-                            print(f"   [PASS] Found essential package: {package}")
+                            print(f"  [PASS] Found essential package: {package}")
                         else:
                             issues.append(f"Missing essential LaTeX package: {package}")
 
@@ -277,22 +277,22 @@ def main():
     if results['issues']:
         print("\n[FAIL] Issues found:")
         for i, issue in enumerate(results['issues'], 1):
-            print(f"   {i}. {issue}")
+            print(f"  {i}. {issue}")
     else:
         print("\n[PASS] No major issues detected!")
 
     print(f"\n[TIP] Recommendations:")
     for category, items in results['recommendations'].items():
         if items:
-            print(f"\n   {category.replace('_', ' ').title()}:")
+            print(f"\n  {category.replace('_', ' ').title()}:")
             for item in items:
-                print(f"   * {item}")
+                print(f"  * {item}")
 
     print(f"\n[TARGET] Prevention Strategy:")
-    print("   1. Implement enhanced monitoring and diagnostics")
-    print("   2. Add proactive environment validation")
-    print("   3. Improve error handling and recovery")
-    print("   4. Regular maintenance of action versions")
+    print("  1. Implement enhanced monitoring and diagnostics")
+    print("  2. Add proactive environment validation")
+    print("  3. Improve error handling and recovery")
+    print("  4. Regular maintenance of action versions")
 
     return results['status'] == 'healthy'
 

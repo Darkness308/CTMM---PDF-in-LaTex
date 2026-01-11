@@ -7,15 +7,15 @@
 - **Auto-resolved:** 1
 - **Manual review needed:** 7
 
-## ✅ PRs Ready to Merge (No Conflicts)
+## [PASS] PRs Ready to Merge (No Conflicts)
 - **PR #1185**: Complete merge conflict resolution analysis...
 
-## 🔧 Successfully Auto-Resolved PRs
+## [FIX] Successfully Auto-Resolved PRs
 - **PR #307**: Fix LaTeX syntax error: Add missing backslash...
   - Strategy: MERGE_WORKFLOW_UPDATES
   - Conflicts resolved: LaTeX workflow conflicts, Overlapping fix changes
 
-## ⚠️ PRs Requiring Manual Review
+## [WARN]️ PRs Requiring Manual Review
 - **PR #555**: Copilot/fix 300
   - Conflicts: Unknown merge status - requires investigation
   - Recommended strategy: NEEDS_RECHECK

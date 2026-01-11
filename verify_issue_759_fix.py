@@ -105,12 +105,12 @@ def check_file_changes():
                 total_added += added
                 total_deleted += deleted
                 file_count += 1
-                print(f"   [NOTE] {filename}: +{added} -{deleted}")
+                print(f"  [NOTE] {filename}: +{added} -{deleted}")
 
     print(f"\n[CHART] Summary:")
-    print(f"   Files changed: {file_count}")
-    print(f"   Lines added: {total_added}")
-    print(f"   Lines deleted: {total_deleted}")
+    print(f"  Files changed: {file_count}")
+    print(f"  Lines added: {total_added}")
+    print(f"  Lines deleted: {total_deleted}")
 
     if file_count == 0:
         print("[FAIL] No files changed")
@@ -133,7 +133,7 @@ def check_validation_systems():
     success, stdout, stderr = run_command("python3 validate_pr.py")
     if not success:
         print("[FAIL] PR validation failed")
-        print(f"   Error: {stderr}")
+        print(f"  Error: {stderr}")
         return False
 
     print("[PASS] PR validation passes")
@@ -142,7 +142,7 @@ def check_validation_systems():
     success, stdout, stderr = run_command("python3 ctmm_build.py")
     if not success:
         print("[FAIL] CTMM build system failed")
-        print(f"   Error: {stderr}")
+        print(f"  Error: {stderr}")
         return False
 
     print("[PASS] CTMM build system passes")
@@ -184,16 +184,16 @@ def main():
         print("[PASS] Build systems pass")
         print("[PASS] GitHub Copilot should now be able to review this PR")
         print("\n[EMOJI] This resolution follows the established pattern from:")
-        print("   - Issue #409: Original empty PR detection")
-        print("   - Issue #476: Binary file exclusion")
-        print("   - Issue #667: GitHub Actions upgrade")
-        print("   - Issue #673: Enhanced verification infrastructure")
-        print("   - Issue #708: Previous empty PR resolution")
-        print("   - Issue #731: Validation system improvements")
+        print("  - Issue #409: Original empty PR detection")
+        print("  - Issue #476: Binary file exclusion")
+        print("  - Issue #667: GitHub Actions upgrade")
+        print("  - Issue #673: Enhanced verification infrastructure")
+        print("  - Issue #708: Previous empty PR resolution")
+        print("  - Issue #731: Validation system improvements")
         return True
     else:
         print("[FAIL] ISSUE #759 RESOLUTION: INCOMPLETE")
-        print("   Some tests failed - see details above")
+        print("  Some tests failed - see details above")
         return False
 
 if __name__ == "__main__":

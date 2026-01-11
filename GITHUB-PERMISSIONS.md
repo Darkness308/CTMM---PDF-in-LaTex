@@ -23,8 +23,8 @@ gh auth login --scopes repo,workflow,admin:repo_hook
 ### 3. Repository-Einstellungen
 - **Settings** → **Actions** → **General**
 - **Workflow permissions** prüfen:
-  - ✅ "Read and write permissions" aktivieren
-  - ✅ "Allow GitHub Actions to create and approve pull requests" aktivieren
+  - [PASS] "Read and write permissions" aktivieren
+  - [PASS] "Allow GitHub Actions to create and approve pull requests" aktivieren
 
 ## Häufige Ursachen und Lösungen
 
@@ -93,14 +93,14 @@ permissions:
   
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Upload PDF artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: CTMM_PDF
-          path: main.pdf
-          retention-days: 30
+  runs-on: ubuntu-latest
+  steps:
+  - name: Upload PDF artifact
+  uses: actions/upload-artifact@v4
+  with:
+  name: CTMM_PDF
+  path: main.pdf
+  retention-days: 30
 ```
 
 ## Weitere Hilfe

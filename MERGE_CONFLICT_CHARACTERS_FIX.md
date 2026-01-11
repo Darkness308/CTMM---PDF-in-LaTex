@@ -51,21 +51,21 @@ A comprehensive Python script that:
 
 1. **Scans repository** for merge-blocking characters
 2. **Identifies issues:**
-   - Trailing whitespace (5+ lines)
-   - BOM (Byte Order Mark) presence
-   - Non-UTF-8 encoding
-   - Mixed line endings (CRLF/LF)
+  - Trailing whitespace (5+ lines)
+  - BOM (Byte Order Mark) presence
+  - Non-UTF-8 encoding
+  - Mixed line endings (CRLF/LF)
 
 3. **Fixes automatically:**
-   - Removes trailing whitespace from all lines
-   - Removes BOM if present
-   - Converts to UTF-8 encoding if needed
-   - Normalizes line endings to LF (Unix-style)
+  - Removes trailing whitespace from all lines
+  - Removes BOM if present
+  - Converts to UTF-8 encoding if needed
+  - Normalizes line endings to LF (Unix-style)
 
 4. **Maintains file integrity:**
-   - Preserves intentional content
-   - Ensures files end with newline
-   - Uses UTF-8 with LF line endings (standard for Git)
+  - Preserves intentional content
+  - Ensures files end with newline
+  - Uses UTF-8 with LF line endings (standard for Git)
 
 ### Usage
 
@@ -123,7 +123,7 @@ Including issue resolutions, guides, and reports:
 ```bash
 python3 ctmm_build.py
 ```
-**Result:** ✅ PASS
+**Result:** [PASS] PASS
 - LaTeX validation: PASS
 - Form field validation: PASS
 - All 4 style files validated
@@ -136,13 +136,13 @@ python3 ctmm_build.py
 ```bash
 python3 test_ctmm_build.py
 ```
-**Result:** ✅ All 56 tests passed in 0.023s
+**Result:** [PASS] All 56 tests passed in 0.023s
 
 ### Secondary Validation
 ```bash
 python3 fix_merge_conflicts.py --dry-run
 ```
-**Result:** ✅ No merge-blocking characters found
+**Result:** [PASS] No merge-blocking characters found
 
 ## Benefits
 
@@ -164,7 +164,7 @@ python3 fix_merge_conflicts.py --dry-run
 All 134 files were modified to remove trailing whitespace. This is a purely formatting change with no functional impact.
 
 ### Backward Compatibility
-✅ **100% compatible** - No functional changes made:
+[PASS] **100% compatible** - No functional changes made:
 - All code logic unchanged
 - All documentation content unchanged
 - All configurations unchanged
@@ -208,11 +208,11 @@ Consider adding a pre-commit hook to prevent trailing whitespace:
 #!/bin/sh
 # Check for trailing whitespace
 if git diff --cached --check --diff-filter=ACMR ; then
-    echo "✓ No trailing whitespace found"
-    exit 0
+  echo "[OK] No trailing whitespace found"
+  exit 0
 else
-    echo "✗ Trailing whitespace detected. Please remove it."
-    exit 1
+  echo "[ERROR] Trailing whitespace detected. Please remove it."
+  exit 1
 fi
 ```
 
@@ -221,24 +221,24 @@ fi
 ### Character Issues That Can Cause Merge Conflicts
 
 1. **Trailing Whitespace**
-   - Most common cause of conflicts
-   - Invisible in most editors
-   - Git considers it a real change
+  - Most common cause of conflicts
+  - Invisible in most editors
+  - Git considers it a real change
 
 2. **Line Endings**
-   - Windows (CRLF): `\r\n`
-   - Unix/Linux/Mac (LF): `\n`
-   - Mixed line endings cause conflicts
+  - Windows (CRLF): `\r\n`
+  - Unix/Linux/Mac (LF): `\n`
+  - Mixed line endings cause conflicts
 
 3. **BOM (Byte Order Mark)**
-   - Invisible character at file start
-   - Not needed for UTF-8
-   - Can cause parsing issues
+  - Invisible character at file start
+  - Not needed for UTF-8
+  - Can cause parsing issues
 
 4. **Non-UTF-8 Encoding**
-   - Different systems interpret differently
-   - Can cause garbled text
-   - Git has trouble with non-UTF-8
+  - Different systems interpret differently
+  - Can cause garbled text
+  - Git has trouble with non-UTF-8
 
 ### Why These Issues Prevent Merges
 
@@ -251,7 +251,7 @@ When Git tries to merge branches:
 
 ## Conclusion
 
-✅ **All merge-blocking characters successfully identified and removed**
+[PASS] **All merge-blocking characters successfully identified and removed**
 
 The repository is now clean and ready for merging:
 - No trailing whitespace in any files
@@ -268,4 +268,4 @@ The repository is now clean and ready for merging:
 **Script:** `fix_merge_conflicts.py`
 **Completion Date:** 2026-01-10
 **Files Fixed:** 134
-**Status:** ✅ COMPLETE
+**Status:** [PASS] COMPLETE

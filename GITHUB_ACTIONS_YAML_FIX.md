@@ -21,15 +21,15 @@ When `on:` is unquoted, the YAML parser creates a key-value pair with the boolea
 Quote the `on` keyword in all GitHub Actions workflow files to prevent YAML boolean interpretation:
 
 ```yaml
-# ❌ Problematic (unquoted)
+# [FAIL] Problematic (unquoted)
 on:
   push:
-    branches: [main]
+  branches: [main]
 
-# ✅ Correct (quoted)  
+# [PASS] Correct (quoted)  
 "on":
   push:
-    branches: [main]
+  branches: [main]
 ```
 
 ### Files Fixed
@@ -42,20 +42,20 @@ on:
 ### Current Status
 All three workflow files have been validated and confirmed to have the correct syntax:
 
-- ✅ **latex-build.yml**: Triggers on push/pull_request to main branch
-- ✅ **latex-validation.yml**: Triggers on push/pull_request to main branch  
-- ✅ **static.yml**: Triggers on push to main branch and manual workflow_dispatch
+- [PASS] **latex-build.yml**: Triggers on push/pull_request to main branch
+- [PASS] **latex-validation.yml**: Triggers on push/pull_request to main branch  
+- [PASS] **static.yml**: Triggers on push to main branch and manual workflow_dispatch
 
 ### Technical Verification
 
 ```python
 # Problematic parsing (unquoted)
-yaml.safe_load('on:\n  push:\n    branches: [main]')
+yaml.safe_load('on:\n  push:\n  branches: [main]')
 # Result: {True: {'push': {'branches': ['main']}}}
 # Issue: Key is boolean True, not string "on"
 
 # Correct parsing (quoted)
-yaml.safe_load('"on":\n  push:\n    branches: [main]')  
+yaml.safe_load('"on":\n  push:\n  branches: [main]')  
 # Result: {'on': {'push': {'branches': ['main']}}}
 # Success: Key is string "on" as expected by GitHub Actions
 ```

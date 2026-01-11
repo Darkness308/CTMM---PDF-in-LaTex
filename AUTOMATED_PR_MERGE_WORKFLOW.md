@@ -6,25 +6,25 @@ The **Automated PR Merge and Build Testing** workflow provides a comprehensive s
 
 ## Features
 
-### 🔄 **Automated PR Processing**
+### [SYNC] **Automated PR Processing**
 - Discovers all open pull requests automatically
 - Creates isolated test branches for safe testing
 - Merges PRs sequentially to identify integration issues
 - Handles merge conflicts gracefully without interruption
 
-### 🏗️ **Comprehensive Build Testing**
+### ️ **Comprehensive Build Testing**
 - Runs CTMM build system validation after each merge
 - Executes LaTeX syntax validation
 - Performs enhanced build management checks
 - Attempts full PDF generation for final validation
 
-### 📊 **Detailed Reporting**
+### [SUMMARY] **Detailed Reporting**
 - Generates comprehensive test result summaries
 - Tracks successful and failed merges/builds
 - Provides individual PR analysis logs
 - Creates actionable recommendations for manual review
 
-### 🔒 **Safe Operation**
+### [SECURE] **Safe Operation**
 - Never modifies the main branch directly
 - Works only on temporary test branches
 - Includes automatic cleanup after completion
@@ -40,9 +40,9 @@ The workflow can be triggered manually through GitHub Actions:
 2. Select **Automated PR Merge and Build Testing**
 3. Click **Run workflow**
 4. Configure options:
-   - **Base branch**: Branch to merge PRs into (default: `main`)
-   - **Max PRs**: Maximum number of PRs to test (default: `10`)
-   - **Cleanup branch**: Delete test branch after completion (default: `true`)
+  - **Base branch**: Branch to merge PRs into (default: `main`)
+  - **Max PRs**: Maximum number of PRs to test (default: `10`)
+  - **Cleanup branch**: Delete test branch after completion (default: `true`)
 
 ### Scheduled Execution
 
@@ -63,9 +63,9 @@ The workflow automatically runs:
 ### 1. **Initialization**
 ```mermaid
 graph LR
-    A[Checkout Repository] --> B[Setup Python]
-    B --> C[Install Dependencies]
-    C --> D[Configure Git]
+  A[Checkout Repository] --> B[Setup Python]
+  B --> C[Install Dependencies]
+  C --> D[Configure Git]
 ```
 
 ### 2. **Test Branch Creation**
@@ -76,21 +76,21 @@ graph LR
 ### 3. **PR Discovery and Processing**
 ```mermaid
 graph TD
-    A[Fetch Open PRs] --> B{For Each PR}
-    B --> C[Check Repository Source]
-    C --> D{Same Repo?}
-    D -->|Yes| E[Fetch PR Branch]
-    D -->|No| F[Skip External PR]
-    E --> G[Attempt Merge]
-    G --> H{Merge Success?}
-    H -->|Yes| I[Run Build Tests]
-    H -->|No| J[Log Conflict]
-    I --> K[Record Results]
-    J --> K
-    F --> K
-    K --> L{More PRs?}
-    L -->|Yes| B
-    L -->|No| M[Final Build Test]
+  A[Fetch Open PRs] --> B{For Each PR}
+  B --> C[Check Repository Source]
+  C --> D{Same Repo?}
+  D -->|Yes| E[Fetch PR Branch]
+  D -->|No| F[Skip External PR]
+  E --> G[Attempt Merge]
+  G --> H{Merge Success?}
+  H -->|Yes| I[Run Build Tests]
+  H -->|No| J[Log Conflict]
+  I --> K[Record Results]
+  J --> K
+  F --> K
+  K --> L{More PRs?}
+  L -->|Yes| B
+  L -->|No| M[Final Build Test]
 ```
 
 ### 4. **Build Testing Sequence**
@@ -117,19 +117,19 @@ After all PR processing:
 ### Test Results Structure
 ```
 test_results/
-├── summary.md                          # Main summary report
-├── pr_XXX_build.log                   # Individual PR build logs
-├── pr_XXX_merge.log                   # Individual PR merge logs
-├── pr_XXX_merge_conflicts.log         # Merge conflict details
-├── final_ctmm_build.log              # Final CTMM build log
-├── final_latex_validation.log         # Final LaTeX validation log
-├── final_enhanced_build.log           # Final enhanced build log
-├── latex_error.log                    # LaTeX compilation errors
-├── combined_test.pdf                  # Generated PDF (if successful)
-├── successful_merges.count            # Success counters
-├── failed_merges.count                # Failure counters
-├── successful_builds.count            # Build success counters
-└── failed_builds.count                # Build failure counters
+├── summary.md  # Main summary report
+├── pr_XXX_build.log  # Individual PR build logs
+├── pr_XXX_merge.log  # Individual PR merge logs
+├── pr_XXX_merge_conflicts.log  # Merge conflict details
+├── final_ctmm_build.log  # Final CTMM build log
+├── final_latex_validation.log  # Final LaTeX validation log
+├── final_enhanced_build.log  # Final enhanced build log
+├── latex_error.log  # LaTeX compilation errors
+├── combined_test.pdf  # Generated PDF (if successful)
+├── successful_merges.count  # Success counters
+├── failed_merges.count  # Failure counters
+├── successful_builds.count  # Build success counters
+└── failed_builds.count  # Build failure counters
 ```
 
 ### Summary Report Example
@@ -148,19 +148,19 @@ test_results/
 - **Head SHA:** abc123...
 - **Head Ref:** fix-escaping
 - **Repository:** Darkness308/CTMM---PDF-in-LaTex
-- **Merge Status:** ✅ SUCCESS
-- **Build Status:** ✅ SUCCESS
+- **Merge Status:** [PASS] SUCCESS
+- **Build Status:** [PASS] SUCCESS
 
 ### PR #124: Add new therapy module
 - **Head SHA:** def456...
 - **Head Ref:** new-module
 - **Repository:** Darkness308/CTMM---PDF-in-LaTex
-- **Merge Status:** ❌ FAILED (merge conflicts)
-- **Build Status:** ⏭️ SKIPPED (merge failed)
+- **Merge Status:** [FAIL] FAILED (merge conflicts)
+- **Build Status:** ️ SKIPPED (merge failed)
 
 ## Final Combined Build Results
-- **Final Build Status:** ✅ SUCCESS
-- **PDF Generation:** ✅ SUCCESS
+- **Final Build Status:** [PASS] SUCCESS
+- **PDF Generation:** [PASS] SUCCESS
 
 ## Summary Statistics
 | Metric | Count |
@@ -172,9 +172,9 @@ test_results/
 | Failed Builds | 0 |
 
 ## Recommendations for Manual Review
-- 🔍 **Review merge conflicts:** 1 PR(s) failed to merge
-- ✅ **Integration ready:** All successfully merged PRs passed build validation
-- 📋 **Next steps:** Review individual PR logs for detailed failure analysis
+- [SEARCH] **Review merge conflicts:** 1 PR(s) failed to merge
+- [PASS] **Integration ready:** All successfully merged PRs passed build validation
+- [TEST] **Next steps:** Review individual PR logs for detailed failure analysis
 ```
 
 ## Integration with Existing Tools
@@ -194,11 +194,11 @@ test_results/
 ## Security Considerations
 
 ### Safe Operations
-- ✅ **Isolated Testing**: Works only on temporary test branches
-- ✅ **No Main Branch Modification**: Never touches main branch directly
-- ✅ **Token Security**: Uses GitHub's built-in authentication
-- ✅ **External PR Handling**: Safely skips external repository PRs
-- ✅ **Automatic Cleanup**: Removes test branches after completion
+- [PASS] **Isolated Testing**: Works only on temporary test branches
+- [PASS] **No Main Branch Modification**: Never touches main branch directly
+- [PASS] **Token Security**: Uses GitHub's built-in authentication
+- [PASS] **External PR Handling**: Safely skips external repository PRs
+- [PASS] **Automatic Cleanup**: Removes test branches after completion
 
 ### Branch Protection
 - Test branches are created with unique timestamps

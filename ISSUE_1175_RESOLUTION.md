@@ -11,17 +11,17 @@ The issue claims:
 
 ## Critical Analysis & Findings
 
-### 🔍 Repository Context Investigation
+### [SEARCH] Repository Context Investigation
 
 After comprehensive analysis of the repository state, historical documentation, and validation scripts, **critical conflicts** have been identified:
 
-#### Current Working State ✅
+#### Current Working State [PASS]
 - **All workflows currently use v0.2.0**: latex-validation.yml, latex-build.yml, automated-pr-merge-test.yml
 - **All validation scripts PASS**: test_issue_1082_fix.py, validate_workflow_versions.py
 - **No CI failures observed**: Current v0.2.0 configuration works correctly
 - **Version pinning validation**: All actions properly version-pinned, no @latest tags
 
-#### Historical Context ⚠️
+#### Historical Context [WARN]️
 Multiple previous issues explicitly document v2.3.0 as **problematic**:
 
 **Issue #1062** (ISSUE_1062_RESOLUTION.md):
@@ -35,7 +35,7 @@ Multiple previous issues explicitly document v2.3.0 as **problematic**:
 - "Causes GitHub Actions failures: Unable to resolve action 'dante-ev/latex-action@v2.3.0'"
 - **Prevention Guidelines**: "Never use v2.3.0, v2.0.0, or v2"
 
-#### Validation Test Results ❌
+#### Validation Test Results [FAIL]
 Custom validation script (`test_issue_1175_fix.py`) confirms:
 - **CONFLICT DETECTED**: Issue #1175 requests v2.3.0, but repository documents it as non-existent
 - **HIGH RISK**: Updating to v2.3.0 may break all CI workflows
@@ -59,7 +59,7 @@ The issue #1175 description contains a fundamental contradiction:
 
 ## Recommended Solution
 
-### ⚠️ DO NOT IMPLEMENT THE REQUESTED CHANGE
+### [WARN]️ DO NOT IMPLEMENT THE REQUESTED CHANGE
 
 Based on comprehensive analysis, **implementing the requested change would be harmful**:
 
@@ -101,7 +101,7 @@ python3 validate_workflow_versions.py
 # Manual workflow dispatch of test-dante-version.yml
 ```
 
-## Status: ⚠️ HOLD - REQUIRES CLARIFICATION
+## Status: [WARN]️ HOLD - REQUIRES CLARIFICATION
 
 **Recommendation**: DO NOT implement the requested change without further verification and stakeholder confirmation.
 
