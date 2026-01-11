@@ -13,7 +13,7 @@
 
 **File Types Affected:**
 - Python scripts (.py): 90+ files
-- Markdown documentation (.md): 60+ files  
+- Markdown documentation (.md): 60+ files
 - LaTeX source files (.tex): 12 files
 - YAML workflow files (.yml): 6 files
 - Shell scripts (.sh): 3 files

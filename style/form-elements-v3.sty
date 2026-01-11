@@ -236,15 +236,15 @@
     \textbf{#2 (1-10):} \\[0.5em]
     \begin{tabular}{*{10}{c}}
         \small 1 & \small 2 & \small 3 & \small 4 & \small 5 & \small 6 & \small 7 & \small 8 & \small 9 & \small 10 \\
-        \ctmmRadioButton{#1}{1}{}{Sehr schlecht} & 
-        \ctmmRadioButton{#1}{2}{}{Schlecht} & 
-        \ctmmRadioButton{#1}{3}{}{Ziemlich schlecht} & 
-        \ctmmRadioButton{#1}{4}{}{Eher schlecht} & 
-        \ctmmRadioButton{#1}{5}{}{Neutral} & 
-        \ctmmRadioButton{#1}{6}{}{Eher gut} & 
-        \ctmmRadioButton{#1}{7}{}{Ziemlich gut} & 
-        \ctmmRadioButton{#1}{8}{}{Gut} & 
-        \ctmmRadioButton{#1}{9}{}{Sehr gut} & 
+        \ctmmRadioButton{#1}{1}{}{Sehr schlecht} &
+        \ctmmRadioButton{#1}{2}{}{Schlecht} &
+        \ctmmRadioButton{#1}{3}{}{Ziemlich schlecht} &
+        \ctmmRadioButton{#1}{4}{}{Eher schlecht} &
+        \ctmmRadioButton{#1}{5}{}{Neutral} &
+        \ctmmRadioButton{#1}{6}{}{Eher gut} &
+        \ctmmRadioButton{#1}{7}{}{Ziemlich gut} &
+        \ctmmRadioButton{#1}{8}{}{Gut} &
+        \ctmmRadioButton{#1}{9}{}{Sehr gut} &
         \ctmmRadioButton{#1}{10}{}{Ausgezeichnet} \\
     \end{tabular}
 }
@@ -255,10 +255,10 @@
     \textbf{#2 Intensität:} \\[0.3em]
     \begin{tabular}{|c|c|c|c|c|}
     \hline
-    \textcolor{ctmmGreen}{\ctmmRadioButton{#1}{1}{1}{Niedrig}} & 
-    \textcolor{ctmmOrange}{\ctmmRadioButton{#1}{2}{2}{Leicht erhöht}} & 
-    \textcolor{ctmmOrange}{\ctmmRadioButton{#1}{3}{3}{Mittel}} & 
-    \textcolor{ctmmRed}{\ctmmRadioButton{#1}{4}{4}{Hoch}} & 
+    \textcolor{ctmmGreen}{\ctmmRadioButton{#1}{1}{1}{Niedrig}} &
+    \textcolor{ctmmOrange}{\ctmmRadioButton{#1}{2}{2}{Leicht erhöht}} &
+    \textcolor{ctmmOrange}{\ctmmRadioButton{#1}{3}{3}{Mittel}} &
+    \textcolor{ctmmRed}{\ctmmRadioButton{#1}{4}{4}{Hoch}} &
     \textcolor{ctmmRed}{\ctmmRadioButton{#1}{5}{5}{Sehr hoch}} \\
     \hline
     \end{tabular}
@@ -272,12 +272,12 @@
     \hline
     \textbf{Mo} & \textbf{Di} & \textbf{Mi} & \textbf{Do} & \textbf{Fr} & \textbf{Sa} & \textbf{So} \\
     \hline
-    \ctmmTextField[2.5cm]{#1_mo}{}{Montag} & 
-    \ctmmTextField[2.5cm]{#1_di}{}{Dienstag} & 
-    \ctmmTextField[2.5cm]{#1_mi}{}{Mittwoch} & 
-    \ctmmTextField[2.5cm]{#1_do}{}{Donnerstag} & 
-    \ctmmTextField[2.5cm]{#1_fr}{}{Freitag} & 
-    \ctmmTextField[2.5cm]{#1_sa}{}{Samstag} & 
+    \ctmmTextField[2.5cm]{#1_mo}{}{Montag} &
+    \ctmmTextField[2.5cm]{#1_di}{}{Dienstag} &
+    \ctmmTextField[2.5cm]{#1_mi}{}{Mittwoch} &
+    \ctmmTextField[2.5cm]{#1_do}{}{Donnerstag} &
+    \ctmmTextField[2.5cm]{#1_fr}{}{Freitag} &
+    \ctmmTextField[2.5cm]{#1_sa}{}{Samstag} &
     \ctmmTextField[2.5cm]{#1_so}{}{Sonntag} \\
     \hline
     \end{tabularx}
@@ -292,29 +292,29 @@
         title={\textbf{Täglicher CTMM-Tracker}},
         fonttitle=\bfseries
     ]
-    
+
     \ctmmDateField{#1_date}{Datum}{TT.MM.JJJJ} \quad \ctmmTimeField{#1_time}{Zeit}
-    
+
     \vspace{0.5em}
     \ctmmMoodScale{#1_mood_morning}{Morgenstimmung}
-    
+
     \vspace{0.5em}
     \ctmmMoodScale{#1_mood_evening}{Abendstimmung}
-    
+
     \vspace{0.5em}
     \ctmmTriggerScale{#1_trigger}{Trigger}
-    
+
     \vspace{0.5em}
     \textbf{Angewandte Strategien:} \\[0.3em]
     \ctmmCheckBox{#1_breath}{Atemtechnik}{breath} \quad
     \ctmmCheckBox{#1_ground}{Grounding}{ground} \quad
     \ctmmCheckBox{#1_pause}{Pause}{pause} \quad
     \ctmmCheckBox{#1_talk}{Gespräch}{talk}
-    
+
     \vspace{0.5em}
     \textbf{Reflexion:} \\[0.3em]
     \ctmmTextArea[\textwidth]{3cm}{#1_reflection}{}{Was war heute besonders? Erkenntnisse?}
-    
+
     \end{tcolorbox}
 }
 
@@ -332,17 +332,17 @@
         function validateCTMMForm() {
             var fields = this.getField();
             var errors = [];
-            
+
             // Check required fields
             if (this.getField("date").value == "") {
                 errors.push("Datum ist erforderlich");
             }
-            
+
             if (errors.length > 0) {
                 app.alert("Bitte korrigieren Sie folgende Fehler:\n" + errors.join("\n"));
                 return false;
             }
-            
+
             return true;
         }
         \end{insDLJS}%
@@ -358,7 +358,7 @@
     \setboolean{ctmmPrintMode}{true}%
 }
 
-% Enable interactive mode  
+% Enable interactive mode
 \newcommand{\enableInteractiveMode}{%
     \setboolean{ctmmPrintMode}{false}%
 }
