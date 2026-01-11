@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Issue #761 Validation: Enhanced CI Pipeline Robustness
-======================================================
 
 This script validates the fixes implemented for issue #761, which addresses
 CI pipeline failures reported in the Mergify CI insights. The focus is on

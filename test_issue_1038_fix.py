@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Issue #1038 Validation: CI Build YAML Syntax Fix
-=================================================
 
 This script validates the fixes implemented for issue #1038, which addresses
 the CI Insights report showing a broken "Build LaTeX PDF" workflow due to

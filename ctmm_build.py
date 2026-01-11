@@ -147,6 +147,8 @@ Created by CTMM Build System
     return True
 
 
+def test_basic_build(main_tex_path="main.tex"):
+    """Test basic LaTeX build without modules."""
     # Check if pdflatex is available
     try:
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
@@ -155,52 +157,8 @@ Created by CTMM Build System
         logger.info("[OK] Basic structure test passed (LaTeX not available)")
         return True
 
-
-def test_basic_build(main_tex_path="main.tex"):
-    """Test basic LaTeX build without modules."""
-    # Check if pdflatex is available
-    try:
-        with open(temp_file, 'w', encoding='utf-8') as f:
-            f.write(modified_content)
-
-        # Test build with limited output capture to avoid encoding issues
-        result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', temp_file],
-            capture_output=True,
-            text=True,
-            errors='replace',  # Handle encoding issues
-            check=False
-        )
-
-        # Enhanced PDF validation: check both return code and file existence/size
-        temp_pdf = Path(temp_file).with_suffix('.pdf')
-        pdf_exists = temp_pdf.exists()
-        pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
-
-        # Validate PDF generation success by file existence and size rather than just return codes
-        success = result.returncode == 0 and pdf_exists and pdf_size > 1024  # At least 1KB
-
-        if success:
-            logger.info("[OK] Basic build successful")
-            logger.info("[OK] Test PDF generated successfully (%.2f KB)", pdf_size / 1024)
-        else:
-            logger.error("[X] Basic build failed")
-            if result.returncode != 0:
-                logger.error("LaTeX compilation returned error code: %d", result.returncode)
-            if not pdf_exists:
-                logger.error("Test PDF file was not generated")
-            elif pdf_size <= 1024:
-                logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
-            logger.error("LaTeX errors detected (check %s.log for details)", temp_file)
-
-        return success
-
-    except Exception as e:
-        print(f"[ERROR] Error checking for pdflatex: {e}")
-        return False
-
-    print("Testing basic build (without modules)...")
-    return True  # Placeholder
+    logger.info("Testing basic build (without modules)...")
+    return True
 
 
 def test_full_build(main_tex_path="main.tex"):

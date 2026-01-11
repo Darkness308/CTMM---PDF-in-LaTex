@@ -313,7 +313,6 @@ This file was automatically created by the CTMM Build System because it was refe
         """Generate a comprehensive build report."""
         report = f"""
 CTMM Build System Report
-========================
 
 ## Summary
 - Style files found: {len(self.style_files)}
