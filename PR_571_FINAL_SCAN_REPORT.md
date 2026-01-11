@@ -19,7 +19,7 @@ This report documents the final comprehensive scan of the CTMM repository to ver
 
 ### Scan Scope
 
-**Files Scanned:** 33 text files
+**Files Scanned:** 42 text files
 - **LaTeX files:** `*.tex`, `*.sty` (17 files)
 - **Python scripts:** `*.py` (3 files)  
 - **Shell scripts:** `*.sh` (1 file)
@@ -290,7 +290,7 @@ Files changed: 0 (verification only)
 
 **Scan Time:** < 2 seconds for entire repository  
 **Memory Usage:** < 50 MB peak  
-**Files Processed:** 33 files (excluding binary and documentation)  
+**Files Processed:** 42 files (excluding binary and documentation)  
 **Accuracy:** 100% (no false positives in final report)
 
 ---
@@ -308,7 +308,7 @@ Files changed: 0 (verification only)
 ### What Was Verified
 
 **Checked:**
-- 33 text files across repository
+- 42 text files across repository
 - 7 categories of disruptive characters
 - 3 different scanning methods
 - Historical fix effectiveness
@@ -364,7 +364,7 @@ python3 scripts/scan_disruptive_chars.py --verbose
 CTMM Disruptive Character Scanner
 ================================================================================
 
-Scanned 33 text files (excluding documentation)
+Scanned 42 text files (excluding documentation)
 Found issues in 0 files
 
 ✅ NO DISRUPTIVE CHARACTERS FOUND!
