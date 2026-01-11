@@ -18,7 +18,7 @@ The issue was related to YAML 1.1 specification behavior where certain keywords 
 All GitHub Actions workflow files in the repository now use the correct double-quoted syntax:
 
 1. **`.github/workflows/latex-build.yml`** - Line 4: `"on":`
-2. **`.github/workflows/latex-validation.yml`** - Line 4: `"on":`  
+2. **`.github/workflows/latex-validation.yml`** - Line 4: `"on":`
 3. **`.github/workflows/static.yml`** - Line 5: `"on":`
 
 ### Validation Results
@@ -39,7 +39,7 @@ yaml.safe_load('on:\n  push:\n    branches: [main]')
 # Problem: Key is boolean True, not string "on"
 
 # Correct parsing (Issue #532 solution)
-yaml.safe_load('"on":\n  push:\n    branches: [main]')  
+yaml.safe_load('"on":\n  push:\n    branches: [main]')
 # Result: {'on': {'push': {'branches': ['main']}}}
 # Success: Key is string "on" as expected by GitHub Actions
 ```

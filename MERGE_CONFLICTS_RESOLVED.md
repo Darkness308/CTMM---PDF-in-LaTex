@@ -40,11 +40,11 @@ Successfully identified and fixed all merge-blocking characters in 10 files acro
 - `modules/matching-matrix-trigger-reaktion.tex`
   - 132 lines trailing whitespace removed
   - CRLF → LF line ending normalization
-  
+
 - `modules/trigger-forschungstagebuch.tex`
   - 109 lines trailing whitespace removed
   - CRLF → LF line ending normalization
-  
+
 - `modules/krisenprotokoll-ausfuellen.tex`
   - 224 lines trailing whitespace removed
   - CRLF → LF line ending normalization

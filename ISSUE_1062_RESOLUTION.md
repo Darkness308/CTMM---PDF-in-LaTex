@@ -90,7 +90,7 @@ $ python3 validate_workflow_syntax.py
 ```bash
 $ python3 ctmm_build.py
 ✅ LaTeX validation: PASS
-✅ Basic build: PASS  
+✅ Basic build: PASS
 ✅ Full build: PASS
 ```
 

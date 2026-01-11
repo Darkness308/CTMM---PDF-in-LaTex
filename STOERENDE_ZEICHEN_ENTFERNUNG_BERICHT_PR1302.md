@@ -98,7 +98,7 @@ python3 fix_merge_conflicts.py --dry-run
 
 **Beispiel der Änderung:**
 ```diff
--**Datum:** 3. August 2025  
+-**Datum:** 3. August 2025
 +**Datum:** 3. August 2025
 ```
 (Erste Zeile hat Leerzeichen am Ende, zweite nicht)
@@ -202,10 +202,10 @@ Found 0 files with issues
 ### Markdown-Dokumentation (3 Dateien)
 - `HYPERLINK-STATUS.md` - Hyperlink-Status-Bericht
   - 6 Zeilen: Trailing Whitespace entfernt
-  
+
 - `PYTHON_SYNTAX_ERROR_RESOLUTION.md` - Python-Syntax-Fehler-Lösung
   - 6 Zeilen: Trailing Whitespace entfernt
-  
+
 - `MERGE_CONFLICT_QUICK_REFERENCE.md` - Merge-Konflikt-Schnellreferenz
   - 9 Zeilen: Trailing Whitespace entfernt
 

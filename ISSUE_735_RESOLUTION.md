@@ -53,7 +53,7 @@ $ python3 validate_latex_syntax.py
 
 ## Impact
 - **Fixes CI build failures**: GitHub Actions workflow will now successfully resolve the LaTeX action
-- **Enables PDF generation**: LaTeX compilation can proceed without action resolution errors  
+- **Enables PDF generation**: LaTeX compilation can proceed without action resolution errors
 - **Maintains compatibility**: No breaking changes to existing document structure or functionality
 - **Improves reliability**: Eliminates version-related workflow failures
 

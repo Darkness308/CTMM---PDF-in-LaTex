@@ -21,7 +21,7 @@ LaTeX files contained Unicode en-dash characters instead of proper LaTeX double-
 - **Line 21**: `Kap.\ 3.1\ –\ 3.5` → `Kap.\ 3.1\ --\ 3.5`
 - **Change**: Unicode en-dash to LaTeX double-hyphen
 
-### 2. modules/matching-matrix-trigger-reaktion.tex  
+### 2. modules/matching-matrix-trigger-reaktion.tex
 - **Line 23**: `Kap. 3.1 – 3.5` → `Kap. 3.1 -- 3.5`
 - **Change**: Unicode en-dash to LaTeX double-hyphen
 
@@ -63,7 +63,7 @@ Total:                   77 tests - ALL PASS
 ### Final Comprehensive Scan
 ✅ No merge conflict markers (<<<<<<, =======, >>>>>>>)
 ✅ No Unicode en-dashes in .tex files
-✅ No Unicode em-dashes in .tex files  
+✅ No Unicode em-dashes in .tex files
 ✅ No smart quotes in .tex files
 ✅ No CRLF (Windows line endings)
 ✅ All files properly UTF-8 encoded

@@ -24,7 +24,7 @@ Contains:
 
 Learn how to:
 - Run automated healing
-- Monitor workflow status  
+- Monitor workflow status
 - Fix failed builds automatically
 - Continue until all builds are green
 

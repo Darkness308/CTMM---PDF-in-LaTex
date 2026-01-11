@@ -66,7 +66,7 @@
             "type": "shell",
             "command": "pdflatex",
             "args": [
-                "-synctex=1", 
+                "-synctex=1",
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=build",
@@ -98,7 +98,7 @@
                 "args": ["-rf", "build/*"]
             },
             "osx": {
-                "command": "rm", 
+                "command": "rm",
                 "args": ["-rf", "build/*"]
             },
             "windows": {
@@ -108,7 +108,7 @@
             "group": "build"
         },
         {
-            "label": "CTMM: Create Missing Directories", 
+            "label": "CTMM: Create Missing Directories",
             "type": "shell",
             "command": "mkdir",
             "args": ["-p", "build", "modules", "style", "assets"],
@@ -118,7 +118,7 @@
             },
             "osx": {
                 "command": "mkdir",
-                "args": ["-p", "build", "modules", "style", "assets"] 
+                "args": ["-p", "build", "modules", "style", "assets"]
             },
             "windows": {
                 "command": "cmd",
@@ -137,7 +137,7 @@
         },
         {
             "label": "CTMM: Generate Module",
-            "type": "shell", 
+            "type": "shell",
             "command": "./create-module.sh",
             "linux": {
                 "command": "./create-module.sh"

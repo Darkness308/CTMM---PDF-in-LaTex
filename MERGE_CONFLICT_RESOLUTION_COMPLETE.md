@@ -77,6 +77,6 @@ The repository is now ready for merge.
 
 ---
 
-**Resolution Date:** 2026-01-10  
-**Resolution Tool:** resolve_merge_conflicts.py + manual fixes  
+**Resolution Date:** 2026-01-10
+**Resolution Tool:** resolve_merge_conflicts.py + manual fixes
 **Verification:** Complete ✓

@@ -181,7 +181,7 @@ test_results/
 
 ### Reuses Established Components
 - **CTMM Build System** (`ctmm_build.py`)
-- **LaTeX Validation** (`validate_latex_syntax.py`)  
+- **LaTeX Validation** (`validate_latex_syntax.py`)
 - **LaTeX Action** (`dante-ev/latex-action@v2.0.0`)
 - **Artifact Upload** (GitHub Actions built-in)
 
@@ -283,6 +283,6 @@ cat test_results/pr_123_merge_conflicts.log
 
 ---
 
-**Workflow File**: `.github/workflows/automated-pr-merge-test.yml`  
-**Validation Script**: `test_automated_pr_workflow.py`  
+**Workflow File**: `.github/workflows/automated-pr-merge-test.yml`
+**Validation Script**: `test_automated_pr_workflow.py`
 **Documentation**: This file (`AUTOMATED_PR_MERGE_WORKFLOW.md`)

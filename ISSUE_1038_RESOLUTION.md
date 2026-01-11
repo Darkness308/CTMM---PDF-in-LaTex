@@ -78,7 +78,7 @@ $ python3 test_issue_1038_fix.py
 
 Tests passed: 4/4
 ✓ YAML Syntax Cleanliness
-✓ Workflow Validation Steps  
+✓ Workflow Validation Steps
 ✓ Enhanced Robustness Validation
 ✓ YAML Workflow Structure
 ```

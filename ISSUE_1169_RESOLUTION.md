@@ -39,7 +39,7 @@ with:
   extra_system_packages: |
     ghostscript
 
-# After (Ubuntu/Debian - working)  
+# After (Ubuntu/Debian - working)
 uses: dante-ev/latex-action@v2.3.0
 with:
   extra_system_packages: |
@@ -58,7 +58,7 @@ with:
 **Added** complete LaTeX package set for German language support:
 - `texlive-lang-german` - German language support (babel ngerman)
 - `texlive-fonts-recommended` - Essential fonts
-- `texlive-latex-recommended` - Core LaTeX packages  
+- `texlive-latex-recommended` - Core LaTeX packages
 - `texlive-fonts-extra` - FontAwesome5, additional fonts
 - `texlive-latex-extra` - TikZ, tcolorbox, advanced packages
 - `texlive-science` - amssymb, mathematical symbols
@@ -82,7 +82,7 @@ with:
 ### Ubuntu/Debian (dante-ev/latex-action@v2.3.0)
 ```bash
 ✅ texlive-lang-german: AVAILABLE
-✅ texlive-fonts-extra: AVAILABLE  
+✅ texlive-fonts-extra: AVAILABLE
 ✅ texlive-latex-extra: AVAILABLE
 ✅ All required packages: AVAILABLE
 ```
@@ -133,7 +133,7 @@ $ python3 validate_workflow_syntax.py
 
 ### Build System Integration
 - ✅ **CTMM Build System**: All tests pass
-- ✅ **LaTeX Validation**: Syntax checks pass  
+- ✅ **LaTeX Validation**: Syntax checks pass
 - ✅ **Package Dependencies**: Comprehensive coverage
 - ✅ **Workflow Syntax**: YAML parsing correct
 - ✅ **Version Pinning**: No @latest tags used
@@ -145,7 +145,7 @@ $ python3 validate_workflow_syntax.py
    - Line 100: LaTeX action updated to dante-ev@v2.3.0
    - Lines 105-112: Added comprehensive package list
 
-2. **`.github/workflows/latex-validation.yml`**  
+2. **`.github/workflows/latex-validation.yml`**
    - Line 70: LaTeX action updated to dante-ev@v2.3.0
    - Lines 74-82: Added comprehensive package list
 
