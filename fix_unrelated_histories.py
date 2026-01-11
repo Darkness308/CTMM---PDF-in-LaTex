@@ -141,18 +141,6 @@ def fix_unrelated_histories_pr(pr_info):
                     else:
                         result['error_message'] = f"Failed to commit changes: {stderr}"
                         print(f"   [FAIL] Failed to commit changes: {stderr}")
-                    result['fix_attempted'] = True
-                    result['fix_successful'] = True
-                    result['new_commit_created'] = True
-
-                    # Get new SHA
-                    success, new_sha, _ = run_command("git rev-parse HEAD")
-                    if success:
-                        result['new_sha'] = new_sha.strip()
-                        print(f"   [PASS] Alternative fix successful, new SHA: {result['new_sha']}")
-                else:
-                    result['error_message'] = f"Failed to commit changes: {stderr}"
-                    print(f"   [FAIL] Failed to commit changes: {stderr}")
             else:
                 result['error_message'] = f"Failed to apply stashed changes: {stderr}"
                 print(f"   [FAIL] Failed to apply stashed changes: {stderr}")

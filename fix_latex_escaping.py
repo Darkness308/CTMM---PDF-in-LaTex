@@ -209,7 +209,6 @@ class LaTeXDeEscaper:
                     logger.warning(f"Error applying cleanup pattern {i+1}: {e}")
                     continue
             
-main
             # Check if content changed
             content_changed = content != original_content
 
