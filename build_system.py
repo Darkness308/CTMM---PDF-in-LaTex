@@ -256,15 +256,15 @@ This file was automatically created by the CTMM Build System because it was refe
             # Create content with modules 0 to i enabled
             modified_content = original_content
             for j, module in enumerate(module_list):
-                module_pattern = "modules/%s" % Path(module).stem
-
+                module_pattern = f"modules/{Path(module).stem}"
+                
                 if j <= i:
                     # Keep this module enabled
                     continue
                 else:
                     # Comment out this module
                     modified_content = re.sub(
-                        '(\\\\input\\{%s\\})' % module_pattern,
+                        f'(\\\\input\\{{{module_pattern}\\}})',
                         r'% \1  % Disabled for incremental testing',
                         modified_content
                     )
@@ -409,9 +409,9 @@ def enhanced_incremental_testing(main_tex_path="main.tex"):
         "resource_issues": [],
         "unknown_errors": []
     }
-
-    logger.info(f"Running enhanced testing on {len(build_system.module_files)} modules...")
-
+    
+    logger.info("Running enhanced testing on %d modules...", len(build_system.module_files))
+    
     # Test each module with enhanced error detection
     successful_modules = 0
     for module in sorted(build_system.module_files):
