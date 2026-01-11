@@ -1,0 +1,109 @@
+% =====================================================
+% CTMM Trigger-Forschungstagebuch
+% Purpose: Mustererkennung, Selbstreflexion und Beziehungssicherheit
+% Context: Einzelanwendung oder Paar - Trigger-Tracking
+% Author: CTMM-Team
+% Copilot: Use for pattern recognition, trigger analysis, relationship safety documentation
+% =====================================================
+
+\section*{\textcolor{ctmmBlue}{\faSearch~Trigger-Forschungstagebuch}}
+\label{sec:trigger-forschungstagebuch}
+\addcontentsline{toc}{section}{Trigger-Forschungstagebuch}
+
+\begin{quote}
+\textbf{\textcolor{ctmmBlue}{Modul zur Mustererkennung, Selbstreflexion und Beziehungssicherheit}}\\
+Für Einzel- oder Paaranwendung. Wirklicher Fortschritt beginnt dort, wo ich mich ehrlich selbst beobachte -- ohne mich zu verurteilen.
+\end{quote}
+
+\subsection*{\textcolor{ctmmBlue}{Tägliches Trigger-Tracking}}
+
+\begin{center}
+\begin{tabular}{|p{1.5cm}|p{3cm}|p{2.5cm}|p{2cm}|p{1.5cm}|p{2cm}|p{1cm}|p{2cm}|}
+\hline
+\textbf{Datum} & \textbf{Kontext (Ort, Menschen, Situation)} & \textbf{Auslösender Trigger} & \textbf{Frühwarnzeichen} & \textbf{Reaktion} & \textbf{Skill angewendet?} & \textbf{Wirkung (1-10)} & \textbf{Reflexion (später)} \\
+\hline
+\ctmmTextField[1.4cm]{}{datum1} & \ctmmTextField[2.8cm]{}{kontext1} & \ctmmTextField[2.3cm]{}{trigger1} & \ctmmTextField[1.8cm]{}{warnung1} & \ctmmTextField[1.3cm]{}{reaktion1} & \ctmmTextField[1.8cm]{}{skill1} & \ctmmTextField[0.8cm]{}{wirkung1} & \ctmmTextField[1.8cm]{}{reflexion1} \\
+\hline
+\ctmmTextField[1.4cm]{}{datum2} & \ctmmTextField[2.8cm]{}{kontext2} & \ctmmTextField[2.3cm]{}{trigger2} & \ctmmTextField[1.8cm]{}{warnung2} & \ctmmTextField[1.3cm]{}{reaktion2} & \ctmmTextField[1.8cm]{}{skill2} & \ctmmTextField[0.8cm]{}{wirkung2} & \ctmmTextField[1.8cm]{}{reflexion2} \\
+\hline
+\ctmmTextField[1.4cm]{}{datum3} & \ctmmTextField[2.8cm]{}{kontext3} & \ctmmTextField[2.3cm]{}{trigger3} & \ctmmTextField[1.8cm]{}{warnung3} & \ctmmTextField[1.3cm]{}{reaktion3} & \ctmmTextField[1.8cm]{}{skill3} & \ctmmTextField[0.8cm]{}{wirkung3} & \ctmmTextField[1.8cm]{}{reflexion3} \\
+\hline
+\ctmmTextField[1.4cm]{}{datum4} & \ctmmTextField[2.8cm]{}{kontext4} & \ctmmTextField[2.3cm]{}{trigger4} & \ctmmTextField[1.8cm]{}{warnung4} & \ctmmTextField[1.3cm]{}{reaktion4} & \ctmmTextField[1.8cm]{}{skill4} & \ctmmTextField[0.8cm]{}{wirkung4} & \ctmmTextField[1.8cm]{}{reflexion4} \\
+\hline
+\ctmmTextField[1.4cm]{}{datum5} & \ctmmTextField[2.8cm]{}{kontext5} & \ctmmTextField[2.3cm]{}{trigger5} & \ctmmTextField[1.8cm]{}{warnung5} & \ctmmTextField[1.3cm]{}{reaktion5} & \ctmmTextField[1.8cm]{}{skill5} & \ctmmTextField[0.8cm]{}{wirkung5} & \ctmmTextField[1.8cm]{}{reflexion5} \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Hinweis:} [SYM]Ich erinnere mich an ..." -> Schreibe auf, auch wenn es klein erscheint.
+
+\subsection*{\textcolor{ctmmPurple}{Wöchentliche Auswertung}}
+
+\begin{tcolorbox}[colback=ctmmPurple!5!white,colframe=ctmmPurple,title=\textcolor{white}{\textbf{Reflexionsfragen für diese Woche}}]
+
+\textbf{1. Wiederkehrende Muster:}\\
+\ctmmTextArea[12cm]{3}{muster_woche}{}
+
+\textbf{2. Welche Situationen meide ich (bewusst oder unbewusst)?}\\
+\ctmmTextArea[12cm]{3}{vermeidung}{}
+
+\textbf{3. Was funktioniert gut?}\\
+\ctmmTextArea[12cm]{3}{funktioniert_gut}{}
+
+\textbf{4. Was braucht neue Ideen oder Veränderungen?}\\
+\ctmmTextArea[12cm]{3}{neue_ideen}{}
+
+\end{tcolorbox}
+
+\subsection*{\textcolor{ctmmGreen}{Reflexions-Fragen (1x pro Woche oder nach Bedarf)}}
+
+\begin{itemize}
+  \item \textbf{Wann hat mein Notfallplan gut funktioniert?}\\
+  \ctmmTextArea[12cm]{2}{notfallplan_gut}{}
+
+  \item \textbf{Wo hätte ein anderes Ritual helfen können?}\\
+  \ctmmTextArea[12cm]{2}{ritual_anders}{}
+
+  \item \textbf{Wer kann mich in solchen Momenten konkret unterstützen?}\\
+  \ctmmTextArea[12cm]{2}{unterstuetzung}{}
+\end{itemize}
+
+\subsection*{\textcolor{ctmmOrange}{Monatliche Trend-Analyse}}
+
+\textbf{Häufigste Trigger diesen Monat:}\\
+1. \ctmmTextField[4cm]{}{haeufig1} \quad 2. \ctmmTextField[4cm]{}{haeufig2} \quad 3. \ctmmTextField[4cm]{}{haeufig3}
+
+\textbf{Erfolgreichste Skills:}\\
+1. \ctmmTextField[4cm]{}{erfolg1} \quad 2. \ctmmTextField[4cm]{}{erfolg2} \quad 3. \ctmmTextField[4cm]{}{erfolg3}
+
+\textbf{Verbesserung zu letztem Monat:}\\
+\ctmmYesNo{verbesserung} \quad \textbf{Wie zeigt sich das:} \ctmmTextField[6cm]{}{verbesserung_detail}
+
+\textbf{Neue Trigger entdeckt:}\\
+\ctmmTextArea[12cm]{2}{neue_trigger}{}
+
+\textbf{Support-Netzwerk erweitert:}\\
+\ctmmYesNo{netzwerk} \quad \textbf{Wie:} \ctmmTextField[8cm]{}{netzwerk_detail}
+
+\subsection*{\textcolor{ctmmBlue}{Digitale Erweiterung}}
+
+\begin{ctmmBlueBox}[title=Tipp für digitale Nutzung]
+\textbf{Digitale Version:} Auch als Excel/Google Sheets nutzbar -- mit Filterfunktion, Diagrammen, Suchfunktion. Export als .xlsx empfohlen für Langzeitanalyse.
+
+\textbf{Empfohlene Spalten für digitale Version:}
+\begin{itemize}
+  \item Datum (Datumsformat für Sortierung)
+  \item Trigger-Kategorie (Dropdown: Lärm, Kritik, Nähe, Distanz, Überforderung)
+  \item Intensität (1-10 Skala)
+  \item Dauer (in Minuten)
+  \item Erfolgreich bewältigt (Ja/Nein)
+  \item Beteiligte Personen (Tags)
+\end{itemize}
+\end{ctmmBlueBox}
+
+\subsection*{\textcolor{ctmmBlue}{CTMM-Navigation}}
+\begin{itemize}
+  \item \texttt{triggermanagement} [SYM] Grundlagen und Strategien
+  \item \texttt{notfallkarten} [SYM] Akute Krisenintervention
+  \item \texttt{selbstreflexion} [SYM] Vertiefende Analysen
+\end{itemize}

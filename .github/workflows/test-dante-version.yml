@@ -1,0 +1,25 @@
+name: Test dante-ev/latex-action version availability
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-2025-A:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test if 2025-A exists
+        id: test_version
+        continue-on-error: true
+        uses: dante-ev/latex-action@v0.2.0
+        with:
+          root_file: test.tex
+          
+      - name: Report result
+        timeout-minutes: 3
+        run: |
+          if [ "${{ steps.test_version.outcome }}" = "success" ]; then
+            echo "✅ 2025-A exists and works"
+          else
+            echo "❌ 2025-A does not exist or failed"
+            echo "Previous step outcome: ${{ steps.test_version.outcome }}"
+          fi

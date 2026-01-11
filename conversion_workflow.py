@@ -24,10 +24,10 @@ logger = logging.getLogger(__name__)
 
 def create_sample_over_escaped_files():
     """Create sample files demonstrating the over-escaping issue."""
-    
+
     converted_dir = Path('converted')
     converted_dir.mkdir(exist_ok=True)
-    
+
     # Sample README file with over-escaping
     readme_content = """\\textbackslash{}hypertarget\\textbackslash{}{ctmm-system\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
 \\textbackslash{}section\\textbackslash{}{CTMM-System\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{ctmm-system\\textbackslash{}}\\textbackslash{}}
@@ -75,25 +75,25 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 
     # Sample Safewords file with over-escaping
     safewords_content = """\\textbackslash{}hypertarget\\textbackslash{}{tool-22-safe-words-signalsysteme-ctmm-modul\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%
-\\textbackslash{}section\\textbackslash{}{\\textbackslash{}texorpdfstring\\textbackslash{}{\\textbackslash{}textbf\\textbackslash{}{🛑 TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}{🛑 TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{tool-22-safe-words-signalsysteme-ctmm-modul\\textbackslash{}}\\textbackslash{}}
+\\textbackslash{}section\\textbackslash{}{\\textbackslash{}texorpdfstring\\textbackslash{}{\\textbackslash{}textbf\\textbackslash{}{[EMOJI] TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}{[EMOJI] TOOL 22 -- SAFE-WORDS \\textbackslash{}\\textbackslash{}& SIGNALSYSTEME (CTMM-MODUL)\\textbackslash{}}\\textbackslash{}}\\textbackslash{}label\\textbackslash{}{tool-22-safe-words-signalsysteme-ctmm-modul\\textbackslash{}}\\textbackslash{}}
 
 \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-🧠 \\textbackslash{}textbf\\textbackslash{}{\\textbackslash{}ul\\textbackslash{}{Worum geht's hier -- für Freunde?\\textbackslash{}}\\textbackslash{}}\\textbackslash{}\\textbackslash{}
+[EMOJI] \\textbackslash{}textbf\\textbackslash{}{\\textbackslash{}ul\\textbackslash{}{Worum geht's hier -- für Freunde?\\textbackslash{}}\\textbackslash{}}\\textbackslash{}\\textbackslash{}
 Safe-Words sind vereinbarte Codes oder Zeichen, die sofort signalisieren:
 \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 
 \\textbackslash{}begin\\textbackslash{}{itemize\\textbackslash{}}
 \\textbackslash{}item
   \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-  \\textbackslash{}textbf\\textbackslash{}{„Ich kann nicht mehr``\\textbackslash{}}
+  \\textbackslash{}textbf\\textbackslash{}{[SYM]Ich kann nicht mehr``\\textbackslash{}}
   \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 \\textbackslash{}item
   \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-  \\textbackslash{}textbf\\textbackslash{}{„Ich brauch Ruhe`` oder\\textbackslash{}}
+  \\textbackslash{}textbf\\textbackslash{}{[SYM]Ich brauch Ruhe`` oder\\textbackslash{}}
   \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 \\textbackslash{}item
   \\textbackslash{}begin\\textbackslash{}{quote\\textbackslash{}}
-  \\textbackslash{}textbf\\textbackslash{}{„Stopp -- das wird mir zu viel``\\textbackslash{}}
+  \\textbackslash{}textbf\\textbackslash{}{[SYM]Stopp -- das wird mir zu viel``\\textbackslash{}}
   \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 \\textbackslash{}end\\textbackslash{}{itemize\\textbackslash{}}
 
@@ -101,37 +101,37 @@ Safe-Words sind vereinbarte Codes oder Zeichen, die sofort signalisieren:
 Sie schützen vor Eskalation, Überforderung, Rückzug oder Missverständnissen -- ohne viele Worte.
 \\textbackslash{}end\\textbackslash{}{quote\\textbackslash{}}
 
-🧩 \\textbackslash{}textbf\\textbackslash{}{Zentraler Bestandteil der Eskalationsprävention -- mit Symbol- und Notfallsystem\\textbackslash{}}
+[EMOJI] \\textbackslash{}textbf\\textbackslash{}{Zentraler Bestandteil der Eskalationsprävention -- mit Symbol- und Notfallsystem\\textbackslash{}}
 
 \\textbackslash{}hypertarget\\textbackslash{}{kapitelzuordnung-im-ctmm-system\\textbackslash{}}\\textbackslash{}{\\textbackslash{}%"""
 
     # Write the sample files
     with open(converted_dir / 'README.tex', 'w', encoding='utf-8') as f:
         f.write(readme_content)
-    
+
     with open(converted_dir / 'Tool 22 Safewords Signalsysteme CTMM.tex', 'w', encoding='utf-8') as f:
         f.write(safewords_content)
-    
+
     logger.info(f"Created sample over-escaped files in {converted_dir}")
     return converted_dir
 
 def demonstrate_workflow():
     """Demonstrate the complete workflow for fixing over-escaped LaTeX files."""
-    
+
     print("="*60)
     print("CTMM LaTeX De-escaping Workflow Demonstration")
     print("="*60)
-    
+
     # Step 1: Create sample files demonstrating the problem
     print("\n1. Creating sample files with over-escaping issues...")
     converted_dir = create_sample_over_escaped_files()
-    
+
     # List the files before processing
     tex_files = list(converted_dir.glob('*.tex'))
     print(f"   Found {len(tex_files)} files to process:")
     for file in tex_files:
         print(f"   - {file.name}")
-    
+
     # Step 2: Show a sample of the problematic content
     print("\n2. Example of over-escaped content (first few lines):")
     sample_file = tex_files[0]
@@ -139,40 +139,40 @@ def demonstrate_workflow():
         lines = f.readlines()[:5]
     for i, line in enumerate(lines, 1):
         print(f"   {i:2d}: {line.rstrip()}")
-    
-    print("\n   ❌ Problem: Excessive \\textbackslash{} escaping makes code unreadable")
-    
+
+    print(r"\n   [FAIL] Problem: Excessive \textbackslash{} escaping makes code unreadable")
+
     # Step 3: Apply the fix
     print("\n3. Applying de-escaping fixes...")
     de_escaper = LaTeXDeEscaper()
     stats = de_escaper.process_directory(converted_dir)
-    
+
     # Step 4: Show the fixed content
     print("\n4. Fixed content (first few lines):")
     with open(sample_file, 'r', encoding='utf-8') as f:
         lines = f.readlines()[:5]
     for i, line in enumerate(lines, 1):
         print(f"   {i:2d}: {line.rstrip()}")
-    
-    print("\n   ✅ Result: Clean, readable LaTeX code")
-    
+
+    print("\n   [PASS] Result: Clean, readable LaTeX code")
+
     # Step 5: Summary
     print("\n5. Processing Summary:")
     print(f"   Files processed: {stats['files_processed']}")
     print(f"   Files changed: {stats['files_changed']}")
     print(f"   Total replacements: {stats['total_replacements']}")
-    
+
     # Step 6: Validation
     print("\n6. Validation:")
     for tex_file in tex_files:
         issues = de_escaper.validate_latex_syntax(tex_file)
-        status = "✅ OK" if not issues else f"⚠️  {', '.join(issues)}"
+        status = "[PASS] OK" if not issues else f"[WARN]  {', '.join(issues)}"
         print(f"   {tex_file.name}: {status}")
-    
+
     print("\n" + "="*60)
     print("Workflow completed successfully!")
     print("="*60)
-    
+
     print("\nNext steps:")
     print("- Review the fixed files in the converted/ directory")
     print("- Test compilation with your LaTeX environment")
