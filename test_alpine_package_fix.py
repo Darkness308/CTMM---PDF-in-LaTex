@@ -97,7 +97,7 @@ def test_latex_build_workflow():
         timeout = latex_setup_step['timeout-minutes']
         print(f"[PASS] Timeout configured: {timeout} minutes")
         if timeout < 10:
-            print("[WARN]️  Warning: Timeout might be too short for LaTeX compilation")
+            print("[WARN]  Warning: Timeout might be too short for LaTeX compilation")
 
     print("\n" + "=" * 70)
     print("[PASS] ALL TESTS PASSED - Workflow configuration is correct")

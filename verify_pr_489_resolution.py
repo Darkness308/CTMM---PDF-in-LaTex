@@ -27,17 +27,17 @@ def check_file_for_issues(filepath):
             
             # Check for BOM
             if text.startswith('\ufeff'):
-                issues.append('[WARN]️  Has BOM (Byte Order Mark) at start')
+                issues.append('[WARN]  Has BOM (Byte Order Mark) at start')
             
             # Check for zero-width characters
             zero_width = re.findall(r'[\u200B-\u200D\uFEFF]', text)
             if zero_width:
-                issues.append(f'[WARN]️  Contains {len(zero_width)} zero-width character(s)')
+                issues.append(f'[WARN]  Contains {len(zero_width)} zero-width character(s)')
             
             # Check for control characters (except standard whitespace)
             control_chars = re.findall(r'[\x01-\x08\x0B\x0C\x0E-\x1F]', text)
             if control_chars:
-                issues.append(f'[WARN]️  Contains {len(control_chars)} control character(s)')
+                issues.append(f'[WARN]  Contains {len(control_chars)} control character(s)')
             
             # Check for merge conflict markers at line start
             if re.search(r'^<<<<<<< ', text, re.MULTILINE):
@@ -74,7 +74,7 @@ def main():
     all_clean = True
     for filepath in key_files:
         if not os.path.exists(filepath):
-            print(f"[WARN]️  {filepath}: File not found")
+            print(f"[WARN]  {filepath}: File not found")
             continue
         
         issues = check_file_for_issues(filepath)
@@ -102,10 +102,10 @@ def main():
         print("[PASS] VERIFICATION PASSED: All files are clean and ready for merge!")
         print()
         print("[TEST] Summary:")
-        print("  • No null bytes found")
-        print("  • No merge conflict markers")
-        print("  • No problematic Unicode characters")
-        print("  • All files have valid UTF-8 encoding")
+        print("  * No null bytes found")
+        print("  * No merge conflict markers")
+        print("  * No problematic Unicode characters")
+        print("  * All files have valid UTF-8 encoding")
         print()
         print("[TARGET] Next Step:")
         print("  Change PR #489 base branch from 'copilot/fix-99' to 'main'")
