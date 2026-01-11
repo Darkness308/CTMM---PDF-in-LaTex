@@ -306,8 +306,13 @@ def validate_form_fields():
     try:
         # Pass current directory as repo_root
         validator = FormFieldValidator(repo_root='.')
-        results = validator.validate_all()
-        return results.get("passed", True)
+        # Run validation on all files
+        validator.validate_all_files()
+        # Check if there are any issues
+        has_issues = len(validator.issues) > 0
+        if has_issues:
+            logger.warning(f"Form field validation found {len(validator.issues)} issue(s)")
+        return not has_issues
     except Exception as e:
         logger.warning(f"Form validation failed: {e}")
         return True  # Don't fail build on validation errors
