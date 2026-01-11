@@ -55,7 +55,7 @@ Stichprobenartige Überprüfung von Dateien mit `hexdump`:
 #### Pattern-basierte Suche
 ```bash
 # Suche nach Replacement Character (Encoding-Fehler)
-grep -r "�" --include="*.tex" --include="*.py"
+grep -r $'\ufffd' --include="*.tex" --include="*.py"
 ```
 **Ergebnis:** 0 Treffer
 
