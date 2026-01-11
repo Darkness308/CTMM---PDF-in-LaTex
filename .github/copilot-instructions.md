@@ -5,7 +5,7 @@
 This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
 
 - Depression and mood disorders
-- Trigger management 
+- Trigger management
 - Borderline Personality Disorder (BPD)
 - ADHD, Autism Spectrum Disorder (ASD)
 - Complex PTSD (CPTSD)
@@ -19,7 +19,7 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 ├── main.tex                    # Main LaTeX document (entry point)
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── form-elements.sty      # Interactive form components  
+│   ├── form-elements.sty      # Interactive form components
 │   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
@@ -61,7 +61,7 @@ python3 build_system.py --verbose  # Granular analysis
 #### Package Loading Rules
 - **CRITICAL**: All `\usepackage{...}` commands MUST be in the preamble of `main.tex`
 - **NEVER** load packages in modules or after `\begin{document}`
-- Error: `Can be used only in preamble` → Move package to preamble
+- Error: `Can be used only in preamble` -> Move package to preamble
 
 #### Custom Macros & Commands
 - Define custom macros centrally in preamble or style files
@@ -81,7 +81,7 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Color Scheme:**
 - `ctmmBlue` - Primary blue for headers and structure
-- `ctmmOrange` - Accent orange for highlights  
+- `ctmmOrange` - Accent orange for highlights
 - `ctmmGreen` - Green for positive elements
 - `ctmmPurple` - Purple for special sections
 
@@ -114,9 +114,9 @@ python3 build_system.py --verbose  # Granular analysis
 ### Troubleshooting Common Issues
 
 **Build Errors:**
-- `Undefined control sequence` → Check if macro is defined in preamble
-- `Command already defined` → Remove duplicate macro definitions
-- Missing file errors → Run `ctmm_build.py` to auto-generate templates
+- `Undefined control sequence` -> Check if macro is defined in preamble
+- `Command already defined` -> Remove duplicate macro definitions
+- Missing file errors -> Run `ctmm_build.py` to auto-generate templates
 
 **Module Guidelines:**
 - Use semantic section structure: `\section{Title}`, `\subsection{}`
