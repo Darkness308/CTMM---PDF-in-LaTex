@@ -105,7 +105,7 @@ def main():
     print("Solution: Use texlive-lang-european which includes German support\n")
 
     if test_alpine_compatibility():
-        print("\n[EMOJI] ALPINE COMPATIBILITY VALIDATION PASSED!")
+        print("\n[SUCCESS] ALPINE COMPATIBILITY VALIDATION PASSED!")
         print("[PASS] xu-cheng/latex-action correctly configured without extra_system_packages")
         print("[PASS] The texlive-full Docker image includes all German language packages")
         print("[PASS] No Alpine package installation errors will occur")
