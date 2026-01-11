@@ -53,7 +53,7 @@ def extract_actions_from_workflow(workflow_file: str) -> List[Tuple[str, str, st
                         actions.append((action_spec, 'latest', step_name))
 
     except Exception as e:
-        print(f"❌ Error parsing {workflow_file}: {e}")
+        print(f"[FAIL] Error parsing {workflow_file}: {e}")
 
     return actions
 
@@ -120,10 +120,10 @@ def validate_action_versions():
 
     workflow_files = get_workflow_files()
     if not workflow_files:
-        print("❌ No workflow files found")
+        print("[FAIL] No workflow files found")
         return False
 
-    print(f"\n🔍 Scanning {len(workflow_files)} workflow files...")
+    print(f"\n[SEARCH] Scanning {len(workflow_files)} workflow files...")
 
     known_versions = get_known_action_versions()
     all_actions = []
@@ -131,19 +131,19 @@ def validate_action_versions():
 
     # Extract all actions from all workflows
     for workflow_file in workflow_files:
-        print(f"\n📋 Analyzing {workflow_file}...")
+        print(f"\n[TEST] Analyzing {workflow_file}...")
         actions = extract_actions_from_workflow(workflow_file)
 
         for action_name, version, step_name in actions:
             all_actions.append((workflow_file, action_name, version, step_name))
-            print(f"   📦 {action_name}@{version} in '{step_name}'")
+            print(f"   [PACKAGE] {action_name}@{version} in '{step_name}'")
 
     if not all_actions:
-        print("❌ No GitHub Actions found in workflows")
+        print("[FAIL] No GitHub Actions found in workflows")
         return False
 
     # Validate each action
-    print(f"\n🔍 Validating {len(all_actions)} action usages...")
+    print(f"\n[SEARCH] Validating {len(all_actions)} action usages...")
     print("-" * 50)
 
     status_counts = {'ok': 0, 'warning': 0, 'deprecated': 0, 'unknown': 0}
@@ -154,13 +154,13 @@ def validate_action_versions():
 
         # Format output based on status
         if status == 'ok':
-            print(f"✅ {action_name}@{version}: {message}")
+            print(f"[PASS] {action_name}@{version}: {message}")
         elif status == 'warning':
-            print(f"⚠️  {action_name}@{version}: {message}")
+            print(f"[WARN]  {action_name}@{version}: {message}")
         elif status == 'deprecated':
-            print(f"🔴 {action_name}@{version}: {message}")
+            print(f"[RED] {action_name}@{version}: {message}")
         else:
-            print(f"❓ {action_name}@{version}: {message}")
+            print(f"[QUESTION] {action_name}@{version}: {message}")
 
         validation_results.append({
             'workflow': os.path.basename(workflow_file),
@@ -177,35 +177,35 @@ def validate_action_versions():
     print("=" * 70)
 
     total_actions = len(all_actions)
-    print(f"📊 Actions analyzed: {total_actions}")
-    print(f"✅ Recommended versions: {status_counts['ok']}")
-    print(f"⚠️  Compatible versions: {status_counts['warning']}")
-    print(f"🔴 Deprecated versions: {status_counts['deprecated']}")
-    print(f"❓ Unknown actions/versions: {status_counts['unknown']}")
+    print(f"[SUMMARY] Actions analyzed: {total_actions}")
+    print(f"[PASS] Recommended versions: {status_counts['ok']}")
+    print(f"[WARN]  Compatible versions: {status_counts['warning']}")
+    print(f"[RED] Deprecated versions: {status_counts['deprecated']}")
+    print(f"[QUESTION] Unknown actions/versions: {status_counts['unknown']}")
 
     # Calculate health score
     health_score = ((status_counts['ok'] + status_counts['warning']) / total_actions) * 100
-    print(f"\n🎯 Version Health Score: {health_score:.1f}%")
+    print(f"\n[TARGET] Version Health Score: {health_score:.1f}%")
 
     if health_score >= 90:
-        print("🎉 EXCELLENT: GitHub Actions versions are well-maintained")
+        print("[SUCCESS] EXCELLENT: GitHub Actions versions are well-maintained")
         overall_status = True
     elif health_score >= 75:
-        print("✅ GOOD: Most GitHub Actions are using recommended versions")
+        print("[PASS] GOOD: Most GitHub Actions are using recommended versions")
         overall_status = True
     elif health_score >= 50:
-        print("⚠️  WARNING: Some GitHub Actions need version updates")
+        print("[WARN]  WARNING: Some GitHub Actions need version updates")
         overall_status = True
     else:
-        print("🔴 CRITICAL: Many GitHub Actions are using deprecated versions")
+        print("[RED] CRITICAL: Many GitHub Actions are using deprecated versions")
         overall_status = False
 
     # Recommendations
     if status_counts['deprecated'] > 0 or status_counts['unknown'] > 0:
-        print("\n📋 RECOMMENDATIONS:")
+        print("\n[TEST] RECOMMENDATIONS:")
         for result in validation_results:
             if result['status'] in ['deprecated', 'unknown']:
-                print(f"   • Update {result['action']} in {result['workflow']}")
+                print(f"   * Update {result['action']} in {result['workflow']}")
 
     return overall_status
 

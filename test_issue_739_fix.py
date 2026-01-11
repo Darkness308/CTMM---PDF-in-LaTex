@@ -14,14 +14,14 @@ def test_pifont_package_availability():
     workflow_path = '.github/workflows/latex-build.yml'
 
     if not os.path.exists(workflow_path):
-        print(f"❌ ERROR: Workflow file {workflow_path} not found")
+        print(f"[FAIL] ERROR: Workflow file {workflow_path} not found")
         return False
 
     try:
         with open(workflow_path, 'r') as f:
             workflow_content = yaml.safe_load(f)
     except Exception as e:
-        print(f"❌ ERROR: Failed to parse {workflow_path}: {e}")
+        print(f"[FAIL] ERROR: Failed to parse {workflow_path}: {e}")
         return False
 
     # Find the LaTeX action step
@@ -36,7 +36,7 @@ def test_pifont_package_availability():
             break
 
     if not latex_step:
-        print("❌ ERROR: 'Set up LaTeX' step not found in workflow")
+        print("[FAIL] ERROR: 'Set up LaTeX' step not found in workflow")
         return False
 
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
@@ -52,16 +52,16 @@ def test_pifont_package_availability():
             found_packages.append(pkg)
 
     if not found_packages:
-        print("❌ FAIL: No packages found that provide pifont")
+        print("[FAIL] FAIL: No packages found that provide pifont")
         print("Expected one of: texlive-pstricks, texlive-latex-extra, texlive-fonts-extra")
         return False
 
     # Specifically check for texlive-pstricks which was added in the fix
     if 'texlive-pstricks' in extra_packages:
-        print("✅ PASS: texlive-pstricks package included (contains pifont)")
+        print("[PASS] PASS: texlive-pstricks package included (contains pifont)")
         return True
     elif found_packages:
-        print(f"✅ PASS: Found packages that should contain pifont: {found_packages}")
+        print(f"[PASS] PASS: Found packages that should contain pifont: {found_packages}")
         return True
 
     return False
@@ -74,13 +74,13 @@ def test_workflow_syntax():
     try:
         with open(workflow_path, 'r') as f:
             yaml.safe_load(f)
-        print("✅ PASS: Workflow YAML syntax is valid")
+        print("[PASS] PASS: Workflow YAML syntax is valid")
         return True
     except yaml.YAMLError as e:
-        print(f"❌ FAIL: Invalid YAML syntax: {e}")
+        print(f"[FAIL] FAIL: Invalid YAML syntax: {e}")
         return False
     except Exception as e:
-        print(f"❌ ERROR: Failed to read workflow file: {e}")
+        print(f"[FAIL] ERROR: Failed to read workflow file: {e}")
         return False
 
 def test_form_elements_dependency():
@@ -89,7 +89,7 @@ def test_form_elements_dependency():
     form_elements_path = 'style/form-elements.sty'
 
     if not os.path.exists(form_elements_path):
-        print(f"❌ ERROR: {form_elements_path} not found")
+        print(f"[FAIL] ERROR: {form_elements_path} not found")
         return False
 
     try:
@@ -97,14 +97,14 @@ def test_form_elements_dependency():
             content = f.read()
 
         if '\\RequirePackage{pifont}' in content:
-            print("✅ PASS: form-elements.sty properly requires pifont package")
+            print("[PASS] PASS: form-elements.sty properly requires pifont package")
             return True
         else:
-            print("❌ FAIL: form-elements.sty does not require pifont package")
+            print("[FAIL] FAIL: form-elements.sty does not require pifont package")
             return False
 
     except Exception as e:
-        print(f"❌ ERROR: Failed to read {form_elements_path}: {e}")
+        print(f"[FAIL] ERROR: Failed to read {form_elements_path}: {e}")
         return False
 
 def main():
@@ -133,7 +133,7 @@ def main():
 
     passed = 0
     for test_name, result in results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status} {test_name}")
         if result:
             passed += 1
@@ -141,14 +141,14 @@ def main():
     print(f"\nTests passed: {passed}/{len(tests)}")
 
     if passed == len(tests):
-        print("🎉 ALL TESTS PASSED - Issue #739 fix is working correctly!")
+        print("[SUCCESS] ALL TESTS PASSED - Issue #739 fix is working correctly!")
         print("\nThe GitHub Actions workflow should now be able to:")
         print("- Install the pifont package through texlive-pstricks")
         print("- Successfully compile LaTeX files using form elements")
         print("- Complete the PDF build without missing package errors")
         return True
     else:
-        print("❌ Some tests failed. Please address the issues above.")
+        print("[FAIL] Some tests failed. Please address the issues above.")
         return False
 
 if __name__ == '__main__':

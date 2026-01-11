@@ -40,7 +40,7 @@ def test_alpine_compatibility():
         if not os.path.exists(workflow_file):
             continue
 
-        print(f"\n📄 Checking {workflow_file}...")
+        print(f"\n[FILE] Checking {workflow_file}...")
 
         try:
             with open(workflow_file, 'r') as f:
@@ -69,22 +69,22 @@ def test_alpine_compatibility():
                                 alpine_german_found.append(alpine_pkg)
 
                         if unavailable_found:
-                            print(f"   ❌ Found unavailable packages: {unavailable_found}")
-                            print(f"   💡 Replace with: texlive-lang-european")
+                            print(f"   [FAIL] Found unavailable packages: {unavailable_found}")
+                            print(f"   [TIP] Replace with: texlive-lang-european")
                             success = False
                         elif alpine_german_found:
-                            print(f"   ✅ Uses Alpine-compatible German support: {alpine_german_found}")
+                            print(f"   [PASS] Uses Alpine-compatible German support: {alpine_german_found}")
                         else:
                             # No German language package specified - acceptable if German support not needed
-                            print("   ℹ️  No German-specific package specified; this is acceptable if German support is not required")
+                            print("   [INFO]  No German-specific package specified; this is acceptable if German support is not required")
 
         except Exception as e:
-            print(f"❌ Error checking {workflow_file}: {e}")
+            print(f"[FAIL] Error checking {workflow_file}: {e}")
             success = False
 
     # Check if we found any xu-cheng/latex-action workflows
     if xu_cheng_workflows_found == 0:
-        print("\nℹ️  Note: No xu-cheng/latex-action workflows found in checked files")
+        print("\n[INFO]  Note: No xu-cheng/latex-action workflows found in checked files")
         print("   This is acceptable if all workflows use dante-ev/latex-action instead")
 
     return success

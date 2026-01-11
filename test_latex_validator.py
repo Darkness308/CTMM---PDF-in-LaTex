@@ -37,7 +37,7 @@ class TestLaTeXValidator(unittest.TestCase):
         """Test detection of over-complex hypertarget usage."""
         content = r"""
         \hypertarget{tool-23-trigger-management}{%
-        \section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
+        \section{\texorpdfstring{[FILE] \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
         """
         issues = self.validator.detect_issues(content)
         self.assertIn('hypertarget_overuse', issues)
@@ -45,7 +45,7 @@ class TestLaTeXValidator(unittest.TestCase):
     def test_detect_texorpdfstring_overuse(self):
         """Test detection of excessive texorpdfstring usage."""
         content = r"""
-        \subsection{\texorpdfstring{🎯 \textbf{\ul{ZIEL}}}{🎯 ZIEL}}
+        \subsection{\texorpdfstring{[TARGET] \textbf{\ul{ZIEL}}}{[TARGET] ZIEL}}
         """
         issues = self.validator.detect_issues(content)
         self.assertIn('texorpdfstring_overuse', issues)
@@ -61,7 +61,7 @@ class TestLaTeXValidator(unittest.TestCase):
         """Test simplification of over-complex section headers."""
         content = r"""
         \hypertarget{tool-23-trigger-management}{%
-        \section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
+        \section{\texorpdfstring{[FILE] \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
         """
         cleaned = self.validator.clean_excessive_escaping(content)
         self.assertIn(r'\section{TOOL 23: TRIGGER-MANAGEMENT}', cleaned)
@@ -92,7 +92,7 @@ class TestLaTeXValidator(unittest.TestCase):
         """Test validation of a file with escaping issues."""
         problematic_content = r"""
         \hypertarget{tool-23-trigger-management}{%
-        \section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
+        \section{\texorpdfstring{[FILE] \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
 
         Text with \textbackslash{} escaping issues.
         """
