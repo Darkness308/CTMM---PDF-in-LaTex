@@ -1,0 +1,69 @@
+{
+    "workbench.editor.defaultBinaryEditor": "default",
+    "workbench.editor.autoLockGroups": {
+        "default": true
+    },
+    "latex-workshop.latex.tools": [
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-output-directory=build",
+                "main.tex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "pdflatex",
+            "tools": ["pdflatex"]
+        }
+    ],
+    "latex-workshop.latex.recipe.default": "CTMM: 3x pdflatex (Links & Navigation)",
+    "latex-workshop.latex.rootFile.useSubFile": false,
+    "latex-workshop.latex.rootFile.doNotPrompt": true,
+    "latex-workshop.latex.search.rootFiles.include": ["main.tex"],
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click",
+    "latex-workshop.latex.outDir": "build",
+    "latex-workshop.latex.magic.args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-output-directory=build"
+    ],
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux", "*.bbl", "*.blg", "*.idx", "*.ind",
+        "*.lof", "*.lot", "*.out", "*.toc", "*.acn",
+        "*.acr", "*.alg", "*.glg", "*.glo", "*.gls",
+        "*.fls", "*.log", "*.fdb_latexmk", "*.synctex.gz"
+    ],
+    "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
+    "latex-workshop.latex.autoBuild.interval": 1000,
+    "latex-workshop.message.error.show": true,
+    "latex-workshop.message.warning.show": true,
+    "latex-workshop.message.information.show": true,
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.intellisense.unimathsymbols.enabled": true,
+    "latex-workshop.hover.citation.enabled": true,
+    "latex-workshop.hover.command.enabled": true,
+    "files.associations": {
+        "*.tex": "latex",
+        "*.sty": "latex"
+    },
+    "editor.wordWrap": "on",
+    "editor.rulers": [80],
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "files.encoding": "utf8",
+    "github.copilot.enable": {
+        "*": true,
+        "latex": true
+    },
+    "github.copilot.editor.enableAutoCompletions": true
+}
