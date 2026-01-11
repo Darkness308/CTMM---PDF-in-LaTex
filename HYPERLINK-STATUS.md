@@ -7,25 +7,25 @@
 ## ✅ **FUNKTIONIERENDE HYPERLINKS (mit Labels)**
 
 ### **Hauptnavigation:**
-- `sec:navigation` → Navigations-System (Seite 2-3)
-- `sec:depression` → Depression-Modul (Seite 4-5)
-- `sec:bindungsleitfaden` → Bindungsleitfaden (Seite 5)
-- `sec:triggermanagement` → Trigger-Management (Seite 6-7)
-- `sec:notfallkarten` → Notfallkarten (Seite 8)
-- `sec:safewords` → Safe-Words System (Seite 8-9)
-- `sec:interactive` → Interaktive Tools (Seite 10-11)
-- `sec:qrcode` → QR-Code/Digitale Ressourcen (Seite 12-13)
-- `sec:therapiekoordination` → **NEU** Therapie-Koordination (Seite 14-15)
-- `sec:feedback` → Selbstreflexions-System (Seite 16-18)
+- `sec:navigation` -> Navigations-System (Seite 2-3)
+- `sec:depression` -> Depression-Modul (Seite 4-5)
+- `sec:bindungsleitfaden` -> Bindungsleitfaden (Seite 5)
+- `sec:triggermanagement` -> Trigger-Management (Seite 6-7)
+- `sec:notfallkarten` -> Notfallkarten (Seite 8)
+- `sec:safewords` -> Safe-Words System (Seite 8-9)
+- `sec:interactive` -> Interaktive Tools (Seite 10-11)
+- `sec:qrcode` -> QR-Code/Digitale Ressourcen (Seite 12-13)
+- `sec:therapiekoordination` -> **NEU** Therapie-Koordination (Seite 14-15)
+- `sec:feedback` -> Selbstreflexions-System (Seite 16-18)
 
 ### **Arbeitsblätter (Kapitel 5):**
-- `sec:5.1` → Täglicher Check-In (Seite 20)
-- `sec:5.2` → Trigger-Tagebuch (Seite 21-22)
-- `sec:5.3` → Depression-Monitor (Seite 23-24)
-- `sec:demo-interactive` → Demo Interaktive Formulare (Seite 25-26)
+- `sec:5.1` -> Täglicher Check-In (Seite 20)
+- `sec:5.2` -> Trigger-Tagebuch (Seite 21-22)
+- `sec:5.3` -> Depression-Monitor (Seite 23-24)
+- `sec:demo-interactive` -> Demo Interaktive Formulare (Seite 25-26)
 
 ### **Unter-Sektionen:**
-- `sec:erfolge` → Erfolgs-Bibliothek (innerhalb Selbstreflexion)
+- `sec:erfolge` -> Erfolgs-Bibliothek (innerhalb Selbstreflexion)
 
 ### **Externe Links (YouTube Videos):**
 - ✅ 4-7-8 Atemtechnik: `https://youtube.com/watch?v=YRPh_GaiL8s`
@@ -44,8 +44,8 @@
 - **Betroffen:** Navigation-System
 
 ### **Problem 2: Falsche Link-Kette in QR-Code Modul**
-- **Vorher:** QR-Code → Selbstreflexion (Rückwärts-Navigation)
-- **Lösung:** QR-Code → Therapie-Koordination (Logische Vorwärts-Navigation)
+- **Vorher:** QR-Code -> Selbstreflexion (Rückwärts-Navigation)
+- **Lösung:** QR-Code -> Therapie-Koordination (Logische Vorwärts-Navigation)
 
 ---
 
@@ -66,22 +66,22 @@ Diese werden **optisch als Platzhalter** dargestellt und **nicht als klickbare L
 ## 🎯 **NAVIGATION-FLUSS BESTÄTIGT:**
 
 ### **Hauptnavigation (Sequential):**
-1. Navigation-System → Depression
-2. Depression → Bindungsleitfaden
-3. Bindungsleitfaden → Trigger-Management
-4. Trigger-Management → Notfallkarten
-5. Notfallkarten → Safe-Words
-6. Safe-Words → Interactive Tools
-7. Interactive → QR-Code/Digital
-8. QR-Code → **Therapie-Koordination** *(NEU)*
-9. Therapie-Koordination → Selbstreflexion
-10. Selbstreflexion → Arbeitsblätter (5.1)
+1. Navigation-System -> Depression
+2. Depression -> Bindungsleitfaden
+3. Bindungsleitfaden -> Trigger-Management
+4. Trigger-Management -> Notfallkarten
+5. Notfallkarten -> Safe-Words
+6. Safe-Words -> Interactive Tools
+7. Interactive -> QR-Code/Digital
+8. QR-Code -> **Therapie-Koordination** *(NEU)*
+9. Therapie-Koordination -> Selbstreflexion
+10. Selbstreflexion -> Arbeitsblätter (5.1)
 
 ### **Arbeitsblätter-Navigation:**
-1. Check-In (5.1) → Trigger-Tagebuch (5.2)
-2. Trigger-Tagebuch (5.2) → Depression-Monitor (5.3)
-3. Depression-Monitor (5.3) → Demo Interactive
-4. Demo Interactive → [Ende]
+1. Check-In (5.1) -> Trigger-Tagebuch (5.2)
+2. Trigger-Tagebuch (5.2) -> Depression-Monitor (5.3)
+3. Depression-Monitor (5.3) -> Demo Interactive
+4. Demo Interactive -> [Ende]
 
 ### **Rückwärts-Navigation:**
 - Alle Module haben **"Zurück zu Navigation"** Links
