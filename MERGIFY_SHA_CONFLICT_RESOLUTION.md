@@ -36,7 +36,7 @@ Create a new commit with a different SHA to allow Mergify to distinguish between
 - New unique SHA: `e2fafb18ba4412d8185bbef9c72b918b89f64090`
 - Mergify can now evaluate rules for this PR independently
 
-### Issue #661  
+### Issue #661
 ✅ **RESOLVED** - New commit created to resolve SHA conflict with PR #570
 - Previous conflicting SHA: `bd9d4edd8bf809a453fa9e9b9e68694823218ae1`
 - New unique SHA: `c210fad73d7f8e88e2f0b1a4c9e6d2a7b5f8e3c0`
@@ -58,6 +58,6 @@ Create a new commit with a different SHA to allow Mergify to distinguish between
 - Issue #884 provides comprehensive documentation enhancement
 
 ---
-**Issue References:** #650, #661, #884  
-**Resolution Dates:** #650 - 2024-08-15, #661 - 2024-08-16, #884 - 2024-06-19  
+**Issue References:** #650, #661, #884
+**Resolution Dates:** #650 - 2024-08-15, #661 - 2024-08-16, #884 - 2024-06-19
 **Resolution Method:** SHA differentiation through new commits with meaningful content

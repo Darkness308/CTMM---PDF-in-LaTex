@@ -16,7 +16,7 @@ The GitHub Actions workflows were using an invalid version of the LaTeX action:
 ### Technical Details
 The `dante-ev/latex-action` GitHub Action version availability:
 - ❌ `@v2` - Does not exist
-- ❌ `@v2.0.0` - Does not exist  
+- ❌ `@v2.0.0` - Does not exist
 - ❌ `@v2.3.0` - Does not exist (current issue)
 - ✅ `@latest` - Always available, points to current stable release
 - ✅ `@v0.2.0` - Specific version that exists
@@ -72,7 +72,7 @@ $ python3 test_issue_1036_fix.py
 
 Tests passed: 4/4
 ✅ LaTeX Action Version Fix: PASS
-✅ Removal of Problematic Versions: PASS  
+✅ Removal of Problematic Versions: PASS
 ✅ Workflow YAML Syntax: PASS
 ✅ Action Configuration Completeness: PASS
 ```

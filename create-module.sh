@@ -9,7 +9,7 @@ echo "========================"
 # Typ auswählen
 echo "Welchen Modul-Typ möchten Sie erstellen?"
 echo "1) Arbeitsblatt (arbeitsblatt)"
-echo "2) Tool (tool)"  
+echo "2) Tool (tool)"
 echo "2) Tool (tool)"
 echo "3) Notfallkarte (notfallkarte)"
 echo ""
@@ -44,10 +44,10 @@ if [ $? -eq 0 ]; then
     echo "📋 Nächste Schritte:"
     echo "1. Öffnen Sie main.tex"
     echo "2. Fügen Sie an der gewünschten Stelle ein:"
-    
+
     # Dateiname generieren (vereinfacht)
     filename=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/-\+/-/g' | sed 's/^-\|-$//g')
-    
+
 
     # Dateiname generieren (aus dem Modulnamen, ohne Leerzeichen und in Kleinbuchstaben)
     filename=$(echo "$name" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g')

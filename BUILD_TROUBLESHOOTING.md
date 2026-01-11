@@ -211,5 +211,5 @@ A successful build should show:
 
 ---
 
-**Last Updated**: August 2024  
+**Last Updated**: August 2024
 **Version**: 1.0

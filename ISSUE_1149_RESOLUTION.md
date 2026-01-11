@@ -62,7 +62,7 @@ Full build: ✓ PASS
 
 ### Existing Implementation (Verified Working)
 - `module-generator.js` - JavaScript-based module generator
-- `create-module.sh` - Interactive shell script  
+- `create-module.sh` - Interactive shell script
 - `.vscode/tasks.json` - Enhanced build tasks with cross-platform support
 - `modules/tool-5-4-3-2-1-grounding.tex` - Example generated tool module
 - `modules/notfall-panikattacken.tex` - Example generated emergency card
@@ -79,7 +79,7 @@ Full build: ✓ PASS
 - `\ctmmTextArea[width]{lines}{name}{default}` - Multi-line text area
 - `\ctmmCheckBox{name}{label}` - Interactive checkbox with CTMM styling
 
-### Date and Time Elements  
+### Date and Time Elements
 - `\ctmmDate{prefix}` - Standard date input
 - `\ctmmTime{prefix}` - Standard time input
 - `\ctmmDateField{name}{label}{placeholder}` - Custom date field
@@ -116,7 +116,7 @@ Full build: ✓ PASS
 
 # Direct usage
 node module-generator.js arbeitsblatt "Wochenreflexion"
-node module-generator.js tool "Atemtechnik-Guide"  
+node module-generator.js tool "Atemtechnik-Guide"
 node module-generator.js notfallkarte "Angst-Protokoll"
 ```
 
@@ -125,7 +125,7 @@ node module-generator.js notfallkarte "Angst-Protokoll"
 2. Select "Tasks: Run Task"
 3. Choose from 8 available CTMM tasks:
    - CTMM: Build Complete System
-   - CTMM: Build Single Module  
+   - CTMM: Build Single Module
    - CTMM: Generate Module
    - CTMM: Clean Build Directory
    - And 4 more specialized tasks

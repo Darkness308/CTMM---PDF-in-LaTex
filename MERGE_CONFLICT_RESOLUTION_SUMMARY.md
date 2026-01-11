@@ -123,7 +123,7 @@ af523b6 Resolve merge conflicts by removing all conflict markers
    - No conflict markers
    - Valid LaTeX syntax
 
-3. **Next Steps**: 
+3. **Next Steps**:
    - Review the merged content to ensure functionality is correct
    - Test the LaTeX build in CI
    - Consider squashing commits before final merge if desired

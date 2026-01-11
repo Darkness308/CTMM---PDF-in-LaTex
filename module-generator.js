@@ -150,7 +150,7 @@ const moduleConfig = {
         context: 'Tägliche Routine und Mustererkennung'
     },
     tool: {
-        color: 'ctmmOrange', 
+        color: 'ctmmOrange',
         icon: 'faCog',
         folder: 'modules/',
         prefix: 'tool-',
@@ -161,7 +161,7 @@ const moduleConfig = {
     },
     notfallkarte: {
         color: 'ctmmRed',
-        icon: 'faExclamationTriangle', 
+        icon: 'faExclamationTriangle',
         folder: 'modules/',
         prefix: 'notfall-',
         boxType: 'ctmmRedBox',
@@ -179,19 +179,19 @@ function generateModule(type, name) {
 
     const config = moduleConfig[type];
     const template = templates[type];
-    
+
     // Dateiname erstellen
     const baseFilename = name.toLowerCase()
         .replace(/ä/g, 'ae')
-        .replace(/ö/g, 'oe') 
+        .replace(/ö/g, 'oe')
         .replace(/ü/g, 'ue')
         .replace(/ß/g, 'ss')
         .replace(/[^a-z0-9]/g, '-')
         .replace(/-+/g, '-')
         .replace(/^-|-$/g, '');
-    
+
     const filename = `${config.prefix}${baseFilename}`;
-    
+
     // Bestimme nächste Tool-Nummer für tool-Module
     let nextToolNumber = 1;
     if (type === 'tool') {
@@ -221,12 +221,12 @@ function generateModule(type, name) {
         USAGE_NOTE: `Anwendung: Regelmäßig ausfüllen und als Teil Ihrer CTMM-Routine nutzen`,
         SECTION_TITLE: `${name} Dokumentation`,
         FIELD_1: 'Ausgangssituation',
-        FIELD_2: 'Angewendete Strategie', 
+        FIELD_2: 'Angewendete Strategie',
         FIELD_3: 'Wirksamkeit (1-10)',
         TOOL_NUMBER: getNextToolNumber(modulesDir),
         TOOL_NUMBER: nextToolNumber,
         STEP_1: 'Situation erfassen und bewerten',
-        STEP_2: 'Passende Intervention aus CTMM-System wählen', 
+        STEP_2: 'Passende Intervention aus CTMM-System wählen',
         STEP_3: 'Technik anwenden und beobachten',
         STEP_4: 'Wirkung dokumentieren und bei Bedarf anpassen',
         RELATED_MODULE_1: 'bindungsleitfaden',
@@ -264,7 +264,7 @@ function generateModule(type, name) {
 
     // Datei erstellen
     const filepath = path.join(config.folder, `${filename}.tex`);
-    
+
     try {
         fs.writeFileSync(filepath, content);
         console.log(`✅ Modul erstellt: ${filepath}`);
@@ -280,7 +280,7 @@ function generateModule(type, name) {
 // CLI Interface
 if (require.main === module) {
     const [,, type, name] = process.argv;
-    
+
     if (!type || !name) {
         console.log(`
 🧩 CTMM Module Generator für LaTeX-Projekt
@@ -289,7 +289,7 @@ Usage: node module-generator.js <type> <name>
 
 Verfügbare Typen:
   arbeitsblatt  - Interaktive Formulare und Tracking-Bögen
-  tool         - Interventions-Tools und Skill-Anleitungen  
+  tool         - Interventions-Tools und Skill-Anleitungen
   notfallkarte - Krisenprotokolle und Sofortmaßnahmen
 
 Beispiele:
@@ -301,7 +301,7 @@ Die generierten Dateien werden im modules/ Ordner erstellt.
         `);
         process.exit(1);
     }
-    
+
     generateModule(type, name);
 }
 

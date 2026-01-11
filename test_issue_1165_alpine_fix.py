@@ -3,7 +3,7 @@
 Test validation for Issue #1165: CI Alpine Compatibility Fix
 Validates that CI workflows use Alpine-compatible packages for xu-cheng/latex-action.
 
-Specifically, texlive-lang-german is NOT available in Alpine Linux and must be 
+Specifically, texlive-lang-german is NOT available in Alpine Linux and must be
 replaced with texlive-lang-european which provides German language support.
 """
 

@@ -20,7 +20,7 @@
 The GitHub Actions workflow had these packages:
 - texlive-lang-german
 - texlive-fonts-recommended
-- texlive-latex-recommended  
+- texlive-latex-recommended
 - texlive-fonts-extra
 - texlive-latex-extra
 - texlive-science
@@ -109,7 +109,7 @@ The `pifont` package provides the Postscript symbol fonts including:
 
 ## Related Issues
 - Builds on previous LaTeX package fixes from issues #702, #735, #729
-- Complements workflow syntax improvements from issues #458, #532  
+- Complements workflow syntax improvements from issues #458, #532
 - Aligns with package management practices established in previous resolutions
 
 ## Status: ✅ RESOLVED
