@@ -13,7 +13,7 @@ grep -r "<<<<<<< HEAD" . --include="*.tex" --include="*.md" --include="*.py" --i
 grep -l "<<<<<<< HEAD" . -r --include="*.tex" --include="*.md" --include="*.py" --include="*.sty" | wc -l
 
 # List files with conflict counts
-for file in $(grep -l "<<<<<<< HEAD" . -r --include="*.tex" --include="*.md" --include="*.py" --include="*.sty"); do 
+for file in $(grep -l "<<<<<<< HEAD" . -r --include="*.tex" --include="*.md" --include="*.py" --include="*.sty"); do
   echo "$file: $(grep -c "<<<<<<< HEAD" "$file") conflicts"
 done
 ```
@@ -81,33 +81,33 @@ For bulk conflict resolution, use the pattern from this resolution:
 ```python
 def resolve_conflict_smart(head_content, merge_content, file_path):
     """Intelligently resolve conflict based on content."""
-    
+
     # Case 1: Empty content
     if not head_content.strip():
         return merge_content
     if not merge_content.strip():
         return head_content
-    
+
     # Case 2: Identical
     if head_content.strip() == merge_content.strip():
         return head_content
-    
+
     # Case 3: Subset detection
     if head_content.strip() in merge_content:
         return merge_content
     if merge_content.strip() in head_content:
         return head_content
-    
+
     # Case 4: File type specific
     if file_path.endswith('.md'):
         return head_content  # Prefer newer docs
-    
+
     if file_path.endswith('.tex'):
         # Check if both have complete sections
         if '\\section' in head_content and '\\section' in merge_content:
             return head_content + '\n\n' + merge_content
         return head_content
-    
+
     # Default: prefer HEAD
     return head_content
 ```
@@ -129,7 +129,7 @@ python3 ctmm_build.py
 ### 3. Verify file integrity
 ```bash
 # Check LaTeX files
-for f in modules/*.tex; do 
+for f in modules/*.tex; do
   python3 -c "open('$f').read()" && echo "✓ $f" || echo "✗ $f"
 done
 ```
@@ -183,5 +183,5 @@ git checkout HEAD -- path/to/file.tex
 
 ---
 
-**Last Updated**: 2026-01-10  
+**Last Updated**: 2026-01-10
 **Validated Against**: CTMM LaTeX Therapeutic Materials System v1.0
