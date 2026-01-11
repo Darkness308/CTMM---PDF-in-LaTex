@@ -1,8 +1,8 @@
 # PR #489 Merge Conflict Resolution
 
-**PR Title:** Fix CI workflow: resolve LaTeX package naming issue causing build failures  
-**Branch:** `copilot/fix-488` → `copilot/fix-99` (❌ INCORRECT BASE)  
-**Status:** ⚠️ Requires Resolution  
+**PR Title:** Fix CI workflow: resolve LaTeX package naming issue causing build failures
+**Branch:** `copilot/fix-488` → `copilot/fix-99` (❌ INCORRECT BASE)
+**Status:** ⚠️ Requires Resolution
 **Date:** 2026-01-10
 
 ## Problem Analysis
@@ -10,7 +10,7 @@
 ### Issues Identified
 
 1. **❌ Wrong Base Branch**
-   - Current target: `copilot/fix-99` 
+   - Current target: `copilot/fix-99`
    - Should target: `main`
    - This is preventing the merge from being applied correctly
 
@@ -181,6 +181,6 @@ This resolution follows the patterns documented in:
 The repository has comprehensive merge conflict resolution tooling available.
 
 ---
-**Resolution prepared by:** GitHub Copilot Coding Agent  
-**Branch:** copilot/resolve-merge-conflicts  
+**Resolution prepared by:** GitHub Copilot Coding Agent
+**Branch:** copilot/resolve-merge-conflicts
 **Analysis date:** 2026-01-10
