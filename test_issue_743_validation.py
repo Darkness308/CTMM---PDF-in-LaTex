@@ -144,13 +144,13 @@ def validate_latex_packages():
 
     # Essential package validation
     required_packages = [
-        'texlive-lang-german',       # German language support
-        'texlive-fonts-recommended', # Recommended fonts
-        'texlive-latex-recommended', # Recommended LaTeX packages
-        'texlive-latex-extra',       # Extra LaTeX packages
-        'texlive-fonts-extra',       # Extra fonts
-        'texlive-science',           # Scientific packages
-        'texlive-pstricks'           # PostScript tricks (contains pifont)
+        ('texlive-lang-german', 'texlive-lang-european'),  # German language support (either package is acceptable)
+        ('texlive-fonts-recommended',),                     # Recommended fonts
+        ('texlive-latex-recommended',),                     # Recommended LaTeX packages
+        ('texlive-latex-extra',),                           # Extra LaTeX packages
+        ('texlive-fonts-extra',),                           # Extra fonts
+        ('texlive-science',),                               # Scientific packages
+        ('texlive-pstricks',)                               # PostScript tricks (contains pifont)
     ]
 
     all_passed = True
