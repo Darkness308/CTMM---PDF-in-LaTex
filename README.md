@@ -54,6 +54,24 @@ python3 test_ctmm_build.py
 
 Die Tests überprüfen die `filename_to_title()` Funktion mit verschiedenen Eingabeformaten (Unterstriche, Bindestriche, Groß-/Kleinschreibung, etc.).
 
+### Zeichenfehler-Prüfung
+
+Das Repository enthält einen automatischen Checker für problematische Zeichen (`check_character_issues.py`):
+
+```bash
+# Prüfung auf problematische Zeichen
+make check-chars
+# oder direkt:
+python3 check_character_issues.py
+```
+
+Der Checker findet:
+- Git-Merge-Conflict-Marker (`<<<<<<<`, `=======`, `>>>>>>>`)
+- Unsichtbare Unicode-Zeichen (non-breaking spaces, zero-width spaces, etc.)
+- Steuerzeichen, die LaTeX-Probleme verursachen können
+
+📖 **Ausführliche Dokumentation:** Siehe [CHARACTER_CHECKER.md](CHARACTER_CHECKER.md)
+
 ### Modulare Test-Strategie
 
 **Für Entwickler:**
