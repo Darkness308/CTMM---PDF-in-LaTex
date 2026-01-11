@@ -29,16 +29,16 @@ PROBLEMATIC_CHARS = {
     '\u00AD': 'Soft hyphen (U+00AD) - use \\- in LaTeX',
     '\uFEFF': 'BOM/Zero-width no-break space (U+FEFF) - remove from file',
     # Typographic characters (common in copy-pasted text)
-    '\u2018': "Left single quotation mark (') - use ` in LaTeX",
-    '\u2019': "Right single quotation mark (') - use ' in LaTeX",
-    '\u201C': 'Left double quotation mark (") - use `` in LaTeX',
-    '\u201D': 'Right double quotation mark (") - use \'\' in LaTeX',
-    '\u2013': 'En dash (–) - use -- in LaTeX or regular hyphen',
-    '\u2014': 'Em dash (—) - use --- in LaTeX or regular hyphen',
-    '\u2026': 'Horizontal ellipsis (…) - use \\ldots in LaTeX',
-    '\u00AB': 'Left-pointing double angle quotation («) - check context',
-    '\u00BB': 'Right-pointing double angle quotation (») - check context',
-    '\u2022': 'Bullet (•) - use \\textbullet in LaTeX',
+    '\u2018': "Left single quotation mark (U+2018) - use ` in LaTeX",
+    '\u2019': "Right single quotation mark (U+2019) - use ' in LaTeX",
+    '\u201C': 'Left double quotation mark (U+201C) - use `` in LaTeX',
+    '\u201D': 'Right double quotation mark (U+201D) - use \'\' in LaTeX',
+    '\u2013': 'En dash (U+2013) - use -- in LaTeX or regular hyphen',
+    '\u2014': 'Em dash (U+2014) - use --- in LaTeX or regular hyphen',
+    '\u2026': 'Horizontal ellipsis (U+2026) - use \\ldots in LaTeX',
+    '\u00AB': 'Left-pointing double angle quotation (U+00AB) - check context',
+    '\u00BB': 'Right-pointing double angle quotation (U+00BB) - check context',
+    '\u2022': 'Bullet (U+2022) - use \\textbullet in LaTeX',
 }
 
 # File extensions to check
