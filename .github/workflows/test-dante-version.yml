@@ -15,6 +15,7 @@ jobs:
           root_file: test.tex
           
       - name: Report result
+        timeout-minutes: 3
         run: |
           if [ "${{ steps.test_version.outcome }}" = "success" ]; then
             echo "✅ 2025-A exists and works"

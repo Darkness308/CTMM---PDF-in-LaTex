@@ -62,6 +62,20 @@ jobs:
         fi
 
         echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added"
+    
+    - name: Set up Python
+      timeout-minutes: 5
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Install Python dependencies
+      timeout-minutes: 5
+      run: |
+        echo "📦 Installing Python dependencies..."
+        pip install chardet pyyaml
+        echo "✅ Python dependencies installed successfully"
+    
     - name: Run CTMM build check
       timeout-minutes: 8
       run: |
