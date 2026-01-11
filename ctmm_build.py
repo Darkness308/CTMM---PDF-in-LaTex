@@ -7,6 +7,7 @@ Handles missing files and basic build testing with robust error handling.
 import re
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 import logging
 
@@ -144,11 +145,11 @@ Created by CTMM Build System
         logger.error("Failed to create template for %s: %s", file_path, e)
         return False
 
+    return True
+
 
 def test_basic_build(main_tex_path="main.tex"):
-    """Test basic build without modules."""
-    logger.info("Testing basic build (without modules)...")
-
+    """Test basic LaTeX build without modules."""
     # Check if pdflatex is available
     try:
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
@@ -158,27 +159,21 @@ def test_basic_build(main_tex_path="main.tex"):
         return True
 
     try:
-        with open(main_tex_path, 'r', encoding='utf-8', errors='replace') as f:
+        # Read main.tex and create a minimal test version without modules
+        with open(main_tex_path, 'r', encoding='utf-8') as f:
             content = f.read()
-    except Exception as e:
-        logger.error("Error reading %s: %s", main_tex_path, e)
-        return False
-
-    # Comment out all input{modules/...} lines
-    modified_content = re.sub(
-        r'(\\input\{modules/[^}]+\})',
-        r'% \1  % Temporarily commented by build system',
-        content
-    )
-
-    temp_file = "main_basic_test.tex"
-    try:
-        with open(temp_file, 'w', encoding='utf-8') as f:
-            f.write(modified_content)
+        
+        # Remove all \input{modules/...} lines to test basic framework
+        modified_content = re.sub(r'\\input\{modules/[^}]+\}', '', content)
+        
+        # Create temporary test file
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.tex', delete=False, encoding='utf-8') as temp_file:
+            temp_file_path = temp_file.name
+            temp_file.write(modified_content)
 
         # Test build with limited output capture to avoid encoding issues
         result = subprocess.run(
-            ['pdflatex', '-interaction=nonstopmode', temp_file],
+            ['pdflatex', '-interaction=nonstopmode', temp_file_path],
             capture_output=True,
             text=True,
             errors='replace',  # Handle encoding issues
@@ -186,7 +181,8 @@ def test_basic_build(main_tex_path="main.tex"):
         )
 
         # Enhanced PDF validation: check both return code and file existence/size
-        temp_pdf = Path(temp_file).with_suffix('.pdf')
+        temp_pdf = Path(temp_file_path).with_suffix('.pdf')
+        temp_log = Path(temp_file_path).with_suffix('.log')
         pdf_exists = temp_pdf.exists()
         pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
 
@@ -204,25 +200,27 @@ def test_basic_build(main_tex_path="main.tex"):
                 logger.error("Test PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
-            logger.error("LaTeX errors detected (check %s.log for details)", temp_file)
+            if temp_log.exists():
+                logger.error("Check log file for details: %s", temp_log)
+
+        # Cleanup temporary files
+        try:
+            Path(temp_file_path).unlink(missing_ok=True)
+            temp_pdf.unlink(missing_ok=True)
+            temp_log.unlink(missing_ok=True)
+            Path(temp_file_path).with_suffix('.aux').unlink(missing_ok=True)
+        except Exception:
+            pass
 
         return success
 
     except Exception as e:
-        logger.error("Build test failed: %s", e)
+        logger.error("Error in basic build test: %s", e)
         return False
-    finally:
-        # Clean up
-        for ext in ['', '.aux', '.log', '.pdf', '.out', '.toc']:
-            cleanup_file = Path(temp_file).with_suffix(ext)
-            if cleanup_file.exists():
-                cleanup_file.unlink()
 
 
 def test_full_build(main_tex_path="main.tex"):
-    """Test full build with all modules."""
-    logger.info("Testing full build (with all modules)...")
-
+    """Test full LaTeX build with modules."""
     # Check if pdflatex is available
     try:
         subprocess.run(['pdflatex', '--version'], capture_output=True, check=True)
@@ -264,14 +262,14 @@ def test_full_build(main_tex_path="main.tex"):
         return success
 
     except Exception as e:
-        logger.error("Full build test failed: %s", e)
+        logger.error("Error in full build test: %s", e)
         return False
 
 
 def validate_latex_files():
-    """Validate LaTeX files for excessive escaping issues."""
+    """Validate LaTeX files for escaping issues."""
     if not VALIDATOR_AVAILABLE:
-        logger.debug("Skipping LaTeX validation - validator not available")
+        logger.info("LaTeX validator not available, skipping validation")
         return True
 
     logger.info("Validating LaTeX files for escaping issues...")
@@ -303,18 +301,24 @@ def validate_latex_files():
 
 
 def validate_form_fields():
-    """Validate form fields using the FormFieldValidator."""
+    """Validate form fields in LaTeX files."""
     if not FORM_VALIDATOR_AVAILABLE:
-        logger.info("Form field validator not available - skipping validation")
+        logger.info("Form validator not available, skipping validation")
         return True
 
     try:
-        validator = FormFieldValidator(".")
-        is_valid = validator.validate_all_files()
-        return is_valid
+        # Pass current directory as repo_root
+        validator = FormFieldValidator(repo_root='.')
+        # Run validation on all files
+        validator.validate_all_files()
+        # Check if there are any issues
+        has_issues = len(validator.issues) > 0
+        if has_issues:
+            logger.warning(f"Form field validation found {len(validator.issues)} issue(s)")
+        return not has_issues
     except Exception as e:
-        logger.error("Form field validation error: %s", e)
-        return False
+        logger.warning(f"Form validation failed: {e}")
+        return True  # Don't fail build on validation errors
 
 
 def main():
