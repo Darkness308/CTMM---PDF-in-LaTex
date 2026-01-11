@@ -48,18 +48,18 @@ def main():
         total_added = sum(int(line.split('\t')[0]) for line in lines if line.split('\t')[0].isdigit())
         total_deleted = sum(int(line.split('\t')[1]) for line in lines if line.split('\t')[1].isdigit())
 
-        print(f"📊 Changes detected: {total_files} file(s)")
-        print(f"📈 Lines added: {total_added}")
-        print(f"📉 Lines deleted: {total_deleted}")
+        print(f"[SUMMARY] Changes detected: {total_files} file(s)")
+        print(f"[CHART] Lines added: {total_added}")
+        print(f"[EMOJI] Lines deleted: {total_deleted}")
 
         for line in lines:
             parts = line.split('\t')
             if len(parts) >= 3:
                 added, deleted, filename = parts[0], parts[1], parts[2]
                 print(f"   {filename}: +{added} -{deleted}")
-        print("✅ PASS: Meaningful changes present for Copilot review")
+        print("[PASS] PASS: Meaningful changes present for Copilot review")
     else:
-        print("❌ FAIL: No meaningful changes found")
+        print("[FAIL] FAIL: No meaningful changes found")
         return False
 
     # Check 2: Verify syntax fix in validation system
@@ -68,13 +68,13 @@ def main():
 
     success, output = run_command("python3 validate_pr.py", "Test fixed validation system")
     if success:
-        print("✅ PASS: Validation system runs without syntax errors")
-        if "🎉 All validation checks passed!" in output:
-            print("✅ PASS: PR validation confirms meaningful changes")
+        print("[PASS] PASS: Validation system runs without syntax errors")
+        if "[SUCCESS] All validation checks passed!" in output:
+            print("[PASS] PASS: PR validation confirms meaningful changes")
         else:
-            print("ℹ️  INFO: Validation provides expected feedback")
+            print("[INFO]  INFO: Validation provides expected feedback")
     else:
-        print("❌ FAIL: Validation system has errors")
+        print("[FAIL] FAIL: Validation system has errors")
         print(f"Error output: {output}")
         return False
 
@@ -83,10 +83,10 @@ def main():
     print("-" * 40)
 
     success, output = run_command("python3 ctmm_build.py", "Test CTMM build system")
-    if success and "✓ PASS" in output:
-        print("✅ PASS: CTMM build system functions correctly")
+    if success and "[OK] PASS" in output:
+        print("[PASS] PASS: CTMM build system functions correctly")
     else:
-        print("❌ FAIL: CTMM build system has issues")
+        print("[FAIL] FAIL: CTMM build system has issues")
         return False
 
     # Check 4: Verify unit tests pass
@@ -95,9 +95,9 @@ def main():
 
     success, output = run_command("python3 test_ctmm_build.py", "Run unit tests")
     if success and "OK" in output:
-        print("✅ PASS: All unit tests pass")
+        print("[PASS] PASS: All unit tests pass")
     else:
-        print("❌ FAIL: Unit tests failed")
+        print("[FAIL] FAIL: Unit tests failed")
         print(f"Test output: {output}")
         return False
 
@@ -106,23 +106,23 @@ def main():
     print("-" * 40)
 
     if Path("ISSUE_731_RESOLUTION.md").exists():
-        print("✅ PASS: Comprehensive resolution documentation created")
+        print("[PASS] PASS: Comprehensive resolution documentation created")
 
         # Check content quality
         with open("ISSUE_731_RESOLUTION.md", 'r') as f:
             content = f.read()
 
         if len(content) > 1000:
-            print("✅ PASS: Documentation is substantial and comprehensive")
+            print("[PASS] PASS: Documentation is substantial and comprehensive")
         else:
-            print("⚠️  WARN: Documentation may be too brief")
+            print("[WARN]  WARN: Documentation may be too brief")
 
         if "## Problem Statement" in content and "## Solution Implemented" in content:
-            print("✅ PASS: Documentation follows established structure")
+            print("[PASS] PASS: Documentation follows established structure")
         else:
-            print("⚠️  WARN: Documentation structure could be improved")
+            print("[WARN]  WARN: Documentation structure could be improved")
     else:
-        print("❌ FAIL: Resolution documentation not found")
+        print("[FAIL] FAIL: Resolution documentation not found")
         return False
 
     # Check 6: Verify git commit history
@@ -132,33 +132,33 @@ def main():
     success, output = run_command("git log --oneline -3", "Check recent commits")
     if success:
         commits = output.split('\n')
-        print(f"📝 Recent commits: {len(commits)}")
+        print(f"[NOTE] Recent commits: {len(commits)}")
         for commit in commits[:3]:
             print(f"   {commit}")
-        print("✅ PASS: Proper commit history with meaningful changes")
+        print("[PASS] PASS: Proper commit history with meaningful changes")
     else:
-        print("❌ FAIL: Could not verify commit history")
+        print("[FAIL] FAIL: Could not verify commit history")
         return False
 
     # Summary
     print("\n" + "="*70)
     print("VERIFICATION SUMMARY")
     print("="*70)
-    print("✅ Issue #731 RESOLVED")
-    print("✅ Copilot can now review files in this PR")
-    print("✅ Critical syntax error in validation system fixed")
-    print("✅ All build systems and validations pass")
-    print("✅ Comprehensive documentation added")
-    print("✅ Repository functionality improved")
+    print("[PASS] Issue #731 RESOLVED")
+    print("[PASS] Copilot can now review files in this PR")
+    print("[PASS] Critical syntax error in validation system fixed")
+    print("[PASS] All build systems and validations pass")
+    print("[PASS] Comprehensive documentation added")
+    print("[PASS] Repository functionality improved")
 
-    print("\n📋 WHAT WAS FIXED:")
-    print("   • Fixed critical IndentationError in validate_pr.py")
-    print("   • Created meaningful, reviewable changes")
-    print("   • Added comprehensive issue resolution documentation")
-    print("   • Maintained all existing validation systems")
-    print("   • Ensured proper diff calculation for Copilot")
+    print("\n[TEST] WHAT WAS FIXED:")
+    print("   * Fixed critical IndentationError in validate_pr.py")
+    print("   * Created meaningful, reviewable changes")
+    print("   * Added comprehensive issue resolution documentation")
+    print("   * Maintained all existing validation systems")
+    print("   * Ensured proper diff calculation for Copilot")
 
-    print("\n🎯 COPILOT REVIEW STATUS: READY FOR REVIEW")
+    print("\n[TARGET] COPILOT REVIEW STATUS: READY FOR REVIEW")
 
     return True
 

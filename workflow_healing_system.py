@@ -261,7 +261,7 @@ class WorkflowHealingSystem:
         self.logger.info(f"Errors: {analysis.total_errors} in categories: {', '.join(analysis.error_categories)}")
 
         for i, result in enumerate(fix_results, 1):
-            status = "✅" if result.success else "❌"
+            status = "[PASS]" if result.success else "[FAIL]"
             self.logger.info(f"Fix {i}: {status} {result.description}")
             if result.files_modified:
                 self.logger.info(f"   Files: {', '.join(result.files_modified)}")
@@ -336,10 +336,10 @@ def main():
 
     if args.status:
         status = healing_system.get_system_status()
-        print("🔧 CTMM Workflow Healing System Status")
+        print("[FIX] CTMM Workflow Healing System Status")
         print("=" * 50)
         print(f"System Version: {status['system_version']}")
-        print(f"Config Valid: {'✅' if status['config_valid'] else '❌'}")
+        print(f"Config Valid: {'[PASS]' if status['config_valid'] else '[FAIL]'}")
         print(f"Monitored Workflows: {len(status['monitored_workflows'])}")
 
         if status['current_session']:
@@ -355,7 +355,7 @@ def main():
         return
 
     # Start healing session
-    print("🚀 Starting CTMM Workflow Healing System")
+    print("[LAUNCH] Starting CTMM Workflow Healing System")
     print("=" * 50)
 
     try:
@@ -365,23 +365,23 @@ def main():
             max_workflows=args.max_workflows
         )
 
-        print("\n✅ Healing session completed successfully")
-        print(f"📊 Results: {healing_system._get_session_summary()}")
+        print("\n[PASS] Healing session completed successfully")
+        print(f"[SUMMARY] Results: {healing_system._get_session_summary()}")
 
         if session.prs_created > 0:
-            print(f"\n🔗 Created {session.prs_created} healing PRs")
+            print(f"\n[EMOJI] Created {session.prs_created} healing PRs")
             print("   Please review and merge the PRs to apply the fixes")
 
         return 0
 
     except KeyboardInterrupt:
-        print("\n⏹️  Healing session interrupted by user")
+        print("\n[SYM]  Healing session interrupted by user")
         if healing_system.current_session:
             healing_system.current_session.status = 'stopped'
         return 1
 
     except Exception as e:
-        print(f"\n❌ Healing session failed: {e}")
+        print(f"\n[FAIL] Healing session failed: {e}")
         healing_system.logger.exception("Healing session failed")
         return 1
 

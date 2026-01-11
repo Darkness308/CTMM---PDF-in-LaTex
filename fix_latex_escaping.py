@@ -208,8 +208,7 @@ class LaTeXDeEscaper:
                 except Exception as e:
                     logger.warning(f"Error applying cleanup pattern {i+1}: {e}")
                     continue
-            
-main
+
             # Check if content changed
             content_changed = content != original_content
 
@@ -230,7 +229,7 @@ main
                     logger.error(f"IO error writing to {output_path}: {e}")
                     return False, 0
                 except Exception as e:
-                    logger.error(f"Unexpected error writing to {output_path}: {e}")
+                    logger.error(f"Error writing file {output_path}: {e}")
                     return False, 0
             else:
                 logger.info(f"No changes needed for {input_path}")

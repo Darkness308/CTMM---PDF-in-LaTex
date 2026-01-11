@@ -272,36 +272,36 @@ def main():
 
     monitor = WorkflowMonitor()
 
-    print("🔍 Testing Workflow Monitor")
+    print("[SEARCH] Testing Workflow Monitor")
     print("=" * 50)
 
     # Test configuration validation
     config_issues = config.validate_config()
     if config_issues:
-        print("❌ Configuration Issues:")
+        print("[FAIL] Configuration Issues:")
         for issue in config_issues:
             print(f"   - {issue}")
         return
 
-    print("✅ Configuration validated")
+    print("[PASS] Configuration validated")
 
     # Get failed workflows
-    print("\n📋 Fetching failed workflows...")
+    print("\n[TEST] Fetching failed workflows...")
     failed_workflows = monitor.get_failed_workflows()
 
     if not failed_workflows:
-        print("✅ No failed workflows found")
+        print("[PASS] No failed workflows found")
     else:
-        print(f"⚠️  Found {len(failed_workflows)} failed workflows:")
+        print(f"[WARN]  Found {len(failed_workflows)} failed workflows:")
         for workflow in failed_workflows[:3]:  # Show first 3
             print(f"   - {workflow.workflow_name} (ID: {workflow.id}, Status: {workflow.conclusion})")
 
     # Check for healing PRs
-    print("\n🔧 Checking for existing healing PRs...")
+    print("\n[FIX] Checking for existing healing PRs...")
     healing_prs = monitor.get_healing_prs()
     print(f"Found {len(healing_prs)} existing healing PRs")
 
-    print("\n✅ Workflow monitor test completed")
+    print("\n[PASS] Workflow monitor test completed")
 
 if __name__ == "__main__":
     main()

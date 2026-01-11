@@ -96,7 +96,7 @@ def main():
     # Ensure we're in the right directory
     os.chdir(Path(__file__).parent)
 
-    print("🔧 Testing Issue #1074 Fix: dante-ev/latex-action version correction")
+    print("[FIX] Testing Issue #1074 Fix: dante-ev/latex-action version correction")
     print("=" * 70)
 
     # Run tests
@@ -104,7 +104,7 @@ def main():
 
     # Additional validation
     print("\n" + "=" * 70)
-    print("✅ Issue #1074 Fix Verification Summary:")
+    print("[PASS] Issue #1074 Fix Verification Summary:")
     print("   - dante-ev/latex-action@v2.0.0 removed (non-existent version)")
     print("   - dante-ev/latex-action@v0.2.0 used (correct working version)")
     print("   - Workflow syntax is valid")

@@ -67,4 +67,4 @@ if __name__ == '__main__':
         unittest.main(verbosity=2, exit=False)
     finally:
         sys.stdout = original_stdout
-        print("✅ Version validation tests completed")
+        print("[PASS] Version validation tests completed")

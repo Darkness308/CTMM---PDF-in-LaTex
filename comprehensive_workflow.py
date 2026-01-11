@@ -48,19 +48,19 @@ def run_command(cmd, description, check=True):
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True, errors='replace')
 
         if result.returncode == 0:
-            print(f"✅ {description} - SUCCESS")
+            print(f"[PASS] {description} - SUCCESS")
             if result.stdout.strip():
                 print(f"Output: {result.stdout.strip()}")
             return True
         else:
-            print(f"❌ {description} - FAILED")
+            print(f"[FAIL] {description} - FAILED")
             if result.stderr.strip():
                 print(f"Error: {result.stderr.strip()}")
             if check:
                 return False
             return True
     except Exception as e:
-        print(f"❌ {description} - ERROR: {e}")
+        print(f"[FAIL] {description} - ERROR: {e}")
         if check:
             return False
         return True
@@ -133,10 +133,10 @@ def comprehensive_workflow(args):
 
     missing_files = [f for f in key_files if not Path(f).exists()]
     if not missing_files:
-        print("✅ All key workflow files present")
+        print("[PASS] All key workflow files present")
         success_count += 1
     else:
-        print(f"❌ Missing key files: {missing_files}")
+        print(f"[FAIL] Missing key files: {missing_files}")
 
     # Step 8: Cleanup (if requested)
     if args.cleanup:
@@ -149,15 +149,15 @@ def comprehensive_workflow(args):
     print(f"Success rate: {(success_count/total_steps)*100:.1f}%")
 
     if success_count == total_steps:
-        print("\n🎉 COMPREHENSIVE TOOLSET VALIDATION: SUCCESS")
-        print("✅ The CTMM comprehensive toolset is fully operational!")
-        print("\n📋 READY FOR:")
+        print("\n[SUCCESS] COMPREHENSIVE TOOLSET VALIDATION: SUCCESS")
+        print("[PASS] The CTMM comprehensive toolset is fully operational!")
+        print("\n[TEST] READY FOR:")
         print("  - Production LaTeX document creation")
         print("  - Automated de-escaping of converted files")
         print("  - Continuous integration workflows")
         print("  - Therapeutic material development")
     else:
-        print(f"\n⚠️  VALIDATION INCOMPLETE: {total_steps - success_count} issues found")
+        print(f"\n[WARN]  VALIDATION INCOMPLETE: {total_steps - success_count} issues found")
         print("Please review the failed steps above.")
 
     print("\n" + "="*60)

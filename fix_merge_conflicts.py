@@ -201,7 +201,7 @@ class MergeConflictFixer:
         print(f"Found {len(self.issues_found)} files with issues\n")
 
         if not self.issues_found:
-            print("✅ No merge-blocking characters found!")
+            print("[PASS] No merge-blocking characters found!")
             return
 
         # Show sample of issues
@@ -222,7 +222,7 @@ class MergeConflictFixer:
 
             for filepath, _ in self.issues_found:
                 if self.fix_file(filepath):
-                    print(f"✓ Fixed: {filepath}")
+                    print(f"[OK] Fixed: {filepath}")
 
         # Final report
         print(f"\n{'='*60}")
@@ -243,7 +243,7 @@ class MergeConflictFixer:
         print(f"{'='*60}\n")
 
         if not self.dry_run and self.stats['files_fixed'] > 0:
-            print("✅ All merge-blocking characters have been fixed!")
+            print("[PASS] All merge-blocking characters have been fixed!")
             print("   Files are now UTF-8 encoded with LF line endings.")
             print("   Trailing whitespace has been removed.")
 

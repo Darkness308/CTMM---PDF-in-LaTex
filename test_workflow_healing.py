@@ -301,7 +301,7 @@ class TestPRManager(unittest.TestCase):
         mock_response.json.return_value = [
             {
                 'number': 123,
-                'title': '🔧 Automated Workflow Fix: Test fix',
+                'title': '[FIX] Automated Workflow Fix: Test fix',
                 'head': {'ref': 'workflow-healing/test-branch'},
                 'created_at': '2024-01-01T00:00:00Z'
             },
@@ -437,7 +437,7 @@ jobs:
 
 def run_comprehensive_tests():
     """Run comprehensive test suite with detailed output."""
-    print("🧪 Running Comprehensive Workflow Healing System Tests")
+    print("[TEST] Running Comprehensive Workflow Healing System Tests")
     print("=" * 60)
 
     # Create test suite
@@ -456,7 +456,7 @@ def run_comprehensive_tests():
     failed_tests = []
 
     for test_class in test_classes:
-        print(f"\n📋 Testing {test_class.__name__}")
+        print(f"\n[TEST] Testing {test_class.__name__}")
         print("-" * 40)
 
         suite = unittest.TestLoader().loadTestsFromTestCase(test_class)
@@ -482,12 +482,12 @@ def run_comprehensive_tests():
             for test, traceback in result.errors:
                 failed_tests.append(f"{test_class.__name__}.{test._testMethodName}: ERROR")
 
-        status = "✅ PASSED" if class_passed == class_total else "❌ FAILED"
+        status = "[PASS] PASSED" if class_passed == class_total else "[FAIL] FAILED"
         print(f"   Status: {status}")
 
     # Summary
     print(f"\n{'=' * 60}")
-    print(f"📊 TEST SUMMARY")
+    print(f"[SUMMARY] TEST SUMMARY")
     print(f"{'=' * 60}")
     print(f"Total Tests: {total_tests}")
     print(f"Passed: {passed_tests}")
@@ -495,11 +495,11 @@ def run_comprehensive_tests():
     print(f"Success Rate: {(passed_tests / total_tests * 100):.1f}%")
 
     if failed_tests:
-        print(f"\n❌ Failed Tests:")
+        print(f"\n[FAIL] Failed Tests:")
         for test in failed_tests:
             print(f"   - {test}")
 
-    overall_status = "✅ ALL TESTS PASSED" if passed_tests == total_tests else "❌ SOME TESTS FAILED"
+    overall_status = "[PASS] ALL TESTS PASSED" if passed_tests == total_tests else "[FAIL] SOME TESTS FAILED"
     print(f"\n{overall_status}")
 
     return passed_tests == total_tests

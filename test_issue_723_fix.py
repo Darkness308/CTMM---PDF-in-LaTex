@@ -112,7 +112,7 @@ def main():
     unittest.main(verbosity=2, exit=False)
 
     print("\n" + "=" * 60)
-    print("✅ Issue #723 validation completed")
+    print("[PASS] Issue #723 validation completed")
     print("The Python syntax error fix in latex_validator.py is working correctly.")
     print("CI build system should now run successfully.")
     print("=" * 60)
