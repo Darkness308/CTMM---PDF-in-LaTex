@@ -35,7 +35,7 @@ def validate_workflow_versions():
 
     for file_path in workflow_files:
         if not os.path.exists(file_path):
-            print(f"❌ File not found: {file_path}")
+            print(f"[FAIL] File not found: {file_path}")
             all_pinned = False
             continue
 
@@ -56,11 +56,11 @@ def validate_workflow_versions():
             if version == 'latest':
                 latest_found = True
                 unpinned_actions.append(f"{action}@{version}")
-                print(f"❌ Found @latest usage: {action}@{version}")
+                print(f"[FAIL] Found @latest usage: {action}@{version}")
             elif version.startswith('v') and re.match(r'^v\d+(\.\d+)*$', version):
-                print(f"✅ Properly pinned: {action}@{version}")
+                print(f"[PASS] Properly pinned: {action}@{version}")
             else:
-                print(f"⚠️  Non-standard version: {action}@{version}")
+                print(f"[WARN]  Non-standard version: {action}@{version}")
 
         if latest_found:
             all_pinned = False
@@ -74,17 +74,17 @@ def validate_workflow_versions():
     print("=" * 70)
 
     for file_path, is_pinned, message in results:
-        status = "✅ PASS" if is_pinned else "❌ FAIL"
+        status = "[PASS] PASS" if is_pinned else "[FAIL] FAIL"
         print(f"{status} {os.path.basename(file_path)}: {message}")
 
     if all_pinned:
-        print("\n🎉 ALL ACTIONS PROPERLY VERSION-PINNED")
+        print("\n[SUCCESS] ALL ACTIONS PROPERLY VERSION-PINNED")
         print("No @latest tags found. All GitHub Actions use specific versions.")
         print("This ensures reproducible builds and prevents unexpected failures.")
     else:
-        print("\n⚠️  SOME ACTIONS USE @latest TAGS")
+        print("\n[WARN]  SOME ACTIONS USE @latest TAGS")
         print("Replace @latest with specific version tags for reproducible builds.")
-        print("Example: dante-ev/latex-action@latest → dante-ev/latex-action@v0.2")
+        print("Example: dante-ev/latex-action@latest -> dante-ev/latex-action@v0.2")
 
     print(f"\nStatus: {'SUCCESS' if all_pinned else 'NEEDS_FIXES'}")
     return all_pinned

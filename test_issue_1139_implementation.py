@@ -34,7 +34,7 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
 
     def test_enhanced_latex_build_system(self):
         """Test enhanced LaTeX build system with multi-pass compilation and error handling."""
-        print("\n🔧 Testing enhanced LaTeX build system...")
+        print("\n[FIX] Testing enhanced LaTeX build system...")
 
         # Check that ctmm_build.py exists and is executable
         build_script = os.path.join(self.repo_root, "ctmm_build.py")
@@ -48,15 +48,15 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, "Build system should complete successfully")
         self.assertIn("CTMM BUILD SYSTEM SUMMARY", result.stdout)
-        self.assertIn("LaTeX validation: ✓ PASS", result.stdout)
-        self.assertIn("Basic build: ✓ PASS", result.stdout)
-        self.assertIn("Full build: ✓ PASS", result.stdout)
+        self.assertIn("LaTeX validation: [OK] PASS", result.stdout)
+        self.assertIn("Basic build: [OK] PASS", result.stdout)
+        self.assertIn("Full build: [OK] PASS", result.stdout)
 
-        print("  ✅ Enhanced LaTeX build system functional")
+        print("  [PASS] Enhanced LaTeX build system functional")
 
     def test_document_conversion_pipeline(self):
         """Test document conversion pipeline that converts therapy documents to LaTeX."""
-        print("\n📄 Testing document conversion pipeline...")
+        print("\n[FILE] Testing document conversion pipeline...")
 
         # Check that converted directory exists
         converted_dir = os.path.join(self.repo_root, "converted")
@@ -91,11 +91,11 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
             has_therapeutic_content = any(term in content.lower() for term in therapeutic_indicators)
             self.assertTrue(has_therapeutic_content, f"{filename} should contain therapeutic content")
 
-        print(f"  ✅ All {len(expected_files)} documents successfully converted")
+        print(f"  [PASS] All {len(expected_files)} documents successfully converted")
 
     def test_advanced_error_analysis_and_optimization(self):
         """Test advanced error analysis and code optimization capabilities."""
-        print("\n🔍 Testing advanced error analysis and optimization...")
+        print("\n[SEARCH] Testing advanced error analysis and optimization...")
 
         # Run validation pipeline
         report = self.validator.validate_conversion_pipeline()
@@ -126,11 +126,11 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
         self.assertGreaterEqual(metrics["total_lines"], 500, "Should analyze substantial content")
         self.assertGreaterEqual(metrics["therapeutic_terms"], 100, "Should detect therapeutic terminology")
 
-        print(f"  ✅ Quality analysis complete (Score: {quality_score:.1f}/100)")
+        print(f"  [PASS] Quality analysis complete (Score: {quality_score:.1f}/100)")
 
     def test_pdf_verification_capabilities(self):
         """Test PDF verification and multi-format output capabilities."""
-        print("\n📋 Testing PDF verification capabilities...")
+        print("\n[TEST] Testing PDF verification capabilities...")
 
         # Check that build system includes PDF verification logic
         build_script_path = os.path.join(self.repo_root, "ctmm_build.py")
@@ -147,11 +147,11 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
         has_error_handling = any(indicator in build_content for indicator in error_handling_indicators)
         self.assertTrue(has_error_handling, "Build system should have error handling")
 
-        print("  ✅ PDF verification capabilities present")
+        print("  [PASS] PDF verification capabilities present")
 
     def test_therapy_content_compliance(self):
         """Test that converted documents maintain therapeutic content standards."""
-        print("\n🧠 Testing therapy content compliance...")
+        print("\n[EMOJI] Testing therapy content compliance...")
 
         # Check for CTMM methodology compliance
         converted_dir = os.path.join(self.repo_root, "converted")
@@ -191,11 +191,11 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
         self.assertGreaterEqual(terminology_files, 4,
                                "Most documents should contain German therapeutic terminology")
 
-        print("  ✅ Therapeutic content compliance verified")
+        print("  [PASS] Therapeutic content compliance verified")
 
     def test_interactive_elements_and_forms(self):
         """Test interactive elements and form functionality in converted documents."""
-        print("\n🎯 Testing interactive elements and forms...")
+        print("\n[TARGET] Testing interactive elements and forms...")
 
         converted_dir = os.path.join(self.repo_root, "converted")
         interactive_element_count = 0
@@ -221,11 +221,11 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
         self.assertGreaterEqual(table_structure_count, 10,
                                "Should have multiple table structures")
 
-        print(f"  ✅ Interactive elements: {interactive_element_count}, Tables: {table_structure_count}")
+        print(f"  [PASS] Interactive elements: {interactive_element_count}, Tables: {table_structure_count}")
 
     def test_system_integration_and_workflow(self):
         """Test overall system integration and workflow functionality."""
-        print("\n⚙️ Testing system integration and workflow...")
+        print("\n[GEAR] Testing system integration and workflow...")
 
         # Test that validation script can be run
         validation_script = os.path.join(self.repo_root, "validate_conversion_pipeline.py")
@@ -244,11 +244,11 @@ class TestCTMMWorkflowSystem(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, "Main build system should integrate successfully")
 
-        print("  ✅ System integration and workflow functional")
+        print("  [PASS] System integration and workflow functional")
 
 def main():
     """Run the comprehensive test suite."""
-    print("🚀 CTMM Comprehensive LaTeX Workflow System Test Suite")
+    print("[LAUNCH] CTMM Comprehensive LaTeX Workflow System Test Suite")
     print("=" * 70)
     print("Testing implementation for Issue #1139...")
     print()
@@ -257,8 +257,8 @@ def main():
     unittest.main(verbosity=2, exit=False)
 
     print("\n" + "=" * 70)
-    print("🎉 Test Suite Complete!")
-    print("✅ Comprehensive LaTeX workflow system implementation validated")
+    print("[SUCCESS] Test Suite Complete!")
+    print("[PASS] Comprehensive LaTeX workflow system implementation validated")
 
 if __name__ == "__main__":
     main()

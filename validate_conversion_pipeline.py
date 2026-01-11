@@ -46,7 +46,7 @@ class CTMMConversionValidator:
     def validate_conversion_pipeline(self) -> Dict[str, any]:
         """Main validation function for the document conversion pipeline."""
 
-        print("🔍 CTMM Document Conversion Pipeline Validation")
+        print("[SEARCH] CTMM Document Conversion Pipeline Validation")
         print("=" * 60)
         print("Analyzing converted therapy documents for quality and compliance...")
         print()
@@ -71,10 +71,10 @@ class CTMMConversionValidator:
 
     def _validate_file_existence(self):
         """Validate that all expected converted files exist."""
-        print("📂 Checking file existence...")
+        print("[FOLDER] Checking file existence...")
 
         if not os.path.exists(self.converted_dir):
-            self.issues_found.append(f"❌ Converted directory '{self.converted_dir}' not found")
+            self.issues_found.append(f"[FAIL] Converted directory '{self.converted_dir}' not found")
             return
 
         existing_files = os.listdir(self.converted_dir)
@@ -82,19 +82,19 @@ class CTMMConversionValidator:
 
         for expected_file in self.expected_files:
             if expected_file in existing_files:
-                print(f"  ✅ {expected_file}")
+                print(f"  [PASS] {expected_file}")
             else:
-                self.issues_found.append(f"❌ Missing converted file: {expected_file}")
+                self.issues_found.append(f"[FAIL] Missing converted file: {expected_file}")
 
         missing_count = len(self.expected_files) - len([f for f in self.expected_files if f in existing_files])
         if missing_count == 0:
-            print(f"  ✅ All {len(self.expected_files)} expected files found")
+            print(f"  [PASS] All {len(self.expected_files)} expected files found")
         else:
-            print(f"  ⚠️  {missing_count} files missing")
+            print(f"  [WARN]  {missing_count} files missing")
 
     def _analyze_document_quality(self):
         """Analyze quality metrics for converted documents."""
-        print("\n📊 Analyzing document quality...")
+        print("\n[SUMMARY] Analyzing document quality...")
 
         for filename in self.expected_files:
             filepath = os.path.join(self.converted_dir, filename)
@@ -140,21 +140,21 @@ class CTMMConversionValidator:
             # Count CTMM-specific patterns
             ctmm_patterns = [
                 r"Catch-Track-Map-Match", r"CTMM-System", r"CTMM-Modul",
-                r"🧠.*?Worum geht.*?hier", r"Kapitelzuordnung.*?CTMM"
+                r"[EMOJI].*?Worum geht.*?hier", r"Kapitelzuordnung.*?CTMM"
             ]
 
             for pattern in ctmm_patterns:
                 matches = re.findall(pattern, content, re.IGNORECASE)
                 self.quality_metrics["ctmm_patterns"] += len(matches)
 
-            print(f"  📄 {filename}: {len(lines)} lines, {term_count} therapeutic terms")
+            print(f"  [FILE] {filename}: {len(lines)} lines, {term_count} therapeutic terms")
 
         except Exception as e:
-            self.issues_found.append(f"❌ Error analyzing {filename}: {str(e)}")
+            self.issues_found.append(f"[FAIL] Error analyzing {filename}: {str(e)}")
 
     def _validate_therapeutic_content(self):
         """Validate therapeutic content compliance."""
-        print("\n🧠 Validating therapeutic content...")
+        print("\n[EMOJI] Validating therapeutic content...")
 
         required_elements = {
             "Tool 23 Trigger Management.tex": [
@@ -184,13 +184,13 @@ class CTMMConversionValidator:
                         missing_elements.append(element)
 
                 if missing_elements:
-                    self.issues_found.append(f"⚠️ {filename}: Missing therapeutic elements: {missing_elements}")
+                    self.issues_found.append(f"[WARN] {filename}: Missing therapeutic elements: {missing_elements}")
                 else:
-                    print(f"  ✅ {filename}: All therapeutic elements present")
+                    print(f"  [PASS] {filename}: All therapeutic elements present")
 
     def _validate_latex_structure(self):
         """Validate LaTeX document structure and formatting."""
-        print("\n📝 Validating LaTeX structure...")
+        print("\n[NOTE] Validating LaTeX structure...")
 
         structure_checks = [
             (r"\\section\{", "Section headers"),
@@ -213,9 +213,9 @@ class CTMMConversionValidator:
                         structure_score += 1
 
                 if structure_score >= 4:  # At least 4 structural elements
-                    print(f"  ✅ {filename}: Good LaTeX structure ({structure_score}/6)")
+                    print(f"  [PASS] {filename}: Good LaTeX structure ({structure_score}/6)")
                 else:
-                    self.issues_found.append(f"⚠️ {filename}: Limited LaTeX structure ({structure_score}/6)")
+                    self.issues_found.append(f"[WARN] {filename}: Limited LaTeX structure ({structure_score}/6)")
 
     def _calculate_quality_score(self):
         """Calculate overall quality score for the conversion pipeline."""
@@ -242,11 +242,11 @@ class CTMMConversionValidator:
     def _generate_validation_report(self) -> Dict[str, any]:
         """Generate comprehensive validation report."""
         print("\n" + "=" * 60)
-        print("📋 CONVERSION PIPELINE VALIDATION REPORT")
+        print("[TEST] CONVERSION PIPELINE VALIDATION REPORT")
         print("=" * 60)
 
         # Summary metrics
-        print(f"\n📊 Quality Metrics:")
+        print(f"\n[SUMMARY] Quality Metrics:")
         print(f"  Files converted: {self.quality_metrics['file_count']}/5")
         print(f"  Total lines: {self.quality_metrics['total_lines']}")
         print(f"  Therapeutic terms: {self.quality_metrics['therapeutic_terms']}")
@@ -257,20 +257,20 @@ class CTMMConversionValidator:
 
         # Quality score
         score = self.quality_metrics["quality_score"]
-        print(f"\n🎯 Overall Quality Score: {score:.1f}/100")
+        print(f"\n[TARGET] Overall Quality Score: {score:.1f}/100")
 
         if score >= 90:
-            print("  🌟 Excellent conversion quality!")
+            print("  [EMOJI] Excellent conversion quality!")
         elif score >= 80:
-            print("  ✅ Good conversion quality")
+            print("  [PASS] Good conversion quality")
         elif score >= 70:
-            print("  ⚠️ Acceptable conversion quality")
+            print("  [WARN] Acceptable conversion quality")
         else:
-            print("  ❌ Conversion quality needs improvement")
+            print("  [FAIL] Conversion quality needs improvement")
 
         # Issues and recommendations
         if self.issues_found:
-            print(f"\n⚠️ Issues Found ({len(self.issues_found)}):")
+            print(f"\n[WARN] Issues Found ({len(self.issues_found)}):")
             for issue in self.issues_found:
                 print(f"  {issue}")
 
@@ -278,7 +278,7 @@ class CTMMConversionValidator:
         self._generate_recommendations()
 
         if self.recommendations:
-            print(f"\n💡 Recommendations ({len(self.recommendations)}):")
+            print(f"\n[TIP] Recommendations ({len(self.recommendations)}):")
             for rec in self.recommendations:
                 print(f"  {rec}")
 
@@ -292,19 +292,19 @@ class CTMMConversionValidator:
     def _generate_recommendations(self):
         """Generate actionable recommendations for improvement."""
         if self.quality_metrics["interactive_elements"] < 15:
-            self.recommendations.append("🔧 Add more interactive form elements (\\rule{}{} fields)")
+            self.recommendations.append("[FIX] Add more interactive form elements (\\rule{}{} fields)")
 
         if self.quality_metrics["table_structures"] < 3:
-            self.recommendations.append("📊 Include more structured tables for data collection")
+            self.recommendations.append("[SUMMARY] Include more structured tables for data collection")
 
         if self.quality_metrics["ctmm_patterns"] < 10:
-            self.recommendations.append("🧩 Enhance CTMM methodology references and patterns")
+            self.recommendations.append("[EMOJI] Enhance CTMM methodology references and patterns")
 
         if len(self.issues_found) > 0:
-            self.recommendations.append("🐛 Address structural and content issues identified")
+            self.recommendations.append("[EMOJI] Address structural and content issues identified")
 
         if self.quality_metrics["therapeutic_terms"] < 40:
-            self.recommendations.append("🧠 Increase therapeutic terminology density for professional use")
+            self.recommendations.append("[EMOJI] Increase therapeutic terminology density for professional use")
 
 def main():
     """Main function to run the conversion pipeline validation."""
@@ -315,15 +315,15 @@ def main():
     validator = CTMMConversionValidator()
     report = validator.validate_conversion_pipeline()
 
-    print(f"\n🚀 Validation complete!")
+    print(f"\n[LAUNCH] Validation complete!")
     print(f"Quality Score: {report['quality_score']:.1f}/100")
 
     # Exit with appropriate code
     if report['quality_score'] >= 80:
-        print("✅ CONVERSION PIPELINE VALIDATION: PASS")
+        print("[PASS] CONVERSION PIPELINE VALIDATION: PASS")
         sys.exit(0)
     else:
-        print("⚠️ CONVERSION PIPELINE VALIDATION: IMPROVEMENTS NEEDED")
+        print("[WARN] CONVERSION PIPELINE VALIDATION: IMPROVEMENTS NEEDED")
         sys.exit(1)
 
 if __name__ == "__main__":

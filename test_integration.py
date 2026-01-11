@@ -269,7 +269,7 @@ def run_integration_tests():
             print(f"- {test}: {traceback}")
 
     success = len(result.failures) == 0 and len(result.errors) == 0
-    print(f"\nOverall result: {'✓ PASS' if success else '✗ FAIL'}")
+    print(f"\nOverall result: {'[OK] PASS' if success else '[X] FAIL'}")
 
     return success
 

@@ -221,14 +221,14 @@ class TestCIFailurePatternDetection(unittest.TestCase):
 def main():
     """Run all CI improvement tests."""
     print("=" * 70)
-    print("🧪 TESTING CI IMPROVEMENTS FOR ISSUE #1084")
+    print("[TEST] TESTING CI IMPROVEMENTS FOR ISSUE #1084")
     print("=" * 70)
 
     # Run the tests
     unittest.main(verbosity=2, exit=False)
 
     print("\n" + "=" * 70)
-    print("✅ CI IMPROVEMENT TESTS COMPLETED")
+    print("[PASS] CI IMPROVEMENT TESTS COMPLETED")
     print("=" * 70)
 
 

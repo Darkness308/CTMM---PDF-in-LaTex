@@ -16,12 +16,12 @@
 
 % Check if hyperref is loaded for interactive forms
 \@ifpackageloaded{hyperref}{%
-    % hyperref is already loaded - just enable interactive mode
+    % hyperref is already loaded - enable interactive mode
     \renewcommand{\@ctmmInteractive}{true}%
 }{%
-    % hyperref not loaded - load it and enable interactive mode
-    \RequirePackage{hyperref}%
-    \renewcommand{\@ctmmInteractive}{true}%
+    % hyperref not loaded - disable interactive mode and give warning
+    \PackageWarning{ctmm-form-elements}{hyperref package not loaded. Interactive forms disabled.}%
+    \renewcommand{\@ctmmInteractive}{false}%
 }
 
 \makeatother
@@ -144,9 +144,9 @@
 % Safe-Word Usage Tracker
 \newcommand{\ctmmSafeWordOptions}[1]{%
     \textbf{Safe-Word verwendet:}\\%
-    \ctmmCheckBox{#1anker}{„Anker!"} \quad%
-    \ctmmCheckBox{#1reset}{„Reset!"} \quad%
-    \ctmmCheckBox{#1eiszeit}{„Eiszeit!"} \quad%
+    \ctmmCheckBox{#1anker}{[SYM]Anker!"} \quad%
+    \ctmmCheckBox{#1reset}{[SYM]Reset!"} \quad%
+    \ctmmCheckBox{#1eiszeit}{[SYM]Eiszeit!"} \quad%
     \ctmmCheckBox{#1other}{Anderes:} \ctmmTextField[3cm]{}{#1otherword}%
 }
 

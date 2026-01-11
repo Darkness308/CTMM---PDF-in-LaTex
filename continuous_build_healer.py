@@ -45,12 +45,12 @@ class ContinuousBuildHealer:
             Dictionary with workflow status information
         """
         print(f"\n{'='*80}")
-        print(f"🔍 Checking Workflow Status - Iteration {self.iteration_count + 1}/{self.max_iterations}")
+        print(f"[SEARCH] Checking Workflow Status - Iteration {self.iteration_count + 1}/{self.max_iterations}")
         print(f"{'='*80}")
 
         # Check if workflow_monitor.py exists
         if not os.path.exists('workflow_monitor.py'):
-            print("⚠️  workflow_monitor.py not found, using alternative method")
+            print("[WARN]  workflow_monitor.py not found, using alternative method")
             return {'failed_workflows': [], 'method': 'alternative'}
 
         # Try to use the existing workflow monitor
@@ -65,14 +65,14 @@ class ContinuousBuildHealer:
                 monitor = workflow_monitor.WorkflowMonitor()
                 failed_workflows = monitor.get_failed_workflows(hours_back=2)
 
-                print(f"📊 Found {len(failed_workflows)} failed workflows in last 2 hours")
+                print(f"[SUMMARY] Found {len(failed_workflows)} failed workflows in last 2 hours")
                 return {
                     'failed_workflows': failed_workflows,
                     'method': 'monitor',
                     'count': len(failed_workflows)
                 }
         except Exception as e:
-            print(f"⚠️  Error using workflow_monitor: {e}")
+            print(f"[WARN]  Error using workflow_monitor: {e}")
             return {'failed_workflows': [], 'method': 'error', 'error': str(e)}
 
     def apply_healing(self, workflow_info: Dict) -> bool:
@@ -86,24 +86,24 @@ class ContinuousBuildHealer:
             True if healing was applied, False otherwise
         """
         if not workflow_info.get('failed_workflows'):
-            print("✅ No failed workflows found - everything is green!")
+            print("[PASS] No failed workflows found - everything is green!")
             return False
 
         print(f"\n{'='*80}")
-        print(f"🔧 Applying Healing Fixes...")
+        print(f"[FIX] Applying Healing Fixes...")
         print(f"{'='*80}")
 
         # Check if workflow_healing_system.py exists
         if not os.path.exists('workflow_healing_system.py'):
-            print("⚠️  workflow_healing_system.py not found")
-            print("💡 Manual intervention required - please check:")
+            print("[WARN]  workflow_healing_system.py not found")
+            print("[TIP] Manual intervention required - please check:")
             for wf in workflow_info['failed_workflows']:
                 print(f"   - {wf.get('workflow_name', 'Unknown')} (Run #{wf.get('id', 'N/A')})")
             return False
 
         # Run the workflow healing system
         try:
-            print("🚀 Running workflow healing system...")
+            print("[LAUNCH] Running workflow healing system...")
             result = subprocess.run(
                 ['python3', 'workflow_healing_system.py', '--max-workflows', '5'],
                 capture_output=True,
@@ -112,19 +112,19 @@ class ContinuousBuildHealer:
             )
 
             if result.returncode == 0:
-                print("✅ Healing system executed successfully")
+                print("[PASS] Healing system executed successfully")
                 print(result.stdout)
                 return True
             else:
-                print(f"⚠️  Healing system returned error code {result.returncode}")
+                print(f"[WARN]  Healing system returned error code {result.returncode}")
                 print(result.stderr)
                 return False
 
         except subprocess.TimeoutExpired:
-            print("⚠️  Healing system timed out after 5 minutes")
+            print("[WARN]  Healing system timed out after 5 minutes")
             return False
         except Exception as e:
-            print(f"❌ Error running healing system: {e}")
+            print(f"[FAIL] Error running healing system: {e}")
             return False
 
     def restart_workflows(self, workflow_info: Dict) -> int:
@@ -141,7 +141,7 @@ class ContinuousBuildHealer:
             return 0
 
         print(f"\n{'='*80}")
-        print(f"🔄 Attempting to Restart Failed Workflows...")
+        print(f"[SYNC] Attempting to Restart Failed Workflows...")
         print(f"{'='*80}")
 
         restarted_count = 0
@@ -153,7 +153,7 @@ class ContinuousBuildHealer:
             wf_name = wf.get('workflow_name', 'Unknown')
             wf_id = wf.get('id', 'N/A')
 
-            print(f"📝 Workflow: {wf_name} (Run #{wf_id})")
+            print(f"[NOTE] Workflow: {wf_name} (Run #{wf_id})")
             print(f"   To restart manually:")
             print(f"   gh run rerun {wf_id}")
             print(f"   Or visit: {wf.get('html_url', 'N/A')}")
@@ -164,14 +164,14 @@ class ContinuousBuildHealer:
     def wait_for_completion(self) -> None:
         """Wait for the check interval before next iteration."""
         if self.iteration_count < self.max_iterations - 1:
-            print(f"\n⏰ Waiting {self.check_interval} seconds before next check...")
+            print(f"\n[SYM] Waiting {self.check_interval} seconds before next check...")
             time.sleep(self.check_interval)
 
     def generate_summary_report(self) -> str:
         """Generate a summary report of the healing session."""
         report = []
         report.append("\n" + "="*80)
-        report.append("📊 CONTINUOUS BUILD HEALING SUMMARY")
+        report.append("[SUMMARY] CONTINUOUS BUILD HEALING SUMMARY")
         report.append("="*80)
         report.append(f"\n**Session Started:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         report.append(f"**Total Iterations:** {self.iteration_count}")
@@ -180,12 +180,12 @@ class ContinuousBuildHealer:
         report.append("")
 
         if self.healed_workflows:
-            report.append("\n✅ Successfully Healed:")
+            report.append("\n[PASS] Successfully Healed:")
             for wf in self.healed_workflows:
                 report.append(f"   - {wf}")
 
         if self.failed_healing_attempts:
-            report.append("\n❌ Failed to Heal:")
+            report.append("\n[FAIL] Failed to Heal:")
             for wf in self.failed_healing_attempts:
                 report.append(f"   - {wf}")
 
@@ -200,7 +200,7 @@ class ContinuousBuildHealer:
             True if all workflows are green, False otherwise
         """
         print("="*80)
-        print("🔧 CTMM Continuous Build Healing System")
+        print("[FIX] CTMM Continuous Build Healing System")
         print("="*80)
         print(f"\nConfiguration:")
         print(f"   Max Iterations: {self.max_iterations}")
@@ -218,7 +218,7 @@ class ContinuousBuildHealer:
 
             # If no failed workflows, we're done!
             if not workflow_info.get('failed_workflows'):
-                print("\n🎉 All workflows are GREEN!")
+                print("\n[SUCCESS] All workflows are GREEN!")
                 all_green = True
                 break
 
@@ -226,16 +226,16 @@ class ContinuousBuildHealer:
             healing_applied = self.apply_healing(workflow_info)
 
             if healing_applied:
-                print("✅ Healing fixes applied")
+                print("[PASS] Healing fixes applied")
                 self.healed_workflows.append(f"Iteration {self.iteration_count}")
             else:
-                print("⚠️  Could not apply healing fixes")
+                print("[WARN]  Could not apply healing fixes")
                 self.failed_healing_attempts.append(f"Iteration {self.iteration_count}")
 
             # Try to restart workflows
             restarted = self.restart_workflows(workflow_info)
             if restarted > 0:
-                print(f"🔄 Restarted {restarted} workflows")
+                print(f"[SYNC] Restarted {restarted} workflows")
 
             # Wait before next check (unless this is the last iteration)
             if not all_green:
@@ -249,7 +249,7 @@ class ContinuousBuildHealer:
         summary_file = f'healing_summary_{datetime.now().strftime("%Y%m%d_%H%M%S")}.md'
         with open(summary_file, 'w') as f:
             f.write(summary)
-        print(f"\n📄 Summary saved to: {summary_file}")
+        print(f"\n[FILE] Summary saved to: {summary_file}")
 
         return all_green
 
@@ -296,7 +296,7 @@ Examples:
     args = parser.parse_args()
 
     if args.dry_run:
-        print("🔍 DRY RUN MODE - No fixes will be applied")
+        print("[SEARCH] DRY RUN MODE - No fixes will be applied")
         args.max_iterations = 1
 
     healer = ContinuousBuildHealer(

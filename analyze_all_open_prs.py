@@ -36,17 +36,17 @@ class PRAnalyzer:
 
     def get_open_prs(self) -> List[Dict]:
         """Fetch all open PRs from GitHub API."""
-        print("📋 Fetching all open pull requests...")
+        print("[TEST] Fetching all open pull requests...")
         url = f'{self.api_base}/pulls?state=open&per_page=100'
 
         try:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
             prs = response.json()
-            print(f"✅ Found {len(prs)} open PRs")
+            print(f"[PASS] Found {len(prs)} open PRs")
             return prs
         except Exception as e:
-            print(f"❌ Error fetching PRs: {e}")
+            print(f"[FAIL] Error fetching PRs: {e}")
             return []
 
     def get_pr_details(self, pr_number: int) -> Optional[Dict]:
@@ -58,7 +58,7 @@ class PRAnalyzer:
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"❌ Error fetching PR #{pr_number} details: {e}")
+            print(f"[FAIL] Error fetching PR #{pr_number} details: {e}")
             return None
 
     def get_pr_files(self, pr_number: int) -> List[Dict]:
@@ -70,7 +70,7 @@ class PRAnalyzer:
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            print(f"❌ Error fetching PR #{pr_number} files: {e}")
+            print(f"[FAIL] Error fetching PR #{pr_number} files: {e}")
             return []
 
     def get_workflow_runs(self, branch: str, limit: int = 5) -> List[Dict]:
@@ -83,13 +83,13 @@ class PRAnalyzer:
             data = response.json()
             return data.get('workflow_runs', [])
         except Exception as e:
-            print(f"❌ Error fetching workflow runs for branch {branch}: {e}")
+            print(f"[FAIL] Error fetching workflow runs for branch {branch}: {e}")
             return []
 
     def analyze_pr(self, pr: Dict) -> Dict:
         """Analyze a single PR for conflicts and status."""
         pr_number = pr['number']
-        print(f"\n🔍 Analyzing PR #{pr_number}: {pr['title'][:60]}...")
+        print(f"\n[SEARCH] Analyzing PR #{pr_number}: {pr['title'][:60]}...")
 
         # Get detailed info
         details = self.get_pr_details(pr_number)
@@ -131,7 +131,7 @@ class PRAnalyzer:
 
         # Identify conflict files and generate direct links
         if analysis['has_conflicts']:
-            print(f"  ⚠️  Has merge conflicts")
+            print(f"  [WARN]  Has merge conflicts")
             for file in files:
                 filename = file['filename']
                 # Generate direct GitHub link to the file
@@ -157,23 +157,23 @@ class PRAnalyzer:
         # Determine overall status
         if analysis['is_mergeable'] and analysis['workflow_status'] == 'success':
             analysis['status'] = 'READY_TO_MERGE'
-            print(f"  ✅ Ready to merge!")
+            print(f"  [PASS] Ready to merge!")
         elif analysis['has_conflicts']:
             analysis['status'] = 'HAS_CONFLICTS'
-            print(f"  ❌ Has {len(analysis['conflict_files'])} conflicting files")
+            print(f"  [FAIL] Has {len(analysis['conflict_files'])} conflicting files")
         elif analysis['workflow_status'] == 'failure':
             analysis['status'] = 'WORKFLOW_FAILED'
-            print(f"  ⚠️  Workflow failed")
+            print(f"  [WARN]  Workflow failed")
         else:
             analysis['status'] = 'NEEDS_REVIEW'
-            print(f"  ⏳ Needs review (mergeable: {mergeable}, state: {mergeable_state})")
+            print(f"  [SYM] Needs review (mergeable: {mergeable}, state: {mergeable_state})")
 
         return analysis
 
     def generate_report(self, analyses: List[Dict]) -> str:
         """Generate a comprehensive markdown report."""
         report = []
-        report.append("# 📊 Comprehensive Open PR Analysis Report")
+        report.append("# [SUMMARY] Comprehensive Open PR Analysis Report")
         report.append(f"\n**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
         report.append(f"\n**Total Open PRs:** {len(analyses)}")
         report.append("\n---\n")
@@ -185,33 +185,33 @@ class PRAnalyzer:
         needs_review = [a for a in analyses if a['status'] == 'NEEDS_REVIEW']
 
         # Summary
-        report.append("## 📈 Summary\n")
-        report.append(f"- ✅ **Ready to Merge:** {len(ready_to_merge)}")
-        report.append(f"- ❌ **Has Merge Conflicts:** {len(has_conflicts)}")
-        report.append(f"- ⚠️  **Workflow Failed:** {len(workflow_failed)}")
-        report.append(f"- ⏳ **Needs Review:** {len(needs_review)}")
+        report.append("## [CHART] Summary\n")
+        report.append(f"- [PASS] **Ready to Merge:** {len(ready_to_merge)}")
+        report.append(f"- [FAIL] **Has Merge Conflicts:** {len(has_conflicts)}")
+        report.append(f"- [WARN]  **Workflow Failed:** {len(workflow_failed)}")
+        report.append(f"- [SYM] **Needs Review:** {len(needs_review)}")
         report.append("")
 
         # Ready to merge PRs
         if ready_to_merge:
-            report.append("\n## ✅ Ready to Merge\n")
+            report.append("\n## [PASS] Ready to Merge\n")
             report.append("These PRs have no conflicts and all workflows passed:\n")
             for pr in ready_to_merge:
                 report.append(f"### PR #{pr['number']}: {pr['title']}")
                 report.append(f"- **URL:** {pr['url']}")
-                report.append(f"- **Branch:** `{pr['branch']}` → `{pr['base']}`")
+                report.append(f"- **Branch:** `{pr['branch']}` -> `{pr['base']}`")
                 report.append(f"- **Files Changed:** {pr['files_changed']}")
                 report.append(f"- **Action:** Can be merged immediately")
                 report.append("")
 
         # PRs with conflicts
         if has_conflicts:
-            report.append("\n## ❌ Pull Requests with Merge Conflicts\n")
+            report.append("\n## [FAIL] Pull Requests with Merge Conflicts\n")
             report.append("These PRs require manual conflict resolution:\n")
             for pr in has_conflicts:
                 report.append(f"### PR #{pr['number']}: {pr['title']}")
                 report.append(f"- **URL:** {pr['url']}")
-                report.append(f"- **Branch:** `{pr['branch']}` → `{pr['base']}`")
+                report.append(f"- **Branch:** `{pr['branch']}` -> `{pr['base']}`")
                 report.append(f"- **Conflicting Files:** {len(pr['conflict_files'])}")
                 report.append("")
                 report.append("**Direct Links to Conflicting Files:**")
@@ -223,7 +223,7 @@ class PRAnalyzer:
 
         # Workflow failures
         if workflow_failed:
-            report.append("\n## ⚠️  Pull Requests with Failed Workflows\n")
+            report.append("\n## [WARN]  Pull Requests with Failed Workflows\n")
             report.append("These PRs have failing CI/CD workflows:\n")
             for pr in workflow_failed:
                 report.append(f"### PR #{pr['number']}: {pr['title']}")
@@ -240,17 +240,17 @@ class PRAnalyzer:
 
         # Needs review
         if needs_review:
-            report.append("\n## ⏳ Pull Requests Needing Review\n")
+            report.append("\n## [SYM] Pull Requests Needing Review\n")
             for pr in needs_review:
                 report.append(f"### PR #{pr['number']}: {pr['title']}")
                 report.append(f"- **URL:** {pr['url']}")
-                report.append(f"- **Branch:** `{pr['branch']}` → `{pr['base']}`")
+                report.append(f"- **Branch:** `{pr['branch']}` -> `{pr['base']}`")
                 report.append(f"- **Mergeable State:** `{pr['mergeable_state']}`")
                 report.append(f"- **Workflow Status:** `{pr['workflow_status']}`")
                 report.append("")
 
         # Recommendations
-        report.append("\n## 💡 Recommendations\n")
+        report.append("\n## [TIP] Recommendations\n")
         report.append("### For PRs Ready to Merge")
         report.append("- Review and merge immediately to reduce backlog")
         report.append("- Consider using automated merge workflows")
@@ -284,7 +284,7 @@ class PRAnalyzer:
     def run(self):
         """Main execution method."""
         print("=" * 80)
-        print("🔧 CTMM Open PR Analysis Tool")
+        print("[FIX] CTMM Open PR Analysis Tool")
         print("=" * 80)
         print()
 
@@ -302,7 +302,7 @@ class PRAnalyzer:
 
         # Generate report
         print("\n" + "=" * 80)
-        print("📝 Generating Report...")
+        print("[NOTE] Generating Report...")
         print("=" * 80)
 
         report = self.generate_report(analyses)
@@ -312,9 +312,9 @@ class PRAnalyzer:
         with open(report_file, 'w', encoding='utf-8') as f:
             f.write(report)
 
-        print(f"\n✅ Report saved to: {report_file}")
+        print(f"\n[PASS] Report saved to: {report_file}")
         print("\n" + "=" * 80)
-        print("📊 Quick Summary:")
+        print("[SUMMARY] Quick Summary:")
         print("=" * 80)
 
         # Print quick summary
@@ -323,10 +323,10 @@ class PRAnalyzer:
         failed = sum(1 for a in analyses if a['status'] == 'WORKFLOW_FAILED')
         review = sum(1 for a in analyses if a['status'] == 'NEEDS_REVIEW')
 
-        print(f"✅ Ready to Merge: {ready}")
-        print(f"❌ Has Conflicts: {conflicts}")
-        print(f"⚠️  Workflow Failed: {failed}")
-        print(f"⏳ Needs Review: {review}")
+        print(f"[PASS] Ready to Merge: {ready}")
+        print(f"[FAIL] Has Conflicts: {conflicts}")
+        print(f"[WARN]  Workflow Failed: {failed}")
+        print(f"[SYM] Needs Review: {review}")
         print()
 
         return analyses
