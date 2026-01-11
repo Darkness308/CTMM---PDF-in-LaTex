@@ -12,7 +12,7 @@ from typing import Dict, List, Tuple, Optional
 
 def test_workflow_file_integrity() -> Dict[str, any]:
     """Test the integrity of all workflow files."""
-    print("📋 Testing Workflow File Integrity")
+    print("[TEST] Testing Workflow File Integrity")
     print("-" * 50)
 
     workflow_dir = '.github/workflows'
@@ -31,7 +31,7 @@ def test_workflow_file_integrity() -> Dict[str, any]:
 
     for workflow_file in workflow_files:
         workflow_path = os.path.join(workflow_dir, workflow_file)
-        print(f"🔍 Checking {workflow_file}...")
+        print(f"[SEARCH] Checking {workflow_file}...")
 
         try:
             with open(workflow_path, 'r', encoding='utf-8') as f:
@@ -75,21 +75,21 @@ def test_workflow_file_integrity() -> Dict[str, any]:
                     continue
 
             integrity_results['valid_files'] += 1
-            print(f"   ✅ {workflow_file} is valid")
+            print(f"   [PASS] {workflow_file} is valid")
 
         except yaml.YAMLError as e:
             integrity_results['issues'].append(f'{workflow_file} YAML syntax error: {str(e)[:100]}')
-            print(f"   ❌ {workflow_file} has YAML syntax error")
+            print(f"   [FAIL] {workflow_file} has YAML syntax error")
         except Exception as e:
             integrity_results['issues'].append(f'{workflow_file} error: {str(e)[:100]}')
-            print(f"   ❌ {workflow_file} has error: {e}")
+            print(f"   [FAIL] {workflow_file} has error: {e}")
 
-    print(f"\n📊 File integrity: {integrity_results['valid_files']}/{integrity_results['total_files']} valid")
+    print(f"\n[SUMMARY] File integrity: {integrity_results['valid_files']}/{integrity_results['total_files']} valid")
     return integrity_results
 
 def test_build_system_health() -> Dict[str, any]:
     """Test the health of the CTMM build system."""
-    print("\n🔧 Testing Build System Health")
+    print("\n[FIX] Testing Build System Health")
     print("-" * 50)
 
     health_results = {
@@ -100,7 +100,7 @@ def test_build_system_health() -> Dict[str, any]:
     }
 
     # Test 1: Basic CTMM build
-    print("🏗️  Testing basic CTMM build...")
+    print("[EMOJI]  Testing basic CTMM build...")
     try:
         start_time = time.time()
         result = subprocess.run(
@@ -116,9 +116,9 @@ def test_build_system_health() -> Dict[str, any]:
 
         if success:
             health_results['tests_passed'] += 1
-            print(f"   ✅ Basic build passed ({duration:.1f}s)")
+            print(f"   [PASS] Basic build passed ({duration:.1f}s)")
         else:
-            print(f"   ❌ Basic build failed ({duration:.1f}s)")
+            print(f"   [FAIL] Basic build failed ({duration:.1f}s)")
             health_results['issues'].append('Basic CTMM build failed')
 
         health_results['test_details'].append({
@@ -130,16 +130,16 @@ def test_build_system_health() -> Dict[str, any]:
         })
 
     except subprocess.TimeoutExpired:
-        print("   ⏱️  Basic build timed out")
+        print("   [TIMER]  Basic build timed out")
         health_results['tests_run'] += 1
         health_results['issues'].append('Basic CTMM build timeout')
     except Exception as e:
-        print(f"   ❌ Basic build error: {e}")
+        print(f"   [FAIL] Basic build error: {e}")
         health_results['tests_run'] += 1
         health_results['issues'].append(f'Basic CTMM build error: {e}')
 
     # Test 2: LaTeX syntax validation
-    print("📝 Testing LaTeX syntax validation...")
+    print("[NOTE] Testing LaTeX syntax validation...")
     try:
         start_time = time.time()
         result = subprocess.run(
@@ -155,9 +155,9 @@ def test_build_system_health() -> Dict[str, any]:
 
         if success:
             health_results['tests_passed'] += 1
-            print(f"   ✅ LaTeX validation passed ({duration:.1f}s)")
+            print(f"   [PASS] LaTeX validation passed ({duration:.1f}s)")
         else:
-            print(f"   ❌ LaTeX validation failed ({duration:.1f}s)")
+            print(f"   [FAIL] LaTeX validation failed ({duration:.1f}s)")
             health_results['issues'].append('LaTeX syntax validation failed')
 
         health_results['test_details'].append({
@@ -167,12 +167,12 @@ def test_build_system_health() -> Dict[str, any]:
         })
 
     except Exception as e:
-        print(f"   ❌ LaTeX validation error: {e}")
+        print(f"   [FAIL] LaTeX validation error: {e}")
         health_results['tests_run'] += 1
         health_results['issues'].append(f'LaTeX validation error: {e}')
 
     # Test 3: Action version validation
-    print("📦 Testing action version validation...")
+    print("[PACKAGE] Testing action version validation...")
     try:
         start_time = time.time()
         result = subprocess.run(
@@ -188,9 +188,9 @@ def test_build_system_health() -> Dict[str, any]:
 
         if success:
             health_results['tests_passed'] += 1
-            print(f"   ✅ Action version validation passed ({duration:.1f}s)")
+            print(f"   [PASS] Action version validation passed ({duration:.1f}s)")
         else:
-            print(f"   ❌ Action version validation failed ({duration:.1f}s)")
+            print(f"   [FAIL] Action version validation failed ({duration:.1f}s)")
             health_results['issues'].append('Action version validation failed')
 
         health_results['test_details'].append({
@@ -200,7 +200,7 @@ def test_build_system_health() -> Dict[str, any]:
         })
 
     except Exception as e:
-        print(f"   ❌ Action version validation error: {e}")
+        print(f"   [FAIL] Action version validation error: {e}")
         health_results['tests_run'] += 1
         health_results['issues'].append(f'Action version validation error: {e}')
 
@@ -208,7 +208,7 @@ def test_build_system_health() -> Dict[str, any]:
 
 def test_dependency_health() -> Dict[str, any]:
     """Test the health of system dependencies."""
-    print("\n📦 Testing Dependency Health")
+    print("\n[PACKAGE] Testing Dependency Health")
     print("-" * 50)
 
     dependency_results = {
@@ -222,7 +222,7 @@ def test_dependency_health() -> Dict[str, any]:
     try:
         import sys
         dependency_results['python_version'] = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
-        print(f"🐍 Python version: {dependency_results['python_version']}")
+        print(f"[PYTHON] Python version: {dependency_results['python_version']}")
     except Exception as e:
         dependency_results['issues'].append(f'Cannot determine Python version: {e}')
 
@@ -233,19 +233,19 @@ def test_dependency_health() -> Dict[str, any]:
         try:
             __import__(module_name)
             dependency_results['required_modules'].append(module_name)
-            print(f"   ✅ {module_name} available")
+            print(f"   [PASS] {module_name} available")
         except ImportError:
             dependency_results['missing_modules'].append(module_name)
             dependency_results['issues'].append(f'Missing required module: {module_name}')
-            print(f"   ❌ {module_name} missing")
+            print(f"   [FAIL] {module_name} missing")
 
     # Check for chardet specifically (required by CTMM build system)
     try:
         import chardet
-        print(f"   ✅ chardet version: {chardet.__version__}")
+        print(f"   [PASS] chardet version: {chardet.__version__}")
     except ImportError:
         dependency_results['issues'].append('chardet module missing - required for CTMM build')
-        print("   ❌ chardet missing - required for CTMM build")
+        print("   [FAIL] chardet missing - required for CTMM build")
     except Exception as e:
         dependency_results['issues'].append(f'chardet issue: {e}')
 
@@ -253,7 +253,7 @@ def test_dependency_health() -> Dict[str, any]:
 
 def test_file_system_health() -> Dict[str, any]:
     """Test the health of the file system structure."""
-    print("\n📁 Testing File System Health")
+    print("\n[EMOJI] Testing File System Health")
     print("-" * 50)
 
     filesystem_results = {
@@ -275,11 +275,11 @@ def test_file_system_health() -> Dict[str, any]:
     for directory in required_dirs:
         if os.path.exists(directory) and os.path.isdir(directory):
             filesystem_results['required_directories'].append(directory)
-            print(f"   ✅ {directory}/ exists")
+            print(f"   [PASS] {directory}/ exists")
         else:
             filesystem_results['missing_directories'].append(directory)
             filesystem_results['issues'].append(f'Missing required directory: {directory}')
-            print(f"   ❌ {directory}/ missing")
+            print(f"   [FAIL] {directory}/ missing")
 
     # Check required files
     required_files = [
@@ -293,11 +293,11 @@ def test_file_system_health() -> Dict[str, any]:
     for file_path in required_files:
         if os.path.exists(file_path) and os.path.isfile(file_path):
             filesystem_results['required_files'].append(file_path)
-            print(f"   ✅ {file_path} exists")
+            print(f"   [PASS] {file_path} exists")
         else:
             filesystem_results['missing_files'].append(file_path)
             filesystem_results['issues'].append(f'Missing required file: {file_path}')
-            print(f"   ❌ {file_path} missing")
+            print(f"   [FAIL] {file_path} missing")
 
     return filesystem_results
 
@@ -330,14 +330,14 @@ def test_issue_1064_ci_health():
     # Workflow integrity summary
     workflow_results = test_results['workflow_integrity']
     workflow_health = (workflow_results['valid_files'] / workflow_results['total_files'] * 100) if workflow_results['total_files'] > 0 else 0
-    print(f"📋 Workflow Integrity: {workflow_results['valid_files']}/{workflow_results['total_files']} files valid ({workflow_health:.1f}%)")
+    print(f"[TEST] Workflow Integrity: {workflow_results['valid_files']}/{workflow_results['total_files']} files valid ({workflow_health:.1f}%)")
     total_issues += len(workflow_results['issues'])
 
     # Build system summary
     build_results = test_results['build_system']
     if build_results['tests_run'] > 0:
         build_health = (build_results['tests_passed'] / build_results['tests_run'] * 100)
-        print(f"🔧 Build System Health: {build_results['tests_passed']}/{build_results['tests_run']} tests passed ({build_health:.1f}%)")
+        print(f"[FIX] Build System Health: {build_results['tests_passed']}/{build_results['tests_run']} tests passed ({build_health:.1f}%)")
         total_tests += build_results['tests_run']
         total_passed += build_results['tests_passed']
     total_issues += len(build_results['issues'])
@@ -346,7 +346,7 @@ def test_issue_1064_ci_health():
     dependency_results = test_results['dependencies']
     if dependency_results['required_modules']:
         dependency_health = (len(dependency_results['required_modules']) / (len(dependency_results['required_modules']) + len(dependency_results['missing_modules'])) * 100)
-        print(f"📦 Dependency Health: {len(dependency_results['required_modules'])} modules available ({dependency_health:.1f}%)")
+        print(f"[PACKAGE] Dependency Health: {len(dependency_results['required_modules'])} modules available ({dependency_health:.1f}%)")
     total_issues += len(dependency_results['issues'])
 
     # Filesystem summary
@@ -355,15 +355,15 @@ def test_issue_1064_ci_health():
         total_required = len(filesystem_results['required_files']) + len(filesystem_results['required_directories'])
         total_found = len(filesystem_results['required_files']) + len(filesystem_results['required_directories'])
         filesystem_health = (total_found / total_required * 100) if total_required > 0 else 100
-        print(f"📁 Filesystem Health: {total_found}/{total_required} required items found ({filesystem_health:.1f}%)")
+        print(f"[EMOJI] Filesystem Health: {total_found}/{total_required} required items found ({filesystem_health:.1f}%)")
     total_issues += len(filesystem_results['issues'])
 
     # Overall assessment
-    print(f"\n⏱️  Total Duration: {total_duration:.1f} seconds")
-    print(f"🎯 Total Issues: {total_issues}")
+    print(f"\n[TIMER]  Total Duration: {total_duration:.1f} seconds")
+    print(f"[TARGET] Total Issues: {total_issues}")
     if total_tests > 0:
         overall_test_success = (total_passed / total_tests * 100)
-        print(f"🧪 Overall Test Success: {total_passed}/{total_tests} ({overall_test_success:.1f}%)")
+        print(f"[TEST] Overall Test Success: {total_passed}/{total_tests} ({overall_test_success:.1f}%)")
 
     # Health score calculation
     health_score = 100
@@ -372,19 +372,19 @@ def test_issue_1064_ci_health():
     if total_tests > 0 and total_passed < total_tests:
         health_score -= ((total_tests - total_passed) / total_tests) * 30  # Deduct for failed tests
 
-    print(f"\n🎯 CI Health Score: {health_score:.1f}/100")
+    print(f"\n[TARGET] CI Health Score: {health_score:.1f}/100")
 
     if health_score >= 95:
-        print("🎉 EXCELLENT: CI ecosystem is in excellent health")
+        print("[SUCCESS] EXCELLENT: CI ecosystem is in excellent health")
         return True
     elif health_score >= 80:
-        print("✅ GOOD: CI ecosystem is healthy with minor issues")
+        print("[PASS] GOOD: CI ecosystem is healthy with minor issues")
         return True
     elif health_score >= 60:
-        print("⚠️  WARNING: CI ecosystem has moderate issues")
+        print("[WARN]  WARNING: CI ecosystem has moderate issues")
         return True
     else:
-        print("🔴 CRITICAL: CI ecosystem has significant health issues")
+        print("[RED] CRITICAL: CI ecosystem has significant health issues")
         return False
 
 if __name__ == "__main__":

@@ -160,7 +160,7 @@ def test_no_merge_conflict_markers():
 
 def test_workflow_action_consistency():
     """Test that all workflow files use consistent action versions."""
-    print("\n[REFRESH] Testing Action Version Consistency")
+    print("\n[SYNC] Testing Action Version Consistency")
     print("=" * 60)
 
     workflow_files = [
@@ -196,7 +196,7 @@ def test_workflow_action_consistency():
             print(f"[FAIL] Error analyzing {workflow_file}: {e}")
             consistency_success = False
 
-    print(f"\n[REPORT] LaTeX Action Version Summary:")
+    print(f"\n[SUMMARY] LaTeX Action Version Summary:")
     for action, files in latex_actions_found.items():
         print(f"   {action} used in: {', '.join(files)}")
 
@@ -244,7 +244,7 @@ def main():
 
     # Print summary
     print("\n" + "=" * 80)
-    print("[REPORT] VALIDATION SUMMARY")
+    print("[SUMMARY] VALIDATION SUMMARY")
     print("=" * 80)
 
     for test_name, result in test_results:

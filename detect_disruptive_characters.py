@@ -119,15 +119,15 @@ class CharacterValidator:
             '±': r'\pm',
             '×': r'\times',
             '÷': r'\div',
-            '€': r'\euro',
+            'EUR': r'\euro',
             '£': r'\pounds',
             '¥': r'\yen',
             '©': r'\copyright',
             '®': r'\textregistered',
-            '™': r'\texttrademark',
-            '…': r'\ldots',
-            '–': r'--',
-            '—': r'---',
+            '(TM)': r'\texttrademark',
+            '...': r'\ldots',
+            '--': r'--',
+            '---': r'---',
             ''': r'`',
             ''': r"'",
             '"': r'``',
@@ -297,17 +297,17 @@ class CharacterValidator:
                 warning_counts[warning_type] = warning_counts.get(warning_type, 0) + 1
 
         if issue_counts:
-            print("\n❌ CRITICAL ISSUES:")
+            print("\n[FAIL] CRITICAL ISSUES:")
             for issue_type, count in sorted(issue_counts.items()):
                 print(f"  - {issue_type}: {count}")
 
         if warning_counts:
-            print("\n⚠️  WARNINGS:")
+            print("\n[WARN]  WARNINGS:")
             for warning_type, count in sorted(warning_counts.items()):
                 print(f"  - {warning_type}: {count}")
 
         if not issue_counts and not warning_counts:
-            print("\n✅ No issues or warnings found!")
+            print("\n[PASS] No issues or warnings found!")
 
         print("\n" + "=" * 80)
 
@@ -321,19 +321,19 @@ class CharacterValidator:
             if not result.get('issues') and not result.get('warnings'):
                 continue
 
-            print(f"\n📄 File: {result['file']}")
+            print(f"\n[FILE] File: {result['file']}")
             print(f"   Encoding: {result['info'].get('encoding', 'unknown')} "
                   f"(confidence: {result['info'].get('confidence', 0):.2%})")
 
             # Print issues
             if result.get('issues'):
-                print("\n   ❌ CRITICAL ISSUES:")
+                print("\n   [FAIL] CRITICAL ISSUES:")
                 for issue in result['issues']:
                     self._print_issue_details(issue)
 
             # Print warnings
             if result.get('warnings'):
-                print("\n   ⚠️  WARNINGS:")
+                print("\n   [WARN]  WARNINGS:")
                 for warning in result['warnings']:
                     self._print_issue_details(warning)
 

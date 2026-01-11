@@ -55,7 +55,7 @@ class ComprehensivePRMergeResolver:
 
     def analyze_all_prs(self) -> List[PRAnalysis]:
         """Analyze all open PRs for merge conflicts and resolution strategies."""
-        print("🔍 Analyzing all open pull requests for merge conflicts...")
+        print("[SEARCH] Analyzing all open pull requests for merge conflicts...")
 
         analyses = []
 
@@ -162,11 +162,11 @@ class ComprehensivePRMergeResolver:
         """Process PRs that are ready to merge without conflicts."""
         ready_prs = [a for a in analyses if a.resolution_strategy == "READY_TO_MERGE"]
 
-        print(f"\n✅ Found {len(ready_prs)} PR(s) ready to merge without conflicts:")
+        print(f"\n[PASS] Found {len(ready_prs)} PR(s) ready to merge without conflicts:")
 
         resolved = []
         for pr in ready_prs:
-            print(f"   • PR #{pr.number}: {pr.title}")
+            print(f"   * PR #{pr.number}: {pr.title}")
             # In real implementation, this would call merge API
             # For now, just track as resolved
             resolved.append(pr.number)
@@ -215,7 +215,7 @@ class ComprehensivePRMergeResolver:
         """Implement automatic resolutions for conflicts that can be auto-resolved."""
         auto_resolvable = [a for a in analyses if a.can_auto_resolve and a.resolution_strategy != "READY_TO_MERGE"]
 
-        print(f"\n🔧 Implementing automatic resolutions for {len(auto_resolvable)} PRs...")
+        print(f"\n[FIX] Implementing automatic resolutions for {len(auto_resolvable)} PRs...")
 
         resolved = []
         for pr in auto_resolvable:
@@ -227,9 +227,9 @@ class ComprehensivePRMergeResolver:
             success = self._apply_resolution_strategy(pr)
             if success:
                 resolved.append(pr.number)
-                print(f"   ✅ Auto-resolved")
+                print(f"   [PASS] Auto-resolved")
             else:
-                print(f"   ⚠️  Requires manual intervention")
+                print(f"   [WARN]  Requires manual intervention")
 
         return resolved
 
@@ -250,26 +250,26 @@ class ComprehensivePRMergeResolver:
 
     def _standardize_action_versions(self, pr_number: int) -> bool:
         """Standardize GitHub Action versions across PRs."""
-        print(f"      → Standardizing action versions for PR #{pr_number}")
+        print(f"      -> Standardizing action versions for PR #{pr_number}")
         # Implementation would update action versions to match main branch
         # For this demo, simulate success for action-related PRs
         return pr_number in [653, 489, 423]  # PRs with action/workflow changes
 
     def _merge_workflow_updates(self, pr_number: int) -> bool:
         """Merge workflow updates by taking the most recent changes."""
-        print(f"      → Merging workflow updates for PR #{pr_number}")
+        print(f"      -> Merging workflow updates for PR #{pr_number}")
         # Implementation would merge workflow files intelligently
         return pr_number in [232, 307]  # Workflow/syntax fix PRs
 
     def _apply_sequential_merge(self, pr_number: int) -> bool:
         """Apply sequential merge strategy for overlapping changes."""
-        print(f"      → Applying sequential merge for PR #{pr_number}")
+        print(f"      -> Applying sequential merge for PR #{pr_number}")
         # Implementation would merge PRs in dependency order
         return True  # Most PRs can be sequentially merged
 
     def _apply_rebase_strategy(self, pr_number: int) -> bool:
         """Apply rebase strategy to resolve conflicts."""
-        print(f"      → Applying rebase strategy for PR #{pr_number}")
+        print(f"      -> Applying rebase strategy for PR #{pr_number}")
         # Implementation would rebase PR branch onto current main
         return True
 
@@ -291,14 +291,14 @@ class ComprehensivePRMergeResolver:
         # Ready to merge PRs
         ready_prs = [a for a in analyses if a.resolution_strategy == "READY_TO_MERGE"]
         if ready_prs:
-            report.append("## ✅ PRs Ready to Merge (No Conflicts)")
+            report.append("## [PASS] PRs Ready to Merge (No Conflicts)")
             for pr in ready_prs:
                 report.append(f"- **PR #{pr.number}**: {pr.title}")
             report.append("")
 
         # Auto-resolved PRs
         if auto_resolved:
-            report.append("## 🔧 Successfully Auto-Resolved PRs")
+            report.append("## [FIX] Successfully Auto-Resolved PRs")
             for pr_num in auto_resolved:
                 pr = next(a for a in analyses if a.number == pr_num)
                 report.append(f"- **PR #{pr_num}**: {pr.title}")
@@ -309,7 +309,7 @@ class ComprehensivePRMergeResolver:
         # Manual review needed
         manual_prs = [a for a in analyses if not a.can_auto_resolve and a.resolution_strategy != "READY_TO_MERGE"]
         if manual_prs:
-            report.append("## ⚠️ PRs Requiring Manual Review")
+            report.append("## [WARN] PRs Requiring Manual Review")
             for pr in manual_prs:
                 report.append(f"- **PR #{pr.number}**: {pr.title}")
                 report.append(f"  - Conflicts: {', '.join(pr.conflicts)}")
@@ -347,29 +347,29 @@ class ComprehensivePRMergeResolver:
 
 def main():
     """Main execution function."""
-    print("🔍 CTMM Pull Request Merge Conflict Resolution Tool")
+    print("[SEARCH] CTMM Pull Request Merge Conflict Resolution Tool")
     print("=" * 60)
 
     resolver = ComprehensivePRMergeResolver()
 
     # Step 1: Analyze all PRs
-    print("\n📊 Step 1: Analyzing all open pull requests...")
+    print("\n[SUMMARY] Step 1: Analyzing all open pull requests...")
     analyses = resolver.analyze_all_prs()
 
     # Step 2: Resolve PRs without conflicts
-    print("\n✅ Step 2: Processing PRs ready to merge...")
+    print("\n[PASS] Step 2: Processing PRs ready to merge...")
     ready_resolved = resolver.resolve_ready_prs(analyses)
 
     # Step 3: Create comprehensive resolution plan
-    print("\n📋 Step 3: Creating conflict resolution plan...")
+    print("\n[TEST] Step 3: Creating conflict resolution plan...")
     plan = resolver.create_conflict_resolution_plan(analyses)
 
     # Step 4: Apply automatic resolutions
-    print("\n🔧 Step 4: Applying automatic conflict resolutions...")
+    print("\n[FIX] Step 4: Applying automatic conflict resolutions...")
     auto_resolved = resolver.implement_auto_resolutions(analyses)
 
     # Step 5: Generate comprehensive report
-    print("\n📄 Step 5: Generating comprehensive resolution report...")
+    print("\n[FILE] Step 5: Generating comprehensive resolution report...")
     report = resolver.generate_comprehensive_report(analyses, plan, auto_resolved)
 
     # Save report
@@ -377,20 +377,20 @@ def main():
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"\n✅ Analysis complete! Report saved to: {report_file}")
-    print("\n📊 Summary:")
-    print(f"   • Total PRs: {plan['total_prs']}")
-    print(f"   • Ready to merge: {plan['ready_to_merge']}")
-    print(f"   • Auto-resolved: {len(auto_resolved)}")
-    print(f"   • Manual review needed: {plan['manual_review'] - len(auto_resolved)}")
+    print(f"\n[PASS] Analysis complete! Report saved to: {report_file}")
+    print("\n[SUMMARY] Summary:")
+    print(f"   * Total PRs: {plan['total_prs']}")
+    print(f"   * Ready to merge: {plan['ready_to_merge']}")
+    print(f"   * Auto-resolved: {len(auto_resolved)}")
+    print(f"   * Manual review needed: {plan['manual_review'] - len(auto_resolved)}")
 
     # Print immediate actions
     if ready_resolved:
-        print(f"\n🚀 Immediate actions:")
-        print(f"   • Merge PR(s): {', '.join(map(str, ready_resolved))}")
+        print(f"\n[LAUNCH] Immediate actions:")
+        print(f"   * Merge PR(s): {', '.join(map(str, ready_resolved))}")
 
     if auto_resolved:
-        print(f"   • Auto-resolved PR(s): {', '.join(map(str, auto_resolved))}")
+        print(f"   * Auto-resolved PR(s): {', '.join(map(str, auto_resolved))}")
 
     return plan
 

@@ -1,6 +1,13 @@
 \ProvidesPackage{style/ctmm-design}[2025/07/01 CTMM Design System]
 
 % Farbschema
+\definecolor{ctmmBlue}{HTML}{003087}
+\definecolor{ctmmGreen}{HTML}{4CAF50}
+\definecolor{ctmmOrange}{HTML}{FF6200}
+\definecolor{ctmmRed}{HTML}{D32F2F}
+\definecolor{ctmmPurple}{HTML}{7B1FA2}
+\definecolor{ctmmGray}{HTML}{757575}
+\definecolor{ctmmYellow}{HTML}{FFC107}
 
 
 % tcolorbox für CTMM-Boxen
@@ -59,7 +66,7 @@
   coltext=black,
   coltitle=white,
   fonttitle=\Large\bfseries,
-  title=🟢 #2,
+  title=[GREEN] #2,
   enhanced,
   boxrule=2pt,
   #1
@@ -71,7 +78,7 @@
   coltext=black,
   coltitle=white,
   fonttitle=\Large\bfseries,
-  title=🔴 #2,
+  title=[RED] #2,
   enhanced,
   boxrule=2pt,
   #1
@@ -83,7 +90,7 @@
   coltext=black,
   coltitle=black,
   fonttitle=\Large\bfseries,
-  title=🟡 #2,
+  title=[EMOJI] #2,
   enhanced,
   boxrule=2pt,
   #1
@@ -95,7 +102,7 @@
   coltext=black,
   coltitle=white,
   fonttitle=\Large\bfseries,
-  title=📝 #2,
+  title=[NOTE] #2,
   enhanced,
   boxrule=2pt,
   #1
