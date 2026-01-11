@@ -28,12 +28,12 @@ The following typographic characters (common in copy-pasted text) can cause issu
 
 | Character | Code | Issue | LaTeX Alternative |
 |-----------|------|-------|-------------------|
-| Left single quote | U+2018 | Copy-paste artifact | Single backtick: \` |
-| Right single quote | U+2019 | Copy-paste artifact | Single quote: ' |
-| German opening single quote | U+201A | German punctuation | Single backtick: \` |
-| Left double quote | U+201C | Copy-paste artifact | Two backticks: \`\` |
-| Right double quote | U+201D | Copy-paste artifact | Two single quotes: '' |
-| German opening double quote | U+201E | German punctuation | Two backticks: \`\` |
+| Left single quote | U+2018 | Copy-paste artifact | Single backtick |
+| Right single quote | U+2019 | Copy-paste artifact | Single apostrophe |
+| German opening single quote | U+201A | German punctuation | Single backtick |
+| Left double quote | U+201C | Copy-paste artifact | Two backticks |
+| Right double quote | U+201D | Copy-paste artifact | Two apostrophes |
+| German opening double quote | U+201E | German punctuation | Two backticks |
 | En dash | U+2013 | Copy-paste artifact | `--` or `-` |
 | Em dash | U+2014 | Copy-paste artifact | `---` or `-` |
 | Horizontal ellipsis | U+2026 | Copy-paste artifact | `\ldots` |
