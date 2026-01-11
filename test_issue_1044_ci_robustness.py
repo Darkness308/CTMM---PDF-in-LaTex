@@ -21,7 +21,7 @@ import re
 
 def test_workflow_timeout_configuration():
     """Test that workflows have proper timeout configurations."""
-    print("\n⏱️  Testing Workflow Timeout Configuration")
+    print("\n[TIMER]  Testing Workflow Timeout Configuration")
     print("=" * 60)
 
     workflows_to_check = [
@@ -34,10 +34,10 @@ def test_workflow_timeout_configuration():
 
     for workflow_file in workflows_to_check:
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file missing: {workflow_file}")
+            print(f"[FAIL] Workflow file missing: {workflow_file}")
             continue
 
-        print(f"📋 Checking {workflow_file}...")
+        print(f"[TEST] Checking {workflow_file}...")
 
         with open(workflow_file, 'r') as f:
             workflow_data = yaml.safe_load(f)
@@ -56,29 +56,29 @@ def test_workflow_timeout_configuration():
                     if 'timeout-minutes' in step:
                         timeout_found += 1
                         timeout_val = step['timeout-minutes']
-                        print(f"✅ TIMEOUT: {step_name} - {timeout_val} minutes")
+                        print(f"[PASS] TIMEOUT: {step_name} - {timeout_val} minutes")
                     else:
-                        print(f"⚠️  NO TIMEOUT: {step_name}")
+                        print(f"[WARN]  NO TIMEOUT: {step_name}")
 
     success_rate = (timeout_found / total_validation_steps * 100) if total_validation_steps > 0 else 0
-    print(f"\n📊 Timeout Coverage: {timeout_found}/{total_validation_steps} ({success_rate:.1f}%)")
+    print(f"\n[SUMMARY] Timeout Coverage: {timeout_found}/{total_validation_steps} ({success_rate:.1f}%)")
 
     if success_rate >= 80:
-        print("✅ Good timeout coverage for validation steps")
+        print("[PASS] Good timeout coverage for validation steps")
         return True
     else:
-        print("⚠️  Consider adding timeouts to more validation steps")
+        print("[WARN]  Consider adding timeouts to more validation steps")
         return True  # Don't fail on this, just warn
 
 def test_enhanced_error_reporting():
     """Test that workflows have enhanced error reporting capabilities."""
-    print("\n📝 Testing Enhanced Error Reporting")
+    print("\n[NOTE] Testing Enhanced Error Reporting")
     print("=" * 60)
 
     workflow_file = '.github/workflows/latex-build.yml'
 
     if not os.path.exists(workflow_file):
-        print(f"❌ Workflow file missing: {workflow_file}")
+        print(f"[FAIL] Workflow file missing: {workflow_file}")
         return False
 
     with open(workflow_file, 'r') as f:
@@ -89,31 +89,31 @@ def test_enhanced_error_reporting():
         'echo statements': 'echo "' in content,
         'log upload on failure': 'if: failure()' in content,
         'continue-on-error': 'continue-on-error: true' in content,
-        'warning messages': '⚠️' in content or 'Warning:' in content,
-        'success indicators': '✅' in content,
-        'progress indicators': '🔍' in content or '🔧' in content or '🚀' in content
+        'warning messages': '[WARN]' in content or 'Warning:' in content,
+        'success indicators': '[PASS]' in content,
+        'progress indicators': '[SEARCH]' in content or '[FIX]' in content or '[LAUNCH]' in content
     }
 
     features_found = 0
     for feature, found in error_features.items():
         if found:
             features_found += 1
-            print(f"✅ FOUND: {feature}")
+            print(f"[PASS] FOUND: {feature}")
         else:
-            print(f"❌ MISSING: {feature}")
+            print(f"[FAIL] MISSING: {feature}")
 
-    print(f"\n📊 Error Reporting Features: {features_found}/{len(error_features)}")
+    print(f"\n[SUMMARY] Error Reporting Features: {features_found}/{len(error_features)}")
 
     if features_found >= 4:
-        print("✅ Good error reporting coverage")
+        print("[PASS] Good error reporting coverage")
         return True
     else:
-        print("⚠️  Consider enhancing error reporting")
+        print("[WARN]  Consider enhancing error reporting")
         return True  # Don't fail, just warn
 
 def test_resource_constraint_awareness():
     """Test that workflows check system resources before heavy operations."""
-    print("\n💾 Testing Resource Constraint Awareness")
+    print("\n[SAVE] Testing Resource Constraint Awareness")
     print("=" * 60)
 
     workflow_file = '.github/workflows/latex-build.yml'
@@ -132,20 +132,20 @@ def test_resource_constraint_awareness():
     for check, found in resource_checks.items():
         if found:
             checks_found += 1
-            print(f"✅ FOUND: {check}")
+            print(f"[PASS] FOUND: {check}")
         else:
-            print(f"❌ MISSING: {check}")
+            print(f"[FAIL] MISSING: {check}")
 
     if checks_found >= 2:
-        print("✅ Good resource constraint awareness")
+        print("[PASS] Good resource constraint awareness")
         return True
     else:
-        print("⚠️  Consider adding more resource checks")
+        print("[WARN]  Consider adding more resource checks")
         return True  # Don't fail, just warn
 
 def test_validation_step_robustness():
     """Test that validation steps have proper error handling."""
-    print("\n🛡️  Testing Validation Step Robustness")
+    print("\n[SHIELD]  Testing Validation Step Robustness")
     print("=" * 60)
 
     # Test the individual validation scripts for robustness
@@ -160,10 +160,10 @@ def test_validation_step_robustness():
 
     for script in validation_scripts:
         if not os.path.exists(script):
-            print(f"⚠️  Script not found: {script}")
+            print(f"[WARN]  Script not found: {script}")
             continue
 
-        print(f"🔧 Testing {script}...")
+        print(f"[FIX] Testing {script}...")
 
         try:
             # Test that scripts complete within reasonable time
@@ -174,24 +174,24 @@ def test_validation_step_robustness():
 
             if result.returncode == 0:
                 robust_scripts += 1
-                print(f"✅ {script} - Completed successfully in {elapsed:.1f}s")
+                print(f"[PASS] {script} - Completed successfully in {elapsed:.1f}s")
             else:
-                print(f"⚠️  {script} - Non-zero exit code but may be expected")
+                print(f"[WARN]  {script} - Non-zero exit code but may be expected")
                 robust_scripts += 1  # Count as robust if it fails gracefully
 
         except subprocess.TimeoutExpired:
-            print(f"❌ {script} - Timeout (>30s)")
+            print(f"[FAIL] {script} - Timeout (>30s)")
         except Exception as e:
-            print(f"❌ {script} - Error: {e}")
+            print(f"[FAIL] {script} - Error: {e}")
 
     success_rate = (robust_scripts / len(validation_scripts) * 100) if validation_scripts else 0
-    print(f"\n📊 Script Robustness: {robust_scripts}/{len(validation_scripts)} ({success_rate:.1f}%)")
+    print(f"\n[SUMMARY] Script Robustness: {robust_scripts}/{len(validation_scripts)} ({success_rate:.1f}%)")
 
     return success_rate >= 80
 
 def test_latex_action_timeout():
     """Test that LaTeX compilation has appropriate timeout."""
-    print("\n📄 Testing LaTeX Action Timeout Configuration")
+    print("\n[FILE] Testing LaTeX Action Timeout Configuration")
     print("=" * 60)
 
     workflow_file = '.github/workflows/latex-build.yml'
@@ -212,20 +212,20 @@ def test_latex_action_timeout():
                 if 'timeout-minutes' in step:
                     timeout_configured = True
                     timeout_val = step['timeout-minutes']
-                    print(f"✅ LaTeX action has timeout: {timeout_val} minutes")
+                    print(f"[PASS] LaTeX action has timeout: {timeout_val} minutes")
                 else:
-                    print("⚠️  LaTeX action missing timeout configuration")
+                    print("[WARN]  LaTeX action missing timeout configuration")
                 break
 
     if not latex_step_found:
-        print("❌ LaTeX action step not found")
+        print("[FAIL] LaTeX action step not found")
         return False
 
     if timeout_configured:
-        print("✅ LaTeX compilation timeout properly configured")
+        print("[PASS] LaTeX compilation timeout properly configured")
         return True
     else:
-        print("⚠️  Consider adding timeout to LaTeX compilation")
+        print("[WARN]  Consider adding timeout to LaTeX compilation")
         return True  # Don't fail, just warn
 
 def main():
@@ -250,11 +250,11 @@ def main():
         try:
             if test_func():
                 passed_tests += 1
-                print(f"✅ PASS {test_name}")
+                print(f"[PASS] PASS {test_name}")
             else:
-                print(f"❌ FAIL {test_name}")
+                print(f"[FAIL] FAIL {test_name}")
         except Exception as e:
-            print(f"❌ ERROR {test_name}: {e}")
+            print(f"[FAIL] ERROR {test_name}: {e}")
 
     print("\n" + "=" * 70)
     print("VALIDATION SUMMARY")
@@ -264,15 +264,15 @@ def main():
     success_rate = (passed_tests / total_tests * 100) if total_tests > 0 else 0
 
     if success_rate >= 80:
-        print("🎉 CI PIPELINE ROBUSTNESS VALIDATION PASSED!")
+        print("[SUCCESS] CI PIPELINE ROBUSTNESS VALIDATION PASSED!")
         print("\nThe enhanced CI configuration should provide:")
-        print("✓ Better timeout handling for validation steps")
-        print("✓ Enhanced error reporting and debugging context")
-        print("✓ Resource constraint awareness")
-        print("✓ Improved error recovery mechanisms")
+        print("[OK] Better timeout handling for validation steps")
+        print("[OK] Enhanced error reporting and debugging context")
+        print("[OK] Resource constraint awareness")
+        print("[OK] Improved error recovery mechanisms")
         return True
     else:
-        print("⚠️  CI pipeline robustness needs improvement")
+        print("[WARN]  CI pipeline robustness needs improvement")
         return False
 
 if __name__ == "__main__":

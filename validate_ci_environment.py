@@ -17,7 +17,7 @@ from pathlib import Path
 
 def run_command(command, description, timeout=30):
     """Run a command with timeout and capture output."""
-    print(f"🔍 {description}...")
+    print(f"[SEARCH] {description}...")
     try:
         result = subprocess.run(
             command.split(),
@@ -26,24 +26,24 @@ def run_command(command, description, timeout=30):
             timeout=timeout
         )
         if result.returncode == 0:
-            print(f"✅ {description}: SUCCESS")
+            print(f"[PASS] {description}: SUCCESS")
             return True, result.stdout.strip()
         else:
-            print(f"❌ {description}: FAILED")
+            print(f"[FAIL] {description}: FAILED")
             print(f"   Error: {result.stderr.strip()}")
             return False, result.stderr.strip()
     except subprocess.TimeoutExpired:
-        print(f"⏰ {description}: TIMEOUT after {timeout}s")
+        print(f"[SYM] {description}: TIMEOUT after {timeout}s")
         return False, f"Timeout after {timeout}s"
     except Exception as e:
-        print(f"💥 {description}: EXCEPTION - {e}")
+        print(f"[ERROR] {description}: EXCEPTION - {e}")
         return False, str(e)
 
 
 def check_system_resources():
     """Check system resources and constraints."""
     print("\n" + "="*60)
-    print("🔧 SYSTEM RESOURCES ANALYSIS")
+    print("[FIX] SYSTEM RESOURCES ANALYSIS")
     print("="*60)
 
     # Disk space check
@@ -56,19 +56,19 @@ def check_system_resources():
                 if len(parts) >= 5:
                     usage = parts[4].replace('%', '')
                     if usage.isdigit() and int(usage) > 90:
-                        print(f"⚠️  WARNING: High disk usage: {usage}%")
+                        print(f"[WARN]  WARNING: High disk usage: {usage}%")
                     else:
-                        print(f"✅ Disk usage OK: {usage}%")
+                        print(f"[PASS] Disk usage OK: {usage}%")
 
     # Memory check
     success, output = run_command("free -h", "Checking memory")
     if success and output:
-        print(f"📊 Memory info: {output.split()[1] if output.split() else 'N/A'}")
+        print(f"[SUMMARY] Memory info: {output.split()[1] if output.split() else 'N/A'}")
 
     # CPU info
     success, output = run_command("nproc", "Checking CPU cores")
     if success:
-        print(f"🖥️  CPU cores: {output}")
+        print(f"[EMOJI]  CPU cores: {output}")
 
     return True
 
@@ -76,7 +76,7 @@ def check_system_resources():
 def check_github_actions_environment():
     """Check GitHub Actions specific environment."""
     print("\n" + "="*60)
-    print("🏗️  GITHUB ACTIONS ENVIRONMENT")
+    print("[EMOJI]  GITHUB ACTIONS ENVIRONMENT")
     print("="*60)
 
     # Environment variables
@@ -88,14 +88,14 @@ def check_github_actions_environment():
     is_github_actions = False
     for var in env_vars:
         value = os.environ.get(var, 'Not set')
-        print(f"📋 {var}: {value}")
+        print(f"[TEST] {var}: {value}")
         if var == 'GITHUB_ACTIONS' and value == 'true':
             is_github_actions = True
 
     if is_github_actions:
-        print("✅ Running in GitHub Actions environment")
+        print("[PASS] Running in GitHub Actions environment")
     else:
-        print("ℹ️  Running in local development environment")
+        print("[INFO]  Running in local development environment")
 
     return is_github_actions
 
@@ -103,7 +103,7 @@ def check_github_actions_environment():
 def check_package_dependencies():
     """Check critical package dependencies."""
     print("\n" + "="*60)
-    print("📦 PACKAGE DEPENDENCIES CHECK")
+    print("[PACKAGE] PACKAGE DEPENDENCIES CHECK")
     print("="*60)
 
     # Python packages
@@ -111,9 +111,9 @@ def check_package_dependencies():
     for package in python_packages:
         try:
             __import__(package)
-            print(f"✅ Python package '{package}': AVAILABLE")
+            print(f"[PASS] Python package '{package}': AVAILABLE")
         except ImportError:
-            print(f"❌ Python package '{package}': MISSING")
+            print(f"[FAIL] Python package '{package}': MISSING")
 
     # System commands
     system_commands = ['python3', 'git', 'pdflatex', 'latex']
@@ -126,12 +126,12 @@ def check_package_dependencies():
 def check_workflow_files():
     """Check workflow file integrity."""
     print("\n" + "="*60)
-    print("📄 WORKFLOW FILES VALIDATION")
+    print("[FILE] WORKFLOW FILES VALIDATION")
     print("="*60)
 
     workflow_dir = Path('.github/workflows')
     if not workflow_dir.exists():
-        print("❌ .github/workflows directory not found")
+        print("[FAIL] .github/workflows directory not found")
         return False
 
     workflow_files = [
@@ -144,16 +144,16 @@ def check_workflow_files():
     for workflow in workflow_files:
         file_path = workflow_dir / workflow
         if file_path.exists():
-            print(f"✅ Found: {workflow}")
+            print(f"[PASS] Found: {workflow}")
             # Basic YAML syntax check
             with open(file_path, 'r') as f:
                 content = f.read()
                 if '"on":' in content:
-                    print(f"✅ {workflow}: Proper quoted 'on:' syntax")
+                    print(f"[PASS] {workflow}: Proper quoted 'on:' syntax")
                 elif 'on:' in content:
-                    print(f"⚠️  {workflow}: Unquoted 'on:' detected")
+                    print(f"[WARN]  {workflow}: Unquoted 'on:' detected")
         else:
-            print(f"❌ Missing: {workflow}")
+            print(f"[FAIL] Missing: {workflow}")
             all_valid = False
 
     return all_valid
@@ -162,31 +162,31 @@ def check_workflow_files():
 def check_latex_configuration():
     """Check LaTeX-specific configuration."""
     print("\n" + "="*60)
-    print("📝 LATEX CONFIGURATION CHECK")
+    print("[NOTE] LATEX CONFIGURATION CHECK")
     print("="*60)
 
     # Check main.tex
     if Path('main.tex').exists():
-        print("✅ main.tex found")
+        print("[PASS] main.tex found")
     else:
-        print("❌ main.tex missing")
+        print("[FAIL] main.tex missing")
         return False
 
     # Check style files
     style_dir = Path('style')
     if style_dir.exists():
         style_files = list(style_dir.glob('*.sty'))
-        print(f"✅ Style directory: {len(style_files)} files")
+        print(f"[PASS] Style directory: {len(style_files)} files")
     else:
-        print("❌ Style directory missing")
+        print("[FAIL] Style directory missing")
 
     # Check modules
     modules_dir = Path('modules')
     if modules_dir.exists():
         module_files = list(modules_dir.glob('*.tex'))
-        print(f"✅ Modules directory: {len(module_files)} files")
+        print(f"[PASS] Modules directory: {len(module_files)} files")
     else:
-        print("❌ Modules directory missing")
+        print("[FAIL] Modules directory missing")
 
     return True
 
@@ -194,7 +194,7 @@ def check_latex_configuration():
 def run_diagnostic_tests():
     """Run diagnostic validation tests."""
     print("\n" + "="*60)
-    print("🧪 DIAGNOSTIC TESTS")
+    print("[TEST] DIAGNOSTIC TESTS")
     print("="*60)
 
     test_commands = [
@@ -211,14 +211,14 @@ def run_diagnostic_tests():
         if success:
             passed += 1
 
-    print(f"\n📊 Diagnostic tests: {passed}/{total} passed")
+    print(f"\n[SUMMARY] Diagnostic tests: {passed}/{total} passed")
     return passed == total
 
 
 def generate_environment_report():
     """Generate comprehensive environment report."""
     print("\n" + "="*70)
-    print("📋 CI ENVIRONMENT DIAGNOSTIC REPORT")
+    print("[TEST] CI ENVIRONMENT DIAGNOSTIC REPORT")
     print("="*70)
 
     report = {
@@ -230,7 +230,7 @@ def generate_environment_report():
     }
 
     for key, value in report.items():
-        print(f"📋 {key.replace('_', ' ').title()}: {value}")
+        print(f"[TEST] {key.replace('_', ' ').title()}: {value}")
 
     return report
 
@@ -238,7 +238,7 @@ def generate_environment_report():
 def main():
     """Main validation function."""
     print("="*70)
-    print("🔍 ENHANCED CI ENVIRONMENT VALIDATION")
+    print("[SEARCH] ENHANCED CI ENVIRONMENT VALIDATION")
     print("Issue #1084: CI Insights Report Build Failures")
     print("="*70)
 
@@ -260,17 +260,17 @@ def main():
     total = len(results)
 
     print("\n" + "="*70)
-    print("📊 VALIDATION SUMMARY")
+    print("[SUMMARY] VALIDATION SUMMARY")
     print("="*70)
-    print(f"✅ Tests passed: {passed}/{total}")
+    print(f"[PASS] Tests passed: {passed}/{total}")
 
     if passed == total:
-        print("🎉 ALL VALIDATION CHECKS PASSED!")
-        print("✅ CI environment is ready for reliable builds")
+        print("[SUCCESS] ALL VALIDATION CHECKS PASSED!")
+        print("[PASS] CI environment is ready for reliable builds")
         return True
     else:
-        print("⚠️  Some validation checks failed")
-        print("💡 Review the issues above to improve CI reliability")
+        print("[WARN]  Some validation checks failed")
+        print("[TIP] Review the issues above to improve CI reliability")
         return False
 
 

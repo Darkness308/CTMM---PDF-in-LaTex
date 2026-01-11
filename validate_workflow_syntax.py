@@ -35,7 +35,7 @@ def validate_workflow_syntax():
 
     for file_path in workflow_files:
         if not os.path.exists(file_path):
-            print(f"❌ File not found: {file_path}")
+            print(f"[FAIL] File not found: {file_path}")
             all_correct = False
             continue
 
@@ -55,7 +55,7 @@ def validate_workflow_syntax():
                 on_lines.append((i, line.strip(), 'unquoted'))
 
         if not on_lines:
-            print("❌ No 'on:' trigger found in workflow")
+            print("[FAIL] No 'on:' trigger found in workflow")
             all_correct = False
             continue
 
@@ -65,33 +65,33 @@ def validate_workflow_syntax():
 
             # Check if 'on' is interpreted correctly
             if 'on' in parsed and isinstance(parsed['on'], dict):
-                print("✅ 'on' correctly interpreted as string key")
+                print("[PASS] 'on' correctly interpreted as string key")
                 print(f"   Line {on_lines[0][0]}: {on_lines[0][1]}")
                 print(f"   Triggers: {list(parsed['on'].keys())}")
 
                 # Validate trigger structure
                 triggers = parsed['on']
                 if 'push' in triggers or 'pull_request' in triggers or 'workflow_dispatch' in triggers:
-                    print("✅ Valid trigger configuration found")
+                    print("[PASS] Valid trigger configuration found")
                 else:
-                    print("⚠️  No standard triggers (push/pull_request/workflow_dispatch) found")
+                    print("[WARN]  No standard triggers (push/pull_request/workflow_dispatch) found")
 
                 results.append((file_path, True, "Correct quoted syntax"))
 
             elif True in parsed:
-                print("❌ 'on' incorrectly interpreted as boolean True")
+                print("[FAIL] 'on' incorrectly interpreted as boolean True")
                 print(f"   Line {on_lines[0][0]}: {on_lines[0][1]}")
                 print("   This causes GitHub Actions parsing errors")
                 all_correct = False
                 results.append((file_path, False, "Incorrect unquoted syntax causing boolean interpretation"))
 
             else:
-                print("❓ Unexpected parsing result - no 'on' or True key found")
+                print("[QUESTION] Unexpected parsing result - no 'on' or True key found")
                 all_correct = False
                 results.append((file_path, False, "Unexpected parsing result"))
 
         except yaml.YAMLError as e:
-            print(f"❌ YAML parsing error: {e}")
+            print(f"[FAIL] YAML parsing error: {e}")
             all_correct = False
             results.append((file_path, False, f"YAML error: {e}"))
 
@@ -101,15 +101,15 @@ def validate_workflow_syntax():
     print("=" * 70)
 
     for file_path, is_correct, message in results:
-        status = "✅ PASS" if is_correct else "❌ FAIL"
+        status = "[PASS] PASS" if is_correct else "[FAIL] FAIL"
         print(f"{status} {os.path.basename(file_path)}: {message}")
 
     if all_correct:
-        print("\n🎉 ALL WORKFLOW FILES HAVE CORRECT SYNTAX")
+        print("\n[SUCCESS] ALL WORKFLOW FILES HAVE CORRECT SYNTAX")
         print("The 'on:' keyword is properly quoted to prevent boolean interpretation.")
         print("GitHub Actions will correctly parse these workflow triggers.")
     else:
-        print("\n⚠️  SOME WORKFLOW FILES NEED FIXING")
+        print("\n[WARN]  SOME WORKFLOW FILES NEED FIXING")
         print("Files with unquoted 'on:' should be changed to quoted '\"on\":' syntax.")
 
     print(f"\nStatus: {'SUCCESS' if all_correct else 'NEEDS_FIXES'}")
@@ -155,13 +155,13 @@ jobs:
         print(f"Key types: {[(k, type(k).__name__) for k in parsed.keys()]}")
 
         if True in parsed:
-            print("❌ PROBLEM: 'on' became boolean True")
+            print("[FAIL] PROBLEM: 'on' became boolean True")
             print(f"   Triggers accessible via parsed[True]: {parsed[True]}")
         else:
-            print("✅ No boolean interpretation issue found")
+            print("[PASS] No boolean interpretation issue found")
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
 
     print("\n2. CORRECT: Quoted '\"on\":' syntax")
     print("-" * 40)
@@ -174,13 +174,13 @@ jobs:
         print(f"Key types: {[(k, type(k).__name__) for k in parsed.keys()]}")
 
         if 'on' in parsed:
-            print("✅ CORRECT: 'on' is string key")
+            print("[PASS] CORRECT: 'on' is string key")
             print(f"   Triggers accessible via parsed['on']: {parsed['on']}")
         else:
-            print("❌ Expected 'on' key not found")
+            print("[FAIL] Expected 'on' key not found")
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[FAIL] Error: {e}")
 
 if __name__ == "__main__":
     # Change to repository root

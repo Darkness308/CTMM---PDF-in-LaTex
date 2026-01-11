@@ -1,7 +1,7 @@
 # Merge Conflict Resolution - Quick Summary
 
 **Date:** January 10, 2026  
-**Branch:** copilot/resolve-merge-conflicts-again  
+**Branch:** copilot/merge-conflict-cleanup  
 **Status:** ✅ RESOLVED
 
 ## Problem (German)

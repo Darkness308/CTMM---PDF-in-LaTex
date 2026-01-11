@@ -12,7 +12,7 @@ import re
 
 def test_latex_action_consistency():
     """Test that both workflows use consistent xu-cheng/latex-action@v3."""
-    print("\n🔧 Testing LaTeX Action Consistency")
+    print("\n[FIX] Testing LaTeX Action Consistency")
     print("=" * 60)
 
     workflow_files = [
@@ -24,10 +24,10 @@ def test_latex_action_consistency():
     latex_actions_found = {}
 
     for workflow_file in workflow_files:
-        print(f"\n📄 Checking {workflow_file}...")
+        print(f"\n[FILE] Checking {workflow_file}...")
 
         if not os.path.exists(workflow_file):
-            print(f"❌ Workflow file not found: {workflow_file}")
+            print(f"[FAIL] Workflow file not found: {workflow_file}")
             consistency_success = False
             continue
 
@@ -46,10 +46,10 @@ def test_latex_action_consistency():
                 latex_actions_found[action_version].append(workflow_file)
 
         except Exception as e:
-            print(f"❌ Error analyzing {workflow_file}: {e}")
+            print(f"[FAIL] Error analyzing {workflow_file}: {e}")
             consistency_success = False
 
-    print(f"\n📊 LaTeX Action Version Summary:")
+    print(f"\n[SUMMARY] LaTeX Action Version Summary:")
     for action, files in latex_actions_found.items():
         print(f"   {action} used in: {', '.join([os.path.basename(f) for f in files])}")
 
@@ -57,22 +57,22 @@ def test_latex_action_consistency():
     expected_action = "xu-cheng/latex-action@v3"
     for action in latex_actions_found.keys():
         if action != expected_action:
-            print(f"❌ Inconsistent action version: {action} (expected {expected_action})")
+            print(f"[FAIL] Inconsistent action version: {action} (expected {expected_action})")
             consistency_success = False
 
     if consistency_success and expected_action in latex_actions_found:
-        print(f"✅ All workflows use consistent action version: {expected_action}")
+        print(f"[PASS] All workflows use consistent action version: {expected_action}")
 
     return consistency_success
 
 
 def test_hyperref_bookmark_validation():
     """Test that hyperref/bookmark package order validation works correctly."""
-    print("\n📦 Testing hyperref/bookmark Package Order Validation")
+    print("\n[PACKAGE] Testing hyperref/bookmark Package Order Validation")
     print("=" * 60)
 
     if not os.path.exists('main.tex'):
-        print("❌ main.tex not found")
+        print("[FAIL] main.tex not found")
         return False
 
     try:
@@ -104,7 +104,7 @@ def test_hyperref_bookmark_validation():
               exit 1
             fi
 
-            echo "✅ hyperref package ordering is correct"
+            echo "[PASS] hyperref package ordering is correct"
             '''
         ], capture_output=True, text=True)
 
@@ -114,33 +114,33 @@ def test_hyperref_bookmark_validation():
 
         success = result.returncode == 0
         if success:
-            print("✅ hyperref/bookmark validation passed")
+            print("[PASS] hyperref/bookmark validation passed")
         else:
-            print("❌ hyperref/bookmark validation failed")
+            print("[FAIL] hyperref/bookmark validation failed")
 
         return success
 
     except Exception as e:
-        print(f"❌ Error running hyperref validation: {e}")
+        print(f"[FAIL] Error running hyperref validation: {e}")
         return False
 
 
 def test_latex_package_dependencies():
     """Test that LaTeX package dependencies are properly configured."""
-    print("\n📦 Testing LaTeX Package Dependencies")
+    print("\n[PACKAGE] Testing LaTeX Package Dependencies")
     print("=" * 60)
 
     workflow_path = '.github/workflows/latex-build.yml'
 
     if not os.path.exists(workflow_path):
-        print(f"❌ Main workflow file {workflow_path} not found")
+        print(f"[FAIL] Main workflow file {workflow_path} not found")
         return False
 
     try:
         with open(workflow_path, 'r') as f:
             workflow_content = yaml.safe_load(f)
     except Exception as e:
-        print(f"❌ Error parsing {workflow_path}: {e}")
+        print(f"[FAIL] Error parsing {workflow_path}: {e}")
         return False
 
     # Find the LaTeX action step
@@ -155,20 +155,20 @@ def test_latex_package_dependencies():
             break
 
     if not latex_step:
-        print("❌ 'Set up LaTeX' step not found in workflow")
+        print("[FAIL] 'Set up LaTeX' step not found in workflow")
         return False
 
-    print("✅ Found 'Set up LaTeX' step")
+    print("[PASS] Found 'Set up LaTeX' step")
 
     # Check for xu-cheng/latex-action usage
     if latex_step.get('uses') != 'xu-cheng/latex-action@v3':
-        print(f"❌ Expected xu-cheng/latex-action@v3, got: {latex_step.get('uses')}")
+        print(f"[FAIL] Expected xu-cheng/latex-action@v3, got: {latex_step.get('uses')}")
         return False
 
-    print("✅ Uses xu-cheng/latex-action@v3")
+    print("[PASS] Uses xu-cheng/latex-action@v3")
 
     extra_packages = latex_step.get('with', {}).get('extra_system_packages', '')
-    print(f"📋 LaTeX packages configuration:")
+    print(f"[TEST] LaTeX packages configuration:")
     for line in extra_packages.strip().split('\n'):
         if line.strip():
             print(f"   - {line.strip()}")
@@ -185,13 +185,13 @@ def test_latex_package_dependencies():
     ]
 
     all_packages_found = True
-    print("\n🔍 Validating essential packages...")
+    print("\n[SEARCH] Validating essential packages...")
 
     for pkg in required_packages:
         if pkg in extra_packages:
-            print(f"✅ FOUND: {pkg}")
+            print(f"[PASS] FOUND: {pkg}")
         else:
-            print(f"❌ MISSING: {pkg}")
+            print(f"[FAIL] MISSING: {pkg}")
             all_packages_found = False
 
     return all_packages_found
@@ -199,7 +199,7 @@ def test_latex_package_dependencies():
 
 def test_issue_743_validation_passes():
     """Test that the comprehensive Issue #743 validation now passes."""
-    print("\n🧪 Testing Issue #743 Validation Script")
+    print("\n[TEST] Testing Issue #743 Validation Script")
     print("=" * 60)
 
     try:
@@ -218,23 +218,23 @@ def test_issue_743_validation_passes():
                 print(line)
 
         if success:
-            print("✅ Issue #743 validation script passes")
+            print("[PASS] Issue #743 validation script passes")
         else:
-            print("❌ Issue #743 validation script fails")
+            print("[FAIL] Issue #743 validation script fails")
             print("Error output:")
             print(result.stderr)
 
         return success
 
     except Exception as e:
-        print(f"❌ Error running validation script: {e}")
+        print(f"[FAIL] Error running validation script: {e}")
         return False
 
 
 def main():
     """Run all validation tests for Issue #1157 fixes."""
     print("=" * 80)
-    print("🧪 ISSUE #1157 CI BUILD FAILURE RESOLUTION VALIDATION")
+    print("[TEST] ISSUE #1157 CI BUILD FAILURE RESOLUTION VALIDATION")
     print("=" * 80)
 
     tests = [
@@ -254,19 +254,19 @@ def main():
         try:
             results[test_name] = test_func()
         except Exception as e:
-            print(f"❌ Test failed with exception: {e}")
+            print(f"[FAIL] Test failed with exception: {e}")
             results[test_name] = False
 
     # Summary
     print(f"\n{'='*80}")
-    print("📊 VALIDATION SUMMARY")
+    print("[SUMMARY] VALIDATION SUMMARY")
     print('='*80)
 
     passed = 0
     total = len(tests)
 
     for test_name, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status}: {test_name}")
         if result:
             passed += 1
@@ -274,11 +274,11 @@ def main():
     print(f"\nOverall: {passed}/{total} tests passed")
 
     if passed == total:
-        print("\n🎉 ALL TESTS PASSED!")
+        print("\n[SUCCESS] ALL TESTS PASSED!")
         print("Issue #1157 CI build failures have been resolved.")
         return 0
     else:
-        print(f"\n❌ {total - passed} test(s) failed")
+        print(f"\n[FAIL] {total - passed} test(s) failed")
         print("Some issues remain to be addressed.")
         return 1
 

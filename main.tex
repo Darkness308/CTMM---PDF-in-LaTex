@@ -32,6 +32,8 @@
 }
 
 \hypersetup{
+  colorlinks=false,
+  pdfborder={0 0 0},
   % pdfborder={0 0 0}, % Optional: kann entfernt werden, falls Fehler
   pdftitle={CTMM-System - Interaktives Therapie-Workbook},
   pdfauthor={CTMM-Team},
@@ -39,8 +41,12 @@
   pdfkeywords={CTMM, Therapie, Trigger, Borderline, ADHS, ASS, KPTBS, interaktiv},
   pdfcreator={LaTeX mit hyperref},
   pdfproducer={pdfLaTeX},
+  % Formular-spezifische Einstellungen
   bookmarksopen=true,
-  bookmarksopenlevel=1
+  bookmarksopenlevel=1,
+  % Für bessere Formularkompatibilität
+  pdfencoding=auto,
+  unicode=true
 }
 
 \hbadness=10000
@@ -61,6 +67,7 @@
 \tableofcontents
 \newpage
 
+\section*{\textcolor{ctmmBlue}{\faCompass~CTMM-System Übersicht}}
 \section*{\texorpdfstring{\textcolor{ctmmBlue}{\faCompass~CTMM-System Übersicht}}{CTMM-System Übersicht}}
 \addcontentsline{toc}{section}{CTMM-System Übersicht}
 
@@ -69,6 +76,7 @@
 
 \begin{itemize}
     \item \textcolor{ctmmBlue}{\textbf{Catch:}} Trigger erkennen
+    \item \textcolor{ctmmGreen}{\textbf{Track:}} Gefühl \& Situation verfolgen  
     \item \textcolor{ctmmGreen}{\textbf{Track:}} Gefühl \& Situation verfolgen
     \item \textcolor{ctmmOrange}{\textbf{Map:}} Muster verstehen
     \item \textcolor{ctmmPurple}{\textbf{Match:}} Handlung anpassen

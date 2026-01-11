@@ -11,7 +11,7 @@ import re
 
 def test_awk_regex_improvement():
     """Test that the improved AWK regex doesn't produce warnings."""
-    print("\n🔧 Testing AWK Regex Improvement")
+    print("\n[FIX] Testing AWK Regex Improvement")
     print("=" * 60)
 
     # Test the old problematic AWK command
@@ -33,21 +33,21 @@ def test_awk_regex_improvement():
     print(f"New pattern warning: {'Yes' if new_has_warning else 'No'}")
 
     if not new_has_warning:
-        print("✅ AWK regex improvement successful")
+        print("[PASS] AWK regex improvement successful")
         return True
     else:
-        print("❌ AWK regex still has warnings")
+        print("[FAIL] AWK regex still has warnings")
         print(f"Error: {result_new.stderr}")
         return False
 
 
 def test_robust_hyperref_validation():
     """Test that the improved hyperref validation logic is more robust."""
-    print("\n📦 Testing Robust Hyperref Validation")
+    print("\n[PACKAGE] Testing Robust Hyperref Validation")
     print("=" * 60)
 
     if not os.path.exists('main.tex'):
-        print("❌ main.tex not found")
+        print("[FAIL] main.tex not found")
         return False
 
     try:
@@ -79,7 +79,7 @@ def test_robust_hyperref_validation():
           exit 1
         fi
 
-        echo "✅ hyperref package ordering is correct"
+        echo "[PASS] hyperref package ordering is correct"
         '''
 
         result = subprocess.run(['bash', '-c', script], capture_output=True, text=True)
@@ -90,26 +90,26 @@ def test_robust_hyperref_validation():
 
         success = result.returncode == 0
         if success:
-            print("✅ Robust hyperref validation passed")
+            print("[PASS] Robust hyperref validation passed")
         else:
-            print("❌ Robust hyperref validation failed")
+            print("[FAIL] Robust hyperref validation failed")
 
         return success
 
     except Exception as e:
-        print(f"❌ Error running robust hyperref validation: {e}")
+        print(f"[FAIL] Error running robust hyperref validation: {e}")
         return False
 
 
 def test_workflow_syntax_validity():
     """Test that the workflow file syntax is valid."""
-    print("\n📄 Testing Workflow Syntax Validity")
+    print("\n[FILE] Testing Workflow Syntax Validity")
     print("=" * 60)
 
     workflow_file = '.github/workflows/latex-validation.yml'
 
     if not os.path.exists(workflow_file):
-        print(f"❌ Workflow file not found: {workflow_file}")
+        print(f"[FAIL] Workflow file not found: {workflow_file}")
         return False
 
     try:
@@ -118,7 +118,7 @@ def test_workflow_syntax_validity():
         with open(workflow_file, 'r') as f:
             workflow_content = yaml.safe_load(f)
 
-        print("✅ YAML syntax is valid")
+        print("[PASS] YAML syntax is valid")
 
         # Check for the improved validation step
         jobs = workflow_content.get('jobs', {})
@@ -132,10 +132,10 @@ def test_workflow_syntax_validity():
                 break
 
         if not hyperref_step:
-            print("❌ Hyperref validation step not found")
+            print("[FAIL] Hyperref validation step not found")
             return False
 
-        print("✅ Found hyperref validation step")
+        print("[PASS] Found hyperref validation step")
 
         # Check for debug output and robust arithmetic
         step_script = hyperref_step.get('run', '')
@@ -143,25 +143,25 @@ def test_workflow_syntax_validity():
         has_robust_arithmetic = 'next_line=$(' in step_script
 
         if has_debug:
-            print("✅ Debug output present")
+            print("[PASS] Debug output present")
         else:
-            print("❌ Debug output missing")
+            print("[FAIL] Debug output missing")
 
         if has_robust_arithmetic:
-            print("✅ Robust arithmetic present")
+            print("[PASS] Robust arithmetic present")
         else:
-            print("❌ Robust arithmetic missing")
+            print("[FAIL] Robust arithmetic missing")
 
         return has_debug and has_robust_arithmetic
 
     except Exception as e:
-        print(f"❌ Error validating workflow syntax: {e}")
+        print(f"[FAIL] Error validating workflow syntax: {e}")
         return False
 
 
 def test_ci_environment_compatibility():
     """Test compatibility with different shell environments."""
-    print("\n🌐 Testing CI Environment Compatibility")
+    print("\n[EMOJI] Testing CI Environment Compatibility")
     print("=" * 60)
 
     # Test different shell environments if available
@@ -186,13 +186,13 @@ def test_ci_environment_compatibility():
             result = subprocess.run([shell, '-c', script], capture_output=True, text=True)
 
             if result.returncode == 0:
-                print(f"✅ {shell} compatibility: PASS")
+                print(f"[PASS] {shell} compatibility: PASS")
                 success_count += 1
             else:
-                print(f"❌ {shell} compatibility: FAIL")
+                print(f"[FAIL] {shell} compatibility: FAIL")
                 print(f"Error: {result.stderr}")
         else:
-            print(f"⚠️  {shell} not available")
+            print(f"[WARN]  {shell} not available")
 
     return success_count > 0
 
@@ -200,7 +200,7 @@ def test_ci_environment_compatibility():
 def main():
     """Run all validation tests for Issue #1159 fixes."""
     print("=" * 80)
-    print("🧪 ISSUE #1159 CI VALIDATION FAILURE FIX VALIDATION")
+    print("[TEST] ISSUE #1159 CI VALIDATION FAILURE FIX VALIDATION")
     print("=" * 80)
 
     tests = [
@@ -220,19 +220,19 @@ def main():
         try:
             results[test_name] = test_func()
         except Exception as e:
-            print(f"❌ Test failed with exception: {e}")
+            print(f"[FAIL] Test failed with exception: {e}")
             results[test_name] = False
 
     # Summary
     print(f"\n{'='*80}")
-    print("📊 VALIDATION SUMMARY")
+    print("[SUMMARY] VALIDATION SUMMARY")
     print('='*80)
 
     passed = 0
     total = len(tests)
 
     for test_name, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status}: {test_name}")
         if result:
             passed += 1
@@ -240,11 +240,11 @@ def main():
     print(f"\nOverall: {passed}/{total} tests passed")
 
     if passed == total:
-        print("\n🎉 ALL TESTS PASSED!")
+        print("\n[SUCCESS] ALL TESTS PASSED!")
         print("Issue #1159 CI validation failures have been resolved.")
         return 0
     else:
-        print(f"\n❌ {total - passed} test(s) failed")
+        print(f"\n[FAIL] {total - passed} test(s) failed")
         print("Some issues remain to be addressed.")
         return 1
 

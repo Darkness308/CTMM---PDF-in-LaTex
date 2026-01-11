@@ -45,15 +45,15 @@ jobs:
             exit 1
           fi
 
-          # Check that no critical packages come after hyperref (except bookmark)
-          # Use more robust arithmetic to avoid potential shell issues
+          # Check that no critical packages come after hyperref (except bookmark and style/ packages)
+          # Style packages (like ctmm-form-elements) are allowed after hyperref as they depend on it
           next_line=$((hyperref_line + 1))
           echo "Debug: checking from line $next_line onward"
-          packages_after_hyperref=$(echo "$packages" | tail -n +$next_line | grep -v 'bookmark')
+          packages_after_hyperref=$(echo "$packages" | tail -n +$next_line | grep -vE '\\usepackage\{(bookmark|style/)')
           echo "Debug: packages after hyperref (filtered): '$packages_after_hyperref'"
 
           if [ -n "$packages_after_hyperref" ]; then
-            echo "::error ::Core packages found after hyperref (only bookmark is allowed): $packages_after_hyperref"
+            echo "::error ::Core packages found after hyperref (only bookmark and style/ packages are allowed): $packages_after_hyperref"
             exit 1
           fi
 

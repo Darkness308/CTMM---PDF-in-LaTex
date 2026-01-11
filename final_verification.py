@@ -46,7 +46,7 @@ jobs:
         print(f"Key types: {[(k, type(k)) for k in parsed.keys()]}")
 
         if True in parsed:
-            print("❌ PROBLEM CONFIRMED: 'on' becomes boolean True")
+            print("[FAIL] PROBLEM CONFIRMED: 'on' becomes boolean True")
             print("   GitHub Actions would not recognize this as a trigger!")
 
         print("\n2. DEMONSTRATING THE CURRENT FIX")
@@ -72,29 +72,29 @@ jobs:
             filename = os.path.basename(file_path)
 
             if 'on' in parsed and isinstance(parsed['on'], dict):
-                print(f"✅ {filename}: Correct string key 'on'")
+                print(f"[PASS] {filename}: Correct string key 'on'")
                 triggers = list(parsed['on'].keys())
                 print(f"   Triggers: {triggers}")
             elif True in parsed:
-                print(f"❌ {filename}: Incorrect boolean True key")
+                print(f"[FAIL] {filename}: Incorrect boolean True key")
                 all_correct = False
             else:
-                print(f"❓ {filename}: Unexpected parsing result")
+                print(f"[QUESTION] {filename}: Unexpected parsing result")
                 all_correct = False
 
         print("\n3. VERIFICATION SUMMARY")
         print("-" * 50)
 
         if all_correct:
-            print("🎉 SUCCESS: All workflow files have correct quoted syntax!")
-            print("✅ The 'on:' keyword is properly quoted as '\"on\":' in all files")
-            print("✅ YAML parsing produces string keys as expected by GitHub Actions")
-            print("✅ Workflow triggers will be recognized correctly")
-            print("\n📋 ISSUE STATUS: RESOLVED")
+            print("[SUCCESS] SUCCESS: All workflow files have correct quoted syntax!")
+            print("[PASS] The 'on:' keyword is properly quoted as '\"on\":' in all files")
+            print("[PASS] YAML parsing produces string keys as expected by GitHub Actions")
+            print("[PASS] Workflow triggers will be recognized correctly")
+            print("\n[TEST] ISSUE STATUS: RESOLVED")
             print("   The YAML boolean interpretation issue has been fixed.")
         else:
-            print("⚠️  ATTENTION NEEDED: Some workflow files still have incorrect syntax")
-            print("❌ Files with unquoted 'on:' need to be fixed to '\"on\":'")
+            print("[WARN]  ATTENTION NEEDED: Some workflow files still have incorrect syntax")
+            print("[FAIL] Files with unquoted 'on:' need to be fixed to '\"on\":'")
 
     print("\n" + "=" * 80)
 

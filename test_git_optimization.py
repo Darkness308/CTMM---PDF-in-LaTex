@@ -246,7 +246,7 @@ class TestGitOptimization(unittest.TestCase):
 
 def main():
     """Run the git optimization tests."""
-    print("🧪 Running Git Command Batching Optimization Tests")
+    print("[TEST] Running Git Command Batching Optimization Tests")
     print("=" * 60)
 
     # Create test suite
@@ -259,10 +259,10 @@ def main():
     # Print summary
     print("\n" + "=" * 60)
     if result.wasSuccessful():
-        print("✅ All git optimization tests passed!")
+        print("[PASS] All git optimization tests passed!")
         print(f"Ran {result.testsRun} tests successfully")
     else:
-        print("❌ Some git optimization tests failed")
+        print("[FAIL] Some git optimization tests failed")
         print(f"Failures: {len(result.failures)}, Errors: {len(result.errors)}")
 
     return result.wasSuccessful()

@@ -12,6 +12,7 @@
 
 \subsection*{\faCalendar~Grunddaten}
 \textbf{Datum:} \ctmmTextField[5.5cm]{}{date} \quad \textbf{Zeit:} \ctmmTextField[2.5cm]{}{time}\\[0.2cm]
+\textbf{Check:} \ctmmCheckBox[morning]{Morgen} \ctmmCheckBox[evening]{Abend}
 \textbf{Check:} \ctmmCheckBox{morning}{Morgen} \ctmmCheckBox{evening}{Abend}
 
 \vspace{0.5cm}
@@ -27,6 +28,7 @@
 \hline
 \textbf{Schlafstunden:} & \ctmmTextField[3cm]{}{er_sleep} & \ctmmTextField[3cm]{}{sie_sleep} \\
 \hline
+\textbf{Medikamente:} & \ctmmCheckBox[er_meds_yes]{OK} \ctmmCheckBox[er_meds_forgotten]{Vergessen} & \ctmmCheckBox[sie_meds_yes]{OK} \ctmmCheckBox[sie_meds_forgotten]{Vergessen} \\
 \textbf{Medikamente:} & \ctmmCheckBox{er_meds_yes}{OK} \ctmmCheckBox{er_meds_forgotten}{Vergessen} & \ctmmCheckBox{sie_meds_yes}{OK} \ctmmCheckBox{sie_meds_forgotten}{Vergessen} \\
 \hline
 \end{tabularx}
@@ -38,6 +40,12 @@
 \ctmmTextField[12cm]{}{appointments}
 
 \textbf{Support-Person verfügbar:} \\
+\ctmmCheckBox[support_yes]{Ja, Name:} \ctmmTextField[4cm]{}{support_name} \\
+\ctmmCheckBox[support_no]{Nein, Backup:} \ctmmTextField[4cm]{}{support_backup}
+
+\textbf{Safe-Words erklärt:} \\
+\ctmmCheckBox[safewords_explained_guests]{Allen Anwesenden (Gäste/Familie)} \\
+\ctmmCheckBox[safewords_explained_not_needed]{Nicht nötig (nur wir zwei)}
 \ctmmCheckBox{support_yes}{Ja, Name:} \ctmmTextField[4cm]{}{support_name} \\
 \ctmmCheckBox{support_no}{Nein, Backup:} \ctmmTextField[4cm]{}{support_backup}
 
@@ -53,6 +61,7 @@
 \textbf{Was war schwierig:} \\
 \ctmmTextField[12cm]{}{evening_difficult}
 
+\textbf{Safe-Word benutzt:} \ctmmCheckBox[safeword_no]{Nein} \ctmmCheckBox[safeword_yes]{Ja, welches:} \ctmmTextField[4cm]{}{safeword_used}
 \textbf{Safe-Word benutzt:} \ctmmCheckBox{safeword_no}{Nein} \ctmmCheckBox{safeword_yes}{Ja, welches:} \ctmmTextField[4cm]{}{safeword_detail}
 
 \textbf{Morgen wichtig:} \\

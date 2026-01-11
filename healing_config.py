@@ -99,7 +99,7 @@ class HealingConfig:
         self.pr_settings = {
             'branch_prefix': 'workflow-healing',
             'commit_message_prefix': '[Automated Fix]',
-            'pr_title_prefix': '🔧 Automated Workflow Fix:',
+            'pr_title_prefix': '[FIX] Automated Workflow Fix:',
             'labels': ['documentation', 'automated-fix'],
             'auto_merge': False,  # Require manual approval
             'delete_branch_after_merge': True

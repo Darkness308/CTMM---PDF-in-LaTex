@@ -283,9 +283,9 @@ This file was automatically created by the CTMM Build System because it was refe
                 )
 
                 if result.returncode == 0:
-                    logger.info("✓ Build successful with %s", current_module)
+                    logger.info("[OK] Build successful with %s", current_module)
                 else:
-                    logger.error("✗ Build failed when adding %s", current_module)
+                    logger.error("[X] Build failed when adding %s", current_module)
                     self.problematic_modules.append(current_module)
 
                     # Log error details
@@ -337,7 +337,7 @@ CTMM Build System Report
 """
 
         if not self.missing_files and not self.problematic_modules:
-            report += "✓ All files exist and build successfully. No action needed."
+            report += "[OK] All files exist and build successfully. No action needed."
         else:
             if self.missing_files:
                 report += f"- Review and complete {len(self.missing_files)} template file(s)\n"
@@ -422,7 +422,7 @@ def enhanced_incremental_testing(main_tex_path="main.tex"):
     # Enhanced error reporting
     total_errors = sum(len(errors) for errors in error_categories.values())
     if total_errors == 0:
-        logger.info(f"✓ Enhanced incremental testing: All {successful_modules} modules passed")
+        logger.info(f"[OK] Enhanced incremental testing: All {successful_modules} modules passed")
         return True
     else:
         logger.warning(f"Enhanced incremental testing: {total_errors} issues categorized")
