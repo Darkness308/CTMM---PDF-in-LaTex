@@ -28,10 +28,12 @@ The following typographic characters (common in copy-pasted text) can cause issu
 
 | Character | Code | Issue | LaTeX Alternative |
 |-----------|------|-------|-------------------|
-| Left single quote | U+2018 | Copy-paste artifact | `` ` `` |
-| Right single quote | U+2019 | Copy-paste artifact | `'` |
-| Left double quote | U+201C | Copy-paste artifact | ``` `` ``` |
-| Right double quote | U+201D | Copy-paste artifact | `''` |
+| Left single quote | U+2018 | Copy-paste artifact | Single backtick |
+| Right single quote | U+2019 | Copy-paste artifact | Single apostrophe |
+| German opening single quote | U+201A | German punctuation | Single backtick |
+| Left double quote | U+201C | Copy-paste artifact | Two backticks |
+| Right double quote | U+201D | Copy-paste artifact | Two apostrophes |
+| German opening double quote | U+201E | German punctuation | Two backticks |
 | En dash | U+2013 | Copy-paste artifact | `--` or `-` |
 | Em dash | U+2014 | Copy-paste artifact | `---` or `-` |
 | Horizontal ellipsis | U+2026 | Copy-paste artifact | `\ldots` |
@@ -152,6 +154,17 @@ The following directories are automatically skipped:
 - `__pycache__` - Python cache
 - `node_modules` - Node.js dependencies
 - `.venv` - Python virtual environment
+
+## Note on Documentation Files
+
+Documentation files (`.md` files, `check_character_issues.py`, etc.) may contain **examples** of problematic characters for documentation purposes. These are **NOT actual issues** in the LaTeX source code and should **NOT** be removed:
+
+- `CHARACTER_CHECKER.md` - Documents what the checker looks for (contains examples)
+- `CHARACTER_CLEANUP_SUMMARY.md` - Shows historical fixes (contains examples of fixed characters)
+- `CHARACTER_VERIFICATION_REPORT.md` - Previous verification reports (may contain examples)
+- `check_character_issues.py` - Python code containing string literals for detection
+
+When reviewing checker output, focus on `.tex` and `.sty` files. Occurrences in documentation files are intentional and safe.
 
 ## Technical Details
 
