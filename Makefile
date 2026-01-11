@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test help unit-test
+.PHONY: build check clean test help unit-test check-chars
 
 # Default target
 all: check build
@@ -9,6 +9,11 @@ all: check build
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Check for problematic characters
+check-chars:
+	@echo "Checking for problematic characters..."
+	python3 check_character_issues.py
 
 # Build PDF
 build:
@@ -50,12 +55,13 @@ help:
 	@echo "CTMM LaTeX Build System"
 	@echo "======================="
 	@echo "Available targets:"
-	@echo "  all       - Run check and build (default)"
-	@echo "  check     - Check dependencies and run build system"
-	@echo "  build     - Build the PDF"
-	@echo "  analyze   - Run detailed module analysis"
-	@echo "  test      - Quick test of build system"
-	@echo "  unit-test - Run unit tests for Python functions"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  deps      - Install Python dependencies"
-	@echo "  help      - Show this help"
+	@echo "  all        - Run check and build (default)"
+	@echo "  check      - Check dependencies and run build system"
+	@echo "  check-chars- Check for problematic characters in files"
+	@echo "  build      - Build the PDF"
+	@echo "  analyze    - Run detailed module analysis"
+	@echo "  test       - Quick test of build system"
+	@echo "  unit-test  - Run unit tests for Python functions"
+	@echo "  clean      - Remove build artifacts"
+	@echo "  deps       - Install Python dependencies"
+	@echo "  help       - Show this help"
