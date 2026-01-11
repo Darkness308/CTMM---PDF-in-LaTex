@@ -1,22 +1,22 @@
 \hypertarget{ctmm-system}{%
-\section{CTMM-System}}\label{ctmm-system}
+\section{CTMM-System}\label{ctmm-system}}
 
 Ein modulares LaTeX-Framework für Catch-Track-Map-Match Therapiematerialien.
 
-\hypertarget{uxfcberblick}{%
-\subsection{Überblick}}\label{uxfcberblick}
+\hypertarget{ueberblick}{%
+\subsection{Überblick}\label{ueberblick}}
 
 Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CTMM-Therapiedokumenten, einschließlich:
-- Depression \\& Stimmungstief Module
+- Depression \\\& Stimmungstief Module
 - Trigger-Management
 - Bindungsdynamik
 - Formularelemente für therapeutische Dokumentation
 
 \hypertarget{verwendung}{%
-\subsection{Verwendung}}\label{verwendung}
+\subsection{Verwendung}\label{verwendung}}
 
 \begin{enumerate}
-\deflabelenumi{\arabic{enumi}.}
+\def\labelenumi{\arabic{enumi}.}
 \tightlist
 \item
   Klone das Repository
@@ -27,7 +27,7 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 \end{enumerate}
 
 \hypertarget{struktur}{%
-\subsection{Struktur}}\label{struktur}
+\subsection{Struktur}\label{struktur}}
 
 \begin{itemize}
 \tightlist
@@ -40,4 +40,84 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 \end{itemize}
 
 \hypertarget{anforderungen}{%
-\subsection{Anforderungen}}\label{anforderungen}
+\subsection{Anforderungen}\label{anforderungen}}
+
+\begin{itemize}
+\tightlist
+\item
+  LaTeX-Installation mit TikZ und hyperref
+\item
+  Oder GitHub Codespace (vorkonfiguriert)
+\end{itemize}
+
+\hypertarget{latex-hinweise-fuxfcr-entwickler}\{\%
+\subsection{LaTeX-Hinweise für Entwickler}\label{latex-hinweise-fuxfcr-entwickler}}
+
+\textbf{Typische Fehlerquellen und Best Practices:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Pakete immer in der Präambel laden:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{usepackage\\{...\}} darf nur in der Hauptdatei (z.B. \texttt{main.tex}) vor \texttt{begin\\{document\}} stehen, niemals in Modulen oder nach \texttt{begin\\{document\}}.
+  \end{itemize}
+\item
+  \textbf{Makros und Befehle:}
+
+  \begin{itemize}
+  \item
+    Definiere neue Makros (z.B. Checkboxen, Textfelder) zentral in der Präambel oder in einem Style-File, nicht in einzelnen Modulen.
+  \item
+    Beispiel für Checkboxen:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok\{\\% In der Präambel:}
+\BuiltInTok\{usepackage}\NormalTok\{\{}\ExtensionTok{amssymb}\NormalTok\{\}}
+\FunctionTok\{newcommand}\NormalTok\{\{}\ExtensionTok\{checkbox}\NormalTok\{\}\{}\SpecialStringTok\{\$}\SpecialCharTok\{square}\SpecialStringTok\{\$}\NormalTok\{\}}
+\FunctionTok\{newcommand}\NormalTok\{\{}\ExtensionTok\{checkedbox}\NormalTok\{\}\{}\SpecialStringTok\{\$}\SpecialCharTok\{blacksquare}\SpecialStringTok\{\$}\NormalTok\{\}}
+\end{Highlighting}
+\end{Shaded}
+  \item
+    \textbf{Wichtig:} Verwende in Modulen und Tabellen ausschließlich die Makros \texttt{checkbox} und \texttt{checkedbox} für Checkboxen. Benutze niemals direkt \texttt{Box} oder \texttt{blacksquare}, da dies zu \texttt{Undefined\ control\ sequence}-Fehlern führen kann.
+  \item
+    Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch \texttt{Box} oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
+  \end{itemize}
+\item
+  \textbf{Module:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Module sollten keine Pakete laden oder globale Makros definieren.
+  \item
+    Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
+  \end{itemize}
+\item
+  \textbf{Fehlermeldungen:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{Can\ be\ used\ only\ in\ preamble}: Ein Paket wurde im Fließtext geladen -- in die Präambel verschieben!
+  \item
+    \texttt{Undefined\ control\ sequence}: Ein Makro ist nicht definiert -- Definition prüfen oder in die Präambel verschieben.
+  \item
+    \texttt{Command\ ...\ already\ defined}: Ein Makro wurde doppelt definiert -- nur eine Definition behalten (am besten zentral).
+  \end{itemize}
+\item
+  \textbf{README regelmäßig pflegen:}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
+  \end{itemize}
+\end{itemize}
+
+\textbf{Tipp:}
+Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst -- und ergänze sie zentral, nicht im Modul selbst.
