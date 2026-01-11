@@ -48,10 +48,10 @@ Created a Python script (`/tmp/resolve_conflicts.py`) that:
 1. Identifies conflict blocks marked by `<<<<<<<`, `=======`, and `>>>>>>>`
 2. Compares HEAD and main versions
 3. Applies intelligent resolution:
-   - If main has more content → use main version
-   - If HEAD is empty → use main version
-   - If main is empty → use HEAD version
-   - Otherwise → keep both versions (HEAD first, then main)
+  - If main has more content → use main version
+  - If HEAD is empty → use main version
+  - If main is empty → use HEAD version
+  - Otherwise → keep both versions (HEAD first, then main)
 4. Removes all conflict markers
 
 ### Execution
@@ -84,19 +84,19 @@ git merge pr-branch
 - **Verification**: `grep -r "^<<<<<<< " . --include="*.tex" --include="*.sty" --include="*.yml"` returns 0 results
 
 ### LaTeX Validation
-✅ Passed - All syntax checks successful:
+[PASS] Passed - All syntax checks successful:
 ```
-✅ main.tex readable
-✅ \documentclass found
-✅ \begin{document} found
-✅ \end{document} found
+[PASS] main.tex readable
+[PASS] \documentclass found
+[PASS] \begin{document} found
+[PASS] \end{document} found
 Found 4 style files and 25 module files
-✅ All 29 referenced files exist
-✅ Basic LaTeX syntax validation passed
+[PASS] All 29 referenced files exist
+[PASS] Basic LaTeX syntax validation passed
 ```
 
 ### Code Review
-✅ Completed - 6 comments found, all in pre-existing code from main branch:
+[PASS] Completed - 6 comments found, all in pre-existing code from main branch:
 - workflow_monitor.py: Outdated GitHub API token format
 - workflow_healing_system.py: Security concern with subprocess shell commands
 - validate_issue_721.py: Duplicate code execution
@@ -118,15 +118,15 @@ af523b6 Resolve merge conflicts by removing all conflict markers
 1. **For Future PRs**: Ensure branches are properly rebased on main before opening PRs to avoid unrelated history conflicts
 
 2. **For This PR**: The conflicts are now resolved. The branch `copilot/remove-merge-conflict-characters-again` contains:
-   - All changes from PR #569 source branch
-   - All changes from main branch
-   - No conflict markers
-   - Valid LaTeX syntax
+  - All changes from PR #569 source branch
+  - All changes from main branch
+  - No conflict markers
+  - Valid LaTeX syntax
 
 3. **Next Steps**: 
-   - Review the merged content to ensure functionality is correct
-   - Test the LaTeX build in CI
-   - Consider squashing commits before final merge if desired
+  - Review the merged content to ensure functionality is correct
+  - Test the LaTeX build in CI
+  - Consider squashing commits before final merge if desired
 
 ## Technical Details
 
@@ -144,9 +144,9 @@ Examples of preserved content:
 
 ## Conclusion
 
-✅ All merge conflicts successfully resolved
-✅ No conflict markers remain
-✅ LaTeX validation passes
-✅ Ready for merge with main branch
+[PASS] All merge conflicts successfully resolved
+[PASS] No conflict markers remain
+[PASS] LaTeX validation passes
+[PASS] Ready for merge with main branch
 
 The branch now contains a proper merge of both histories, resolving the "unrelated histories" issue that was blocking PR #569.

@@ -14,7 +14,7 @@ def extract_packages_from_workflow():
     workflow_path = Path(".github/workflows/latex-build.yml")
     
     if not workflow_path.exists():
-        print(f"❌ Workflow file not found: {workflow_path}")
+        print(f"[FAIL] Workflow file not found: {workflow_path}")
         return []
     
     with open(workflow_path, 'r') as f:
@@ -25,7 +25,7 @@ def extract_packages_from_workflow():
     match = re.search(pattern, content)
     
     if not match:
-        print("❌ Could not find extra_system_packages section in workflow")
+        print("[FAIL] Could not find extra_system_packages section in workflow")
         return []
     
     # Extract package names
@@ -45,19 +45,19 @@ def check_package_exists(package_name):
         )
         return bool(result.stdout.strip())
     except FileNotFoundError:
-        print("⚠️  apt-cache not available, skipping package verification")
+        print("[WARN]️  apt-cache not available, skipping package verification")
         return True  # Assume packages exist if we can't check
 
 def main():
     """Main validation function."""
-    print("🔍 Validating LaTeX package configuration...")
+    print("[SEARCH] Validating LaTeX package configuration...")
     print("=" * 50)
     
     # Extract packages from workflow
     packages = extract_packages_from_workflow()
     
     if not packages:
-        print("❌ No packages found in workflow configuration")
+        print("[FAIL] No packages found in workflow configuration")
         return 1
     
     print(f"Found {len(packages)} packages to validate:")
@@ -65,7 +65,7 @@ def main():
     all_valid = True
     for package in packages:
         exists = check_package_exists(package)
-        status = "✅" if exists else "❌"
+        status = "[PASS]" if exists else "[FAIL]"
         print(f"{status} {package}")
         
         if not exists:
@@ -74,10 +74,10 @@ def main():
     print("=" * 50)
     
     if all_valid:
-        print("✅ All packages are valid!")
+        print("[PASS] All packages are valid!")
         return 0
     else:
-        print("❌ Some packages are invalid or not found")
+        print("[FAIL] Some packages are invalid or not found")
         return 1
 
 if __name__ == "__main__":

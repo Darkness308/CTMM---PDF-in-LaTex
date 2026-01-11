@@ -6,7 +6,7 @@
 
 
 \DeclareOption{darkmode}{%
-    \@ctmmDarkModetrue
+  \@ctmmDarkModetrue
 }
 
 \ProcessOptions\relax
@@ -39,9 +39,9 @@
 % Load dark theme if darkmode option was specified
 
 \if@ctmmDarkMode
-    \RequirePackage{ctmm-dark-theme}
-    \AtBeginDocument{%
-        \ctmmEnableDarkMode%
-        \PackageInfo{ctmm-config}{Dark mode activated - therapeutic color system loaded}%
-    }
+  \RequirePackage{ctmm-dark-theme}
+  \AtBeginDocument{%
+  \ctmmEnableDarkMode%
+  \PackageInfo{ctmm-config}{Dark mode activated - therapeutic color system loaded}%
+  }
 \fi

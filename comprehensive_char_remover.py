@@ -51,42 +51,42 @@ class ComprehensiveCharacterRemover:
         # Common special characters
         replacements = {
             # Punctuation
-            '\u2013': '--',    # en-dash
-            '\u2014': '---',   # em-dash
-            '\u2018': "'",     # left single quote
-            '\u2019': "'",     # right single quote
-            '\u201C': '"',     # left double quote
-            '\u201D': '"',     # right double quote
-            '\u2026': '...',   # ellipsis
-            '\u2022': '*',     # bullet
-            '\u2192': '->',    # right arrow
+            '\u2013': '--',  # en-dash
+            '\u2014': '---',  # em-dash
+            '\u2018': "'",  # left single quote
+            '\u2019': "'",  # right single quote
+            '\u201C': '"',  # left double quote
+            '\u201D': '"',  # right double quote
+            '\u2026': '...',  # ellipsis
+            '\u2022': '*',  # bullet
+            '\u2192': '->',  # right arrow
             '\u2713': '[OK]',  # checkmark
-            '\u2717': '[X]',   # x mark
+            '\u2717': '[X]',  # x mark
             '\u2705': '[PASS]',# heavy check mark
             '\u274C': '[FAIL]',# cross mark
 
             # Math
-            '\u2264': '<=',    # less than or equal
-            '\u2265': '>=',    # greater than or equal
+            '\u2264': '<=',  # less than or equal
+            '\u2265': '>=',  # greater than or equal
 
             # Box drawing
-            '\u250C': '+',     # box top-left
-            '\u2500': '-',     # box horizontal
-            '\u2514': '+',     # box bottom-left
-            '\u251C': '+',     # box vertical-right
-            '\u2502': '|',     # box vertical
+            '\u250C': '+',  # box top-left
+            '\u2500': '-',  # box horizontal
+            '\u2514': '+',  # box bottom-left
+            '\u251C': '+',  # box vertical-right
+            '\u2502': '|',  # box vertical
 
             # Arrows
-            '\u2795': '[+]',   # heavy plus
-            '\u2796': '[-]',   # heavy minus
-            '\u27A4': '->',    # right arrow
+            '\u2795': '[+]',  # heavy plus
+            '\u2796': '[-]',  # heavy minus
+            '\u27A4': '->',  # right arrow
 
             # Currency and symbols
-            '\u20AC': 'EUR',   # euro
+            '\u20AC': 'EUR',  # euro
             '\u2122': '(TM)',  # trademark
 
             # Variation selector
-            '\uFE0F': '',      # remove
+            '\uFE0F': '',  # remove
         }
 
         if char in replacements:
@@ -184,9 +184,9 @@ class ComprehensiveCharacterRemover:
         print(f"\n{'='*60}")
         print("SUMMARY")
         print(f"{'='*60}")
-        print(f"Files scanned:         {self.stats['files_scanned']}")
-        print(f"Files modified:        {self.stats['files_modified']}")
-        print(f"Characters replaced:   {self.stats['characters_replaced']}")
+        print(f"Files scanned:  {self.stats['files_scanned']}")
+        print(f"Files modified:  {self.stats['files_modified']}")
+        print(f"Characters replaced:  {self.stats['characters_replaced']}")
 
         if self.dry_run:
             print("\nRun without --dry-run to apply changes")

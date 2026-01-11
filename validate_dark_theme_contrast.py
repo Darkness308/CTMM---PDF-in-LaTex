@@ -142,7 +142,7 @@ def validate_dark_theme():
         else:
             marker = "[PASS]"
 
-        print(f"{marker} {name:<28} {color:<10} {ratio:>6.1f}:1     {level}")
+        print(f"{marker} {name:<28} {color:<10} {ratio:>6.1f}:1  {level}")
 
     print("-" * 80)
     print()
@@ -161,10 +161,10 @@ def validate_dark_theme():
     aa_count = sum(1 for r in results if 'AA' in r['level'] and 'AAA' not in r['level'])
     fail_count = sum(1 for r in results if 'FAIL' in r['level'])
 
-    print(f"Total colors tested:    {total}")
-    print(f"WCAG AAA (>= 7:1):      {aaa_count} ({aaa_count/total*100:.1f}%)")
-    print(f"WCAG AA (>= 4.5:1):     {aa_count} ({aa_count/total*100:.1f}%)")
-    print(f"Failed (< 4.5:1):       {fail_count} ({fail_count/total*100:.1f}%)")
+    print(f"Total colors tested:  {total}")
+    print(f"WCAG AAA (>= 7:1):  {aaa_count} ({aaa_count/total*100:.1f}%)")
+    print(f"WCAG AA (>= 4.5:1):  {aa_count} ({aa_count/total*100:.1f}%)")
+    print(f"Failed (< 4.5:1):  {fail_count} ({fail_count/total*100:.1f}%)")
     print()
 
     # ============================================================
@@ -203,11 +203,11 @@ def validate_dark_theme():
         result = next((r for r in results if r['name'] == color_name), None)
         if result:
             print(f"[EMOJI] {color_name}")
-            print(f"   Color: {result['color']}")
-            print(f"   Contrast: {result['ratio']:.1f}:1 {result['level']}")
-            print(f"   Effect: {info['effect']}")
-            print(f"   Research: {info['research']}")
-            print(f"   Benefit: {info['benefit']}")
+            print(f"  Color: {result['color']}")
+            print(f"  Contrast: {result['ratio']:.1f}:1 {result['level']}")
+            print(f"  Effect: {info['effect']}")
+            print(f"  Research: {info['research']}")
+            print(f"  Benefit: {info['benefit']}")
             print()
 
     # ============================================================

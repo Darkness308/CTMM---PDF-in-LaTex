@@ -28,11 +28,11 @@ Es gab einen doppelten/fehlerhaften `\hypersetup{}`-Abschluss in `main.tex` (Zei
 ## Validierung
 
 Alle Tests wurden erfolgreich durchgeführt:
-- ✅ Lokale Validierung mit `ctmm_build.py`
-- ✅ Workflow-Validierungslogik lokal getestet
-- ✅ LaTeX-Syntax-Validierung
-- ✅ Alle Unit-Tests (77 Tests in 0.031s)
-- ✅ PR-Validierung
+- [PASS] Lokale Validierung mit `ctmm_build.py`
+- [PASS] Workflow-Validierungslogik lokal getestet
+- [PASS] LaTeX-Syntax-Validierung
+- [PASS] Alle Unit-Tests (77 Tests in 0.031s)
+- [PASS] PR-Validierung
 
 ## Warum diese Lösung funktioniert
 

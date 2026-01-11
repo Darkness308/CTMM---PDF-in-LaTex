@@ -9,17 +9,17 @@ This directory contains example files demonstrating the comprehensive LaTeX esca
 **Before (pandoc-style over-escaping):**
 ```latex
 \textbackslash{}hypertarget\textbackslash{}\{tool-23-trigger-management\textbackslash{}\}\textbackslash{}\{%
-\textbackslash{}section\textbackslash{}\{\textbackslash{}texorpdfstring\textbackslash{}\{📄 \textbackslash{}textbf\textbackslash{}\{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}\textbackslash{}\{📄 TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}\textbackslash{}label\textbackslash{}\{tool-23-trigger-management\textbackslash{}\}
+\textbackslash{}section\textbackslash{}\{\textbackslash{}texorpdfstring\textbackslash{}\{[FILE] \textbackslash{}textbf\textbackslash{}\{TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}\textbackslash{}\{[FILE] TOOL 23: TRIGGER-MANAGEMENT\textbackslash{}\}\textbackslash{}\}\textbackslash{}label\textbackslash{}\{tool-23-trigger-management\textbackslash{}\}
 
-🧩 \textbackslash{}emph\textbackslash{}\{\textbackslash{}textbf\textbackslash{}\{Modul zur Selbsthilfe \textbackslash{}\textbackslash{}\& Co-Regulation\textbackslash{}\}\textbackslash{}\}
+ \textbackslash{}emph\textbackslash{}\{\textbackslash{}textbf\textbackslash{}\{Modul zur Selbsthilfe \textbackslash{}\textbackslash{}\& Co-Regulation\textbackslash{}\}\textbackslash{}\}
 ```
 
 **After (cleaned LaTeX):**
 ```latex
 \hypertarget{tool-23-trigger-management}{%
-\section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}}\label{tool-23-trigger-management}
+\section{\texorpdfstring{[FILE] \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}}\label{tool-23-trigger-management}
 
-🧩 \emph{\textbf{Modul zur Selbsthilfe \\& Co-Regulation}}
+ \emph{\textbf{Modul zur Selbsthilfe \\& Co-Regulation}}
 ```
 
 ### Example 2: Environment and List Over-escaping
@@ -106,11 +106,11 @@ python3 fix_latex_escaping.py --verbose demo_examples/ 2>&1 | grep "replacements
 
 These examples are validated by the comprehensive test suite in `test_issue_1132_comprehensive_fix.py` which confirms:
 
-✅ All 45+ pattern recognition rules working correctly
-✅ Multi-pass processing handles complex nested over-escaping
-✅ Enhanced PDF validation ensures proper LaTeX compilation
-✅ Robust error handling and progress reporting
-✅ 100% test success rate across all scenarios
+[PASS] All 45+ pattern recognition rules working correctly
+[PASS] Multi-pass processing handles complex nested over-escaping
+[PASS] Enhanced PDF validation ensures proper LaTeX compilation
+[PASS] Robust error handling and progress reporting
+[PASS] 100% test success rate across all scenarios
 
 ## Integration with CTMM Workflow
 

@@ -51,7 +51,7 @@ def test_latex_action_consistency():
 
     print(f"\n[SUMMARY] LaTeX Action Version Summary:")
     for action, files in latex_actions_found.items():
-        print(f"   {action} used in: {', '.join([os.path.basename(f) for f in files])}")
+        print(f"  {action} used in: {', '.join([os.path.basename(f) for f in files])}")
 
     # Check that all use xu-cheng/latex-action@v3
     expected_action = "xu-cheng/latex-action@v3"
@@ -171,17 +171,17 @@ def test_latex_package_dependencies():
     print(f"[TEST] LaTeX packages configuration:")
     for line in extra_packages.strip().split('\n'):
         if line.strip():
-            print(f"   - {line.strip()}")
+            print(f"  - {line.strip()}")
 
     # Essential package validation
     required_packages = [
-        'texlive-lang-german',       # German language support
+        'texlive-lang-german',  # German language support
         'texlive-fonts-recommended', # Recommended fonts
         'texlive-latex-recommended', # Recommended LaTeX packages
-        'texlive-latex-extra',       # Extra LaTeX packages
-        'texlive-fonts-extra',       # Extra fonts
-        'texlive-science',           # Scientific packages
-        'texlive-pstricks'           # PostScript tricks (contains pifont)
+        'texlive-latex-extra',  # Extra LaTeX packages
+        'texlive-fonts-extra',  # Extra fonts
+        'texlive-science',  # Scientific packages
+        'texlive-pstricks'  # PostScript tricks (contains pifont)
     ]
 
     all_packages_found = True

@@ -54,8 +54,8 @@
 **Solutions:**
 1. Check if timeout-minutes is set appropriately
 2. Verify commands use non-interactive flags
-   - `pdflatex -interaction=nonstopmode`
-   - Git commands with `--no-pager`
+  - `pdflatex -interaction=nonstopmode`
+  - Git commands with `--no-pager`
 3. Increase timeout if legitimate operation takes longer
 
 ##### Issue: Permission Denied
@@ -92,36 +92,36 @@ Add these steps temporarily to debug issues:
 ```yaml
 - name: Debug - List files
   run: |
-    echo "Current directory:"
-    pwd
-    echo "Files in current directory:"
-    ls -la
-    echo "Files in .github/workflows:"
-    ls -la .github/workflows/
+  echo "Current directory:"
+  pwd
+  echo "Files in current directory:"
+  ls -la
+  echo "Files in .github/workflows:"
+  ls -la .github/workflows/
 
 - name: Debug - Check Python environment
   run: |
-    echo "Python version:"
-    python3 --version
-    echo "Installed packages:"
-    pip list
-    echo "Python path:"
-    which python3
+  echo "Python version:"
+  python3 --version
+  echo "Installed packages:"
+  pip list
+  echo "Python path:"
+  which python3
 
 - name: Debug - Check LaTeX environment
   run: |
-    echo "pdflatex version:"
-    pdflatex --version || echo "pdflatex not found"
-    echo "TeX packages:"
-    kpsewhich -var-value TEXMFDIST
+  echo "pdflatex version:"
+  pdflatex --version || echo "pdflatex not found"
+  echo "TeX packages:"
+  kpsewhich -var-value TEXMFDIST
 
 - name: Debug - Environment variables
   run: |
-    echo "GitHub context:"
-    echo "Repository: ${{ github.repository }}"
-    echo "Ref: ${{ github.ref }}"
-    echo "SHA: ${{ github.sha }}"
-    echo "Actor: ${{ github.actor }}"
+  echo "GitHub context:"
+  echo "Repository: ${{ github.repository }}"
+  echo "Ref: ${{ github.ref }}"
+  echo "SHA: ${{ github.sha }}"
+  echo "Actor: ${{ github.actor }}"
 ```
 
 #### 4. Local Testing Commands

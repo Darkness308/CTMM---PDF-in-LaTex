@@ -98,7 +98,7 @@ class ContinuousBuildHealer:
             print("[WARN]  workflow_healing_system.py not found")
             print("[TIP] Manual intervention required - please check:")
             for wf in workflow_info['failed_workflows']:
-                print(f"   - {wf.get('workflow_name', 'Unknown')} (Run #{wf.get('id', 'N/A')})")
+                print(f"  - {wf.get('workflow_name', 'Unknown')} (Run #{wf.get('id', 'N/A')})")
             return False
 
         # Run the workflow healing system
@@ -154,9 +154,9 @@ class ContinuousBuildHealer:
             wf_id = wf.get('id', 'N/A')
 
             print(f"[NOTE] Workflow: {wf_name} (Run #{wf_id})")
-            print(f"   To restart manually:")
-            print(f"   gh run rerun {wf_id}")
-            print(f"   Or visit: {wf.get('html_url', 'N/A')}")
+            print(f"  To restart manually:")
+            print(f"  gh run rerun {wf_id}")
+            print(f"  Or visit: {wf.get('html_url', 'N/A')}")
             print()
 
         return restarted_count
@@ -182,12 +182,12 @@ class ContinuousBuildHealer:
         if self.healed_workflows:
             report.append("\n[PASS] Successfully Healed:")
             for wf in self.healed_workflows:
-                report.append(f"   - {wf}")
+                report.append(f"  - {wf}")
 
         if self.failed_healing_attempts:
             report.append("\n[FAIL] Failed to Heal:")
             for wf in self.failed_healing_attempts:
-                report.append(f"   - {wf}")
+                report.append(f"  - {wf}")
 
         report.append("\n" + "="*80)
         return "\n".join(report)
@@ -203,9 +203,9 @@ class ContinuousBuildHealer:
         print("[FIX] CTMM Continuous Build Healing System")
         print("="*80)
         print(f"\nConfiguration:")
-        print(f"   Max Iterations: {self.max_iterations}")
-        print(f"   Check Interval: {self.check_interval} seconds")
-        print(f"   Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"  Max Iterations: {self.max_iterations}")
+        print(f"  Check Interval: {self.check_interval} seconds")
+        print(f"  Start Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         print()
 
         all_green = False

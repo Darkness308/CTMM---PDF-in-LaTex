@@ -57,29 +57,29 @@ def analyze_and_resolve_pr(pr_number, pr_title, test_branch):
     run_command("git reset --hard origin/main")
 
     # Try to fetch the PR using GitHub's PR refs
-    print(f"   [EMOJI] Fetching PR #{pr_number}...")
+    print(f"  [EMOJI] Fetching PR #{pr_number}...")
     success, stdout, stderr = run_command(f"git fetch origin pull/{pr_number}/head:pr-{pr_number}")
 
     if success:
         result['can_fetch'] = True
         result['analysis_success'] = True
         branch_name = f"pr-{pr_number}"
-        print(f"   [PASS] Successfully fetched PR")
+        print(f"  [PASS] Successfully fetched PR")
 
         # Test the merge
-        print(f"   [EMOJI] Testing merge...")
+        print(f"  [EMOJI] Testing merge...")
         success, stdout, stderr = run_command(f'git merge {branch_name} --no-edit -m "Test merge PR #{pr_number}"')
 
         if success:
             result['merge_status'] = 'success'
-            print(f"   [PASS] Merge successful - no conflicts")
+            print(f"  [PASS] Merge successful - no conflicts")
         else:
-            print(f"   [FAIL] Merge failed: {stderr}")
+            print(f"  [FAIL] Merge failed: {stderr}")
             result['error_message'] = stderr
 
             if "refusing to merge unrelated histories" in stderr:
                 result['merge_status'] = 'unrelated_histories'
-                print(f"   [FIX] Attempting to resolve unrelated histories...")
+                print(f"  [FIX] Attempting to resolve unrelated histories...")
 
                 # Try merge with allow-unrelated-histories
                 success_fix, stdout_fix, stderr_fix = run_command(f'git merge {branch_name} --allow-unrelated-histories --no-edit -m "Resolve unrelated histories for PR #{pr_number}"')
@@ -88,13 +88,13 @@ def analyze_and_resolve_pr(pr_number, pr_title, test_branch):
                     result['resolution_applied'] = True
                     result['resolution_type'] = 'allow_unrelated_histories'
                     result['merge_status'] = 'resolved'
-                    print(f"   [PASS] Unrelated histories resolved with --allow-unrelated-histories")
+                    print(f"  [PASS] Unrelated histories resolved with --allow-unrelated-histories")
 
                     # Get the new merge commit SHA
                     success_sha, new_sha, _ = run_command("git rev-parse HEAD")
                     if success_sha:
                         result['new_sha'] = new_sha.strip()
-                        print(f"   [EMOJI] New merge commit SHA: {result['new_sha']}")
+                        print(f"  [EMOJI] New merge commit SHA: {result['new_sha']}")
 
                         # Create a documentation commit about the resolution
                         timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -136,9 +136,9 @@ This is safe as long as we review the combined changes carefully.
                         success_final, final_sha, _ = run_command("git rev-parse HEAD")
                         if success_final:
                             result['new_sha'] = final_sha.strip()
-                            print(f"   [FILE] Documentation added, final SHA: {result['new_sha']}")
+                            print(f"  [FILE] Documentation added, final SHA: {result['new_sha']}")
                 else:
-                    print(f"   [FAIL] Could not resolve unrelated histories: {stderr_fix}")
+                    print(f"  [FAIL] Could not resolve unrelated histories: {stderr_fix}")
                     result['error_message'] += f" | Attempted fix failed: {stderr_fix}"
             else:
                 result['merge_status'] = 'other_conflict'
@@ -154,7 +154,7 @@ This is safe as long as we review the combined changes carefully.
                     if conflict_files:
                         result['merge_status'] = 'merge_conflicts'
                         result['conflict_files'] = conflict_files
-                        print(f"   [EMOJI] True merge conflicts found in: {', '.join(conflict_files)}")
+                        print(f"  [EMOJI] True merge conflicts found in: {', '.join(conflict_files)}")
 
                         # For now, we'll document these but not auto-resolve
                         # as they require manual review
@@ -166,7 +166,7 @@ This is safe as long as we review the combined changes carefully.
         run_command(f"git branch -D {branch_name}", capture_output=True)
     else:
         result['error_message'] = f"Could not fetch PR: {stderr}"
-        print(f"   [FAIL] Could not fetch PR: {stderr}")
+        print(f"  [FAIL] Could not fetch PR: {stderr}")
 
     return result
 
@@ -406,19 +406,19 @@ def main():
             print(f"\n[FIX] AUTOMATICALLY RESOLVED CONFLICTS:")
             for result in results:
                 if result['resolution_applied']:
-                    print(f"   [PASS] PR #{result['pr_number']}: {result['resolution_type'].replace('_', ' ').title()}")
+                    print(f"  [PASS] PR #{result['pr_number']}: {result['resolution_type'].replace('_', ' ').title()}")
 
         if successful_merges > 0:
             print(f"\n[PASS] READY TO MERGE:")
             for result in results:
                 if result['merge_status'] == 'success':
-                    print(f"   - PR #{result['pr_number']}: {result['pr_title']}")
+                    print(f"  - PR #{result['pr_number']}: {result['pr_title']}")
 
         if unresolved_conflicts > 0:
             print(f"\n[EMOJI] MANUAL RESOLUTION REQUIRED:")
             for result in results:
                 if result['merge_status'] in ['merge_conflicts', 'other_conflict']:
-                    print(f"   - PR #{result['pr_number']}: {result['merge_status'].replace('_', ' ').title()}")
+                    print(f"  - PR #{result['pr_number']}: {result['merge_status'].replace('_', ' ').title()}")
 
     finally:
         # Clean up
@@ -429,7 +429,7 @@ def main():
     print("\n[PASS] Comprehensive merge conflict resolution completed!")
     print("[FILE] Check merge_conflict_resolution/comprehensive_resolution_report.md for detailed results")
     print("\n[TARGET] SUMMARY: Successfully identified and resolved merge conflicts in open pull requests")
-    print("   (Erfolgreich Merge-Konflikte in offenen Pull Requests identifiziert und gelöst)")
+    print("  (Erfolgreich Merge-Konflikte in offenen Pull Requests identifiziert und gelöst)")
 
 if __name__ == "__main__":
     main()

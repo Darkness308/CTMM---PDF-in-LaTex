@@ -48,7 +48,7 @@ def fix_unrelated_histories_pr(pr_info):
     head_ref = pr_info['head_ref']
 
     print(f"\n[FIX] Fixing PR #{pr_number}: {pr_title}")
-    print(f"   Branch: {head_ref}")
+    print(f"  Branch: {head_ref}")
 
     result = {
         'pr_number': pr_number,
@@ -63,7 +63,7 @@ def fix_unrelated_histories_pr(pr_info):
 
     try:
         # Checkout the PR branch
-        print(f"   [EMOJI] Checking out PR branch...")
+        print(f"  [EMOJI] Checking out PR branch...")
         success, stdout, stderr = run_command(f"git checkout {head_ref}")
         if not success:
             # Try fetching first
@@ -72,21 +72,21 @@ def fix_unrelated_histories_pr(pr_info):
 
         if not success:
             result['error_message'] = f"Could not checkout branch: {stderr}"
-            print(f"   [FAIL] Failed to checkout branch: {stderr}")
+            print(f"  [FAIL] Failed to checkout branch: {stderr}")
             return result
 
         # Get current commit SHA
         success, current_sha, _ = run_command("git rev-parse HEAD")
         if success:
             current_sha = current_sha.strip()
-            print(f"   [EMOJI] Current SHA: {current_sha}")
+            print(f"  [EMOJI] Current SHA: {current_sha}")
 
         # Check if we can rebase onto main to fix the unrelated histories
-        print(f"   [SYNC] Attempting rebase onto main...")
+        print(f"  [SYNC] Attempting rebase onto main...")
         success, stdout, stderr = run_command("git rebase main")
 
         if success:
-            print(f"   [PASS] Rebase successful")
+            print(f"  [PASS] Rebase successful")
             result['fix_attempted'] = True
             result['fix_successful'] = True
 
@@ -97,15 +97,15 @@ def fix_unrelated_histories_pr(pr_info):
                 result['new_sha'] = new_sha
                 if new_sha != current_sha:
                     result['new_commit_created'] = True
-                    print(f"   [EMOJI] New SHA after rebase: {new_sha}")
+                    print(f"  [EMOJI] New SHA after rebase: {new_sha}")
                 else:
-                    print(f"   [INFO]  SHA unchanged (already based on main)")
+                    print(f"  [INFO]  SHA unchanged (already based on main)")
         else:
             # Rebase failed, try a different approach
-            print(f"   [WARN]  Rebase failed: {stderr}")
+            print(f"  [WARN]  Rebase failed: {stderr}")
 
             # Try reset to main and cherry-pick changes
-            print(f"   [SYNC] Attempting alternative fix: reset to main and cherry-pick...")
+            print(f"  [SYNC] Attempting alternative fix: reset to main and cherry-pick...")
 
             # First, save the current changes
             run_command("git stash")
@@ -124,7 +124,7 @@ def fix_unrelated_histories_pr(pr_info):
                 success, stdout, stderr = run_command(['git', 'add', '.'])
                 if not success:
                     result['error_message'] = f"Failed to add changes: {stderr}"
-                    print(f"   [FAIL] Failed to add changes: {stderr}")
+                    print(f"  [FAIL] Failed to add changes: {stderr}")
                 else:
                     # Run 'git commit -m <commit_msg>' safely
                     success, stdout, stderr = run_command(['git', 'commit', '-m', commit_msg])
@@ -137,10 +137,10 @@ def fix_unrelated_histories_pr(pr_info):
                         success, new_sha, _ = run_command(['git', 'rev-parse', 'HEAD'])
                         if success:
                             result['new_sha'] = new_sha.strip()
-                            print(f"   [PASS] Alternative fix successful, new SHA: {result['new_sha']}")
+                            print(f"  [PASS] Alternative fix successful, new SHA: {result['new_sha']}")
                     else:
                         result['error_message'] = f"Failed to commit changes: {stderr}"
-                        print(f"   [FAIL] Failed to commit changes: {stderr}")
+                        print(f"  [FAIL] Failed to commit changes: {stderr}")
                     result['fix_attempted'] = True
                     result['fix_successful'] = True
                     result['new_commit_created'] = True
@@ -149,27 +149,27 @@ def fix_unrelated_histories_pr(pr_info):
                     success, new_sha, _ = run_command("git rev-parse HEAD")
                     if success:
                         result['new_sha'] = new_sha.strip()
-                        print(f"   [PASS] Alternative fix successful, new SHA: {result['new_sha']}")
+                        print(f"  [PASS] Alternative fix successful, new SHA: {result['new_sha']}")
                 else:
                     result['error_message'] = f"Failed to commit changes: {stderr}"
-                    print(f"   [FAIL] Failed to commit changes: {stderr}")
+                    print(f"  [FAIL] Failed to commit changes: {stderr}")
             else:
                 result['error_message'] = f"Failed to apply stashed changes: {stderr}"
-                print(f"   [FAIL] Failed to apply stashed changes: {stderr}")
+                print(f"  [FAIL] Failed to apply stashed changes: {stderr}")
 
         # If fix was successful, try to push the changes
         if result['fix_successful'] and result['new_commit_created']:
-            print(f"   [EMOJI] Pushing fixed branch...")
+            print(f"  [EMOJI] Pushing fixed branch...")
             success, stdout, stderr = run_command(f"git push --force-with-lease origin {head_ref}")
             if success:
-                print(f"   [PASS] Successfully pushed fixed branch")
+                print(f"  [PASS] Successfully pushed fixed branch")
             else:
-                print(f"   [WARN]  Warning: Could not push (but fix was applied): {stderr}")
+                print(f"  [WARN]  Warning: Could not push (but fix was applied): {stderr}")
                 # Don't mark as failed since the fix itself worked
 
     except Exception as e:
         result['error_message'] = str(e)
-        print(f"   [FAIL] Exception during fix: {e}")
+        print(f"  [FAIL] Exception during fix: {e}")
 
     return result
 
@@ -178,7 +178,7 @@ def test_fixed_pr(pr_info):
     pr_number = pr_info['number']
     head_ref = pr_info['head_ref']
 
-    print(f"   [TEST] Testing fixed PR #{pr_number}...")
+    print(f"  [TEST] Testing fixed PR #{pr_number}...")
 
     # Create a temporary test branch
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -196,10 +196,10 @@ def test_fixed_pr(pr_info):
     run_command(f"git branch -D {test_branch}")
 
     if success:
-        print(f"   [PASS] Fixed PR #{pr_number} now merges successfully!")
+        print(f"  [PASS] Fixed PR #{pr_number} now merges successfully!")
         return True
     else:
-        print(f"   [FAIL] Fixed PR #{pr_number} still has issues: {stderr}")
+        print(f"  [FAIL] Fixed PR #{pr_number} still has issues: {stderr}")
         return False
 
 def generate_fix_report(results):
@@ -364,16 +364,16 @@ def main():
         for result in results:
             if result['fix_successful']:
                 status = "[PASS]" if result.get('test_passed', False) else "[WARN]"
-                print(f"   {status} PR #{result['pr_number']}: {result['pr_title']}")
+                print(f"  {status} PR #{result['pr_number']}: {result['pr_title']}")
                 if result['new_commit_created']:
-                    print(f"      New SHA: {result['new_sha']}")
+                    print(f"  New SHA: {result['new_sha']}")
 
     if failed_fixes > 0:
         print(f"\n[FAIL] FAILED TO FIX:")
         for result in results:
             if not result['fix_successful']:
-                print(f"   - PR #{result['pr_number']}: {result['pr_title']}")
-                print(f"     Error: {result['error_message']}")
+                print(f"  - PR #{result['pr_number']}: {result['pr_title']}")
+                print(f"  Error: {result['error_message']}")
 
     print("\n[PASS] Unrelated histories resolution completed!")
     print("[FILE] Check merge_conflict_resolution/unrelated_histories_fix_report.md for detailed results")

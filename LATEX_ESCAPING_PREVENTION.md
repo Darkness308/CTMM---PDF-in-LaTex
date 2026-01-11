@@ -10,9 +10,9 @@ Document conversion processes (especially Markdown to LaTeX converters like Pand
 
 ```latex
 \hypertarget{tool-23-trigger-management}{%
-\section{\texorpdfstring{📄 \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
+\section{\texorpdfstring{[FILE] \textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}\label{tool-23-trigger-management}}
 
-🧩 \emph{\textbf{Modul zur Selbsthilfe \textbackslash{}\textbackslash{}& Co-Regulation}}
+ \emph{\textbf{Modul zur Selbsthilfe \textbackslash{}\textbackslash{}& Co-Regulation}}
 ```
 
 This code should be simplified to:
@@ -21,7 +21,7 @@ This code should be simplified to:
 \section{TOOL 23: TRIGGER-MANAGEMENT}
 \label{sec:tool-23-trigger-management}
 
-🧩 \emph{\textbf{Modul zur Selbsthilfe \& Co-Regulation}}
+ \emph{\textbf{Modul zur Selbsthilfe \& Co-Regulation}}
 ```
 
 ## Solution Components
@@ -141,7 +141,7 @@ make validate-fix
 
 ## Validation Rules
 
-### ✅ Good LaTeX
+### [PASS] Good LaTeX
 
 ```latex
 \section{Clean Section Title}
@@ -152,7 +152,7 @@ make validate-fix
 Text with proper \& ampersands and \textbf{formatting}.
 ```
 
-### ❌ Problematic LaTeX
+### [FAIL] Problematic LaTeX
 
 ```latex
 \hypertarget{section-1}{%
@@ -223,9 +223,9 @@ validator = LaTeXValidator()
 # After conversion
 is_valid, issues, cleaned_content = validator.validate_file(output_file)
 if not is_valid:
-    # Write cleaned content
-    with open(output_file, 'w') as f:
-        f.write(cleaned_content)
+  # Write cleaned content
+  with open(output_file, 'w') as f:
+  f.write(cleaned_content)
 ```
 
 ## Best Practices

@@ -106,9 +106,9 @@ def test_timeout_strategy_consistency():
     print("=" * 60)
 
     timeout_categories = {
-        'quick': [],      # 3-5 minutes
-        'medium': [],     # 8-10 minutes
-        'heavy': []       # 15+ minutes
+        'quick': [],  # 3-5 minutes
+        'medium': [],  # 8-10 minutes
+        'heavy': []  # 15+ minutes
     }
 
     workflow_files = [f for f in os.listdir('.github/workflows') if f.endswith('.yml')]

@@ -196,7 +196,7 @@ def test_basic_build(main_tex_path="main.tex"):
         return success
 
     except Exception as e:
-        print(f"✗ Error checking for pdflatex: {e}")
+        print(f"[ERROR] Error checking for pdflatex: {e}")
         return False
 
     print("Testing basic build (without modules)...")
@@ -246,7 +246,7 @@ def test_full_build(main_tex_path="main.tex"):
         return success
 
     except Exception as e:
-        print(f"✗ Error checking for pdflatex: {e}")
+        print(f"[ERROR] Error checking for pdflatex: {e}")
         return False
 
     print("Testing full build (with modules)...")
@@ -524,7 +524,7 @@ def comprehensive_build_workflow():
         print("[PASS] File management: OPTIMIZED")
         print("[PASS] CI/CD reliability: VERIFIED")
         for improvement in results["automation_improvements"]:
-            print(f"   * {improvement}")
+            print(f"  * {improvement}")
         print("="*60)
         return True
     else:

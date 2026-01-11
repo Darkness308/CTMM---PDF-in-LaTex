@@ -140,17 +140,17 @@ def validate_latex_packages():
     print(f"[TEST] Found LaTeX packages configuration:")
     for line in extra_packages.strip().split('\n'):
         if line.strip():
-            print(f"   - {line.strip()}")
+            print(f"  - {line.strip()}")
 
     # Essential package validation
     required_packages = [
         ('texlive-lang-german', 'texlive-lang-european'),  # German language support (either package is acceptable)
-        ('texlive-fonts-recommended',),                     # Recommended fonts
-        ('texlive-latex-recommended',),                     # Recommended LaTeX packages
-        ('texlive-latex-extra',),                           # Extra LaTeX packages
-        ('texlive-fonts-extra',),                           # Extra fonts
-        ('texlive-science',),                               # Scientific packages
-        ('texlive-pstricks',)                               # PostScript tricks (contains pifont)
+        ('texlive-fonts-recommended',),  # Recommended fonts
+        ('texlive-latex-recommended',),  # Recommended LaTeX packages
+        ('texlive-latex-extra',),  # Extra LaTeX packages
+        ('texlive-fonts-extra',),  # Extra fonts
+        ('texlive-science',),  # Scientific packages
+        ('texlive-pstricks',)  # PostScript tricks (contains pifont)
     ]
 
     all_passed = True
@@ -351,7 +351,7 @@ def validate_form_elements_integration():
 
         print(f"[TEST] CTMM form elements found: {len(found_elements)}/{len(ctmm_elements)}")
         for element in found_elements:
-            print(f"   [PASS] {element}")
+            print(f"  [PASS] {element}")
 
         if len(found_elements) >= 2:
             print("[PASS] Form elements validation passed")

@@ -19,7 +19,7 @@ def check_file_for_issues(filepath):
         
         # Check for null bytes
         if b'\x00' in content:
-            issues.append('❌ Contains null bytes')
+            issues.append('[FAIL] Contains null bytes')
         
         # Try UTF-8 decode
         try:
@@ -27,31 +27,31 @@ def check_file_for_issues(filepath):
             
             # Check for BOM
             if text.startswith('\ufeff'):
-                issues.append('⚠️  Has BOM (Byte Order Mark) at start')
+                issues.append('[WARN]️  Has BOM (Byte Order Mark) at start')
             
             # Check for zero-width characters
             zero_width = re.findall(r'[\u200B-\u200D\uFEFF]', text)
             if zero_width:
-                issues.append(f'⚠️  Contains {len(zero_width)} zero-width character(s)')
+                issues.append(f'[WARN]️  Contains {len(zero_width)} zero-width character(s)')
             
             # Check for control characters (except standard whitespace)
             control_chars = re.findall(r'[\x01-\x08\x0B\x0C\x0E-\x1F]', text)
             if control_chars:
-                issues.append(f'⚠️  Contains {len(control_chars)} control character(s)')
+                issues.append(f'[WARN]️  Contains {len(control_chars)} control character(s)')
             
             # Check for merge conflict markers at line start
             if re.search(r'^<<<<<<< ', text, re.MULTILINE):
-                issues.append('❌ Contains merge conflict markers (<<<<<<< )')
+                issues.append('[FAIL] Contains merge conflict markers (<<<<<<< )')
             if re.search(r'^>>>>>>> ', text, re.MULTILINE):
-                issues.append('❌ Contains merge conflict markers (>>>>>>> )')
+                issues.append('[FAIL] Contains merge conflict markers (>>>>>>> )')
             if re.search(r'^=======$', text, re.MULTILINE):
-                issues.append('❌ Contains merge conflict markers (=======)')
+                issues.append('[FAIL] Contains merge conflict markers (=======)')
             
         except UnicodeDecodeError as e:
-            issues.append(f'❌ Invalid UTF-8 encoding: {e}')
+            issues.append(f'[FAIL] Invalid UTF-8 encoding: {e}')
         
     except Exception as e:
-        issues.append(f'❌ Error reading file: {e}')
+        issues.append(f'[FAIL] Error reading file: {e}')
     
     return issues
 
@@ -68,22 +68,22 @@ def main():
         'main.tex',
     ]
     
-    print("🔍 Checking key files for problematic characters...")
+    print("[SEARCH] Checking key files for problematic characters...")
     print()
     
     all_clean = True
     for filepath in key_files:
         if not os.path.exists(filepath):
-            print(f"⚠️  {filepath}: File not found")
+            print(f"[WARN]️  {filepath}: File not found")
             continue
         
         issues = check_file_for_issues(filepath)
         
         if issues:
             all_clean = False
-            print(f"❌ {filepath}:")
+            print(f"[FAIL] {filepath}:")
             for issue in issues:
-                print(f"   {issue}")
+                print(f"  {issue}")
         else:
             # Get file stats
             with open(filepath, 'rb') as f:
@@ -92,28 +92,28 @@ def main():
             lines = len(text.splitlines())
             size = len(content)
             
-            print(f"✅ {filepath}")
-            print(f"   📊 Size: {size:,} bytes, Lines: {lines:,}")
+            print(f"[PASS] {filepath}")
+            print(f"  [SUMMARY] Size: {size:,} bytes, Lines: {lines:,}")
     
     print()
     print("=" * 80)
     
     if all_clean:
-        print("✅ VERIFICATION PASSED: All files are clean and ready for merge!")
+        print("[PASS] VERIFICATION PASSED: All files are clean and ready for merge!")
         print()
-        print("📋 Summary:")
-        print("   • No null bytes found")
-        print("   • No merge conflict markers")
-        print("   • No problematic Unicode characters")
-        print("   • All files have valid UTF-8 encoding")
+        print("[TEST] Summary:")
+        print("  • No null bytes found")
+        print("  • No merge conflict markers")
+        print("  • No problematic Unicode characters")
+        print("  • All files have valid UTF-8 encoding")
         print()
-        print("🎯 Next Step:")
-        print("   Change PR #489 base branch from 'copilot/fix-99' to 'main'")
-        print("   via GitHub web interface at:")
-        print("   https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489")
+        print("[TARGET] Next Step:")
+        print("  Change PR #489 base branch from 'copilot/fix-99' to 'main'")
+        print("  via GitHub web interface at:")
+        print("  https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489")
         return 0
     else:
-        print("❌ VERIFICATION FAILED: Some files have issues")
+        print("[FAIL] VERIFICATION FAILED: Some files have issues")
         print()
         print("Please review and fix the issues listed above.")
         return 1

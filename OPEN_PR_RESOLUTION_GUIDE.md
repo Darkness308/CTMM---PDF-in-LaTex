@@ -1,7 +1,7 @@
-# 📋 Open PR Resolution Guide
+# [TEST] Open PR Resolution Guide
 ## Anleitung zur Lösung offener Pull Requests
 
-### 🎯 Übersicht / Overview
+### [TARGET] Übersicht / Overview
 
 **Deutsch:** Dieser Leitfaden beantwortet die Frage: "Löse alle offenen Pull Requests aus, die noch offen sind. Wenn es Merge-Konflikte gibt, die du nicht selbstständig beheben kannst, stelle mir den direkten Link zur Datei zur Verfügung. Welche Workflows in welchem Branch laufen noch ins rote?"
 
@@ -9,23 +9,23 @@
 
 ---
 
-## 📊 Current Status
+## [SUMMARY] Current Status
 
 **Total Open PRs:** 10 (including this one #1189)
 
 ### Quick Statistics
-- ✅ **0** PRs ready to merge immediately
-- ❌ **8** PRs likely have merge conflicts (old, not updated)
-- ⚠️  **2** PRs target wrong base branch
-- 📝 **1** PR is in draft status
+- [PASS] **0** PRs ready to merge immediately
+- [FAIL] **8** PRs likely have merge conflicts (old, not updated)
+- [WARN]️  **2** PRs target wrong base branch
+- [NOTE] **1** PR is in draft status
 
 ---
 
-## 🔍 Detailed PR Analysis
+## [SEARCH] Detailed PR Analysis
 
 ### PR #1189 (Current - DRAFT)
 **Title:** löse alle offenen pull requests aus, die noch offen sind...
-- **Status:** 🟡 DRAFT - In Progress
+- **Status:**  DRAFT - In Progress
 - **Branch:** `copilot/fix-ef8fabe7-9c91-4cbc-940a-7f895afc77dc` → `main`
 - **Action:** Completing analysis and automation setup
 
@@ -38,123 +38,123 @@
 
 ### PR #572
 **Title:** Copilot/fix 314
-- **Status:** ❌ Likely has conflicts (created Aug 14, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 14, 2025)
 - **Branch:** `copilot/fix-314` → `main`
 - **Age:** 2+ months old
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/572)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/572/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/572/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/572/conflicts)
 
 ---
 
 ### PR #571
 **Title:** Copilot/fix 237
-- **Status:** ❌ Likely has conflicts (created Aug 14, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 14, 2025)
 - **Branch:** `copilot/fix-237` → `main`
 - **Age:** 2+ months old
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/571)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/571/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/571/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/571/conflicts)
 
 ---
 
 ### PR #569
 **Title:** Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789
-- **Status:** ❌ Likely has conflicts (created Aug 14, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 14, 2025)
 - **Branch:** `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789` → `main`
 - **Age:** 2+ months old
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/569)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/569/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/569/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/569/conflicts)
 
 ---
 
 ### PR #555
 **Title:** Copilot/fix 300
-- **Status:** ❌ Likely has conflicts (created Aug 14, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 14, 2025)
 - **Branch:** `copilot/fix-300` → `main`
 - **Age:** 2+ months old
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/555)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/555/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/555/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/555/conflicts)
 
 ---
 
-### PR #489 ⚠️ WRONG BASE BRANCH
+### PR #489 [WARN]️ WRONG BASE BRANCH
 **Title:** Fix CI workflow: resolve LaTeX package naming issue
-- **Status:** ⚠️ Targets `copilot/fix-99` instead of `main`
+- **Status:** [WARN]️ Targets `copilot/fix-99` instead of `main`
 - **Branch:** `copilot/fix-488` → `copilot/fix-99`
 - **Action Required:** Change base branch to `main`
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489/files)
-- [🔧 Change Base Branch](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489)
+- [[FIX] Change Base Branch](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489)
 
 ---
 
-### PR #423 ⚠️ WRONG BASE BRANCH
+### PR #423 [WARN]️ WRONG BASE BRANCH
 **Title:** Fix CI workflow: correct LaTeX package names
-- **Status:** ⚠️ Targets `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789` instead of `main`
+- **Status:** [WARN]️ Targets `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789` instead of `main`
 - **Branch:** `copilot/fix-422` → `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789`
 - **Action Required:** Change base branch to `main`
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423/files)
-- [🔧 Change Base Branch](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423)
+- [[FIX] Change Base Branch](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423)
 
 ---
 
 ### PR #307
 **Title:** Fix LaTeX syntax error: Add missing backslash
-- **Status:** ❌ Likely has conflicts (created Aug 9, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 9, 2025)
 - **Branch:** `copilot/fix-306` → `main`
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/307)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/307/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/307/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/307/conflicts)
 
 ---
 
 ### PR #232
 **Title:** Fix YAML syntax error in LaTeX build workflow
-- **Status:** ❌ Likely has conflicts (created Aug 9, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 9, 2025)
 - **Branch:** `copilot/fix-231` → `main`
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/232)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/232/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/232/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/232/conflicts)
 
 ---
 
 ### PR #3
 **Title:** Implement comprehensive LaTeX build and document conversion workflows
-- **Status:** ❌ Likely has conflicts (created Aug 6, 2025)
+- **Status:** [FAIL] Likely has conflicts (created Aug 6, 2025)
 - **Branch:** `copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467` → `main`
 - **Age:** 2+ months old
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/3)
 - [View Files](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/3/files)
-- [🔧 Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/3/conflicts)
+- [[FIX] Resolve Conflicts](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/3/conflicts)
 
 ---
 
-## 🚀 How to Resolve
+## [DEPLOY] How to Resolve
 
 ### Option 1: Use GitHub Web Interface (Easiest)
-1. Click on the "🔧 Resolve Conflicts" link above for each PR
+1. Click on the "[FIX] Resolve Conflicts" link above for each PR
 2. GitHub will show you the conflicting files
 3. Edit directly in the browser to resolve conflicts
 4. Click "Mark as resolved" when done
@@ -185,9 +185,9 @@ Many of these PRs are 2+ months old. Consider:
 
 ---
 
-## 🤖 Automation Status
+##  Automation Status
 
-### ✅ YES! We Have Automation!
+### [PASS] YES! We Have Automation!
 
 **Workflow Healing System:**
 ```bash
@@ -202,30 +202,30 @@ python3 continuous_build_healer.py
 ```
 
 **What the automation does:**
-- ✅ Monitors all workflows every 5 minutes
-- ✅ Identifies error patterns automatically
-- ✅ Applies fixes for common issues:
+- [PASS] Monitors all workflows every 5 minutes
+- [PASS] Identifies error patterns automatically
+- [PASS] Applies fixes for common issues:
   - LaTeX action version problems
   - Missing packages
   - Timeout issues
   - Workflow syntax errors
-- ✅ Restarts failed workflows
-- ✅ Creates PRs for manual review
-- ✅ Continues until all builds are green
+- [PASS] Restarts failed workflows
+- [PASS] Creates PRs for manual review
+- [PASS] Continues until all builds are green
 
 **See:** `CONTINUOUS_BUILD_HEALING.md` for full documentation
 
 ---
 
-## 🔍 Workflow Status by Branch
+## [SEARCH] Workflow Status by Branch
 
 To check which workflows are failing in each branch:
 
 ### Method 1: Visit PR Checks Tab
 Each PR has a "Checks" tab showing workflow status:
-- ✅ Green checkmarks = passing
-- ❌ Red X = failing
-- 🟡 Yellow circle = in progress
+- [PASS] Green checkmarks = passing
+- [FAIL] Red X = failing
+-  Yellow circle = in progress
 
 ### Method 2: Use Automation Tools
 ```bash
@@ -244,7 +244,7 @@ Visit: [GitHub Actions](https://github.com/Darkness308/CTMM---PDF-in-LaTex/actio
 
 ---
 
-## 📋 Action Checklist
+## [TEST] Action Checklist
 
 ### Immediate Actions (High Priority)
 - [ ] Review this guide and all PR links
@@ -253,7 +253,7 @@ Visit: [GitHub Actions](https://github.com/Darkness308/CTMM---PDF-in-LaTex/actio
 - [ ] Run `python3 generate_pr_report.py` for latest status
 
 ### For Each PR with Conflicts
-- [ ] Click the "🔧 Resolve Conflicts" link
+- [ ] Click the "[FIX] Resolve Conflicts" link
 - [ ] Review the conflicts in GitHub web editor
 - [ ] Resolve conflicts (keep needed changes, remove duplicates)
 - [ ] Commit the resolution
@@ -269,11 +269,11 @@ Visit: [GitHub Actions](https://github.com/Darkness308/CTMM---PDF-in-LaTex/actio
 - [ ] Merge PRs that are ready
 - [ ] Close PRs that are no longer relevant
 - [ ] Update documentation if needed
-- [ ] Celebrate clean PR list! 🎉
+- [ ] Celebrate clean PR list! [SUCCESS]
 
 ---
 
-## 📚 Related Documentation
+## [DOCS] Related Documentation
 
 - **PR Analysis Report:** `PR_ANALYSIS_REPORT.md`
 - **Continuous Healing Guide:** `CONTINUOUS_BUILD_HEALING.md`
@@ -282,7 +282,7 @@ Visit: [GitHub Actions](https://github.com/Darkness308/CTMM---PDF-in-LaTex/actio
 
 ---
 
-## 💡 Tips & Best Practices
+## [IDEA] Tips & Best Practices
 
 ### For Merge Conflicts
 1. **Start with small PRs** - Easier to resolve
@@ -294,9 +294,9 @@ Visit: [GitHub Actions](https://github.com/Darkness308/CTMM---PDF-in-LaTex/actio
 1. **Use automation first** - Let the system try to fix it
 2. **Check logs** - Use direct links to see what failed
 3. **Common fixes:**
-   - Update action versions
-   - Add missing packages
-   - Increase timeouts
+  - Update action versions
+  - Add missing packages
+  - Increase timeouts
 4. **Restart workflows** - Sometimes just needs a retry
 
 ### For PR Management
@@ -307,13 +307,13 @@ Visit: [GitHub Actions](https://github.com/Darkness308/CTMM---PDF-in-LaTex/actio
 
 ---
 
-## ❓ FAQ
+##  FAQ
 
 **Q: Why are so many PRs old?**
 A: They were created 2+ months ago and haven't been updated. Main branch has moved forward, causing conflicts.
 
 **Q: How do I know if a PR has conflicts?**
-A: Click the "🔧 Resolve Conflicts" link. If conflicts exist, GitHub will show them.
+A: Click the "[FIX] Resolve Conflicts" link. If conflicts exist, GitHub will show them.
 
 **Q: Can I just close old PRs?**
 A: Yes! If the changes are no longer needed or have been implemented differently, close them.
@@ -329,13 +329,13 @@ A: Default is 10 iterations x 5 minutes = up to 50 minutes. Usually less if issu
 
 ---
 
-## 🎯 Success Criteria
+## [TARGET] Success Criteria
 
 When are we done?
-- ✅ All PRs either merged or closed
-- ✅ No PR has merge conflicts
-- ✅ All workflows are green (passing)
-- ✅ No stale PRs (>1 month old)
+- [PASS] All PRs either merged or closed
+- [PASS] No PR has merge conflicts
+- [PASS] All workflows are green (passing)
+- [PASS] No stale PRs (>1 month old)
 
 ---
 

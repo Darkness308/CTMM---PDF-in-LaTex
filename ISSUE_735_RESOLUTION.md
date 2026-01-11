@@ -32,23 +32,23 @@ All validation tools confirmed the fix:
 
 ```bash
 $ python3 test_issue_735_fix.py
-✅ PASS: Using correct version v2
-✅ PASS: Workflow YAML syntax is valid
+[PASS] PASS: Using correct version v2
+[PASS] PASS: Workflow YAML syntax is valid
 Tests passed: 2/2
 ```
 
 ### Build System Validation
 ```bash
 $ python3 ctmm_build.py
-✓ All referenced files exist
-✓ Basic structure test passed
-✓ Full structure test passed
+[OK] All referenced files exist
+[OK] Basic structure test passed
+[OK] Full structure test passed
 ```
 
 ### Syntax Validation
 ```bash
 $ python3 validate_latex_syntax.py
-✅ All validation checks passed!
+[PASS] All validation checks passed!
 ```
 
 ## Impact
@@ -63,9 +63,9 @@ $ python3 validate_latex_syntax.py
 
 ## Technical Details
 The `dante-ev/latex-action` GitHub Action follows semantic versioning with major version tags:
-- ✅ `v2` - Valid major version tag
-- ❌ `v2.0.0` - Does not exist
-- ✅ `v0.2` - Valid specific version (older)
+- [PASS] `v2` - Valid major version tag
+- [FAIL] `v2.0.0` - Does not exist
+- [PASS] `v0.2` - Valid specific version (older)
 
 **Error behavior**: GitHub Actions fails immediately during workflow parsing when it cannot resolve the specified action version, preventing any steps from executing.
 
@@ -88,6 +88,6 @@ The `dante-ev/latex-action` GitHub Action follows semantic versioning with major
 - Complements YAML syntax fixes from issues #458, #532
 - Aligns with version pinning improvements from issue #607
 
-## Status: ✅ RESOLVED
+## Status: [PASS] RESOLVED
 
 Issue #735 has been successfully resolved. The GitHub Actions LaTeX build workflow should now execute without version resolution errors and successfully generate the CTMM PDF documentation.

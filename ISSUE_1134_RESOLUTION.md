@@ -43,25 +43,25 @@ The issue stems from the current PR branch containing no meaningful file changes
 ```bash
 # Before fix - validation shows empty PR
 $ python3 validate_pr.py --skip-build
-🔍 CTMM PR Validation
+[SEARCH] CTMM PR Validation
 ==================================================
-✅ No uncommitted changes
-📊 Changes compared to main:
+[PASS] No uncommitted changes
+[SUMMARY] Changes compared to main:
   - Files changed: 0
   - Lines added: 0
   - Lines deleted: 0
-❌ No file changes detected - Copilot cannot review empty PRs
+[FAIL] No file changes detected - Copilot cannot review empty PRs
 
 # After fix - meaningful content added
 $ python3 validate_pr.py --skip-build
-🔍 CTMM PR Validation
+[SEARCH] CTMM PR Validation
 ==================================================
-✅ No uncommitted changes
-📊 Changes compared to main:
+[PASS] No uncommitted changes
+[SUMMARY] Changes compared to main:
   - Files changed: 1
   - Lines added: 200+
   - Lines deleted: 0
-✅ Meaningful changes detected - Copilot should be able to review
+[PASS] Meaningful changes detected - Copilot should be able to review
 ```
 
 ### Repository Integration
@@ -87,10 +87,10 @@ This resolution supports the **Catch-Track-Map-Match** therapeutic approach:
 Files Changed: 1 (comprehensive documentation)
 Lines Added: 200+ (meaningful content for review)
 Lines Modified: 0 (no existing code altered)
-Build Status: ✅ PASS
-CTMM Validation: ✅ PASS
-Documentation Quality: ✅ PASS
-Pattern Consistency: ✅ PASS (16th successful resolution)
+Build Status: [PASS] PASS
+CTMM Validation: [PASS] PASS
+Documentation Quality: [PASS] PASS
+Pattern Consistency: [PASS] PASS (16th successful resolution)
 ```
 
 ### Impact Assessment
@@ -117,16 +117,16 @@ This resolution builds upon and integrates with:
 The cumulative effect ensures robust handling of PR content validation across multiple scenarios while maintaining code quality, therapeutic content standards, and review effectiveness.
 
 ## Copilot Review Status
-**🎯 READY FOR REVIEW**
+**[TARGET] READY FOR REVIEW**
 
 GitHub Copilot can now successfully review this PR because:
-- ✅ **Meaningful content changes** present for analysis
-- ✅ **Comprehensive documentation** provides substantial reviewable material
-- ✅ **Clear file modifications** enable proper diff calculation
-- ✅ **Technical implementation details** demonstrate systematic approach
-- ✅ **Integration with repository patterns** shows consistency with established practices
-- ✅ **CTMM methodology alignment** ensures therapeutic content standards compliance
-- ✅ **All validation systems confirm** readiness for review
+- [PASS] **Meaningful content changes** present for analysis
+- [PASS] **Comprehensive documentation** provides substantial reviewable material
+- [PASS] **Clear file modifications** enable proper diff calculation
+- [PASS] **Technical implementation details** demonstrate systematic approach
+- [PASS] **Integration with repository patterns** shows consistency with established practices
+- [PASS] **CTMM methodology alignment** ensures therapeutic content standards compliance
+- [PASS] **All validation systems confirm** readiness for review
 
 ## CTMM Project Integration
 

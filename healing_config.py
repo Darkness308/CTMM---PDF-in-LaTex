@@ -107,8 +107,8 @@ class HealingConfig:
 
         # Healing Process Limits
         self.max_healing_attempts = 5  # Max attempts per workflow
-        self.max_concurrent_prs = 3    # Max open healing PRs at once
-        self.cooldown_minutes = 30     # Wait time between healing attempts
+        self.max_concurrent_prs = 3  # Max open healing PRs at once
+        self.cooldown_minutes = 30  # Wait time between healing attempts
         self.max_iterations_per_run = 10  # Safety limit for single execution
 
         # Logging Configuration

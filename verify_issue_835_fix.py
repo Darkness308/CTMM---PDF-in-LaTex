@@ -100,12 +100,12 @@ def check_file_changes():
                 total_added += added
                 total_deleted += deleted
                 file_count += 1
-                print(f"   [NOTE] {filename}: +{added} -{deleted}")
+                print(f"  [NOTE] {filename}: +{added} -{deleted}")
 
     print(f"\n[CHART] Summary:")
-    print(f"   Files changed: {file_count}")
-    print(f"   Lines added: {total_added}")
-    print(f"   Lines deleted: {total_deleted}")
+    print(f"  Files changed: {file_count}")
+    print(f"  Lines added: {total_added}")
+    print(f"  Lines deleted: {total_deleted}")
 
     if file_count == 0:
         print("[FAIL] No files changed")

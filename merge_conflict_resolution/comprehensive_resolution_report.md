@@ -6,11 +6,11 @@
 
 ## Executive Summary
 
-🎯 **Resolution Results:**
-- ✅ **0** PRs can merge cleanly (no conflicts)
-- 🔧 **0** PRs had conflicts that were automatically resolved
-- 🔥 **9** PRs have conflicts requiring manual resolution
-- ❌ **0** PRs could not be analyzed (fetch failed)
+[TARGET] **Resolution Results:**
+- [PASS] **0** PRs can merge cleanly (no conflicts)
+- [FIX] **0** PRs had conflicts that were automatically resolved
+- [HOT] **9** PRs have conflicts requiring manual resolution
+- [FAIL] **0** PRs could not be analyzed (fetch failed)
 
 ## Summary Statistics
 
@@ -26,7 +26,7 @@
 
 ### PR #1185: [WIP] identifiziere in diesem repo : löse bei allen offenen pull request, die merge k
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Unrelated Histories
 - **Error Details:** fatal: refusing to merge unrelated histories
  | Attempted fix failed: ...
@@ -34,7 +34,7 @@
 
 ### PR #653: Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Unrelated Histories
 - **Error Details:** fatal: refusing to merge unrelated histories
  | Attempted fix failed: ...
@@ -42,7 +42,7 @@
 
 ### PR #572: Copilot/fix 314
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -52,7 +52,7 @@ fatal: E...
 
 ### PR #571: Copilot/fix 237
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -62,7 +62,7 @@ fatal: E...
 
 ### PR #569: Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -72,7 +72,7 @@ fatal: E...
 
 ### PR #555: Copilot/fix 300
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -82,7 +82,7 @@ fatal: E...
 
 ### PR #489: Fix CI workflow: resolve LaTeX package naming issue causing build failures
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -92,7 +92,7 @@ fatal: E...
 
 ### PR #423: Fix CI workflow: correct LaTeX package names for German support
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -102,7 +102,7 @@ fatal: E...
 
 ### PR #307: Fix LaTeX syntax error: Add missing backslash to \textcolor command
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -112,7 +112,7 @@ fatal: E...
 
 ### PR #232: Fix YAML syntax error in LaTeX build workflow
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'
@@ -122,7 +122,7 @@ fatal: E...
 
 ### PR #3: Implement comprehensive LaTeX build and document conversion workflows
 
-- **Status:** ⚠️ INVESTIGATION NEEDED
+- **Status:** [WARN]️ INVESTIGATION NEEDED
 - **Issue:** Other Conflict
 - **Error Details:** error: Merging is not possible because you have unmerged files.
 hint: Fix them up in the work tree, and then use 'git add/rm <file>'

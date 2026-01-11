@@ -75,14 +75,14 @@ def test_workflow_file_integrity() -> Dict[str, any]:
                     continue
 
             integrity_results['valid_files'] += 1
-            print(f"   [PASS] {workflow_file} is valid")
+            print(f"  [PASS] {workflow_file} is valid")
 
         except yaml.YAMLError as e:
             integrity_results['issues'].append(f'{workflow_file} YAML syntax error: {str(e)[:100]}')
-            print(f"   [FAIL] {workflow_file} has YAML syntax error")
+            print(f"  [FAIL] {workflow_file} has YAML syntax error")
         except Exception as e:
             integrity_results['issues'].append(f'{workflow_file} error: {str(e)[:100]}')
-            print(f"   [FAIL] {workflow_file} has error: {e}")
+            print(f"  [FAIL] {workflow_file} has error: {e}")
 
     print(f"\n[SUMMARY] File integrity: {integrity_results['valid_files']}/{integrity_results['total_files']} valid")
     return integrity_results
@@ -116,9 +116,9 @@ def test_build_system_health() -> Dict[str, any]:
 
         if success:
             health_results['tests_passed'] += 1
-            print(f"   [PASS] Basic build passed ({duration:.1f}s)")
+            print(f"  [PASS] Basic build passed ({duration:.1f}s)")
         else:
-            print(f"   [FAIL] Basic build failed ({duration:.1f}s)")
+            print(f"  [FAIL] Basic build failed ({duration:.1f}s)")
             health_results['issues'].append('Basic CTMM build failed')
 
         health_results['test_details'].append({
@@ -130,11 +130,11 @@ def test_build_system_health() -> Dict[str, any]:
         })
 
     except subprocess.TimeoutExpired:
-        print("   [TIMER]  Basic build timed out")
+        print("  [TIMER]  Basic build timed out")
         health_results['tests_run'] += 1
         health_results['issues'].append('Basic CTMM build timeout')
     except Exception as e:
-        print(f"   [FAIL] Basic build error: {e}")
+        print(f"  [FAIL] Basic build error: {e}")
         health_results['tests_run'] += 1
         health_results['issues'].append(f'Basic CTMM build error: {e}')
 
@@ -155,9 +155,9 @@ def test_build_system_health() -> Dict[str, any]:
 
         if success:
             health_results['tests_passed'] += 1
-            print(f"   [PASS] LaTeX validation passed ({duration:.1f}s)")
+            print(f"  [PASS] LaTeX validation passed ({duration:.1f}s)")
         else:
-            print(f"   [FAIL] LaTeX validation failed ({duration:.1f}s)")
+            print(f"  [FAIL] LaTeX validation failed ({duration:.1f}s)")
             health_results['issues'].append('LaTeX syntax validation failed')
 
         health_results['test_details'].append({
@@ -167,7 +167,7 @@ def test_build_system_health() -> Dict[str, any]:
         })
 
     except Exception as e:
-        print(f"   [FAIL] LaTeX validation error: {e}")
+        print(f"  [FAIL] LaTeX validation error: {e}")
         health_results['tests_run'] += 1
         health_results['issues'].append(f'LaTeX validation error: {e}')
 
@@ -188,9 +188,9 @@ def test_build_system_health() -> Dict[str, any]:
 
         if success:
             health_results['tests_passed'] += 1
-            print(f"   [PASS] Action version validation passed ({duration:.1f}s)")
+            print(f"  [PASS] Action version validation passed ({duration:.1f}s)")
         else:
-            print(f"   [FAIL] Action version validation failed ({duration:.1f}s)")
+            print(f"  [FAIL] Action version validation failed ({duration:.1f}s)")
             health_results['issues'].append('Action version validation failed')
 
         health_results['test_details'].append({
@@ -200,7 +200,7 @@ def test_build_system_health() -> Dict[str, any]:
         })
 
     except Exception as e:
-        print(f"   [FAIL] Action version validation error: {e}")
+        print(f"  [FAIL] Action version validation error: {e}")
         health_results['tests_run'] += 1
         health_results['issues'].append(f'Action version validation error: {e}')
 
@@ -233,19 +233,19 @@ def test_dependency_health() -> Dict[str, any]:
         try:
             __import__(module_name)
             dependency_results['required_modules'].append(module_name)
-            print(f"   [PASS] {module_name} available")
+            print(f"  [PASS] {module_name} available")
         except ImportError:
             dependency_results['missing_modules'].append(module_name)
             dependency_results['issues'].append(f'Missing required module: {module_name}')
-            print(f"   [FAIL] {module_name} missing")
+            print(f"  [FAIL] {module_name} missing")
 
     # Check for chardet specifically (required by CTMM build system)
     try:
         import chardet
-        print(f"   [PASS] chardet version: {chardet.__version__}")
+        print(f"  [PASS] chardet version: {chardet.__version__}")
     except ImportError:
         dependency_results['issues'].append('chardet module missing - required for CTMM build')
-        print("   [FAIL] chardet missing - required for CTMM build")
+        print("  [FAIL] chardet missing - required for CTMM build")
     except Exception as e:
         dependency_results['issues'].append(f'chardet issue: {e}')
 
@@ -275,11 +275,11 @@ def test_file_system_health() -> Dict[str, any]:
     for directory in required_dirs:
         if os.path.exists(directory) and os.path.isdir(directory):
             filesystem_results['required_directories'].append(directory)
-            print(f"   [PASS] {directory}/ exists")
+            print(f"  [PASS] {directory}/ exists")
         else:
             filesystem_results['missing_directories'].append(directory)
             filesystem_results['issues'].append(f'Missing required directory: {directory}')
-            print(f"   [FAIL] {directory}/ missing")
+            print(f"  [FAIL] {directory}/ missing")
 
     # Check required files
     required_files = [
@@ -293,11 +293,11 @@ def test_file_system_health() -> Dict[str, any]:
     for file_path in required_files:
         if os.path.exists(file_path) and os.path.isfile(file_path):
             filesystem_results['required_files'].append(file_path)
-            print(f"   [PASS] {file_path} exists")
+            print(f"  [PASS] {file_path} exists")
         else:
             filesystem_results['missing_files'].append(file_path)
             filesystem_results['issues'].append(f'Missing required file: {file_path}')
-            print(f"   [FAIL] {file_path} missing")
+            print(f"  [FAIL] {file_path} missing")
 
     return filesystem_results
 

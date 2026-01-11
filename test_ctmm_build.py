@@ -218,9 +218,9 @@ class TestFilenameToTitle(unittest.TestCase):
         """Test various whitespace scenarios."""
         test_cases = [
             ("  hello_world  ", "Hello World"),  # Leading/trailing spaces
-            ("hello___world", "Hello World"),    # Multiple underscores
-            ("hello---world", "Hello World"),    # Multiple hyphens
-            ("hello_-_world", "Hello World"),    # Mixed separators
+            ("hello___world", "Hello World"),  # Multiple underscores
+            ("hello---world", "Hello World"),  # Multiple hyphens
+            ("hello_-_world", "Hello World"),  # Mixed separators
         ]
 
         for input_name, expected in test_cases:

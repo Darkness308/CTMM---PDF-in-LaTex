@@ -48,7 +48,7 @@ def test_latex_action_consistency():
     print(f"[PASS] Found {len(latex_actions)} LaTeX action(s):")
     versions = set()
     for action in latex_actions:
-        print(f"   {action['file']} -> {action['uses']}")
+        print(f"  {action['file']} -> {action['uses']}")
         versions.add(action['uses'])
 
     # Check for version consistency
@@ -131,7 +131,7 @@ def test_no_duplicate_action_entries():
                 if len(latex_steps) > 1:
                     print(f"[WARN]  Multiple LaTeX actions in {workflow_file}, job {job_name}:")
                     for step_num, uses in latex_steps:
-                        print(f"    Step {step_num}: {uses}")
+                        print(f"  Step {step_num}: {uses}")
                 elif len(latex_steps) == 1:
                     print(f"[PASS] Single LaTeX action in {workflow_file}, job {job_name}: {latex_steps[0][1]}")
 

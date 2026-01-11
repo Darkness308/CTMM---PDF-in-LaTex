@@ -1,4 +1,4 @@
-# 🔧 CTMM Workflow Healing System
+# [FIX] CTMM Workflow Healing System
 
 ## Overview
 
@@ -23,13 +23,13 @@ Failed Workflow Detection → Error Analysis → Fix Strategy Application → PR
 
 ## Features
 
-### 🔍 **Automated Monitoring**
+### [SEARCH] **Automated Monitoring**
 - Monitors all configured GitHub Actions workflows
 - Detects failures in real-time (within configured time window)
 - Filters out external repository PRs safely
 - Tracks error patterns and frequency
 
-### 🧠 **Intelligent Error Analysis**
+###  **Intelligent Error Analysis**
 - Categorizes errors into solvable patterns:
   - LaTeX action version issues
   - Missing packages
@@ -41,7 +41,7 @@ Failed Workflow Detection → Error Analysis → Fix Strategy Application → PR
 - Extracts specific error details for targeted fixes
 - Determines solvability based on error patterns
 
-### ⚙️ **Automated Fix Strategies**
+### ️ **Automated Fix Strategies**
 - **LaTeX Action Fixes**: Updates to known working versions (v2.3.0)
 - **Package Installation**: Adds missing LaTeX packages to workflows
 - **Timeout Adjustments**: Increases timeout values intelligently
@@ -49,14 +49,14 @@ Failed Workflow Detection → Error Analysis → Fix Strategy Application → PR
 - **Font Package Fixes**: Ensures FontAwesome packages are included
 - **Syntax Corrections**: Basic YAML workflow syntax fixes
 
-### 🔄 **PR Management**
+### [SYNC] **PR Management**
 - Creates descriptive pull requests for each fix attempt
 - Includes detailed analysis and recommended changes
 - Adds appropriate labels for categorization
 - Prevents PR spam with concurrent limits
 - Automatic cleanup of stale healing PRs
 
-### 🛡️ **Safety Features**
+### ️ **Safety Features**
 - Never modifies main branch directly
 - Requires manual review for all changes
 - Validates fixes before creating PRs
@@ -129,19 +129,19 @@ python3 workflow_healing_system.py --debug
 
 ## Error Categories
 
-### 🔴 High Priority (Critical)
+###  High Priority (Critical)
 - **latex_action_version**: Wrong LaTeX action versions
 - **syntax_error**: LaTeX compilation errors
 - **github_api_error**: API authentication issues
 - **workflow_syntax**: GitHub Actions YAML errors
 
-### 🟡 Medium Priority (Important)
+###  Medium Priority (Important)
 - **package_missing**: Missing LaTeX packages
 - **timeout**: Workflow step timeouts
 - **dependency_error**: Python package issues
 - **font_error**: FontAwesome/font problems
 
-### 🟢 Low Priority (Minor)
+###  Low Priority (Minor)
 - **resource_limit**: System resource constraints
 
 ## Fix Strategies
@@ -176,24 +176,24 @@ python3 workflow_healing_system.py --debug
 
 ### Example PR
 ```
-🔧 Automated Workflow Fix: Fix 2 error categories (5 issues) in latex-build.yml
+[FIX] Automated Workflow Fix: Fix 2 error categories (5 issues) in latex-build.yml
 
-## 🔧 Automated Workflow Healing
+## [FIX] Automated Workflow Healing
 
-### 📋 Workflow Information
+### [TEST] Workflow Information
 - **Workflow**: latex-build.yml
 - **Run ID**: 12345
 - **Error Categories**: latex_action_version, package_missing
 - **Total Errors**: 5
 
-### ✅ Applied Fixes
+### [PASS] Applied Fixes
 1. **Updated LaTeX action versions to v2.3.0**
-   - Files modified: `.github/workflows/latex-build.yml`
-   - Updated dante-ev/latex-action from v1.0.0 to v2.3.0
+  - Files modified: `.github/workflows/latex-build.yml`
+  - Updated dante-ev/latex-action from v1.0.0 to v2.3.0
 
 2. **Added missing LaTeX packages: texlive-fonts-extra**
-   - Files modified: `.github/workflows/latex-build.yml`
-   - Added package texlive-fonts-extra
+  - Files modified: `.github/workflows/latex-build.yml`
+  - Added package texlive-fonts-extra
 ```
 
 ## Testing
@@ -221,19 +221,19 @@ python3 fix_strategies.py
 ## Limitations
 
 ### What the System CAN Do
-✅ Fix common workflow configuration issues
-✅ Update action versions automatically
-✅ Install missing packages
-✅ Adjust timeouts intelligently
-✅ Create detailed PRs for review
-✅ Validate fixes before applying
+[PASS] Fix common workflow configuration issues
+[PASS] Update action versions automatically
+[PASS] Install missing packages
+[PASS] Adjust timeouts intelligently
+[PASS] Create detailed PRs for review
+[PASS] Validate fixes before applying
 
 ### What the System CANNOT Do
-❌ Fix complex logic errors in code
-❌ Resolve authentication/permission issues
-❌ Handle custom or proprietary actions
-❌ Merge PRs automatically (safety feature)
-❌ Fix fundamental architecture problems
+[FAIL] Fix complex logic errors in code
+[FAIL] Resolve authentication/permission issues
+[FAIL] Handle custom or proprietary actions
+[FAIL] Merge PRs automatically (safety feature)
+[FAIL] Fix fundamental architecture problems
 
 ## Safety Mechanisms
 

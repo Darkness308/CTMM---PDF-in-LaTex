@@ -43,8 +43,8 @@ on:
 ```yaml
 - name: Enhanced pre-build validation
   run: |
-    echo "🔍 Running enhanced pre-build validation..."
-    python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+  echo "[SEARCH] Running enhanced pre-build validation..."
+  python3 test_issue_761_fix.py || echo "[WARN]️  Warning: Some robustness checks failed but continuing..."
 ```
 
 ### 3. Improved PDF Generation Verification
@@ -53,15 +53,15 @@ on:
 ```yaml
 - name: Verify PDF generation
   run: |
-    if [ -f "main.pdf" ]; then
-      echo "✅ PDF successfully generated"
-      ls -la main.pdf
-    else
-      echo "❌ PDF generation failed"
-      echo "Checking for LaTeX log files..."
-      find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
-      exit 1
-    fi
+  if [ -f "main.pdf" ]; then
+  echo "[PASS] PDF successfully generated"
+  ls -la main.pdf
+  else
+  echo "[FAIL] PDF generation failed"
+  echo "Checking for LaTeX log files..."
+  find . -name "*.log" -exec echo "=== {} ===" \; -exec cat {} \;
+  exit 1
+  fi
 ```
 
 ### 4. Comprehensive Robustness Validation
@@ -76,29 +76,29 @@ on:
 ## Verification Results
 
 ### Before Fix
-- ❌ Potential YAML parsing issues in pr-validation.yml
-- ❌ Limited error detection and recovery mechanisms
-- ❌ Insufficient feedback on build failures
-- ❌ No comprehensive robustness validation
+- [FAIL] Potential YAML parsing issues in pr-validation.yml
+- [FAIL] Limited error detection and recovery mechanisms
+- [FAIL] Insufficient feedback on build failures
+- [FAIL] No comprehensive robustness validation
 
 ### After Fix
-- ✅ **All YAML Syntax Validated**: All 4 workflow files use proper quoted syntax
-- ✅ **Enhanced Error Detection**: 5 validation steps run before LaTeX compilation
-- ✅ **Comprehensive Dependency Validation**: All essential packages verified
-- ✅ **Robust Error Recovery**: Build system gracefully handles missing tools
-- ✅ **Improved Error Reporting**: PDF verification with detailed logging
+- [PASS] **All YAML Syntax Validated**: All 4 workflow files use proper quoted syntax
+- [PASS] **Enhanced Error Detection**: 5 validation steps run before LaTeX compilation
+- [PASS] **Comprehensive Dependency Validation**: All essential packages verified
+- [PASS] **Robust Error Recovery**: Build system gracefully handles missing tools
+- [PASS] **Improved Error Reporting**: PDF verification with detailed logging
 
 ### Test Results Summary
 ```bash
 $ python3 test_issue_761_fix.py
-🎉 ALL TESTS PASSED! CI pipeline robustness validated.
+[SUCCESS] ALL TESTS PASSED! CI pipeline robustness validated.
 
 Tests passed: 5/5
-✓ Enhanced Workflow Error Handling
-✓ Comprehensive Dependency Validation  
-✓ LaTeX Package Dependency Robustness
-✓ Workflow YAML Syntax Robustness
-✓ Build System Error Recovery
+[OK] Enhanced Workflow Error Handling
+[OK] Comprehensive Dependency Validation  
+[OK] LaTeX Package Dependency Robustness
+[OK] Workflow YAML Syntax Robustness
+[OK] Build System Error Recovery
 ```
 
 ## Impact and Benefits
@@ -164,14 +164,14 @@ The improved CI pipeline now includes:
 - Complements comprehensive validation from issue #729, #743
 - Aligns with robustness practices established in previous resolutions
 
-## Status: ✅ RESOLVED
+## Status: [PASS] RESOLVED
 
 Issue #761 has been successfully resolved. The enhanced CI pipeline configuration provides:
 
-✓ **Robust YAML syntax** preventing parsing issues
-✓ **Comprehensive validation** before expensive operations  
-✓ **Enhanced error detection** and recovery mechanisms
-✓ **Improved debugging** with detailed error reporting
-✓ **Proactive monitoring** of CI pipeline health
+[OK] **Robust YAML syntax** preventing parsing issues
+[OK] **Comprehensive validation** before expensive operations  
+[OK] **Enhanced error detection** and recovery mechanisms
+[OK] **Improved debugging** with detailed error reporting
+[OK] **Proactive monitoring** of CI pipeline health
 
 The CI pipeline should now be significantly more robust and provide better feedback when issues occur, reducing the likelihood of mysterious build failures and improving the development experience.

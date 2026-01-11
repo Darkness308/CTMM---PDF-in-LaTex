@@ -261,11 +261,11 @@ class PRConflictDeepAnalyzer:
             "estimated_hours": {
                 "phase_1": 0.2,  # 10 minutes
                 "phase_2": 0.75,  # 45 minutes
-                "phase_3": 1.5,   # 90 minutes
-                "phase_4": 1.5,   # 90 minutes
-                "phase_5": 3.0,   # 3 hours
-                "testing": 1.0,   # 1 hour total
-                "total": 8.0      # 8 hours total
+                "phase_3": 1.5,  # 90 minutes
+                "phase_4": 1.5,  # 90 minutes
+                "phase_5": 3.0,  # 3 hours
+                "testing": 1.0,  # 1 hour total
+                "total": 8.0  # 8 hours total
             },
             "confidence_level": "high",
             "risks": [
@@ -304,9 +304,9 @@ def main():
     effort = analyzer.estimate_total_effort()
 
     print("\n[SUMMARY] Analysis Results:")
-    print(f"   * Total estimated time: {effort['estimated_hours']['total']} hours")
-    print(f"   * Phases: 5 sequential phases")
-    print(f"   * Confidence level: {effort['confidence_level']}")
+    print(f"  * Total estimated time: {effort['estimated_hours']['total']} hours")
+    print(f"  * Phases: 5 sequential phases")
+    print(f"  * Confidence level: {effort['confidence_level']}")
     print(f"\n[FILE] Detailed instructions saved to: SPECIFIC_PR_RESOLUTION_INSTRUCTIONS.md")
 
     return {

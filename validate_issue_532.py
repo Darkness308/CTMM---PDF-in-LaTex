@@ -82,7 +82,7 @@ def validate_issue_532_fix():
 
             elif True in parsed:
                 print("[FAIL] ERROR: 'on' keyword interpreted as boolean True")
-                print("   This indicates unquoted 'on:' syntax causing YAML boolean interpretation")
+                print("  This indicates unquoted 'on:' syntax causing YAML boolean interpretation")
                 all_correct = False
                 validation_results.append((file_path, False, "Boolean interpretation detected"))
 

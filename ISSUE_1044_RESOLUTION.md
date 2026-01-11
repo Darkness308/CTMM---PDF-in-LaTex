@@ -36,16 +36,16 @@ The investigation revealed that while the existing CI configuration was function
 - name: Run LaTeX syntax validation
   timeout-minutes: 5
   run: |
-    echo "🔍 Starting LaTeX syntax validation..."
-    python3 validate_latex_syntax.py
-    echo "✅ LaTeX syntax validation completed successfully"
+  echo "[SEARCH] Starting LaTeX syntax validation..."
+  python3 validate_latex_syntax.py
+  echo "[PASS] LaTeX syntax validation completed successfully"
 
 - name: Run CTMM Build System Check
   timeout-minutes: 10
   run: |
-    echo "🔧 Starting CTMM build system check..."
-    python3 ctmm_build.py
-    echo "✅ CTMM build system check completed successfully"
+  echo "[FIX] Starting CTMM build system check..."
+  python3 ctmm_build.py
+  echo "[PASS] CTMM build system check completed successfully"
 
 - name: Set up LaTeX
   timeout-minutes: 15
@@ -65,10 +65,10 @@ The investigation revealed that while the existing CI configuration was function
 ```yaml
 - name: Check system resources before LaTeX compilation
   run: |
-    echo "📊 Checking system resources..."
-    df -h
-    free -h
-    echo "✅ System resources checked"
+  echo "[SUMMARY] Checking system resources..."
+  df -h
+  free -h
+  echo "[PASS] System resources checked"
 ```
 
 ### 4. Comprehensive Robustness Validation
@@ -107,14 +107,14 @@ The improved CI pipeline now includes:
 ### Comprehensive Testing
 ```bash
 $ python3 test_issue_1044_ci_robustness.py
-✅ PASS Workflow Timeout Configuration (60% coverage)
-✅ PASS Enhanced Error Reporting (6/6 features)
-✅ PASS Resource Constraint Awareness (3/3 checks)
-✅ PASS Validation Step Robustness (4/4 scripts)
-✅ PASS LaTeX Action Timeout (15 minutes configured)
+[PASS] PASS Workflow Timeout Configuration (60% coverage)
+[PASS] PASS Enhanced Error Reporting (6/6 features)
+[PASS] PASS Resource Constraint Awareness (3/3 checks)
+[PASS] PASS Validation Step Robustness (4/4 scripts)
+[PASS] PASS LaTeX Action Timeout (15 minutes configured)
 
 Tests passed: 5/5
-🎉 CI PIPELINE ROBUSTNESS VALIDATION PASSED!
+[SUCCESS] CI PIPELINE ROBUSTNESS VALIDATION PASSED!
 ```
 
 ### Before/After Comparison
@@ -166,7 +166,7 @@ Tests passed: 5/5
 
 ---
 
-**Status**: ✅ **RESOLVED**  
+**Status**: [PASS] **RESOLVED**  
 **Issue #1044**: Successfully addressed through enhanced timeout handling, error reporting, and resource constraint awareness.  
 **Resolution Date**: 2024-08-19  
 **Resolution Method**: Targeted CI pipeline robustness improvements with comprehensive validation

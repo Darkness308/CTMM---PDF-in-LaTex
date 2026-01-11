@@ -1,44 +1,44 @@
-# 🎯 CTMM Form Elements - Komplette Anleitung
+# [TARGET] CTMM Form Elements - Komplette Anleitung
 
-## ✅ **Was Sie jetzt haben:**
+## [PASS] **Was Sie jetzt haben:**
 
 Ihr `form-elements.sty` Paket kann **zwei Modi**:
-- **📱 Interaktiver Modus** (mit hyperref): Echte PDF-Formularfelder
-- **🖨️ Print-Modus** (ohne hyperref): Saubere Unterstriche zum Handausfüllen
+- **[MOBILE] Interaktiver Modus** (mit hyperref): Echte PDF-Formularfelder
+- **️ Print-Modus** (ohne hyperref): Saubere Unterstriche zum Handausfüllen
 
-## 🛠️ **Sofort verfügbare Befehle:**
+## [TOOLS]️ **Sofort verfügbare Befehle:**
 
 ### **Basis-Eingaben:**
 ```latex
-\ctmmTextField[6cm]{Default Text}{fieldname}    % Einzeiliges Textfeld
-\ctmmTextArea[12cm]{3}{fieldname}{Default}      % Mehrzeiliger Text (3 Zeilen)
-\ctmmCheckBox[fieldname]{Label}                 % Checkbox
-\ctmmRadioButton{group}{value}{label}           % Radio Button
+\ctmmTextField[6cm]{Default Text}{fieldname}  % Einzeiliges Textfeld
+\ctmmTextArea[12cm]{3}{fieldname}{Default}  % Mehrzeiliger Text (3 Zeilen)
+\ctmmCheckBox[fieldname]{Label}  % Checkbox
+\ctmmRadioButton{group}{value}{label}  % Radio Button
 ```
 
 ### **Datum & Zeit:**
 ```latex
-\ctmmDate{prefix}         % "Datum: [____]"
-\ctmmTime{prefix}         % "Zeit: [____] Uhr"
+\ctmmDate{prefix}  % "Datum: [____]"
+\ctmmTime{prefix}  % "Zeit: [____] Uhr"
 ```
 
 ### **CTMM-Spezifische Skalen:**
 ```latex
-\ctmmEmotionScale{Stimmung}{fieldgroup}        % 1-10 Skala mit Radio Buttons
-\ctmmStressLevel{prefix}                       % Stresslevel 10-100
-\ctmmTriggerScale{prefix}                      % Grün/Orange/Rot Trigger-Intensität
-\ctmmYesNo{prefix}                             % Ja/Nein Checkboxen
+\ctmmEmotionScale{Stimmung}{fieldgroup}  % 1-10 Skala mit Radio Buttons
+\ctmmStressLevel{prefix}  % Stresslevel 10-100
+\ctmmTriggerScale{prefix}  % Grün/Orange/Rot Trigger-Intensität
+\ctmmYesNo{prefix}  % Ja/Nein Checkboxen
 ```
 
 ### **Fertige Komponenten:**
 ```latex
-\ctmmSafeWordOptions{prefix}                   % Anker/Reset/Eiszeit + Freitext
-\ctmmWeeklyPattern{prefix}                     % Mo-So Wochentabelle
-\ctmmDailyTracker{prefix}                      % Kompletter Tagescheck
-\ctmmCrisisForm{prefix}                        % Krisen-Protokoll (rot)
+\ctmmSafeWordOptions{prefix}  % Anker/Reset/Eiszeit + Freitext
+\ctmmWeeklyPattern{prefix}  % Mo-So Wochentabelle
+\ctmmDailyTracker{prefix}  % Kompletter Tagescheck
+\ctmmCrisisForm{prefix}  % Krisen-Protokoll (rot)
 ```
 
-## 🎨 **Praktische Beispiele:**
+## [DESIGN] **Praktische Beispiele:**
 
 ### **1. Einfaches Tages-Arbeitsblatt:**
 ```latex
@@ -71,7 +71,7 @@ Ihr `form-elements.sty` Paket kann **zwei Modi**:
 \ctmmCrisisForm{notfall01}
 ```
 
-## 📋 **Integration in Ihre Module:**
+## [TEST] **Integration in Ihre Module:**
 
 **Schritt 1:** In beliebiges .tex-Modul einfügen:
 ```latex
@@ -84,29 +84,29 @@ Ihr `form-elements.sty` Paket kann **zwei Modi**:
 
 **Schritt 2:** PDF bauen mit Ctrl+S (automatisch!)
 
-## 🔄 **Zwei Ausgabeversionen:**
+## [SYNC] **Zwei Ausgabeversionen:**
 
 1. **Digital** (am Computer ausfüllen):
-   - Formularfelder anklickbar
-   - Daten speicherbar
-   - Professioneller Look
+  - Formularfelder anklickbar
+  - Daten speicherbar
+  - Professioneller Look
 
 2. **Print** (handschriftlich ausfüllen):
-   - Saubere Unterstriche
-   - Optimiert für Handschrift
-   - Identisches Layout
+  - Saubere Unterstriche
+  - Optimiert für Handschrift
+  - Identisches Layout
 
-## 🎯 **Nächste Schritte:**
+## [TARGET] **Nächste Schritte:**
 
 1. **Testen:** Öffnen Sie `build/main.pdf` → Seite 25-27 anschauen
 2. **Experimentieren:** Kopieren Sie eines der Beispiele in ein neues Modul
 3. **Anpassen:** Verwenden Sie `\ctmmTextField` in bestehenden Arbeitsblättern
 
-## 💡 **Pro-Tipps:**
+## [IDEA] **Pro-Tipps:**
 
 - **Feldnamen:** Verwenden Sie eindeutige Präfixe (z.B. `woche01`, `trigger05`)
 - **Breiten:** `[3cm]` für kurze Felder, `[12cm]` für längere Texte
 - **Zeilen:** Bei `\ctmmTextArea` → `{3}` = 3 Zeilen
 - **Farben:** Nutzen Sie die CTMM-Farbboxen für thematische Gruppierung
 
-**Ihr Form-Elements-System ist einsatzbereit! 🚀**
+**Ihr Form-Elements-System ist einsatzbereit! [DEPLOY]**

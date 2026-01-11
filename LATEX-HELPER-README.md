@@ -1,21 +1,21 @@
-# CTMM LaTeX Helper Tool 🧩
+# CTMM LaTeX Helper Tool 
 
 Ein Python-Skript zur automatisierten Analyse und Fehlerüberprüfung des CTMM LaTeX-Projekts.
 
 ## Funktionen
 
-### 📊 Project Analysis (`analyze`)
+### [SUMMARY] Project Analysis (`analyze`)
 - Analysiert alle `.tex` Module im `modules/` Verzeichnis
 - Zählt Wörter, Abschnitte und Formularelemente
 - Erkennt CTMM-Farbenverwendung
 - Zeigt Package-Nutzung an
 
-### ❌ Error Checking (`check-errors`)
+### [FAIL] Error Checking (`check-errors`)
 - Überprüft LaTeX Build-Logs auf Fehler und Warnungen
 - Erkennt fehlende Packages
 - Zeigt Seitenzahl des fertigen PDFs
 
-### 📈 Detailed Statistics (`stats`)
+###  Detailed Statistics (`stats`)
 - Generiert umfassende Projekt-Statistiken
 - Exportiert Daten als JSON-Report
 - Kategorisiert Module nach Typen
@@ -45,17 +45,17 @@ Ausführung über `Ctrl+Shift+P` → "Tasks: Run Task"
 
 ## Erkannte Elemente
 
-### 🎨 CTMM Design Elements
+### [DESIGN] CTMM Design Elements
 - `ctmmGreen`, `ctmmBlue`, `ctmmPurple`, `ctmmOrange`, `ctmmRed`, `ctmmYellow`, `ctmmGray`
 - Formularelemente: `\ctmmTextField`, `\ctmmCheckBox`, `\ctmmRadioButton`
 - tcolorbox-Verwendung
 
-### 📝 LaTeX Struktur
+### [NOTE] LaTeX Struktur
 - Sections, Subsections, Subsubsections
 - Package-Abhängigkeiten
 - Wortanzahl und Zeilenzahl
 
-### 🔍 Build-Analyse
+### [SEARCH] Build-Analyse
 - LaTeX-Fehler und Warnungen
 - Fehlende Packages
 - Seitenzahl des fertigen PDFs
@@ -63,16 +63,16 @@ Ausführung über `Ctrl+Shift+P` → "Tasks: Run Task"
 ## Output-Beispiel
 
 ```
-🧩 CTMM LaTeX Project Analysis
+ CTMM LaTeX Project Analysis
 ==================================================
-📁 Module gefunden: 18
-📝 Wörter gesamt: 5,033
-📦 Packages verwendet: 8
+ Module gefunden: 18
+[NOTE] Wörter gesamt: 5,033
+[PACKAGE] Packages verwendet: 8
 
-📂 Module nach Kategorien:
+ Module nach Kategorien:
   • root: 18 Module, 5,033 Wörter, 188 Formularfelder
 
-🎨 CTMM-Farben Verwendung:
+[DESIGN] CTMM-Farben Verwendung:
   • ctmmBlue: 28x
   • ctmmPurple: 26x
   • ctmmOrange: 23x
@@ -90,22 +90,22 @@ Ausführung über `Ctrl+Shift+P` → "Tasks: Run Task"
 ```json
 {
   "summary": {
-    "total_modules": 18,
-    "total_words": 5033,
-    "total_packages": 8,
-    "categories": ["root"]
+  "total_modules": 18,
+  "total_words": 5033,
+  "total_packages": 8,
+  "categories": ["root"]
   },
   "modules_by_category": {
-    "root": {
-      "count": 18,
-      "total_words": 5033,
-      "total_form_elements": 188,
-      "modules": [...]
-    }
+  "root": {
+  "count": 18,
+  "total_words": 5033,
+  "total_form_elements": 188,
+  "modules": [...]
+  }
   },
   "ctmm_color_usage": {
-    "ctmmBlue": 28,
-    "ctmmPurple": 26
+  "ctmmBlue": 28,
+  "ctmmPurple": 26
   },
   "form_elements_total": 188
 }

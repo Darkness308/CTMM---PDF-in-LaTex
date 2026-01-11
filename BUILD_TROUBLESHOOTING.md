@@ -4,7 +4,7 @@
 
 The build system requires specific LaTeX packages to compile successfully. This guide provides solutions for common build failures.
 
-## ✅ Dependencies Required
+## [PASS] Dependencies Required
 
 ### Python Dependencies
 ```bash
@@ -30,13 +30,13 @@ sudo apt-get install -y texlive-full
 - `texlive-latex-extra` - Additional LaTeX packages
 - `texlive-fonts-recommended` - Standard fonts
 
-## 🔧 Common Build Errors & Solutions
+## [FIX] Common Build Errors & Solutions
 
 ### Error 1: "Unknown option 'ngerman'"
 ```
 ! Package babel Error: Unknown option 'ngerman'. Either you misspelled it
-(babel)                or the language definition file ngerman.ldf
-(babel)                was not found.
+(babel)  or the language definition file ngerman.ldf
+(babel)  was not found.
 ```
 
 **Solution:**
@@ -64,18 +64,18 @@ WARNING: pdflatex not found - skipping LaTeX compilation test
 sudo apt-get install texlive-latex-base texlive-latex-extra
 ```
 
-## 🚀 Quick Start Commands
+## [DEPLOY] Quick Start Commands
 
 ### 1. Install All Dependencies
 ```bash
 # For Ubuntu/Debian systems
 sudo apt-get update && sudo apt-get install -y \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-lang-german \
-    texlive-fonts-extra \
-    texlive-science
+  texlive-latex-base \
+  texlive-latex-extra \
+  texlive-fonts-recommended \
+  texlive-lang-german \
+  texlive-fonts-extra \
+  texlive-science
 
 # Install Python dependencies
 pip install chardet
@@ -93,7 +93,7 @@ make build
 pdflatex -interaction=nonstopmode main.tex
 ```
 
-## 🔍 Verification Steps
+## [SEARCH] Verification Steps
 
 After installing dependencies, verify the build works:
 
@@ -102,9 +102,9 @@ After installing dependencies, verify the build works:
 python3 ctmm_build.py
 
 # Expected output should include:
-# ✓ LaTeX validation: PASS
-# ✓ Basic build: PASS
-# ✓ Full build: PASS
+# [OK] LaTeX validation: PASS
+# [OK] Basic build: PASS
+# [OK] Full build: PASS
 
 # 2. Run unit tests
 python3 test_ctmm_build.py
@@ -117,7 +117,7 @@ pdflatex -interaction=nonstopmode main.tex
 # Expected: Should generate main.pdf without errors
 ```
 
-## 📋 GitHub Actions Configuration
+## [TEST] GitHub Actions Configuration
 
 For CI/CD environments, the workflow already includes proper dependencies:
 
@@ -125,17 +125,17 @@ For CI/CD environments, the workflow already includes proper dependencies:
 - name: Set up LaTeX
   uses: dante-ev/latex-action@v0.2.0
   with:
-    extra_system_packages: |
-      texlive-lang-german
-      texlive-fonts-recommended
-      texlive-latex-recommended
-      texlive-fonts-extra
-      texlive-latex-extra
-      texlive-science
-      texlive-pstricks
+  extra_system_packages: |
+  texlive-lang-german
+  texlive-fonts-recommended
+  texlive-latex-recommended
+  texlive-fonts-extra
+  texlive-latex-extra
+  texlive-science
+  texlive-pstricks
 ```
 
-## 🐛 Advanced Troubleshooting
+## [BUG] Advanced Troubleshooting
 
 ### Check LaTeX Installation
 ```bash
@@ -169,18 +169,18 @@ python3 build_system.py --verbose
 python3 ctmm_build.py --enhanced
 ```
 
-## 🎯 Environment-Specific Notes
+## [TARGET] Environment-Specific Notes
 
 ### Docker/Containers
 ```dockerfile
 RUN apt-get update && apt-get install -y \
-    texlive-latex-base \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-lang-german \
-    texlive-fonts-extra \
-    python3 \
-    python3-pip
+  texlive-latex-base \
+  texlive-latex-extra \
+  texlive-fonts-recommended \
+  texlive-lang-german \
+  texlive-fonts-extra \
+  python3 \
+  python3-pip
 
 RUN pip3 install chardet
 ```
@@ -192,7 +192,7 @@ sudo apt-get update
 sudo apt-get install -y texlive-lang-german texlive-fonts-extra
 ```
 
-## 📞 Getting Help
+##  Getting Help
 
 If issues persist:
 
@@ -201,7 +201,7 @@ If issues persist:
 3. **Verify file permissions**: Ensure all files are readable
 4. **Check disk space**: LaTeX installations can be large
 
-## ✅ Success Indicators
+## [PASS] Success Indicators
 
 A successful build should show:
 - All LaTeX validation checks pass

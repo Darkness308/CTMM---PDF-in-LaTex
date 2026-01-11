@@ -38,7 +38,7 @@ MERGED_BRANCHES=(
 
 for branch in "${MERGED_BRANCHES[@]}"; do
   echo "Lösche $branch..."
-  git push origin --delete "$branch" 2>/dev/null || echo "  ⚠️  $branch existiert nicht oder bereits gelöscht"
+  git push origin --delete "$branch" 2>/dev/null || echo "  [WARN]️  $branch existiert nicht oder bereits gelöscht"
 done
 
 echo ""
@@ -47,8 +47,8 @@ git fetch --prune origin
 TEST_BRANCHES=$(git branch -r | grep 'origin/automated-merge-test-' | sed 's|origin/||' || true)
 if [ -n "$TEST_BRANCHES" ]; then
   echo "$TEST_BRANCHES" | while read branch; do
-    echo "Lösche $branch..."
-    git push origin --delete "$branch" 2>/dev/null || echo "  ⚠️  $branch bereits gelöscht"
+  echo "Lösche $branch..."
+  git push origin --delete "$branch" 2>/dev/null || echo "  [WARN]️  $branch bereits gelöscht"
   done
 else
   echo "Keine automated-merge-test Branches gefunden."
@@ -63,25 +63,25 @@ read -p "Weiter mit Option B (ALLE restlichen copilot/fix-* löschen)? [y/N] " c
 if [[ $confirm == [yY] || $confirm == [jJ] ]]; then
   echo ""
   echo "=== OPTION B: Lösche alle restlichen copilot/fix Branches ==="
-  echo "⚠️  WARNUNG: Dies löscht ~376 Branches permanent!"
+  echo "[WARN]️  WARNUNG: Dies löscht ~376 Branches permanent!"
   read -p "Bist du sicher? [y/N] " confirm2
 
   if [[ $confirm2 == [yY] || $confirm2 == [jJ] ]]; then
-    git fetch --prune origin
-    REMAINING=$(git branch -r | grep 'origin/copilot/fix-' | sed 's|origin/||' || true)
-    if [ -n "$REMAINING" ]; then
-      COUNT=$(echo "$REMAINING" | wc -l)
-      echo "Lösche $COUNT Branches..."
-      echo "$REMAINING" | while read branch; do
-        echo "  Lösche $branch..."
-        git push origin --delete "$branch" 2>/dev/null || true
-      done
-    else
-      echo "Keine copilot/fix-* Branches mehr vorhanden."
-    fi
-    echo "=== OPTION B abgeschlossen ==="
+  git fetch --prune origin
+  REMAINING=$(git branch -r | grep 'origin/copilot/fix-' | sed 's|origin/||' || true)
+  if [ -n "$REMAINING" ]; then
+  COUNT=$(echo "$REMAINING" | wc -l)
+  echo "Lösche $COUNT Branches..."
+  echo "$REMAINING" | while read branch; do
+  echo "  Lösche $branch..."
+  git push origin --delete "$branch" 2>/dev/null || true
+  done
   else
-    echo "Option B abgebrochen."
+  echo "Keine copilot/fix-* Branches mehr vorhanden."
+  fi
+  echo "=== OPTION B abgeschlossen ==="
+  else
+  echo "Option B abgebrochen."
   fi
 else
   echo "Option B übersprungen."

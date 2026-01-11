@@ -254,11 +254,11 @@ class PRManager:
         for i, result in enumerate(successful_fixes, 1):
             lines.append(f"**{i}. {result.description}**")
             if result.files_modified:
-                lines.append(f"   - Files modified: `{', '.join(result.files_modified)}`")
+                lines.append(f"  - Files modified: `{', '.join(result.files_modified)}`")
             if result.changes_made:
                 for change in result.changes_made:
-                    lines.append(f"   - {change}")
-            lines.append(f"   - Validation: {'[PASS] Passed' if result.validation_passed else '[WARN] Skipped'}")
+                    lines.append(f"  - {change}")
+            lines.append(f"  - Validation: {'[PASS] Passed' if result.validation_passed else '[WARN] Skipped'}")
             lines.append("")
 
         if failed_fixes:
@@ -267,7 +267,7 @@ class PRManager:
             for i, result in enumerate(failed_fixes, 1):
                 lines.append(f"**{i}. {result.description}**")
                 if result.error_message:
-                    lines.append(f"   - Error: {result.error_message}")
+                    lines.append(f"  - Error: {result.error_message}")
                 lines.append("")
 
         # Recommendations
@@ -444,7 +444,7 @@ def main():
     if config_issues:
         print("[FAIL] Configuration Issues:")
         for issue in config_issues:
-            print(f"   - {issue}")
+            print(f"  - {issue}")
         return
 
     print("[PASS] Configuration validated")
@@ -455,7 +455,7 @@ def main():
     print(f"Found {len(healing_prs)} existing healing PRs")
 
     for pr in healing_prs:
-        print(f"   - PR #{pr['number']}: {pr['title']}")
+        print(f"  - PR #{pr['number']}: {pr['title']}")
 
     # Test stale PR cleanup (dry run)
     print("\n[EMOJI] Testing stale PR detection...")
@@ -463,9 +463,9 @@ def main():
         for pr in healing_prs:
             created_at = datetime.fromisoformat(pr['created_at'].replace('Z', '+00:00'))
             age_hours = (datetime.now().astimezone() - created_at).total_seconds() / 3600
-            print(f"   - PR #{pr['number']}: {age_hours:.1f} hours old")
+            print(f"  - PR #{pr['number']}: {age_hours:.1f} hours old")
     else:
-        print("   No healing PRs to check")
+        print("  No healing PRs to check")
 
     print("\n[PASS] PR manager test completed")
 

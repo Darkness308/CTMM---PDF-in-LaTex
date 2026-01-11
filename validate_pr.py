@@ -202,15 +202,15 @@ def main():
 
         if changed_files == 0:
             print("[FAIL] No file changes detected - Copilot cannot review empty PRs")
-            print("   [TIP] To fix: Add meaningful changes to files (documentation, code, etc.)")
-            print("   [BOOKS] See existing ISSUE_*_RESOLUTION.md files for examples")
-            print("   [TARGET] This is similar to issues #409, #476, #673, #708, #731, #817")
+            print("  [TIP] To fix: Add meaningful changes to files (documentation, code, etc.)")
+            print("  [BOOKS] See existing ISSUE_*_RESOLUTION.md files for examples")
+            print("  [TARGET] This is similar to issues #409, #476, #673, #708, #731, #817")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
             print("[FAIL] No content changes detected - PR appears to be empty")
-            print("   [TIP] To fix: Ensure your changes add or modify actual content")
-            print("   [WARN]  Whitespace-only changes won't enable Copilot review")
-            print("   [NOTE] Consider creating documentation or making small code improvements")
+            print("  [TIP] To fix: Ensure your changes add or modify actual content")
+            print("  [WARN]  Whitespace-only changes won't enable Copilot review")
+            print("  [NOTE] Consider creating documentation or making small code improvements")
             all_checks_passed = False
         else:
             print("[PASS] Meaningful changes detected - Copilot should be able to review")
@@ -234,11 +234,11 @@ def main():
         print("Please address the issues above before creating/updating the PR.")
         print()
         print("[EMOJI] Helpful Resources:")
-        print("   [EMOJI] Repository: See existing ISSUE_*_RESOLUTION.md for examples")
-        print("   [TOOL]  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
-        print("   [NOTE] Validation: Run 'python3 validate_pr.py --verbose' for details")
-        print("   [TARGET] Recent fixes: See ISSUE_817_RESOLUTION.md, ISSUE_884_RESOLUTION.md for examples")
-        print("   [WARN]  SHA conflicts: See MERGIFY_SHA_CONFLICT_RESOLUTION.md for Mergify issues")
+        print("  [EMOJI] Repository: See existing ISSUE_*_RESOLUTION.md for examples")
+        print("  [TOOL]  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
+        print("  [NOTE] Validation: Run 'python3 validate_pr.py --verbose' for details")
+        print("  [TARGET] Recent fixes: See ISSUE_817_RESOLUTION.md, ISSUE_884_RESOLUTION.md for examples")
+        print("  [WARN]  SHA conflicts: See MERGIFY_SHA_CONFLICT_RESOLUTION.md for Mergify issues")
         sys.exit(1)
 
 if __name__ == "__main__":

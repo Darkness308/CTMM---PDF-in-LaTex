@@ -1,4 +1,4 @@
-# 📊 Comprehensive Open PR Analysis Report
+# [SUMMARY] Comprehensive Open PR Analysis Report
 
 **Generated:** 2025-10-02 13:19:07 UTC
 
@@ -6,14 +6,14 @@
 
 ---
 
-## 📈 Summary
+##  Summary
 
-- 🔴 **Total Open PRs:** 10
-- 📝 **Draft PRs:** 1
-- ⚠️  **PRs Not Targeting Main:** 2
-- 🕐 **Old PRs (>2 months):** 3
+-  **Total Open PRs:** 10
+- [NOTE] **Draft PRs:** 1
+- [WARN]️  **PRs Not Targeting Main:** 2
+-  **Old PRs (>2 months):** 3
 
-## 🔍 Detailed Analysis
+## [SEARCH] Detailed Analysis
 
 ### Key Issues Identified
 
@@ -21,12 +21,12 @@
 2. **Some PRs target other feature branches** instead of main - these need special handling
 3. **PR chain issues** - Some PRs depend on other PRs being merged first
 
-## 📋 All Open Pull Requests
+## [TEST] All Open Pull Requests
 
 ### 1. PR #1189: löse alle offenen pull requests aus, die noch offen sind...
 - **URL:** https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/1189
 - **Branch:** `copilot/fix-ef8fabe7-9c91-4cbc-940a-7f895afc77dc` → `main`
-- **Status:** 🟡 DRAFT
+- **Status:**  DRAFT
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/1189)
@@ -82,7 +82,7 @@
 - **URL:** https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489
 - **Branch:** `copilot/fix-488` → `copilot/fix-99`
 - **Created:** 2025-08-14T00:26:19Z
-- **⚠️  Warning:** Targets `copilot/fix-99` instead of `main`
+- **[WARN]️  Warning:** Targets `copilot/fix-99` instead of `main`
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489)
@@ -94,7 +94,7 @@
 - **URL:** https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423
 - **Branch:** `copilot/fix-422` → `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789`
 - **Created:** 2025-08-13T13:52:17Z
-- **⚠️  Warning:** Targets `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789` instead of `main`
+- **[WARN]️  Warning:** Targets `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789` instead of `main`
 
 **Direct Links:**
 - [View PR](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423)
@@ -136,7 +136,7 @@
 - [View Commits](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/3/commits)
 
 
-## ⚠️  Special Cases
+## [WARN]️  Special Cases
 
 ### PRs Not Targeting Main Branch
 
@@ -148,7 +148,7 @@ These PRs target other feature branches and may need to be rebased:
   - [Change base branch](https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/423)
 
 
-## 💡 Recommendations
+## [IDEA] Recommendations
 
 ### Immediate Actions
 
@@ -156,9 +156,9 @@ These PRs target other feature branches and may need to be rebased:
 2. **Fix base branches** - Update PRs #489 and #423 to target `main`
 3. **Resolve merge conflicts** - Use the direct links above to access conflict resolution
 4. **Test workflow automation** - Run the workflow healing system:
-   ```bash
-   python3 workflow_healing_system.py
-   ```
+  ```bash
+  python3 workflow_healing_system.py
+  ```
 
 ### For Merge Conflict Resolution
 
@@ -169,9 +169,9 @@ git fetch origin
 git checkout <branch-name>
 git merge origin/main
 # If conflicts:
-#   1. Click the 'View Conflicts' link above
-#   2. Resolve conflicts in GitHub web editor
-#   3. Or resolve locally and push
+#  1. Click the 'View Conflicts' link above
+#  2. Resolve conflicts in GitHub web editor
+#  3. Or resolve locally and push
 ```
 
 ### Workflow Failure Analysis
@@ -179,16 +179,16 @@ git merge origin/main
 To check which workflows are failing:
 
 1. Visit each PR's 'Checks' tab
-2. Look for red ❌ indicators
+2. Look for red [FAIL] indicators
 3. Click on failed checks to see logs
 4. Common issues:
-   - LaTeX package errors
-   - Merge conflicts
-   - Timeout issues
-   - GitHub Actions configuration
+  - LaTeX package errors
+  - Merge conflicts
+  - Timeout issues
+  - GitHub Actions configuration
 
 
-## 🤖 Automated Healing System
+##  Automated Healing System
 
 The repository already has a workflow healing system:
 
@@ -200,7 +200,7 @@ python3 workflow_monitor.py
 ### Run Automated Healing
 ```bash
 python3 workflow_healing_system.py --dry-run  # Test mode
-python3 workflow_healing_system.py            # Apply fixes
+python3 workflow_healing_system.py  # Apply fixes
 ```
 
 ### Merge PR Analysis
@@ -209,7 +209,7 @@ python3 comprehensive_pr_merge_resolver.py
 ```
 
 
-## 🎯 Action Items
+## [TARGET] Action Items
 
 - [ ] Review each PR using the direct links above
 - [ ] Close PRs that are no longer relevant

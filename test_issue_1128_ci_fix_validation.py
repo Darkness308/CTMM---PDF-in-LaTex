@@ -130,13 +130,13 @@ def test_latex_package_dependencies():
     fixes_verified = []
 
     required_packages = [
-        'texlive-lang-german',      # German language support
+        'texlive-lang-german',  # German language support
         'texlive-fonts-recommended', # Essential fonts
         'texlive-latex-recommended', # Core LaTeX packages
-        'texlive-fonts-extra',      # FontAwesome5, additional fonts
-        'texlive-latex-extra',      # TikZ, tcolorbox, advanced packages
-        'texlive-science',          # amssymb, mathematical symbols
-        'texlive-pstricks'          # pifont, graphics packages
+        'texlive-fonts-extra',  # FontAwesome5, additional fonts
+        'texlive-latex-extra',  # TikZ, tcolorbox, advanced packages
+        'texlive-science',  # amssymb, mathematical symbols
+        'texlive-pstricks'  # pifont, graphics packages
     ]
 
     workflow_files = [
