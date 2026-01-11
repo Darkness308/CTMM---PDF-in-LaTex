@@ -38,11 +38,11 @@ def validate_issue_532_fix():
     validation_results = []
 
     for file_path in workflow_files:
-        print(f"🔍 Validating {os.path.basename(file_path)}")
+        print(f"[SEARCH] Validating {os.path.basename(file_path)}")
         print("-" * 50)
 
         if not os.path.exists(file_path):
-            print(f"❌ File not found: {file_path}")
+            print(f"[FAIL] File not found: {file_path}")
             all_correct = False
             validation_results.append((file_path, False, "File not found"))
             continue
@@ -57,12 +57,12 @@ def validate_issue_532_fix():
 
             # Check if 'on' key exists as string (correct)
             if 'on' in parsed and isinstance(parsed['on'], dict):
-                print("✅ Correct: 'on' keyword parsed as string")
+                print("[PASS] Correct: 'on' keyword parsed as string")
 
                 # Verify trigger configuration
                 triggers = parsed['on']
                 trigger_types = list(triggers.keys())
-                print(f"✅ Triggers configured: {trigger_types}")
+                print(f"[PASS] Triggers configured: {trigger_types}")
 
                 # Find the actual line with "on": in the file
                 lines = content.split('\n')
@@ -70,29 +70,29 @@ def validate_issue_532_fix():
                 for i, line in enumerate(lines, 1):
                     if '"on":' in line:
                         on_line = i
-                        print(f"✅ Quoted syntax found on line {i}: {line.strip()}")
+                        print(f"[PASS] Quoted syntax found on line {i}: {line.strip()}")
                         break
 
                 if on_line:
                     validation_results.append((file_path, True, "Correct quoted syntax"))
                 else:
-                    print("⚠️  Warning: Could not find quoted 'on': syntax in file")
+                    print("[WARN]  Warning: Could not find quoted 'on': syntax in file")
                     validation_results.append((file_path, False, "Quoted syntax not found"))
                     all_correct = False
 
             elif True in parsed:
-                print("❌ ERROR: 'on' keyword interpreted as boolean True")
+                print("[FAIL] ERROR: 'on' keyword interpreted as boolean True")
                 print("   This indicates unquoted 'on:' syntax causing YAML boolean interpretation")
                 all_correct = False
                 validation_results.append((file_path, False, "Boolean interpretation detected"))
 
             else:
-                print("❌ ERROR: No 'on' trigger configuration found")
+                print("[FAIL] ERROR: No 'on' trigger configuration found")
                 all_correct = False
                 validation_results.append((file_path, False, "No trigger configuration"))
 
         except yaml.YAMLError as e:
-            print(f"❌ YAML parsing error: {e}")
+            print(f"[FAIL] YAML parsing error: {e}")
             all_correct = False
             validation_results.append((file_path, False, f"YAML error: {e}"))
 
@@ -104,23 +104,23 @@ def validate_issue_532_fix():
     print("=" * 80)
 
     for file_path, is_correct, message in validation_results:
-        status = "✅ PASS" if is_correct else "❌ FAIL"
+        status = "[PASS] PASS" if is_correct else "[FAIL] FAIL"
         filename = os.path.basename(file_path)
         print(f"{status} {filename}: {message}")
 
     print()
 
     if all_correct:
-        print("🎉 ISSUE #532 RESOLUTION: SUCCESS")
-        print("✅ All GitHub Actions workflow files have correct syntax")
-        print("✅ The 'on' keyword is properly quoted to prevent boolean interpretation")
-        print("✅ GitHub Actions will correctly parse all workflow triggers")
-        print("✅ No YAML boolean interpretation issues detected")
-        print("\n📋 STATUS: ISSUE #532 FULLY RESOLVED")
+        print("[SUCCESS] ISSUE #532 RESOLUTION: SUCCESS")
+        print("[PASS] All GitHub Actions workflow files have correct syntax")
+        print("[PASS] The 'on' keyword is properly quoted to prevent boolean interpretation")
+        print("[PASS] GitHub Actions will correctly parse all workflow triggers")
+        print("[PASS] No YAML boolean interpretation issues detected")
+        print("\n[TEST] STATUS: ISSUE #532 FULLY RESOLVED")
     else:
-        print("⚠️  ISSUE #532 RESOLUTION: INCOMPLETE")
-        print("❌ Some workflow files still have incorrect syntax")
-        print("🔧 Action needed: Fix files with unquoted 'on:' to use '\"on\":' syntax")
+        print("[WARN]  ISSUE #532 RESOLUTION: INCOMPLETE")
+        print("[FAIL] Some workflow files still have incorrect syntax")
+        print("[FIX] Action needed: Fix files with unquoted 'on:' to use '\"on\":' syntax")
 
     print("=" * 80)
     return all_correct
@@ -161,7 +161,7 @@ jobs:
         print(f"Key types: {[(k, type(k).__name__) for k in parsed.keys()]}")
 
         if True in parsed:
-            print("❌ PROBLEM: 'on' became boolean True - GitHub Actions won't recognize this!")
+            print("[FAIL] PROBLEM: 'on' became boolean True - GitHub Actions won't recognize this!")
 
     except Exception as e:
         print(f"Error: {e}")
@@ -174,7 +174,7 @@ jobs:
         print(f"Key types: {[(k, type(k).__name__) for k in parsed.keys()]}")
 
         if 'on' in parsed and isinstance(parsed['on'], dict):
-            print("✅ SUCCESS: 'on' is string key - GitHub Actions will work correctly!")
+            print("[PASS] SUCCESS: 'on' is string key - GitHub Actions will work correctly!")
 
     except Exception as e:
         print(f"Error: {e}")

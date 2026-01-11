@@ -11,7 +11,7 @@ from pathlib import Path
 def run_command(cmd, description):
     """Run a command and show results."""
     print(f"\n{'='*60}")
-    print(f"🔍 {description}")
+    print(f"[SEARCH] {description}")
     print('='*60)
 
     try:
@@ -26,7 +26,7 @@ def run_command(cmd, description):
 
 def main():
     """Demonstrate all enhanced build management features."""
-    print("🚀 Enhanced CTMM Build Management System Demo")
+    print("[LAUNCH] Enhanced CTMM Build Management System Demo")
     print("=" * 60)
     print("Demonstrating comprehensive automated build management")
     print("with missing file detection, incremental testing, and CI/CD reliability")
@@ -63,7 +63,7 @@ def main():
 
     # Summary
     print(f"\n{'='*60}")
-    print("📊 ENHANCED BUILD MANAGEMENT DEMO SUMMARY")
+    print("[SUMMARY] ENHANCED BUILD MANAGEMENT DEMO SUMMARY")
     print('='*60)
 
     results = [
@@ -76,27 +76,27 @@ def main():
 
     all_passed = True
     for test_name, success in results:
-        status = "✅ PASS" if success else "❌ FAIL"
+        status = "[PASS] PASS" if success else "[FAIL] FAIL"
         print(f"{status} {test_name}")
         if not success:
             all_passed = False
 
     print('='*60)
     if all_passed:
-        print("🎉 ALL ENHANCED FEATURES WORKING CORRECTLY")
+        print("[SUCCESS] ALL ENHANCED FEATURES WORKING CORRECTLY")
         print("The comprehensive automated build management system is operational!")
         print("\nKey Benefits Demonstrated:")
-        print("• Enhanced automation with comprehensive error detection")
-        print("• Advanced incremental testing with module isolation")
-        print("• Improved CI/CD reliability and artifact management")
-        print("• Complete backward compatibility with existing workflows")
-        print("• Resource management optimization (no ResourceWarnings)")
+        print("* Enhanced automation with comprehensive error detection")
+        print("* Advanced incremental testing with module isolation")
+        print("* Improved CI/CD reliability and artifact management")
+        print("* Complete backward compatibility with existing workflows")
+        print("* Resource management optimization (no ResourceWarnings)")
         print("\nAvailable Commands:")
-        print("• python3 ctmm_build.py --enhanced")
-        print("• make enhanced-build")
-        print("• make enhanced-testing")
+        print("* python3 ctmm_build.py --enhanced")
+        print("* make enhanced-build")
+        print("* make enhanced-testing")
     else:
-        print("⚠️  Some tests failed. Please check the output above.")
+        print("[WARN]  Some tests failed. Please check the output above.")
 
     print('='*60)
     print("See ENHANCED_BUILD_MANAGEMENT.md for complete documentation.")

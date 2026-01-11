@@ -36,13 +36,13 @@ def check_file_exists(filepath, description=""):
     """Check if a file exists."""
     path = Path(filepath)
     exists = path.exists()
-    status = "✅" if exists else "❌"
+    status = "[PASS]" if exists else "[FAIL]"
     print(f"  {status} {description}: {filepath}")
     return exists
 
 def check_file_changes():
     """Check that meaningful file changes are present."""
-    print("\n🔍 CHECKING FILE CHANGES")
+    print("\n[SEARCH] CHECKING FILE CHANGES")
     print("-" * 50)
 
     # Try different comparison bases
@@ -65,7 +65,7 @@ def check_file_changes():
             )
 
         if success and stdout.strip():
-            print(f"\n✅ File changes detected ({desc}):")
+            print(f"\n[PASS] File changes detected ({desc}):")
 
             total_added = 0
             total_deleted = 0
@@ -82,30 +82,30 @@ def check_file_changes():
                     total_deleted += deleted
                     file_count += 1
 
-                    print(f"   📝 {filename}: +{added} -{deleted}")
+                    print(f"   [NOTE] {filename}: +{added} -{deleted}")
 
-            print(f"\n📈 Summary:")
+            print(f"\n[CHART] Summary:")
             print(f"   Files changed: {file_count}")
             print(f"   Lines added: {total_added}")
             print(f"   Lines deleted: {total_deleted}")
 
             if file_count == 0:
-                print("❌ No files changed")
+                print("[FAIL] No files changed")
                 return False
 
             if total_added == 0:
-                print("❌ No lines added")
+                print("[FAIL] No lines added")
                 return False
 
-            print("✅ Meaningful changes present for Copilot review")
+            print("[PASS] Meaningful changes present for Copilot review")
             return True
 
-    print("❌ No file changes detected in any comparison")
+    print("[FAIL] No file changes detected in any comparison")
     return False
 
 def check_resolution_documentation():
     """Check that resolution documentation exists and is complete."""
-    print("\n📄 CHECKING RESOLUTION DOCUMENTATION")
+    print("\n[FILE] CHECKING RESOLUTION DOCUMENTATION")
     print("-" * 50)
 
     if not check_file_exists("ISSUE_1189_RESOLUTION.md", "Resolution documentation"):
@@ -130,25 +130,25 @@ def check_resolution_documentation():
                 missing_sections.append(section)
 
         if missing_sections:
-            print(f"❌ Missing required sections: {', '.join(missing_sections)}")
+            print(f"[FAIL] Missing required sections: {', '.join(missing_sections)}")
             return False
 
-        print("✅ All required sections present")
-        print(f"✅ Document length: {len(content)} characters")
+        print("[PASS] All required sections present")
+        print(f"[PASS] Document length: {len(content)} characters")
 
         # Check for meaningful content
         if len(content) < 5000:
-            print("⚠️  Warning: Document seems short for comprehensive resolution")
+            print("[WARN]  Warning: Document seems short for comprehensive resolution")
 
         return True
 
     except Exception as e:
-        print(f"❌ Error reading documentation: {e}")
+        print(f"[FAIL] Error reading documentation: {e}")
         return False
 
 def check_validation_systems():
     """Test that validation systems work correctly."""
-    print("\n🔧 CHECKING VALIDATION SYSTEMS")
+    print("\n[FIX] CHECKING VALIDATION SYSTEMS")
     print("-" * 50)
 
     # Check PR validation
@@ -160,22 +160,22 @@ def check_validation_systems():
     # Note: validate_pr.py may exit with non-zero if it detects validation issues
     # We check if it runs without Python errors
     if "Traceback" in stderr or "SyntaxError" in stderr:
-        print("❌ PR validation system has errors")
+        print("[FAIL] PR validation system has errors")
         return False
 
-    print("✅ PR validation system operational")
+    print("[PASS] PR validation system operational")
 
     # Check if CTMM build system exists
     if Path("ctmm_build.py").exists():
-        print("✅ CTMM build system present")
+        print("[PASS] CTMM build system present")
     else:
-        print("⚠️  CTMM build system not found (optional)")
+        print("[WARN]  CTMM build system not found (optional)")
 
     return True
 
 def check_pattern_consistency():
     """Verify pattern consistency with previous resolutions."""
-    print("\n🎯 CHECKING PATTERN CONSISTENCY")
+    print("\n[TARGET] CHECKING PATTERN CONSISTENCY")
     print("-" * 50)
 
     # Check that similar resolution files exist
@@ -186,14 +186,14 @@ def check_pattern_consistency():
         filepath = f"ISSUE_{issue_num}_RESOLUTION.md"
         exists = Path(filepath).exists()
         pattern_files_exist.append(exists)
-        status = "✅" if exists else "❌"
+        status = "[PASS]" if exists else "[FAIL]"
         print(f"  {status} {filepath}")
 
     if any(pattern_files_exist):
-        print("✅ Following established resolution patterns")
+        print("[PASS] Following established resolution patterns")
         return True
     else:
-        print("⚠️  No previous resolution files found (may be expected)")
+        print("[WARN]  No previous resolution files found (may be expected)")
         return True  # Not a failure, just unusual
 
 def main():
@@ -219,7 +219,7 @@ def main():
             if not result:
                 all_passed = False
         except Exception as e:
-            print(f"\n❌ {check_name} check failed with error: {e}")
+            print(f"\n[FAIL] {check_name} check failed with error: {e}")
             results.append((check_name, False))
             all_passed = False
 
@@ -229,21 +229,21 @@ def main():
     print("=" * 70)
 
     for check_name, result in results:
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS] PASS" if result else "[FAIL] FAIL"
         print(f"{status}: {check_name}")
 
     print("\n" + "=" * 70)
 
     if all_passed:
-        print("🎉 ALL CHECKS PASSED - ISSUE #1189 SUCCESSFULLY RESOLVED")
+        print("[SUCCESS] ALL CHECKS PASSED - ISSUE #1189 SUCCESSFULLY RESOLVED")
         print("\nGitHub Copilot should now be able to review this PR because:")
-        print("  ✅ Meaningful file changes are present")
-        print("  ✅ Comprehensive documentation added")
-        print("  ✅ All validation systems operational")
-        print("  ✅ Pattern consistency maintained")
-        print("\nThe PR is ready for Copilot review! 🚀")
+        print("  [PASS] Meaningful file changes are present")
+        print("  [PASS] Comprehensive documentation added")
+        print("  [PASS] All validation systems operational")
+        print("  [PASS] Pattern consistency maintained")
+        print("\nThe PR is ready for Copilot review! [LAUNCH]")
     else:
-        print("❌ SOME CHECKS FAILED")
+        print("[FAIL] SOME CHECKS FAILED")
         print("\nPlease address the failed checks before requesting Copilot review.")
 
     print("=" * 70)

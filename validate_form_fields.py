@@ -29,7 +29,7 @@ class FormFieldValidator:
 
     def validate_all_files(self) -> bool:
         """Validate all LaTeX files for form field issues."""
-        print("🔍 CTMM Form Field Validation Starting...")
+        print("[SEARCH] CTMM Form Field Validation Starting...")
         print("=" * 60)
 
         all_valid = True
@@ -50,10 +50,10 @@ class FormFieldValidator:
         style_file = self.style_dir / "form-elements.sty"
 
         if not style_file.exists():
-            self.issues.append(f"❌ Missing form-elements.sty: {style_file}")
+            self.issues.append(f"[FAIL] Missing form-elements.sty: {style_file}")
             return False
 
-        print(f"📄 Validating {style_file}...")
+        print(f"[FILE] Validating {style_file}...")
 
         with open(style_file, 'r', encoding='utf-8') as f:
             content = f.read()
@@ -67,31 +67,31 @@ class FormFieldValidator:
             default_value = match.group(2)
 
             if num_params == 2 and default_value == "":
-                print(r"✅ \ctmmCheckBox maintains backward compatibility (optional first parameter)")
+                print(r"[PASS] \ctmmCheckBox maintains backward compatibility (optional first parameter)")
                 return True
             else:
-                self.issues.append(r"❌ \ctmmCheckBox should have 2 parameters with empty default for first parameter")
+                self.issues.append(r"[FAIL] \ctmmCheckBox should have 2 parameters with empty default for first parameter")
                 return False
         else:
             # Check for breaking change pattern
             breaking_pattern = r'\\newcommand\{\\ctmmCheckBox\}\[2\]\{'
             if re.search(breaking_pattern, content):
-                self.issues.append(r"❌ Breaking change detected: \ctmmCheckBox changed to require 2 mandatory parameters")
+                self.issues.append(r"[FAIL] Breaking change detected: \ctmmCheckBox changed to require 2 mandatory parameters")
                 return False
             else:
-                print(r"✅ \ctmmCheckBox syntax appears valid")
+                print(r"[PASS] \ctmmCheckBox syntax appears valid")
                 return True
 
     def validate_modules(self) -> bool:
         """Validate all module files for form field issues."""
         if not self.modules_dir.exists():
-            self.issues.append(f"❌ Modules directory not found: {self.modules_dir}")
+            self.issues.append(f"[FAIL] Modules directory not found: {self.modules_dir}")
             return False
 
         all_valid = True
         tex_files = list(self.modules_dir.glob("*.tex"))
 
-        print(f"\n📂 Validating {len(tex_files)} module files...")
+        print(f"\n[FOLDER] Validating {len(tex_files)} module files...")
 
         for tex_file in tex_files:
             if not self.validate_module_file(tex_file):
@@ -116,14 +116,14 @@ class FormFieldValidator:
                     self.issues.extend(line_issues)
 
             if file_valid:
-                print(f"✅ {file_path.name}")
+                print(f"[PASS] {file_path.name}")
             else:
-                print(f"❌ {file_path.name} has issues")
+                print(f"[FAIL] {file_path.name} has issues")
 
             return file_valid
 
         except Exception as e:
-            self.issues.append(f"❌ Error reading {file_path}: {e}")
+            self.issues.append(f"[FAIL] Error reading {file_path}: {e}")
             return False
 
     def validate_line(self, line: str, filename: str, line_num: int) -> List[str]:
@@ -132,7 +132,7 @@ class FormFieldValidator:
 
         # Check for double backslash before underscore (\\\_mm pattern)
         if re.search(r'\\\\_', line):
-            issues.append(f"❌ {filename}:{line_num} - Invalid double backslash before underscore: {line.strip()}")
+            issues.append(f"[FAIL] {filename}:{line_num} - Invalid double backslash before underscore: {line.strip()}")
 
         # Check for incomplete field names (missing closing braces)
         incomplete_patterns = [
@@ -143,7 +143,7 @@ class FormFieldValidator:
 
         for pattern in incomplete_patterns:
             if re.search(pattern, line):
-                issues.append(f"❌ {filename}:{line_num} - Incomplete form field command: {line.strip()}")
+                issues.append(f"[FAIL] {filename}:{line_num} - Incomplete form field command: {line.strip()}")
 
         # Check for duplicate \end{center} patterns
         if line.strip() == '\\end{center}':
@@ -161,7 +161,7 @@ class FormFieldValidator:
             matches = re.findall(pattern, line)
             for field_name in matches:
                 if not self.is_valid_field_name(field_name):
-                    issues.append(f"❌ {filename}:{line_num} - Invalid field name '{field_name}': {line.strip()}")
+                    issues.append(f"[FAIL] {filename}:{line_num} - Invalid field name '{field_name}': {line.strip()}")
 
         return issues
 
@@ -180,28 +180,28 @@ class FormFieldValidator:
     def print_summary(self):
         """Print validation summary."""
         print("\n" + "=" * 60)
-        print("📊 VALIDATION SUMMARY")
+        print("[SUMMARY] VALIDATION SUMMARY")
         print("=" * 60)
 
         if not self.issues:
-            print("✅ All form fields pass validation!")
-            print("✅ No LaTeX syntax errors detected")
-            print("✅ Form field naming conventions are consistent")
+            print("[PASS] All form fields pass validation!")
+            print("[PASS] No LaTeX syntax errors detected")
+            print("[PASS] Form field naming conventions are consistent")
         else:
-            print(f"❌ Found {len(self.issues)} issues:")
+            print(f"[FAIL] Found {len(self.issues)} issues:")
             for issue in self.issues:
                 print(f"   {issue}")
 
-        print("\n📚 Form Field Standards:")
-        print(r"   • Use \ctmmCheckBox[field_name]{label} (optional first parameter)")
-        print("   • Field names: alphanumeric + underscores only")
-        print("   • No double backslashes before underscores")
-        print("   • All commands must have proper closing braces")
-        print("   • Avoid auto-generated _mm suffixes")
+        print("\n[BOOKS] Form Field Standards:")
+        print(r"   * Use \ctmmCheckBox[field_name]{label} (optional first parameter)")
+        print("   * Field names: alphanumeric + underscores only")
+        print("   * No double backslashes before underscores")
+        print("   * All commands must have proper closing braces")
+        print("   * Avoid auto-generated _mm suffixes")
 
     def fix_common_issues(self) -> bool:
         """Automatically fix common form field issues."""
-        print("\n🔧 ATTEMPTING AUTOMATIC FIXES...")
+        print("\n[FIX] ATTEMPTING AUTOMATIC FIXES...")
         print("=" * 60)
 
         fixed_files = []
@@ -211,12 +211,12 @@ class FormFieldValidator:
                 fixed_files.append(tex_file.name)
 
         if fixed_files:
-            print(f"✅ Fixed issues in {len(fixed_files)} files:")
+            print(f"[PASS] Fixed issues in {len(fixed_files)} files:")
             for filename in fixed_files:
-                print(f"   • {filename}")
+                print(f"   * {filename}")
             return True
         else:
-            print("ℹ️  No automatic fixes were needed")
+            print("[INFO]  No automatic fixes were needed")
             return False
 
     def fix_file_issues(self, file_path: Path) -> bool:
@@ -245,11 +245,11 @@ class FormFieldValidator:
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
 
-                print(f"✅ Fixed {file_path.name} (backup created)")
+                print(f"[PASS] Fixed {file_path.name} (backup created)")
                 return True
 
         except Exception as e:
-            print(f"❌ Error fixing {file_path}: {e}")
+            print(f"[FAIL] Error fixing {file_path}: {e}")
 
         return False
 
@@ -267,11 +267,11 @@ def main():
 
     # Optionally run automatic fixes
     if not is_valid:
-        print("\n❓ Attempt automatic fixes? (y/n): ", end="")
+        print("\n[QUESTION] Attempt automatic fixes? (y/n): ", end="")
         response = input().lower().strip()
         if response in ['y', 'yes']:
             validator.fix_common_issues()
-            print("\n🔄 Re-running validation after fixes...")
+            print("\n[SYNC] Re-running validation after fixes...")
             validator.issues = []  # Clear previous issues
             is_valid = validator.validate_all_files()
 

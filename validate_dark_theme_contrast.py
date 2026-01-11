@@ -5,8 +5,8 @@ CTMM Dark Theme - WCAG Contrast Validator
 Validates all color combinations in the dark theme for WCAG 2.1 compliance.
 
 Scientific References:
-- WCAG 2.1 Level AA: Contrast ratio ≥ 4.5:1 for normal text
-- WCAG 2.1 Level AAA: Contrast ratio ≥ 7:1 for normal text
+- WCAG 2.1 Level AA: Contrast ratio >= 4.5:1 for normal text
+- WCAG 2.1 Level AAA: Contrast ratio >= 7:1 for normal text
 - WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
 """
 
@@ -91,11 +91,11 @@ def wcag_level(ratio: float, large_text: bool = False) -> str:
         aaa_threshold = 7.0
 
     if ratio >= aaa_threshold:
-        return "✅ AAA"
+        return "[PASS] AAA"
     elif ratio >= aa_threshold:
-        return "✅ AA"
+        return "[PASS] AA"
     else:
-        return "❌ FAIL"
+        return "[FAIL] FAIL"
 
 # ============================================================
 # VALIDATION
@@ -138,9 +138,9 @@ def validate_dark_theme():
         # Check if passes minimum AA
         if ratio < 4.5:
             all_pass = False
-            marker = "⚠️"
+            marker = "[WARN]"
         else:
-            marker = "✅"
+            marker = "[PASS]"
 
         print(f"{marker} {name:<28} {color:<10} {ratio:>6.1f}:1     {level}")
 
@@ -202,7 +202,7 @@ def validate_dark_theme():
     for color_name, info in therapeutic_colors.items():
         result = next((r for r in results if r['name'] == color_name), None)
         if result:
-            print(f"🎨 {color_name}")
+            print(f"[EMOJI] {color_name}")
             print(f"   Color: {result['color']}")
             print(f"   Contrast: {result['ratio']:.1f}:1 {result['level']}")
             print(f"   Effect: {info['effect']}")
@@ -220,7 +220,7 @@ def validate_dark_theme():
     print()
 
     if all_pass:
-        print("✅ ALL COLORS PASS WCAG 2.1 LEVEL AA")
+        print("[PASS] ALL COLORS PASS WCAG 2.1 LEVEL AA")
         print()
         print("The CTMM Dark Theme is FULLY ACCESSIBLE and ready for production!")
         print()
@@ -232,7 +232,7 @@ def validate_dark_theme():
         print("  - Improved sleep hygiene (evening use)")
         return 0
     else:
-        print("⚠️ SOME COLORS DO NOT MEET WCAG 2.1 LEVEL AA")
+        print("[WARN] SOME COLORS DO NOT MEET WCAG 2.1 LEVEL AA")
         print()
         print("Failed colors:")
         for r in results:

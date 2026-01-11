@@ -15,24 +15,24 @@ def test_latex_action_version_fix():
     workflow_file = Path(".github/workflows/latex-build.yml")
 
     if not workflow_file.exists():
-        print("❌ ERROR: latex-build.yml not found")
+        print("[FAIL] ERROR: latex-build.yml not found")
         return False
 
     content = workflow_file.read_text()
 
     # Check for the problematic version
     if "dante-ev/latex-action@v2.0.0" in content:
-        print("❌ FAIL: Still using problematic version v2.0.0")
+        print("[FAIL] FAIL: Still using problematic version v2.0.0")
         print("This version doesn't exist and causes CI failure:")
         print("'Unable to resolve action `dante-ev/latex-action@v2.0.0`, unable to find version `v2.0.0`'")
         return False
 
     # Check for the correct version
     if "dante-ev/latex-action@v2" in content:
-        print("✅ PASS: Using correct version v2")
+        print("[PASS] PASS: Using correct version v2")
         return True
 
-    print("❌ FAIL: dante-ev/latex-action not found or using unexpected version")
+    print("[FAIL] FAIL: dante-ev/latex-action not found or using unexpected version")
     return False
 
 def test_workflow_syntax():
@@ -42,10 +42,10 @@ def test_workflow_syntax():
         workflow_file = Path(".github/workflows/latex-build.yml")
         content = workflow_file.read_text()
         yaml.safe_load(content)
-        print("✅ PASS: Workflow YAML syntax is valid")
+        print("[PASS] PASS: Workflow YAML syntax is valid")
         return True
     except Exception as e:
-        print(f"❌ FAIL: Workflow YAML syntax error: {e}")
+        print(f"[FAIL] FAIL: Workflow YAML syntax error: {e}")
         return False
 
 def main():
@@ -76,14 +76,14 @@ def main():
     total = len(results)
 
     for i, (test_name, _) in enumerate(tests):
-        status = "✅ PASS" if results[i] else "❌ FAIL"
+        status = "[PASS] PASS" if results[i] else "[FAIL] FAIL"
         print(f"{status} {test_name}")
 
     print()
     print(f"Tests passed: {passed}/{total}")
 
     if passed == total:
-        print("🎉 ALL TESTS PASSED - Issue #932 fix is working correctly!")
+        print("[SUCCESS] ALL TESTS PASSED - Issue #932 fix is working correctly!")
         print()
         print("The GitHub Actions workflow should now be able to:")
         print("- Resolve the dante-ev/latex-action@v2 action successfully")
@@ -91,7 +91,7 @@ def main():
         print("- Complete the LaTeX PDF build process")
         return 0
     else:
-        print("❌ SOME TESTS FAILED - Issue #932 fix needs more work")
+        print("[FAIL] SOME TESTS FAILED - Issue #932 fix needs more work")
         return 1
 
 if __name__ == "__main__":
