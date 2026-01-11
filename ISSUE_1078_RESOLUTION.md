@@ -33,7 +33,7 @@ This was previously fixed in Issue #1056 but had regressed in the repository.
 # Before (broken)
 uses: dante-ev/latex-action@v0.2.0
 
-# After (fixed)  
+# After (fixed)
 uses: dante-ev/latex-action@v2.3.0
 ```
 
@@ -58,7 +58,7 @@ uses: dante-ev/latex-action@v2.3.0
 # CTMM Build System Validation
 ✅ LaTeX validation: PASS
 ✅ Style files: 3 found
-✅ Module files: 14 found  
+✅ Module files: 14 found
 ✅ Missing files: 0 (templates created)
 ✅ Basic build: PASS
 ✅ Full build: PASS
@@ -147,7 +147,7 @@ grep -r "dante-ev/latex-action" .github/workflows/
 
 ---
 
-**Resolution Date**: August 20, 2024  
-**Validated**: ✅ All checks passed  
-**Impact**: Fixes GitHub Actions CI LaTeX build failures  
+**Resolution Date**: August 20, 2024
+**Validated**: ✅ All checks passed
+**Impact**: Fixes GitHub Actions CI LaTeX build failures
 **Related**: Issue #1056 (original fix), regression resolved

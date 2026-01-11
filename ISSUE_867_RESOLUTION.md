@@ -45,7 +45,7 @@ $ python3 test_issue_867_fix.py
 
 Tests passed: 3/3
 ✅ LaTeX Action Version: PASS
-✅ Workflow YAML Syntax: PASS  
+✅ Workflow YAML Syntax: PASS
 ✅ Action Configuration: PASS
 ```
 
@@ -78,7 +78,7 @@ $ python3 -c "import yaml; yaml.safe_load(open('.github/workflows/latex-build.ym
 ## Technical Details
 The `dante-ev/latex-action` GitHub Action version availability:
 - ❌ `@v2` - Does not exist (Issue #867)
-- ❌ `@v2.0.0` - Does not exist (Issue #735)  
+- ❌ `@v2.0.0` - Does not exist (Issue #735)
 - ✅ `@latest` - Always available, points to current stable release
 - ✅ `@v0.2` - Specific version that exists (used in Issue #607)
 

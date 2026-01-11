@@ -72,7 +72,7 @@ nothing to commit, working tree clean
 Das automatische Script hat folgende Logik verwendet:
 
 1. **Wenn main mehr Inhalt hat** → main-Version verwenden
-2. **Wenn HEAD leer ist** → main-Version verwenden  
+2. **Wenn HEAD leer ist** → main-Version verwenden
 3. **Wenn main leer ist** → HEAD-Version verwenden
 4. **Sonst** → beide Versionen behalten (HEAD zuerst, dann main)
 

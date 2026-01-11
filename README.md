@@ -203,7 +203,7 @@ Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das
 python3 ctmm_build.py --enhanced
 make enhanced-build
 
-# Enhanced Incremental Testing  
+# Enhanced Incremental Testing
 make enhanced-testing
 ```
 

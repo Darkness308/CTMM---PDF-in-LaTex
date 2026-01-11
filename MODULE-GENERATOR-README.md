@@ -9,7 +9,7 @@ Automatisches Generieren neuer CTMM-Module für Ihr LaTeX-Therapie-Workbook.
 ./create-module.sh
 ```
 
-### Option 2: Direkte Nutzung  
+### Option 2: Direkte Nutzung
 ```bash
 node module-generator.js <typ> "<name>"
 ```
@@ -40,7 +40,7 @@ node module-generator.js <typ> "<name>"
 # Arbeitsblatt erstellen
 node module-generator.js arbeitsblatt "Täglicher Stimmungscheck"
 
-# Tool erstellen  
+# Tool erstellen
 node module-generator.js tool "5-4-3-2-1 Grounding"
 
 # Notfallkarte erstellen
@@ -78,7 +78,7 @@ modules/
 
 1. **Erstellen**: `./create-module.sh` oder `node module-generator.js`
 2. **Anpassen**: Öffnen Sie die erstellte `.tex` Datei und passen Sie Inhalte an
-3. **Einbinden**: Fügen Sie `\input{modules/...}` in `main.tex` ein  
+3. **Einbinden**: Fügen Sie `\input{modules/...}` in `main.tex` ein
 4. **Kompilieren**: Nutzen Sie den CTMM-Build-Task oder `pdflatex`
 
 ## 💡 Tipps
@@ -93,7 +93,7 @@ modules/
 Sie können die Templates in `module-generator.js` nach Ihren Bedürfnissen anpassen:
 
 - **Farben**: Ändern Sie die `color` Werte in `moduleConfig`
-- **Felder**: Passen Sie die Placeholder in der `generateModule` Funktion an  
+- **Felder**: Passen Sie die Placeholder in der `generateModule` Funktion an
 - **Struktur**: Modifizieren Sie die `templates` für andere Layouts
 
 ---

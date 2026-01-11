@@ -144,7 +144,7 @@ The PyYAML addition integrates seamlessly with existing workflows:
 
 ### Modified Files
 1. **`.github/workflows/latex-validation.yml`** - Added `pyyaml` to Python dependencies
-2. **`.github/workflows/latex-build.yml`** - Added `pyyaml` to Python dependencies  
+2. **`.github/workflows/latex-build.yml`** - Added `pyyaml` to Python dependencies
 3. **`.github/workflows/automated-pr-merge-test.yml`** - Added `pyyaml` to Python dependencies
 
 ### New Files

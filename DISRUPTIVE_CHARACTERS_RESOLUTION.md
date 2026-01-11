@@ -75,7 +75,7 @@ The `detect_disruptive_characters.py` script used Python's `chardet` library to 
    ```python
    # Valid German characters that should NOT be reported
    valid_german_chars = set('äöüÄÖÜßáàâéèêíìîóòôúùûÁÀÂÉÈÊÍÌÎÓÒÔÚÙÛ')
-   
+
    # Skip valid German/European characters
    if char in valid_german_chars:
        continue

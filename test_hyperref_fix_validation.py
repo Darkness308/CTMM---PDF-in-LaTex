@@ -96,7 +96,7 @@ def test_hyperref_package_loading_fix(style_file_path):
         print("[FAIL] FAIL: TRUE branch missing \\renewcommand{\\@ctmmInteractive}{true}")
         return False
     print("[PASS] PASS: TRUE branch enables interactive mode")
-    
+
     # FALSE branch should set @ctmmInteractive to false
     if '\\renewcommand{\\@ctmmInteractive}{false}' not in false_branch_content:
         print("[FAIL] FAIL: FALSE branch should set \\@ctmmInteractive to false")
@@ -162,7 +162,7 @@ def test_main_tex_hyperref_loading():
             print(f"[FAIL] FAIL: hyperref (line {hyperref_line+1}) should be loaded before form-elements (line {form_elements_line+1})")
             return False
         print("[PASS] PASS: hyperref is loaded before form-elements")
-    
+
     if ctmm_form_elements_line is not None:
         print("[PASS] PASS: main.tex loads style/ctmm-form-elements package")
         if hyperref_line >= ctmm_form_elements_line:

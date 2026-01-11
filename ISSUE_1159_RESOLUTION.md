@@ -78,7 +78,7 @@ echo "Debug: packages after hyperref (filtered): '$packages_after_hyperref'"
 ```bash
 # All validation tests passing
 ✅ AWK Regex Improvement: PASS
-✅ Robust Hyperref Validation: PASS  
+✅ Robust Hyperref Validation: PASS
 ✅ Workflow Syntax Validity: PASS
 ✅ CI Environment Compatibility: PASS
 Overall: 4/4 tests passed
