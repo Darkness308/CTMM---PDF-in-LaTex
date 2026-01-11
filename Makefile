@@ -57,7 +57,7 @@ help:
 	@echo "Available targets:"
 	@echo "  all        - Run check and build (default)"
 	@echo "  check      - Check dependencies and run build system"
-	@echo "  check-chars- Check for problematic characters in files"
+	@echo "  check-chars - Check for problematic characters in files"
 	@echo "  build      - Build the PDF"
 	@echo "  analyze    - Run detailed module analysis"
 	@echo "  test       - Quick test of build system"

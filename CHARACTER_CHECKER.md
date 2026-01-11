@@ -164,7 +164,7 @@ The checker is optimized for speed:
 
 **Solution:** Use LaTeX's `\-` for discretionary hyphens:
 ```latex
-% Instead of: Donau­dampf­schiff­fahrts­gesell­schaft  (with U+00AD)
+% Instead of: Donau[SOFT-HYPHEN]dampf[SOFT-HYPHEN]schiff...  (with U+00AD)
 % Use: Donau\-dampf\-schiff\-fahrts\-gesell\-schaft
 ```
 

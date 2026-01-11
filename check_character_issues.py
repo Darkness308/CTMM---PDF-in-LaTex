@@ -91,7 +91,7 @@ class CharacterChecker:
     
     def _check_merge_conflicts(self, line, filepath, line_num):
         """Check for git merge conflict markers"""
-        if re.match(r'^<{7}\s', line):
+        if re.match(r'^<{7}(\s|$)', line):
             self.issues.append({
                 'file': str(filepath),
                 'line': line_num,
@@ -100,7 +100,7 @@ class CharacterChecker:
                 'content': line.strip()
             })
             return True
-        elif re.match(r'^>{7}\s', line):
+        elif re.match(r'^>{7}(\s|$)', line):
             self.issues.append({
                 'file': str(filepath),
                 'line': line_num,
@@ -109,7 +109,7 @@ class CharacterChecker:
                 'content': line.strip()
             })
             return True
-        elif re.match(r'^={7}\s', line):
+        elif re.match(r'^={7}(\s|$)', line):
             self.issues.append({
                 'file': str(filepath),
                 'line': line_num,
