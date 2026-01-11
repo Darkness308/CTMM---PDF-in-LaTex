@@ -45,7 +45,7 @@ def check_package_exists(package_name):
         )
         return bool(result.stdout.strip())
     except FileNotFoundError:
-        print("[WARN]️  apt-cache not available, skipping package verification")
+        print("[WARN]  apt-cache not available, skipping package verification")
         return True  # Assume packages exist if we can't check
 
 def main():
