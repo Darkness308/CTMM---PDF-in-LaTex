@@ -1,7 +1,7 @@
 # Merge-Konflikt Auflösung für PR #572
 
-**Datum:** 10. Januar 2026  
-**PR:** #572 (Branch: `copilot/fix-314` → `main`)  
+**Datum:** 10. Januar 2026
+**PR:** #572 (Branch: `copilot/fix-314` → `main`)
 **Status:** ✅ ERFOLGREICH AUFGELÖST
 
 ---
@@ -201,6 +201,6 @@ Das Tool kann für zukünftige Merge-Konflikte wiederverwendet werden.
 
 ---
 
-**Erstellt am:** 2026-01-10  
-**Branch:** copilot/remove-merge-blocking-characters  
-**Tool:** resolve_merge_conflicts.py  
+**Erstellt am:** 2026-01-10
+**Branch:** copilot/remove-merge-blocking-characters
+**Tool:** resolve_merge_conflicts.py

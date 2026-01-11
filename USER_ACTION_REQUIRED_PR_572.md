@@ -129,12 +129,12 @@ git commit
 
 ### Was wurde aufgelöst
 
-**Konflikt-Typ:** "both added" (Dateien existieren in beiden Branches)  
+**Konflikt-Typ:** "both added" (Dateien existieren in beiden Branches)
 **Grund:** Unrelated histories zwischen `copilot/fix-314` und `main`
 
 **Betroffene Dateikategorien:**
 1. Konfiguration (7 Dateien)
-2. Dokumentation (2 Dateien)  
+2. Dokumentation (2 Dateien)
 3. Build-System (4 Dateien)
 4. LaTeX (14 Dateien: 1 main.tex + 10 modules + 3 styles)
 
