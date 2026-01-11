@@ -116,10 +116,10 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
   - Module sollten keine Pakete laden oder globale Makros definieren.
   - Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
 - **Fehlermeldungen:**
-  - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
-  - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
-  - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
-  - `File 'fontawesome5.sty' not found`: LaTeX-Paket fehlt – installiere `texlive-fonts-extra`:
+  - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen - in die Präambel verschieben!
+  - `Undefined control sequence`: Ein Makro ist nicht definiert - Definition prüfen oder in die Präambel verschieben.
+  - `Command ... already defined`: Ein Makro wurde doppelt definiert - nur eine Definition behalten (am besten zentral).
+  - `File 'fontawesome5.sty' not found`: LaTeX-Paket fehlt - installiere `texlive-fonts-extra`:
     ```bash
     sudo apt-get install -y texlive-fonts-extra
     ```
@@ -146,4 +146,4 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 - Hinweise zu neuen Makros, Paketen oder typischen Stolperfallen hier dokumentieren.
 
 **Tipp:**
-Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst – und ergänze sie zentral, nicht im Modul selbst.
+Wenn du ein neues Modul schreibst, prüfe, ob du neue Pakete oder Makros brauchst - und ergänze sie zentral, nicht im Modul selbst.

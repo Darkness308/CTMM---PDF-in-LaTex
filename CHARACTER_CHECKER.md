@@ -23,7 +23,23 @@ The following invisible characters can cause LaTeX compilation issues:
 | Soft hyphen | U+00AD | Invisible hyphenation | `\-` |
 | BOM/Zero-width no-break space | U+FEFF | File encoding issue | Remove |
 
-### 3. Control Characters
+### 3. Typographic Characters
+The following typographic characters (common in copy-pasted text) can cause issues:
+
+| Character | Code | Issue | LaTeX Alternative |
+|-----------|------|-------|-------------------|
+| Left single quote (') | U+2018 | Copy-paste artifact | `` ` `` |
+| Right single quote (') | U+2019 | Copy-paste artifact | `'` |
+| Left double quote (") | U+201C | Copy-paste artifact | ``` `` ``` |
+| Right double quote (") | U+201D | Copy-paste artifact | `''` |
+| En dash (–) | U+2013 | Copy-paste artifact | `--` or `-` |
+| Em dash (—) | U+2014 | Copy-paste artifact | `---` or `-` |
+| Horizontal ellipsis (…) | U+2026 | Copy-paste artifact | `\ldots` |
+| Left angle quote («) | U+00AB | May need escaping | Check context |
+| Right angle quote (») | U+00BB | May need escaping | Check context |
+| Bullet (•) | U+2022 | Copy-paste artifact | `\textbullet` |
+
+### 4. Control Characters
 Any ASCII control characters (0x00-0x1F) except:
 - Tab (`\t` / 0x09)
 - Newline (`\n` / 0x0A)

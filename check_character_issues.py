@@ -21,12 +21,24 @@ from pathlib import Path
 
 # Characters that are problematic in LaTeX
 PROBLEMATIC_CHARS = {
+    # Invisible Unicode characters
     '\u00A0': 'Non-breaking space (U+00A0) - use ~ or \\nobreakspace in LaTeX',
     '\u200B': 'Zero-width space (U+200B) - invisible character',
     '\u200C': 'Zero-width non-joiner (U+200C) - invisible character',
     '\u200D': 'Zero-width joiner (U+200D) - invisible character',
     '\u00AD': 'Soft hyphen (U+00AD) - use \\- in LaTeX',
     '\uFEFF': 'BOM/Zero-width no-break space (U+FEFF) - remove from file',
+    # Typographic characters (common in copy-pasted text)
+    '\u2018': "Left single quotation mark (') - use ` in LaTeX",
+    '\u2019': "Right single quotation mark (') - use ' in LaTeX",
+    '\u201C': 'Left double quotation mark (") - use `` in LaTeX',
+    '\u201D': 'Right double quotation mark (") - use \'\' in LaTeX',
+    '\u2013': 'En dash (–) - use -- in LaTeX or regular hyphen',
+    '\u2014': 'Em dash (—) - use --- in LaTeX or regular hyphen',
+    '\u2026': 'Horizontal ellipsis (…) - use \\ldots in LaTeX',
+    '\u00AB': 'Left-pointing double angle quotation («) - check context',
+    '\u00BB': 'Right-pointing double angle quotation (») - check context',
+    '\u2022': 'Bullet (•) - use \\textbullet in LaTeX',
 }
 
 # File extensions to check
