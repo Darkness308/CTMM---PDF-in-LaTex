@@ -104,12 +104,14 @@ jobs:
           args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
           # Required LaTeX packages for CTMM therapeutic materials system:
           # - texlive-lang-european: European languages support including German (babel)
+          # - texlive-lang-german: German language support (required for ngerman babel)
           # - texlive-fonts-recommended/extra: Font packages
           # - texlive-latex-recommended/extra: Core LaTeX packages
           # - texlive-science: Scientific packages
           # - texlive-pstricks: Provides pifont package for form element symbols (Issue #739, #743)
           extra_system_packages: |
             texlive-lang-european
+            texlive-lang-german
             texlive-fonts-recommended
             texlive-latex-recommended
             texlive-latex-extra

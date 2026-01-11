@@ -72,7 +72,7 @@ jobs:
           root_file: main.tex
           args: "-synctex=1 -interaction=nonstopmode -file-line-error"
           extra_system_packages: |
-            texlive-lang-german
+            texlive-lang-european
             texlive-fonts-recommended
             texlive-latex-recommended
             texlive-fonts-extra
