@@ -223,6 +223,7 @@ function generateModule(type, name) {
         FIELD_1: 'Ausgangssituation',
         FIELD_2: 'Angewendete Strategie', 
         FIELD_3: 'Wirksamkeit (1-10)',
+        TOOL_NUMBER: getNextToolNumber(modulesDir),
         TOOL_NUMBER: nextToolNumber,
         STEP_1: 'Situation erfassen und bewerten',
         STEP_2: 'Passende Intervention aus CTMM-System wählen', 
