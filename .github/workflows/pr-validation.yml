@@ -14,108 +14,108 @@ jobs:
     name: Validate PR has reviewable content
 
     steps:
-    - name: Checkout code
-      timeout-minutes: 5
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        timeout-minutes: 5
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Check for file changes
-      timeout-minutes: 5
-      id: changes
-      run: |
-        # Get the base and head commits
-        BASE_SHA="${{ github.event.pull_request.base.sha }}"
-        HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+      - name: Check for file changes
+        timeout-minutes: 5
+        id: changes
+        run: |
+          # Get the base and head commits
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
 
-        # Count changed files
-        CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA | wc -l)
-        ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}')
-        DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}')
+          # Count changed files
+          CHANGED_FILES=$(git diff --name-only $BASE_SHA..$HEAD_SHA | wc -l)
+          ADDED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $1} END {print sum+0}')
+          DELETED_LINES=$(git diff --numstat $BASE_SHA..$HEAD_SHA | awk 'BEGIN{sum=0} {sum += $2} END {print sum+0}')
 
-        echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
-        echo "added_lines=$ADDED_LINES" >> $GITHUB_OUTPUT
-        echo "deleted_lines=$DELETED_LINES" >> $GITHUB_OUTPUT
+          echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          echo "added_lines=$ADDED_LINES" >> $GITHUB_OUTPUT
+          echo "deleted_lines=$DELETED_LINES" >> $GITHUB_OUTPUT
 
-        echo "📊 PR Statistics:"
-        echo "- Changed files: $CHANGED_FILES"
-        echo "- Added lines: $ADDED_LINES"
-        echo "- Deleted lines: $DELETED_LINES"
+          echo "📊 PR Statistics:"
+          echo "- Changed files: $CHANGED_FILES"
+          echo "- Added lines: $ADDED_LINES"
+          echo "- Deleted lines: $DELETED_LINES"
 
-    - name: Validate PR has content
-      timeout-minutes: 3
-      run: |
-        CHANGED_FILES="${{ steps.changes.outputs.changed_files }}"
-        ADDED_LINES="${{ steps.changes.outputs.added_lines }}"
+      - name: Validate PR has content
+        timeout-minutes: 3
+        run: |
+          CHANGED_FILES="${{ steps.changes.outputs.changed_files }}"
+          ADDED_LINES="${{ steps.changes.outputs.added_lines }}"
 
-        if [ "$CHANGED_FILES" -eq 0 ]; then
-          echo "❌ Error: This PR has no file changes."
-          echo "Copilot cannot review PRs without any changed files."
-          echo "Please ensure your PR includes actual code or documentation changes."
-          exit 1
-        fi
+          if [ "$CHANGED_FILES" -eq 0 ]; then
+            echo "❌ Error: This PR has no file changes."
+            echo "Copilot cannot review PRs without any changed files."
+            echo "Please ensure your PR includes actual code or documentation changes."
+            exit 1
+          fi
 
-        if [ "$ADDED_LINES" -eq 0 ] && [ "${{ steps.changes.outputs.deleted_lines }}" -eq 0 ]; then
-          echo "❌ Error: This PR has no content changes (0 additions, 0 deletions)."
-          echo "Please include meaningful changes for Copilot to review."
-          exit 1
-        fi
+          if [ "$ADDED_LINES" -eq 0 ] && [ "${{ steps.changes.outputs.deleted_lines }}" -eq 0 ]; then
+            echo "❌ Error: This PR has no content changes (0 additions, 0 deletions)."
+            echo "Please include meaningful changes for Copilot to review."
+            exit 1
+          fi
 
-        echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added"
-    
-    - name: Set up Python
-      timeout-minutes: 5
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
-    
-    - name: Install Python dependencies
-      timeout-minutes: 5
-      run: |
-        echo "📦 Installing Python dependencies..."
-        pip install chardet pyyaml
-        echo "✅ Python dependencies installed successfully"
-    
-    - name: Run CTMM build check
-      timeout-minutes: 8
-      run: |
-        echo "🔧 Running CTMM build validation..."
-        python3 ctmm_build.py
-        echo "✅ CTMM build validation completed successfully"
+          echo "✅ PR validation passed: $CHANGED_FILES file(s) changed, $ADDED_LINES line(s) added"
 
-    - name: Enhanced CI environment validation for PRs
-      timeout-minutes: 5
-      continue-on-error: true
-      run: |
-        echo "🔧 Running enhanced CI environment validation for PR..."
-        python3 validate_ci_environment.py || echo "⚠️ Some environment checks had warnings but continuing..."
-        echo "✅ Enhanced CI environment validation completed"
-    - name: Comment on PR if validation fails
-      if: failure()
-      timeout-minutes: 3
-      continue-on-error: true
-      uses: actions/github-script@v7
-      with:
-        script: |
-          github.rest.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: `## ⚠️ PR Content Validation Failed
+      - name: Set up Python
+        timeout-minutes: 5
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-              This pull request appears to have no reviewable content:
-              - Changed files: ${{ steps.changes.outputs.changed_files }}
-              - Added lines: ${{ steps.changes.outputs.added_lines }}
-              - Deleted lines: ${{ steps.changes.outputs.deleted_lines }}
+      - name: Install Python dependencies
+        timeout-minutes: 5
+        run: |
+          echo "📦 Installing Python dependencies..."
+          pip install chardet pyyaml
+          echo "✅ Python dependencies installed successfully"
 
-              **Why this matters:** Copilot cannot review pull requests that contain no file changes or content modifications.
+      - name: Run CTMM build check
+        timeout-minutes: 8
+        run: |
+          echo "🔧 Running CTMM build validation..."
+          python3 ctmm_build.py
+          echo "✅ CTMM build validation completed successfully"
 
-              ### To fix this issue:
-              1. Ensure you have committed and pushed actual changes to files
-              2. Check that your changes are included in this PR branch
-              3. Verify the PR is comparing the correct base and head branches
-              ### Need help?
-              - Review the [contributing guidelines](README.md)
-              - Check the [CTMM build system documentation](.github/copilot-instructions.md)
-              - Run \\\`python3 ctmm_build.py\\\` locally to test your changes`
-          })
+      - name: Enhanced CI environment validation for PRs
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🔧 Running enhanced CI environment validation for PR..."
+          python3 validate_ci_environment.py || echo "⚠️ Some environment checks had warnings but continuing..."
+          echo "✅ Enhanced CI environment validation completed"
+      - name: Comment on PR if validation fails
+        if: failure()
+        timeout-minutes: 3
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## ⚠️ PR Content Validation Failed
+
+                This pull request appears to have no reviewable content:
+                - Changed files: ${{ steps.changes.outputs.changed_files }}
+                - Added lines: ${{ steps.changes.outputs.added_lines }}
+                - Deleted lines: ${{ steps.changes.outputs.deleted_lines }}
+
+                **Why this matters:** Copilot cannot review pull requests that contain no file changes or content modifications.
+
+                ### To fix this issue:
+                1. Ensure you have committed and pushed actual changes to files
+                2. Check that your changes are included in this PR branch
+                3. Verify the PR is comparing the correct base and head branches
+                ### Need help?
+                - Review the [contributing guidelines](README.md)
+                - Check the [CTMM build system documentation](.github/copilot-instructions.md)
+                - Run \\\`python3 ctmm_build.py\\\` locally to test your changes`
+            })
