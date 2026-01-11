@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 CTMM Document Conversion Pipeline Validator
-============================================
 
 Advanced error analysis and code optimization for converted therapy documents.
 Provides actionable recommendations for quality improvement.

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Issue #1128 CI LaTeX Build Failure Fix Validation
-===============================================
 
 This script validates that all the CI LaTeX build failure fixes mentioned in
 the PR description have been properly implemented:

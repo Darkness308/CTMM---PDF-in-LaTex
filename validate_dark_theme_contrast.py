@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 CTMM Dark Theme - WCAG Contrast Validator
-==========================================
 Validates all color combinations in the dark theme for WCAG 2.1 compliance.
 
 Scientific References:

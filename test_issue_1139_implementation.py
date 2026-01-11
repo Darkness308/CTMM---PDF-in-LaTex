@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Test CTMM Comprehensive LaTeX Workflow System Implementation
-=============================================================
 
 This test validates the comprehensive LaTeX workflow system implementation
 including document conversion pipeline, error analysis, and code optimization.

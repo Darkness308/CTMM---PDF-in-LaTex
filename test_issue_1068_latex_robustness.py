@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Issue #1068 Validation: LaTeX Action Migration and Robustness Enhancement
-========================================================================
 
 This script validates the fixes implemented for issue #1068, which addresses
 CI pipeline failures by migrating from the unreliable dante-ev/latex-action
