@@ -62,10 +62,10 @@ Alle LaTeX-Dateien verwenden die standardisierten LaTeX-Befehle für deutsche An
 **Beispiele aus dem Code:**
 
 ```latex
-// modules/safewords.tex, Zeile 7:
+% modules/safewords.tex, Zeile 7:
 \glqq Ich kann nicht mehr\grqq{}, \glqq Ich brauch Ruhe\grqq{}
 
-// modules/arbeitsblatt-trigger.tex, Zeile 38:
+% modules/arbeitsblatt-trigger.tex, Zeile 38:
 \glqq Es war wie...\grqq{} oder \glqq Es fühlte sich an wie...\grqq{}
 ```
 

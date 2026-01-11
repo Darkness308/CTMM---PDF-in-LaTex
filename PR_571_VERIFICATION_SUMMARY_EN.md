@@ -62,10 +62,10 @@ All LaTeX files use standardized LaTeX commands for German quotation marks:
 **Code Examples:**
 
 ```latex
-// modules/safewords.tex, Line 7:
+% modules/safewords.tex, Line 7:
 \glqq Ich kann nicht mehr\grqq{}, \glqq Ich brauch Ruhe\grqq{}
 
-// modules/arbeitsblatt-trigger.tex, Line 38:
+% modules/arbeitsblatt-trigger.tex, Line 38:
 \glqq Es war wie...\grqq{} oder \glqq Es fühlte sich an wie...\grqq{}
 ```
 
