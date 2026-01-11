@@ -13,7 +13,7 @@ import yaml
 
 def test_alpine_compatibility():
     """Test that xu-cheng/latex-action does not specify extra_system_packages"""
-    print("[EMOJI] Testing Alpine Package Compatibility")
+    print("[TEST] Testing Alpine Package Compatibility")
     print("=" * 60)
 
     workflow_files = [
@@ -92,7 +92,7 @@ def test_alpine_compatibility():
 def main():
     """Run Alpine compatibility validation for Issue #1165"""
     print("=" * 80)
-    print("[EMOJI] ALPINE COMPATIBILITY FIX VALIDATION")
+    print("[TEST] ALPINE COMPATIBILITY FIX VALIDATION")
     print("=" * 80)
     print("\nValidating that xu-cheng/latex-action@v3 does NOT specify extra_system_packages")
     print("because the texlive-full Docker image already includes all necessary packages.")
