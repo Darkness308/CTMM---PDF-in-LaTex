@@ -61,7 +61,9 @@ class LaTeXValidator:
             'hypertarget_overuse': r'\\hypertarget\{[^}]+\}\{%\s*\\section',
             'texorpdfstring_overuse': r'\\texorpdfstring\{[^}]*\\textbf\{[^}]*\}\}',
             'excessive_backslashes': r'\\\\&',  # Double backslashes before &
-            'auto_generated_labels': r'\\label\{[a-z]+-\d+.*\}',  # Auto-generated labels
+            # Auto-generated labels like section-1, unnumbered-45, subsection-123
+            # But NOT semantic labels like tool-23-trigger-management
+            'auto_generated_labels': r'\\label\{(section|subsection|subsubsection|unnumbered|chapter)-\d+\}',
         }
 
         # Patterns for proper LaTeX structure
