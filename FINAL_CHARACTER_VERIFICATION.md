@@ -111,12 +111,12 @@ The character checker now detects **20 types of problematic characters:**
 ### Typographic Characters (12 types)
 | Character | Code | LaTeX Alternative |
 |-----------|------|-------------------|
-| Left single quotation mark | U+2018 | `` ` `` |
-| Right single quotation mark | U+2019 | `'` |
-| **German opening single quote** | **U+201A** | `` ` `` |
-| Left double quotation mark | U+201C | ``` `` ``` |
-| Right double quotation mark | U+201D | `''` |
-| **German opening double quote** | **U+201E** | ``` `` ``` |
+| Left single quotation mark | U+2018 | Single backtick: \` |
+| Right single quotation mark | U+2019 | Single quote: ' |
+| **German opening single quote** | **U+201A** | Single backtick: \` |
+| Left double quotation mark | U+201C | Two backticks: \`\` |
+| Right double quotation mark | U+201D | Two single quotes: '' |
+| **German opening double quote** | **U+201E** | Two backticks: \`\` |
 | En dash | U+2013 | `--` or `-` |
 | Em dash | U+2014 | `---` or `-` |
 | Horizontal ellipsis | U+2026 | `\ldots` |
@@ -196,11 +196,11 @@ The file `modules/safewords.tex` had 5 instances of German opening double quotes
 
 | Original | Fixed |
 |----------|-------|
-| `„ "` | ``` `` '' ``` |
-| `„Orange"` | ``` ``Orange'' ``` |
-| `„Kristall"` | ``` ``Kristall'' ``` |
-| `„Lagerfeuer"` | ``` ``Lagerfeuer'' ``` |
-| `„Bitte..."` | ``` ``Bitte...'' ``` |
+| `„ "` | Two backticks, two quotes: \`\` '' |
+| `„Orange"` | \`\`Orange'' |
+| `„Kristall"` | \`\`Kristall'' |
+| `„Lagerfeuer"` | \`\`Lagerfeuer'' |
+| `„Bitte..."` | \`\`Bitte...'' |
 
 ---
 
@@ -223,7 +223,7 @@ The file `modules/safewords.tex` had 5 instances of German opening double quotes
 
 ### Recommendations
 1. **Keep using the character checker** before commits: `python3 check_character_issues.py`
-2. **Use LaTeX quotation marks** in all new content: `` for opening, `''` for closing
+2. **Use LaTeX quotation marks** in all new content: \`\` for opening, '' for closing
 3. **Avoid copy-pasting** from word processors (use plain text editors)
 4. **Configure editors** to disable smart quotes for LaTeX files
 
