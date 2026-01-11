@@ -15,6 +15,42 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
+def sanitize_pkg_name(name):
+    """
+    Sanitize package names to proper CamelCase format.
+
+    Converts names with numbers, hyphens, and underscores to proper CamelCase:
+    - '123-package' -> 'pkg123Package'
+    - '1-package' -> 'pkg1Package'
+    - '2_test' -> 'pkg2Test'
+    - '999-name' -> 'pkg999Name'
+
+    Args:
+        name (str): The input package name to sanitize
+
+    Returns:
+        str: The sanitized package name in CamelCase format
+    """
+    if not name:
+        return 'pkg'
+
+    # Split on hyphens and underscores
+    parts = re.split(r'[-_]', name)
+    sanitized = 'pkg'
+
+    for i, part in enumerate(parts):
+        if not part:  # Skip empty parts
+            continue
+        if part.isdigit():
+            # If part is purely numeric, add as-is
+            sanitized += part
+        else:
+            # Capitalize the first letter of non-numeric parts
+            sanitized += part.capitalize()
+
+    return sanitized
+
+
 class LaTeXValidator:
     """Validates and cleans LaTeX files from excessive escaping."""
 
@@ -174,7 +210,7 @@ class LaTeXValidator:
                         f.write(cleaned_content)
                     logger.info(f"Fixed escaping issues in {tex_file}")
             else:
-                logger.info(f"✓ {tex_file} is properly formatted")
+                logger.info(f"[OK] {tex_file} is properly formatted")
 
         return results
 
@@ -182,12 +218,12 @@ class LaTeXValidator:
         """Create a sample file with escaping issues for testing."""
         problematic_content = """
 \\hypertarget{tool-23-trigger-management}{%
-\\section{\\texorpdfstring{📄 \\textbf{TOOL 23: TRIGGER-MANAGEMENT}}{📄 TOOL 23: TRIGGER-MANAGEMENT}\\label{tool-23-trigger-management}}
+\\section{\\texorpdfstring{[FILE] \\textbf{TOOL 23: TRIGGER-MANAGEMENT}}{[FILE] TOOL 23: TRIGGER-MANAGEMENT}\\label{tool-23-trigger-management}}
 
-🧩 \\emph{\\textbf{Modul zur Selbsthilfe \\textbackslash{}\\textbackslash{}& Co-Regulation -- Klartextversion für beide Partner}}
+[EMOJI] \\emph{\\textbf{Modul zur Selbsthilfe \\textbackslash{}\\textbackslash{}& Co-Regulation -- Klartextversion für beide Partner}}
 
 \\hypertarget{ziel-nutzen}{%
-\\subsection{\\texorpdfstring{🎯 \\textbf{\\ul{ZIEL \\textbackslash{}\\textbackslash{}& NUTZEN}}}{🎯 ZIEL \\textbackslash{}\\textbackslash{}& NUTZEN}\\label{ziel-nutzen}}
+\\subsection{\\texorpdfstring{[TARGET] \\textbf{\\ul{ZIEL \\textbackslash{}\\textbackslash{}& NUTZEN}}}{[TARGET] ZIEL \\textbackslash{}\\textbackslash{}& NUTZEN}\\label{ziel-nutzen}}
 
 \\textbf{Trigger besser verstehen}, körperliche/emotionale/mentale Reaktionen erkennen, passende Skills zuordnen.
 
@@ -198,8 +234,8 @@ class LaTeXValidator:
 \\subsection{}\\label{section-1}}
 
 \\begin{itemize}
-\\item 🟢 \\textbf{Grün} = Alltag \\textbackslash{}\\textbackslash{}& Prävention
-\\item 🟠 \\textbf{Orange} = Akutphase \\textbackslash{}\\textbackslash{}& Regulation
+\\item [GREEN] \\textbf{Grün} = Alltag \\textbackslash{}\\textbackslash{}& Prävention
+\\item [EMOJI] \\textbf{Orange} = Akutphase \\textbackslash{}\\textbackslash{}& Regulation
 \\end{itemize}
 """
 
@@ -238,10 +274,10 @@ def main():
         is_valid, issues, cleaned_content = validator.validate_file(path)
 
         if is_valid:
-            print(f"✓ {path} is properly formatted")
+            print(f"[OK] {path} is properly formatted")
             return 0
         else:
-            print(f"✗ Issues found in {path}:")
+            print(f"[X] Issues found in {path}:")
             for issue_type, matches in issues.items():
                 print(f"  - {issue_type}: {len(matches)} occurrence(s)")
 

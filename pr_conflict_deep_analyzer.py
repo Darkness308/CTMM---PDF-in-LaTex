@@ -22,12 +22,12 @@ class PRConflictDeepAnalyzer:
 
     def analyze_unknown_status_prs(self) -> Dict:
         """Analyze PRs with unknown merge status."""
-        print("🔍 Deep analysis of PRs with unknown merge status...")
+        print("[SEARCH] Deep analysis of PRs with unknown merge status...")
 
         results = {}
 
         for pr_number in self.needs_recheck:
-            print(f"\n📋 Analyzing PR #{pr_number}...")
+            print(f"\n[TEST] Analyzing PR #{pr_number}...")
             analysis = self._deep_analyze_pr(pr_number)
             results[pr_number] = analysis
 
@@ -79,7 +79,7 @@ class PRConflictDeepAnalyzer:
 
     def create_sequential_merge_plan(self) -> Dict:
         """Create a plan for sequential merging of conflicted PRs."""
-        print("\n📋 Creating sequential merge plan...")
+        print("\n[TEST] Creating sequential merge plan...")
 
         # Group PRs by type and complexity
         plan = {
@@ -282,7 +282,7 @@ class PRConflictDeepAnalyzer:
 
 def main():
     """Main execution function."""
-    print("🔍 CTMM PR Conflict Deep Analysis Tool")
+    print("[SEARCH] CTMM PR Conflict Deep Analysis Tool")
     print("=" * 50)
 
     analyzer = PRConflictDeepAnalyzer()
@@ -303,11 +303,11 @@ def main():
     # Estimate effort
     effort = analyzer.estimate_total_effort()
 
-    print("\n📊 Analysis Results:")
-    print(f"   • Total estimated time: {effort['estimated_hours']['total']} hours")
-    print(f"   • Phases: 5 sequential phases")
-    print(f"   • Confidence level: {effort['confidence_level']}")
-    print(f"\n📄 Detailed instructions saved to: SPECIFIC_PR_RESOLUTION_INSTRUCTIONS.md")
+    print("\n[SUMMARY] Analysis Results:")
+    print(f"   * Total estimated time: {effort['estimated_hours']['total']} hours")
+    print(f"   * Phases: 5 sequential phases")
+    print(f"   * Confidence level: {effort['confidence_level']}")
+    print(f"\n[FILE] Detailed instructions saved to: SPECIFIC_PR_RESOLUTION_INSTRUCTIONS.md")
 
     return {
         "unknown_analysis": unknown_analysis,

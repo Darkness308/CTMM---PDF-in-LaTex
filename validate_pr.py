@@ -25,16 +25,16 @@ def check_git_status():
     """Check if there are uncommitted changes."""
     success, stdout, stderr = run_command("git status --porcelain")
     if not success:
-        print(f"❌ Error checking git status: {stderr}")
+        print(f"[FAIL] Error checking git status: {stderr}")
         return False
 
     if stdout.strip():
-        print("⚠️  Uncommitted changes detected:")
+        print("[WARN]  Uncommitted changes detected:")
         print(stdout)
         print("Consider committing these changes before creating a PR.")
         return False
 
-    print("✅ No uncommitted changes")
+    print("[PASS] No uncommitted changes")
     return True
 
 def check_file_changes(base_branch="main"):
@@ -65,14 +65,14 @@ def check_file_changes(base_branch="main"):
         # If no base branch found, compare with HEAD~1 or show staged changes
         success, stdout, stderr = run_command("git diff --cached --name-only")
         if success and stdout.strip():
-            print("📄 Checking staged changes...")
+            print("[FILE] Checking staged changes...")
             actual_base = "--cached"
         else:
             success, stdout, stderr = run_command("git diff --name-only HEAD~1..HEAD")
             if success:
                 actual_base = "HEAD~1"
             else:
-                print("⚠️  Cannot determine base for comparison, checking working directory changes...")
+                print("[WARN]  Cannot determine base for comparison, checking working directory changes...")
                 success, stdout, stderr = run_command("git diff --name-only")
                 actual_base = ""
 
@@ -85,7 +85,7 @@ def check_file_changes(base_branch="main"):
         success, stdout, stderr = run_command(f"git diff --name-only {actual_base}..HEAD")
 
     if not success:
-        print(f"❌ Error checking file changes: {stderr}")
+        print(f"[FAIL] Error checking file changes: {stderr}")
         return False, 0, 0, 0
 
     changed_files = len(stdout.split('\n')) if stdout.strip() else 0
@@ -116,21 +116,21 @@ def check_file_changes(base_branch="main"):
 
 def check_ctmm_build():
     """Run the CTMM build system to validate the project."""
-    print("\n🔧 Running CTMM build system...")
+    print("\n[FIX] Running CTMM build system...")
     success, stdout, stderr = run_command("python3 ctmm_build.py")
 
     if not success:
-        print(f"❌ CTMM build failed")
+        print(f"[FAIL] CTMM build failed")
         if stderr:
             print(f"Error details: {stderr}")
         return False
 
     # Check the output for success indicators
-    if stdout and ("PASS" in stdout or "✓" in stdout):
-        print("✅ CTMM build system passed")
+    if stdout and ("PASS" in stdout or "[OK]" in stdout):
+        print("[PASS] CTMM build system passed")
         return True
     else:
-        print("⚠️  CTMM build completed but status unclear")
+        print("[WARN]  CTMM build completed but status unclear")
         return True  # Don't fail if we can't parse the output clearly
 
 def validate_latex_files():
@@ -144,7 +144,7 @@ def validate_latex_files():
     if not latex_files:
         return True
 
-    print(f"\n📄 Checking {len(latex_files)} LaTeX file(s)...")
+    print(f"\n[FILE] Checking {len(latex_files)} LaTeX file(s)...")
 
     issues_found = False
     for file_path in latex_files:
@@ -156,15 +156,15 @@ def validate_latex_files():
 
         # Check for common LaTeX issues
         if '\\usepackage{' in content and 'modules/' in file_path:
-            print(f"⚠️  {file_path}: Contains \\usepackage - should be in main.tex preamble")
+            print(f"[WARN]  {file_path}: Contains \\usepackage - should be in main.tex preamble")
             issues_found = True
 
         if '\\Box' in content or '\\blacksquare' in content:
-            print(f"⚠️  {file_path}: Uses \\Box or \\blacksquare - use \\checkbox/\\checkedbox macros")
+            print(f"[WARN]  {file_path}: Uses \\Box or \\blacksquare - use \\checkbox/\\checkedbox macros")
             issues_found = True
 
     if not issues_found:
-        print("✅ No LaTeX issues detected")
+        print("[PASS] No LaTeX issues detected")
 
     return not issues_found
 
@@ -176,12 +176,12 @@ def main():
 
     args = parser.parse_args()
 
-    print("🔍 CTMM PR Validation")
+    print("[SEARCH] CTMM PR Validation")
     print("=" * 50)
 
     # Check if we're in a git repository
     if not os.path.exists('.git'):
-        print("❌ Not in a git repository")
+        print("[FAIL] Not in a git repository")
         sys.exit(1)
 
     all_checks_passed = True
@@ -195,25 +195,25 @@ def main():
     if not success:
         all_checks_passed = False
     else:
-        print(f"\n📊 Changes compared to {args.base_branch}:")
+        print(f"\n[SUMMARY] Changes compared to {args.base_branch}:")
         print(f"  - Files changed: {changed_files}")
         print(f"  - Lines added: {added_lines}")
         print(f"  - Lines deleted: {deleted_lines}")
 
         if changed_files == 0:
-            print("❌ No file changes detected - Copilot cannot review empty PRs")
-            print("   💡 To fix: Add meaningful changes to files (documentation, code, etc.)")
-            print("   📚 See existing ISSUE_*_RESOLUTION.md files for examples")
-            print("   🎯 This is similar to issues #409, #476, #673, #708, #731, #817")
+            print("[FAIL] No file changes detected - Copilot cannot review empty PRs")
+            print("   [TIP] To fix: Add meaningful changes to files (documentation, code, etc.)")
+            print("   [BOOKS] See existing ISSUE_*_RESOLUTION.md files for examples")
+            print("   [TARGET] This is similar to issues #409, #476, #673, #708, #731, #817")
             all_checks_passed = False
         elif added_lines == 0 and deleted_lines == 0:
-            print("❌ No content changes detected - PR appears to be empty")
-            print("   💡 To fix: Ensure your changes add or modify actual content")
-            print("   ⚠️  Whitespace-only changes won't enable Copilot review")
-            print("   📝 Consider creating documentation or making small code improvements")
+            print("[FAIL] No content changes detected - PR appears to be empty")
+            print("   [TIP] To fix: Ensure your changes add or modify actual content")
+            print("   [WARN]  Whitespace-only changes won't enable Copilot review")
+            print("   [NOTE] Consider creating documentation or making small code improvements")
             all_checks_passed = False
         else:
-            print("✅ Meaningful changes detected - Copilot should be able to review")
+            print("[PASS] Meaningful changes detected - Copilot should be able to review")
 
     # Validate LaTeX files
     if not validate_latex_files():
@@ -226,19 +226,19 @@ def main():
 
     print("\n" + "=" * 50)
     if all_checks_passed:
-        print("🎉 All validation checks passed!")
+        print("[SUCCESS] All validation checks passed!")
         print("This PR should be reviewable by Copilot.")
         sys.exit(0)
     else:
-        print("❌ Some validation checks failed")
+        print("[FAIL] Some validation checks failed")
         print("Please address the issues above before creating/updating the PR.")
         print()
-        print("🔗 Helpful Resources:")
-        print("   📖 Repository: See existing ISSUE_*_RESOLUTION.md for examples")
-        print("   🛠️  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
-        print("   📝 Validation: Run 'python3 validate_pr.py --verbose' for details")
-        print("   🎯 Recent fixes: See ISSUE_817_RESOLUTION.md, ISSUE_884_RESOLUTION.md for examples")
-        print("   ⚠️  SHA conflicts: See MERGIFY_SHA_CONFLICT_RESOLUTION.md for Mergify issues")
+        print("[EMOJI] Helpful Resources:")
+        print("   [EMOJI] Repository: See existing ISSUE_*_RESOLUTION.md for examples")
+        print("   [TOOL]  Build system: Run 'python3 ctmm_build.py' to check LaTeX")
+        print("   [NOTE] Validation: Run 'python3 validate_pr.py --verbose' for details")
+        print("   [TARGET] Recent fixes: See ISSUE_817_RESOLUTION.md, ISSUE_884_RESOLUTION.md for examples")
+        print("   [WARN]  SHA conflicts: See MERGIFY_SHA_CONFLICT_RESOLUTION.md for Mergify issues")
         sys.exit(1)
 
 if __name__ == "__main__":

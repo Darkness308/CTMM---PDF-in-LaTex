@@ -14,16 +14,16 @@ def test_latex_validator_import():
     """Test that latex_validator.py can be imported without syntax errors."""
     try:
         from latex_validator import LaTeXValidator
-        print("✅ LaTeXValidator imported successfully")
+        print("[PASS] LaTeXValidator imported successfully")
         return True
     except IndentationError as e:
-        print(f"❌ IndentationError in latex_validator.py: {e}")
+        print(f"[FAIL] IndentationError in latex_validator.py: {e}")
         return False
     except SyntaxError as e:
-        print(f"❌ SyntaxError in latex_validator.py: {e}")
+        print(f"[FAIL] SyntaxError in latex_validator.py: {e}")
         return False
     except Exception as e:
-        print(f"❌ Unexpected error importing LaTeXValidator: {e}")
+        print(f"[FAIL] Unexpected error importing LaTeXValidator: {e}")
         return False
 
 def test_sanitize_pkg_name_function():
@@ -43,14 +43,14 @@ def test_sanitize_pkg_name_function():
         for input_val, expected in test_cases:
             result = sanitize_pkg_name(input_val)
             if result == expected:
-                print(f"✅ sanitize_pkg_name('{input_val}') = '{result}'")
+                print(f"[PASS] sanitize_pkg_name('{input_val}') = '{result}'")
             else:
-                print(f"❌ sanitize_pkg_name('{input_val}') = '{result}', expected '{expected}'")
+                print(f"[FAIL] sanitize_pkg_name('{input_val}') = '{result}', expected '{expected}'")
                 return False
 
         return True
     except Exception as e:
-        print(f"❌ Error testing sanitize_pkg_name function: {e}")
+        print(f"[FAIL] Error testing sanitize_pkg_name function: {e}")
         return False
 
 def test_ctmm_build_system():
@@ -64,18 +64,18 @@ def test_ctmm_build_system():
         )
 
         if result.returncode == 0:
-            print("✅ CTMM build system runs successfully")
+            print("[PASS] CTMM build system runs successfully")
             return True
         else:
-            print(f"❌ CTMM build system failed with exit code {result.returncode}")
+            print(f"[FAIL] CTMM build system failed with exit code {result.returncode}")
             print(f"Stderr: {result.stderr}")
             return False
 
     except subprocess.TimeoutExpired:
-        print("❌ CTMM build system timed out")
+        print("[FAIL] CTMM build system timed out")
         return False
     except Exception as e:
-        print(f"❌ Error running CTMM build system: {e}")
+        print(f"[FAIL] Error running CTMM build system: {e}")
         return False
 
 def main():
@@ -109,12 +109,12 @@ def main():
     # Summary
     print("=" * 70)
     if all_tests_passed:
-        print("🎉 ALL TESTS PASSED - Issue #719 fix validated!")
+        print("[SUCCESS] ALL TESTS PASSED - Issue #719 fix validated!")
         print("The CI build failure has been resolved.")
         print("The indentation error in latex_validator.py is fixed.")
         sys.exit(0)
     else:
-        print("❌ SOME TESTS FAILED - Issue #719 not fully resolved")
+        print("[FAIL] SOME TESTS FAILED - Issue #719 not fully resolved")
         sys.exit(1)
 
 if __name__ == "__main__":

@@ -33,18 +33,18 @@ def check_issue_835_resolution():
     # Check that the resolution document exists
     resolution_file = Path("ISSUE_835_RESOLUTION.md")
     if not resolution_file.exists():
-        print("❌ ISSUE_835_RESOLUTION.md not found")
+        print("[FAIL] ISSUE_835_RESOLUTION.md not found")
         return False
 
-    print("✅ Issue resolution document exists")
+    print("[PASS] Issue resolution document exists")
 
     # Check document content
     content = resolution_file.read_text()
     if len(content) < 5000:
-        print("❌ Resolution document is too short for meaningful review")
+        print("[FAIL] Resolution document is too short for meaningful review")
         return False
 
-    print(f"✅ Resolution document contains {len(content)} characters")
+    print(f"[PASS] Resolution document contains {len(content)} characters")
 
     # Check for key sections in the document
     required_sections = [
@@ -62,34 +62,34 @@ def check_issue_835_resolution():
             missing_sections.append(section)
 
     if missing_sections:
-        print(f"❌ Missing required sections: {', '.join(missing_sections)}")
+        print(f"[FAIL] Missing required sections: {', '.join(missing_sections)}")
         return False
 
-    print("✅ All required sections present in resolution document")
+    print("[PASS] All required sections present in resolution document")
 
     return True
 
 def check_file_changes():
     """Check that meaningful file changes are present."""
 
-    print("\n🔍 CHECKING FILE CHANGES")
+    print("\n[SEARCH] CHECKING FILE CHANGES")
     print("-" * 50)
 
     # Check git diff stats
     success, stdout, stderr = run_command("git diff --numstat HEAD~1..HEAD")
     if not success:
-        print(f"❌ Git diff failed: {stderr}")
+        print(f"[FAIL] Git diff failed: {stderr}")
         return False
 
     if not stdout.strip():
-        print("❌ No file changes detected")
+        print("[FAIL] No file changes detected")
         return False
 
     total_added = 0
     total_deleted = 0
     file_count = 0
 
-    print("📊 File changes detected:")
+    print("[SUMMARY] File changes detected:")
     for line in stdout.split('\n'):
         if line.strip():
             parts = line.split('\t')
@@ -100,79 +100,79 @@ def check_file_changes():
                 total_added += added
                 total_deleted += deleted
                 file_count += 1
-                print(f"   📝 {filename}: +{added} -{deleted}")
+                print(f"   [NOTE] {filename}: +{added} -{deleted}")
 
-    print(f"\n📈 Summary:")
+    print(f"\n[CHART] Summary:")
     print(f"   Files changed: {file_count}")
     print(f"   Lines added: {total_added}")
     print(f"   Lines deleted: {total_deleted}")
 
     if file_count == 0:
-        print("❌ No files changed")
+        print("[FAIL] No files changed")
         return False
 
     if total_added < 100:
-        print("❌ Insufficient content added for meaningful review")
+        print("[FAIL] Insufficient content added for meaningful review")
         return False
 
-    print("✅ Meaningful changes present for Copilot review")
+    print("[PASS] Meaningful changes present for Copilot review")
     return True
 
 def check_validation_systems():
     """Test that all validation systems pass."""
 
-    print("\n🔧 CHECKING VALIDATION SYSTEMS")
+    print("\n[FIX] CHECKING VALIDATION SYSTEMS")
     print("-" * 50)
 
     # Test PR validation
     print("Testing PR validation...")
     success, stdout, stderr = run_command("python3 validate_pr.py")
     if not success:
-        print("❌ PR validation failed")
+        print("[FAIL] PR validation failed")
         return False
 
     if "All validation checks passed" not in stdout:
-        print("❌ PR validation did not pass all checks")
+        print("[FAIL] PR validation did not pass all checks")
         return False
 
-    print("✅ PR validation passed")
+    print("[PASS] PR validation passed")
 
     # Test CTMM build system
     print("\nTesting CTMM build system...")
     success, stdout, stderr = run_command("python3 ctmm_build.py")
     if not success:
-        print("❌ CTMM build system failed")
+        print("[FAIL] CTMM build system failed")
         return False
 
-    if "✓ PASS" not in stdout:
-        print("❌ CTMM build system validation failed")
+    if "[OK] PASS" not in stdout:
+        print("[FAIL] CTMM build system validation failed")
         return False
 
-    print("✅ CTMM build system passed")
+    print("[PASS] CTMM build system passed")
 
     return True
 
 def check_pattern_consistency():
     """Verify consistency with previous resolution patterns."""
 
-    print("\n📋 CHECKING PATTERN CONSISTENCY")
+    print("\n[TEST] CHECKING PATTERN CONSISTENCY")
     print("-" * 50)
 
     # Check for other resolution files
     resolution_files = list(Path(".").glob("ISSUE_*_RESOLUTION.md"))
     if len(resolution_files) < 8:
-        print(f"❌ Expected at least 8 resolution files, found {len(resolution_files)}")
+        print(f"[FAIL] Expected at least 8 resolution files, found {len(resolution_files)}")
         return False
 
-    print(f"✅ Found {len(resolution_files)} resolution files")
+    print(f"[PASS] Found {len(resolution_files)} resolution files")
 
     # Check that our resolution follows the pattern
     our_resolution = Path("ISSUE_835_RESOLUTION.md")
     if our_resolution not in resolution_files:
-        print("❌ ISSUE_835_RESOLUTION.md not found in resolution files list")
+        print("[FAIL] ISSUE_835_RESOLUTION.md not found in resolution files list")
         return False
 
-    print("✅ Issue #835 resolution follows established pattern")
+    print("[PASS] Issue #835 resolution follows established pattern")
 
     # Verify content follows pattern of issue #817 (most recent)
     issue_817 = Path("ISSUE_817_RESOLUTION.md")
@@ -182,9 +182,9 @@ def check_pattern_consistency():
 
         # Check for similar structure
         if "Pattern Recognition" in issue_817_content and "Pattern Recognition" not in our_content:
-            print("⚠️  Pattern structure differs from Issue #817")
+            print("[WARN]  Pattern structure differs from Issue #817")
         else:
-            print("✅ Pattern structure consistent with Issue #817")
+            print("[PASS] Pattern structure consistent with Issue #817")
 
     return True
 
@@ -204,24 +204,24 @@ def main():
         try:
             if not check_func():
                 all_passed = False
-                print(f"\n❌ {check_name} check failed")
+                print(f"\n[FAIL] {check_name} check failed")
             else:
-                print(f"\n✅ {check_name} check passed")
+                print(f"\n[PASS] {check_name} check passed")
         except Exception as e:
-            print(f"\n❌ {check_name} check failed with error: {e}")
+            print(f"\n[FAIL] {check_name} check failed with error: {e}")
             all_passed = False
 
     print("\n" + "=" * 80)
     if all_passed:
-        print("🎉 ALL CHECKS PASSED - ISSUE #835 SUCCESSFULLY RESOLVED")
+        print("[SUCCESS] ALL CHECKS PASSED - ISSUE #835 SUCCESSFULLY RESOLVED")
         print("\nGitHub Copilot should now be able to review this PR because:")
-        print("  ✅ Meaningful file changes are present (189+ lines added)")
-        print("  ✅ Comprehensive documentation provides reviewable content")
-        print("  ✅ All validation systems confirm PR is ready for review")
-        print("  ✅ Resolution follows established pattern from 7 previous issues")
-        print("  ✅ CTMM therapeutic materials system integrity maintained")
+        print("  [PASS] Meaningful file changes are present (189+ lines added)")
+        print("  [PASS] Comprehensive documentation provides reviewable content")
+        print("  [PASS] All validation systems confirm PR is ready for review")
+        print("  [PASS] Resolution follows established pattern from 7 previous issues")
+        print("  [PASS] CTMM therapeutic materials system integrity maintained")
     else:
-        print("❌ SOME CHECKS FAILED - Issue #835 not fully resolved")
+        print("[FAIL] SOME CHECKS FAILED - Issue #835 not fully resolved")
 
     print("=" * 80)
     return all_passed

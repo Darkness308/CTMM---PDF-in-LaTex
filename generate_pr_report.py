@@ -124,7 +124,7 @@ def generate_report():
     """Generate comprehensive PR analysis report."""
 
     report = []
-    report.append("# 📊 Comprehensive Open PR Analysis Report")
+    report.append("# [SUMMARY] Comprehensive Open PR Analysis Report")
     report.append(f"\n**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}")
     report.append(f"\n**Total Open PRs:** {len(OPEN_PRS)}")
     report.append("\n---\n")
@@ -134,32 +134,32 @@ def generate_report():
     non_main_base = [pr for pr in OPEN_PRS if pr['base']['ref'] != 'main']
     old_prs = [pr for pr in OPEN_PRS if pr.get('created_at', '2025-08-14') < '2025-08-10']
 
-    report.append("## 📈 Summary\n")
-    report.append(f"- 🔴 **Total Open PRs:** {len(OPEN_PRS)}")
-    report.append(f"- 📝 **Draft PRs:** {len(draft_prs)}")
-    report.append(f"- ⚠️  **PRs Not Targeting Main:** {len(non_main_base)}")
-    report.append(f"- 🕐 **Old PRs (>2 months):** {len(old_prs)}")
+    report.append("## [CHART] Summary\n")
+    report.append(f"- [RED] **Total Open PRs:** {len(OPEN_PRS)}")
+    report.append(f"- [NOTE] **Draft PRs:** {len(draft_prs)}")
+    report.append(f"- [WARN]  **PRs Not Targeting Main:** {len(non_main_base)}")
+    report.append(f"- [TIME] **Old PRs (>2 months):** {len(old_prs)}")
     report.append("")
 
-    report.append("## 🔍 Detailed Analysis\n")
+    report.append("## [SEARCH] Detailed Analysis\n")
     report.append("### Key Issues Identified\n")
     report.append("1. **Many PRs are very old** (from August 2025) - likely have merge conflicts with current main")
     report.append("2. **Some PRs target other feature branches** instead of main - these need special handling")
     report.append("3. **PR chain issues** - Some PRs depend on other PRs being merged first")
     report.append("")
 
-    report.append("## 📋 All Open Pull Requests\n")
+    report.append("## [TEST] All Open Pull Requests\n")
 
     for i, pr in enumerate(OPEN_PRS, 1):
         report.append(f"### {i}. PR #{pr['number']}: {pr['title']}")
         report.append(f"- **URL:** {pr['html_url']}")
-        report.append(f"- **Branch:** `{pr['head']['ref']}` → `{pr['base']['ref']}`")
+        report.append(f"- **Branch:** `{pr['head']['ref']}` -> `{pr['base']['ref']}`")
         if pr.get('created_at'):
             report.append(f"- **Created:** {pr['created_at']}")
         if pr.get('draft'):
-            report.append(f"- **Status:** 🟡 DRAFT")
+            report.append(f"- **Status:** [EMOJI] DRAFT")
         if pr['base']['ref'] != 'main':
-            report.append(f"- **⚠️  Warning:** Targets `{pr['base']['ref']}` instead of `main`")
+            report.append(f"- **[WARN]  Warning:** Targets `{pr['base']['ref']}` instead of `main`")
         report.append("")
 
         # Provide direct links for conflict resolution
@@ -170,17 +170,17 @@ def generate_report():
         report.append(f"- [View Commits]({pr['html_url']}/commits)")
         report.append("")
 
-    report.append("\n## ⚠️  Special Cases\n")
+    report.append("\n## [WARN]  Special Cases\n")
 
     if non_main_base:
         report.append("### PRs Not Targeting Main Branch\n")
         report.append("These PRs target other feature branches and may need to be rebased:\n")
         for pr in non_main_base:
-            report.append(f"- **PR #{pr['number']}**: `{pr['head']['ref']}` → `{pr['base']['ref']}`")
+            report.append(f"- **PR #{pr['number']}**: `{pr['head']['ref']}` -> `{pr['base']['ref']}`")
             report.append(f"  - [Change base branch]({pr['html_url']})")
         report.append("")
 
-    report.append("\n## 💡 Recommendations\n")
+    report.append("\n## [TIP] Recommendations\n")
     report.append("### Immediate Actions\n")
     report.append("1. **Close stale/duplicate PRs** - Many of these PRs are 2+ months old")
     report.append("2. **Fix base branches** - Update PRs #489 and #423 to target `main`")
@@ -208,7 +208,7 @@ def generate_report():
     report.append("### Workflow Failure Analysis\n")
     report.append("To check which workflows are failing:\n")
     report.append("1. Visit each PR's 'Checks' tab")
-    report.append("2. Look for red ❌ indicators")
+    report.append("2. Look for red [FAIL] indicators")
     report.append("3. Click on failed checks to see logs")
     report.append("4. Common issues:")
     report.append("   - LaTeX package errors")
@@ -217,7 +217,7 @@ def generate_report():
     report.append("   - GitHub Actions configuration")
     report.append("")
 
-    report.append("\n## 🤖 Automated Healing System\n")
+    report.append("\n## [EMOJI] Automated Healing System\n")
     report.append("The repository already has a workflow healing system:")
     report.append("")
     report.append("### Check Workflow Status")
@@ -237,7 +237,7 @@ def generate_report():
     report.append("```")
     report.append("")
 
-    report.append("\n## 🎯 Action Items\n")
+    report.append("\n## [TARGET] Action Items\n")
     report.append("- [ ] Review each PR using the direct links above")
     report.append("- [ ] Close PRs that are no longer relevant")
     report.append("- [ ] Update base branches for PRs #489 and #423")
@@ -251,7 +251,7 @@ def generate_report():
 def main():
     """Main execution."""
     print("=" * 80)
-    print("📊 Generating PR Analysis Report...")
+    print("[SUMMARY] Generating PR Analysis Report...")
     print("=" * 80)
     print()
 
@@ -262,14 +262,14 @@ def main():
     with open(report_file, 'w', encoding='utf-8') as f:
         f.write(report)
 
-    print(f"✅ Report generated: {report_file}")
+    print(f"[PASS] Report generated: {report_file}")
     print()
-    print("📋 Quick Summary:")
+    print("[TEST] Quick Summary:")
     print(f"   Total Open PRs: {len(OPEN_PRS)}")
     print(f"   Draft PRs: {sum(1 for pr in OPEN_PRS if pr.get('draft'))}")
     print(f"   PRs Not Targeting Main: {sum(1 for pr in OPEN_PRS if pr['base']['ref'] != 'main')}")
     print()
-    print("💡 Next Steps:")
+    print("[TIP] Next Steps:")
     print("   1. Review the generated report: PR_ANALYSIS_REPORT.md")
     print("   2. Use the direct links to resolve conflicts")
     print("   3. Run workflow healing system if needed")
