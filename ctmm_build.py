@@ -87,7 +87,7 @@ def check_missing_files(files):
 
 def create_template(file_path):
     """Create a minimal template for a missing file.
-    
+
     Returns:
         bool: True if template creation succeeded, False otherwise
     """
@@ -138,7 +138,7 @@ Created by CTMM Build System
 """
         with open(todo_path, 'w', encoding='utf-8') as f:
             f.write(todo_content)
-        
+
         return True
     except Exception as e:
         logger.error("Failed to create template for %s: %s", file_path, e)
@@ -404,7 +404,7 @@ def main():
                 if create_template(file_path):
                     created_count += 1
                     build_data["template_creation"]["created_files"].append(file_path)
-            
+
             build_data["template_creation"]["created_count"] = created_count
             print(f"[OK] Created {created_count} template files")
         except Exception as e:
@@ -440,13 +440,13 @@ def main():
     step += 1
     print(f"\n{step}. Generating build report...")
     form_valid = build_data.get("form_validation", {}).get("passed", True)
-    _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
+    _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok,
                            len(style_files), len(module_files), total_missing, missing_files)
 
     return _generate_exit_code(build_data)
 
 
-def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok, 
+def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_ok,
                            style_count, module_count, total_missing, missing_files):
     """Generate and display the build summary."""
     print("\n" + "="*50)
@@ -469,7 +469,7 @@ def _generate_build_summary(build_data, latex_valid, form_valid, basic_ok, full_
         print("\nLATEX VALIDATION:")
         print("- Escaping issues found in LaTeX files")
         print("- Run 'python3 latex_validator.py --fix' to automatically fix issues")
-        
+
     if not form_valid:
         print("\nFORM FIELD VALIDATION:")
         print("- Form field issues found in LaTeX files")
