@@ -130,7 +130,7 @@ tlmgr install insdljs eforms acrotex
    tlmgr install eforms
    ```
 
-2. **"Undefined control sequence 	extcolor"**
+2. **"Undefined control sequence \\textcolor"**
    - Check: `\RequirePackage{xcolor}` is loaded
    - Verify: No typos like `extcolor`
 

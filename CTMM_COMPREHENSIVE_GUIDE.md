@@ -165,19 +165,19 @@ Add to your `Makefile`:
 .PHONY: ctmm-check ctmm-fix ctmm-validate
 
 ctmm-check:
-	python3 ctmm_unified_tool.py build
+    python3 ctmm_unified_tool.py build
 
 ctmm-fix:
-	python3 ctmm_unified_tool.py de-escape --converted converted/ --backup
+    python3 ctmm_unified_tool.py de-escape --converted converted/ --backup
 
 ctmm-validate:
-	python3 ctmm_unified_tool.py validate
+    python3 ctmm_unified_tool.py validate
 
 ctmm-workflow:
-	python3 ctmm_unified_tool.py workflow --converted converted/
+    python3 ctmm_unified_tool.py workflow --converted converted/
 
 integration-test:
-	python3 test_integration.py
+    python3 test_integration.py
 ```
 
 ### GitHub Actions Integration
