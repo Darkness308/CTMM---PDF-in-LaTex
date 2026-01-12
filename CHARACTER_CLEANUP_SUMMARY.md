@@ -16,11 +16,11 @@ Successfully identified and removed all disruptive characters from the CTMM LaTe
 
 | Line | Character | Unicode | Issue | Fix Applied |
 |------|-----------|---------|-------|-------------|
-| 7 | „ " | U+201E | German quotation marks | Replaced with LaTeX `` '' |
-| 20 | „Orange" | U+201E | German quotation marks | Replaced with ``Orange'' |
-| 22 | „Kristall" | U+201E | German quotation marks | Replaced with ``Kristall'' |
-| 26 | „Lagerfeuer" | U+201E | German quotation marks | Replaced with ``Lagerfeuer'' |
-| 43 | „Bitte..." | U+201E | German quotation marks | Replaced with ``Bitte...'' |
+| 7 | [U+201E]" " | U+201E | German quotation marks | Replaced with LaTeX `` '' |
+| 20 | [U+201E]Orange" | U+201E | German quotation marks | Replaced with ``Orange'' |
+| 22 | [U+201E]Kristall" | U+201E | German quotation marks | Replaced with ``Kristall'' |
+| 26 | [U+201E]Lagerfeuer" | U+201E | German quotation marks | Replaced with ``Lagerfeuer'' |
+| 43 | [U+201E]Bitte..." | U+201E | German quotation marks | Replaced with ``Bitte...'' |
 
 ## Verification Process
 
@@ -30,7 +30,7 @@ Successfully identified and removed all disruptive characters from the CTMM LaTe
 - All issues located in `modules/safewords.tex`
 
 ### 2. Fix Applied
-- Replaced German-style Unicode quotation marks („") with LaTeX-style quotation marks (`` '')
+- Replaced German-style Unicode quotation marks (U+201E U+201C) with LaTeX-style quotation marks (`` '')
 - Maintained text meaning and readability
 - Ensured LaTeX compilation compatibility
 
