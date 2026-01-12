@@ -161,23 +161,25 @@ export CTMM_LOG_LEVEL="INFO"           # Logging level
 
 Add to your `Makefile`:
 
+> **Note:** When creating actual Makefiles, the indentation before commands **must** be tabs (not spaces). This is a requirement of Make syntax. The example below uses spaces for markdown formatting consistency, but replace them with tabs when adding to your Makefile.
+
 ```makefile
 .PHONY: ctmm-check ctmm-fix ctmm-validate
 
 ctmm-check:
-	python3 ctmm_unified_tool.py build
+    python3 ctmm_unified_tool.py build
 
 ctmm-fix:
-	python3 ctmm_unified_tool.py de-escape --converted converted/ --backup
+    python3 ctmm_unified_tool.py de-escape --converted converted/ --backup
 
 ctmm-validate:
-	python3 ctmm_unified_tool.py validate
+    python3 ctmm_unified_tool.py validate
 
 ctmm-workflow:
-	python3 ctmm_unified_tool.py workflow --converted converted/
+    python3 ctmm_unified_tool.py workflow --converted converted/
 
 integration-test:
-	python3 test_integration.py
+    python3 test_integration.py
 ```
 
 ### GitHub Actions Integration
