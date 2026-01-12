@@ -16,7 +16,7 @@ Successfully identified and removed all disruptive characters from the CTMM LaTe
 
 | Line | Character | Unicode | Issue | Fix Applied |
 |------|-----------|---------|-------|-------------|
-| 7 | [U+201E] " " | U+201E | German quotation marks | Replaced with LaTeX `` '' |
+| 7 | [U+201E]" " | U+201E | German quotation marks | Replaced with LaTeX `` '' |
 | 20 | [U+201E]Orange" | U+201E | German quotation marks | Replaced with ``Orange'' |
 | 22 | [U+201E]Kristall" | U+201E | German quotation marks | Replaced with ``Kristall'' |
 | 26 | [U+201E]Lagerfeuer" | U+201E | German quotation marks | Replaced with ``Lagerfeuer'' |

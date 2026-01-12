@@ -196,7 +196,7 @@ The file `modules/safewords.tex` had 5 instances of German opening double quotes
 
 | Original | Fixed |
 |----------|-------|
-| `[U+201E] "` | Two backticks, two apostrophes |
+| `[U+201E]"` | Two backticks, two apostrophes |
 | `[U+201E]Orange"` | Two backticks + Orange + two apostrophes |
 | `[U+201E]Kristall"` | Two backticks + Kristall + two apostrophes |
 | `[U+201E]Lagerfeuer"` | Two backticks + Lagerfeuer + two apostrophes |
