@@ -48,32 +48,32 @@ EXCLUDE_DIRS = {'.git', 'build', '__pycache__', '.vscode', '.devcontainer', 'nod
 def scan_text_file(filepath, verbose=False):
     """
     Scan a text file for disruptive characters.
-    
+
     Args:
         filepath: Path to the file to scan
         verbose: If True, show details for each check
-        
+
     Returns:
         List of issues found, each as (issue_type, line_num, description)
     """
     issues = []
-    
+
     try:
         with open(filepath, 'rb') as f:
             content_bytes = f.read()
-        
+
         # 1. Check BOM at start
         if content_bytes.startswith(b'\xef\xbb\xbf'):
             issues.append(('BOM', 1, 'UTF-8 BOM at file start'))
             if verbose:
                 print(f"  BOM found in {filepath}")
-        
+
         # 2. Check NULL bytes (should not be in text files)
         if b'\x00' in content_bytes:
             issues.append(('NULL_BYTE', -1, 'NULL byte in text file'))
             if verbose:
                 print(f"  NULL byte found in {filepath}")
-        
+
         # Try to decode as UTF-8
         try:
             text = content_bytes.decode('utf-8')
@@ -82,9 +82,9 @@ def scan_text_file(filepath, verbose=False):
             if verbose:
                 print(f"  Encoding error in {filepath}")
             return issues
-        
+
         lines = text.split('\n')
-        
+
         # 3. Check for actual merge conflict markers at line start
         for i, line in enumerate(lines, 1):
             if line.startswith('<<<<<<<') or line.startswith('>>>>>>>'):
@@ -93,11 +93,11 @@ def scan_text_file(filepath, verbose=False):
                     issues.append(('MERGE_CONFLICT', i, line.strip()[:60]))
                     if verbose:
                         print(f"  Merge conflict marker at {filepath}:{i}")
-        
+
         # 4. Check for invisible characters
         zero_width = ['\u200b', '\ufeff', '\u200c', '\u200d']
         direction = ['\u200e', '\u200f']
-        
+
         for i, line in enumerate(lines, 1):
             for char in zero_width:
                 if char in line:
@@ -109,18 +109,18 @@ def scan_text_file(filepath, verbose=False):
                     issues.append(('DIRECTION', i, f'U+{ord(char):04X}'))
                     if verbose:
                         print(f"  Direction mark U+{ord(char):04X} at {filepath}:{i}")
-        
+
         # 5. Check for problematic quotes in code/LaTeX files
         if filepath.endswith(('.tex', '.sty', '.py', '.sh', '.json', '.yml', '.yaml')):
             problematic_quotes = ['\u201e', '\u201c', '\u201d', '\u2018', '\u2019']
-            
+
             for i, line in enumerate(lines, 1):
                 for char in problematic_quotes:
                     if char in line:
                         issues.append(('QUOTE', i, f'{char} (U+{ord(char):04X}) in: {line.strip()[:50]}'))
                         if verbose:
                             print(f"  Problematic quote at {filepath}:{i}")
-        
+
         # 6. Check for invalid control characters (except tab, LF, CR)
         for i, line in enumerate(lines, 1):
             for char in line:
@@ -129,12 +129,12 @@ def scan_text_file(filepath, verbose=False):
                     issues.append(('CONTROL_CHAR', i, f'Invalid control U+{code:04X}'))
                     if verbose:
                         print(f"  Control char U+{code:04X} at {filepath}:{i}")
-        
+
     except Exception as e:
         issues.append(('ERROR', -1, str(e)))
         if verbose:
             print(f"  Error scanning {filepath}: {e}")
-    
+
     return issues
 
 
@@ -143,40 +143,40 @@ def main():
     parser = argparse.ArgumentParser(description='Scan for disruptive characters in text files')
     parser.add_argument('--verbose', '-v', action='store_true', help='Show verbose output')
     args = parser.parse_args()
-    
+
     print("=" * 80)
     print("CTMM Disruptive Character Scanner")
     print("=" * 80)
     print()
-    
+
     # Scan all text files
     all_issues = {}
     files_scanned = 0
-    
+
     for root, dirs, files in os.walk('.'):
         # Remove excluded directories from traversal
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        
+
         for file in files:
             # Only check text files
             if not any(file.endswith(ext) for ext in TEXT_EXTENSIONS):
                 continue
             if file in DOCUMENTATION_FILES:
                 continue
-                
+
             filepath = os.path.join(root, file)
             files_scanned += 1
-            
+
             if args.verbose:
                 print(f"Scanning: {filepath}")
-            
+
             issues = scan_text_file(filepath, args.verbose)
             if issues:
                 all_issues[filepath] = issues
-    
+
     print(f"\nScanned {files_scanned} text files (excluding documentation)")
     print(f"Found issues in {len(all_issues)} files\n")
-    
+
     if all_issues:
         print("=" * 80)
         print("DISRUPTIVE CHARACTERS FOUND:")
@@ -188,7 +188,7 @@ def main():
                     print(f"   Line {line_num}: [{issue_type}] {description}")
                 else:
                     print(f"   File-wide: [{issue_type}] {description}")
-        
+
         print("\n" + "=" * 80)
         print(f"TOTAL: {sum(len(issues) for issues in all_issues.values())} issues in {len(all_issues)} files")
         print("\n⚠️  ACTION REQUIRED: These disruptive characters should be removed!")
