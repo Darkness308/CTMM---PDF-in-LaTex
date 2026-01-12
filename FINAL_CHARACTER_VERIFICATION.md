@@ -19,8 +19,8 @@ A comprehensive scan of the entire CTMM LaTeX repository confirms that **NO disr
 ### 1. Enhanced Character Checker
 
 **Updates Made:**
-- Added German opening double quote (U+201E „) to detection list
-- Added German opening single quote (U+201A ‚) to detection list
+- Added German opening double quote (U+201E) to detection list
+- Added German opening single quote (U+201A) to detection list
 - Updated documentation with German quotation mark information
 - Added clarification note about documentation files containing examples
 
@@ -196,11 +196,11 @@ The file `modules/safewords.tex` had 5 instances of German opening double quotes
 
 | Original | Fixed |
 |----------|-------|
-| `„ "` | Two backticks, two apostrophes |
-| `„Orange"` | Two backticks + Orange + two apostrophes |
-| `„Kristall"` | Two backticks + Kristall + two apostrophes |
-| `„Lagerfeuer"` | Two backticks + Lagerfeuer + two apostrophes |
-| `„Bitte..."` | Two backticks + Bitte... + two apostrophes |
+| `[U+201E] "` | Two backticks, two apostrophes |
+| `[U+201E]Orange"` | Two backticks + Orange + two apostrophes |
+| `[U+201E]Kristall"` | Two backticks + Kristall + two apostrophes |
+| `[U+201E]Lagerfeuer"` | Two backticks + Lagerfeuer + two apostrophes |
+| `[U+201E]Bitte..."` | Two backticks + Bitte... + two apostrophes |
 
 ---
 
