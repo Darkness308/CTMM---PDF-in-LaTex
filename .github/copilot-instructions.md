@@ -5,7 +5,7 @@
 This repository contains a **LaTeX-based therapeutic materials system** called **CTMM** (Catch-Track-Map-Match) designed for creating professional therapy documents, particularly for neurodiverse couples dealing with mental health challenges including:
 
 - Depression and mood disorders
-- Trigger management 
+- Trigger management
 - Borderline Personality Disorder (BPD)
 - ADHD, Autism Spectrum Disorder (ASD)
 - Complex PTSD (CPTSD)
@@ -19,7 +19,7 @@ This repository contains a **LaTeX-based therapeutic materials system** called *
 ├── main.tex                    # Main LaTeX document (entry point)
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── form-elements.sty      # Interactive form components  
+│   ├── form-elements.sty      # Interactive form components
 │   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
@@ -81,7 +81,7 @@ python3 build_system.py --verbose  # Granular analysis
 
 **Color Scheme:**
 - `ctmmBlue` - Primary blue for headers and structure
-- `ctmmOrange` - Accent orange for highlights  
+- `ctmmOrange` - Accent orange for highlights
 - `ctmmGreen` - Green for positive elements
 - `ctmmPurple` - Purple for special sections
 
