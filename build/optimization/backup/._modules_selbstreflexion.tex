@@ -1,0 +1,97 @@
+% Feedback und Selbstreflexions-System
+\newpage
+\section*{\textcolor{ctmmPurple}{\faChartLine~Selbstreflexions-System}}
+\addcontentsline{toc}{section}{Selbstreflexions-System}
+\label{sec:feedback}
+
+\begin{ctmmPurpleBox}{\faSync~Kontinuierliche Verbesserung}
+\textit{Dieses System hilft uns, Fortschritte zu erfassen, Erfolge zu würdigen und Verbesserungsbereiche zu identifizieren. Es wächst mit uns mit.}
+\end{ctmmPurpleBox}
+
+\subsection*{\faCalendar~Tägliche Mikro-Reflexion (2 Minuten)}
+\textit{Nach dem Abend-Check-In → \ctmmRef{sec:5.1}{\faEdit~Kap.5.1}}
+
+\textbf{Drei einfache Fragen:}\\[0.3cm]
+1. \textbf{Werkzeug-Check:} Welches Tool/Skill haben wir heute benutzt?\\
+\ctmmTextField[10cm]{}{daily_tool}\\[0.3cm]
+
+2. \textbf{Wirksamkeit:} Hat es geholfen? (1-10)\\
+\ctmmTextField[3cm]{}{daily_effectiveness}\\[0.3cm]
+
+3. \textbf{Anpassung:} Eine kleine Verbesserung für morgen?\\
+\ctmmTextField[10cm]{}{daily_improvement}\\[0.5cm]
+
+\subsection*{\faCalendar~Wöchentliche Mini-Retrospektive}
+\textit{Sonntag beim Depression-Monitor → \ctmmRef{sec:5.3}{\faEdit~Kap.5.3}}
+
+\begin{ctmmYellowBox}{Wochenreflexion}
+\textbf{Genutzte Tools diese Woche:}\\
+\ctmmCheckBox[week_safewords]{Safe-Words} \quad \ctmmCheckBox[week_skills]{Skills-Box} \quad \ctmmCheckBox[week_rituals]{Rituale}\\[0.3cm]
+
+\textbf{Was hat gut funktioniert?}\\
+\ctmmTextArea[12cm]{2}{week_success}{}\\[0.3cm]
+
+\textbf{Was verbessern wir nächste Woche?}\\
+\ctmmTextField[10cm]{}{week_improvement}\\[0.3cm]
+
+\textbf{Ein Erfolg dieser Woche (egal wie klein):}\\
+\ctmmTextField[10cm]{}{week_win}
+\end{ctmmYellowBox}
+
+\subsection*{\faChartLine~Fortschrittsmessung}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|X|X|X|}
+\hline
+\textbf{Metrik} & \textbf{Letzter Monat} & \textbf{Dieser Monat} & \textbf{Trend} \\
+\hline
+Safe-Word Nutzung/Woche & \ctmmTextField[2cm]{}{metric_safeword_last} & \ctmmTextField[2cm]{}{metric_safeword_now} & \ctmmCheckBox[trend_safeword_up]{↑} \ctmmCheckBox[trend_safeword_down]{↓} \\
+\hline
+Krisenzeit (Minuten) & \ctmmTextField[2cm]{}{metric_crisis_last} & \ctmmTextField[2cm]{}{metric_crisis_now} & \ctmmCheckBox[trend_crisis_up]{↑} \ctmmCheckBox[trend_crisis_down]{↓} \\
+\hline
+Schlafqualität (1-10) & \ctmmTextField[2cm]{}{metric_sleep_last} & \ctmmTextField[2cm]{}{metric_sleep_now} & \ctmmCheckBox[trend_sleep_up]{↑} \ctmmCheckBox[trend_sleep_down]{↓} \\
+\hline
+Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & \ctmmTextField[2cm]{}{metric_activities_now} & \ctmmCheckBox[trend_activities_up]{↑} \ctmmCheckBox[trend_activities_down]{↓} \\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsection*{\faTrophy~Erfolgs-Bibliothek}
+\label{sec:erfolge}
+
+\begin{ctmmGreenBox}{\faBullseye~Beweise sammeln}
+\textbf{Datum:} \ctmmTextField[3cm]{}{success_date} \quad \textbf{Kategorie:} \ctmmCheckBox[cat_micro]{Mikro} \ctmmCheckBox[cat_breakthrough]{Durchbruch} \ctmmCheckBox[cat_surprise]{Überraschung}\\[0.3cm]
+
+\textbf{Was ist passiert? (Konkrete Details)}\\
+\ctmmTextArea[12cm]{3}{success_description}{}\\[0.3cm]
+
+\textbf{Vorher vs. Nachher:}\\
+\textbf{Früher:} \ctmmTextField[5cm]{}{success_before} \textbf{Heute:} \ctmmTextField[5cm]{}{success_after}\\[0.3cm]
+
+\textbf{Gefühl und Bedeutung:}\\
+\ctmmTextArea[12cm]{2}{success_meaning}{}\\[0.3cm]
+
+\textbf{Was war entscheidend für diesen Erfolg?}\\
+\ctmmTextField[10cm]{}{success_key_factor}
+\end{ctmmGreenBox}
+
+\subsection*{\faLightbulb~System-Anpassungen}
+
+\begin{ctmmOrangeBox}{\faWrench~Unser System entwickelt sich weiter}
+\textbf{Dokument-Feedback markieren:}\\
+\faThumbtack~\textbf{Unklar:} \ctmmTextField[8cm]{}{feedback_unclear}\\
+\faTimes~\textbf{Funktioniert nicht:} \ctmmTextField[8cm]{}{feedback_broken}\\
+\faPlus~\textbf{Fehlt:} \ctmmTextField[8cm]{}{feedback_missing}\\
+\faStar~\textbf{Besonders hilfreich:} \ctmmTextField[8cm]{}{feedback_helpful}\\[0.3cm]
+
+\textbf{Neue Idee zum Testen:}\\
+\ctmmTextArea[12cm]{2}{new_idea}{}\\[0.3cm]
+
+\textbf{Gewünschte Änderung:}\\
+\ctmmTextField[10cm]{}{desired_change}
+\end{ctmmOrangeBox}
+
+\vspace{1cm}
+\begin{center}
+\textit{\textcolor{ctmmGreen}{\faChevronRight~Weiter zu} \ctmmRef{sec:5.1}{Arbeitsblätter} | \textcolor{ctmmBlue}{\faHome~Zurück zu} \ctmmRef{sec:navigation}{Navigation}}
+\end{center}

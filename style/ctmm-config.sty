@@ -1,0 +1,47 @@
+% xcolor muss vor den Farbdefinitionen geladen werden
+\RequirePackage{xcolor}
+% CTMM zentrale Konfiguration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ctmm-config}[2025/11/06 CTMM zentrale Konfiguration]
+
+
+\DeclareOption{darkmode}{%
+    \@ctmmDarkModetrue
+}
+
+\ProcessOptions\relax
+
+% Version und Autor
+\newcommand{\ctmmVersion}{1.0.0}
+\newcommand{\ctmmAuthor}{CTMM-Team}
+
+% Farbdefinitionen
+\definecolor{ctmmBlue}{HTML}{003087}
+\definecolor{ctmmGreen}{HTML}{4CAF50}
+\definecolor{ctmmOrange}{HTML}{FF6200}
+\definecolor{ctmmRed}{HTML}{D32F2F}
+\definecolor{ctmmPurple}{HTML}{7B1FA2}
+\definecolor{ctmmGray}{HTML}{757575}
+\definecolor{ctmmYellow}{HTML}{FFC107}
+
+% Dimensionen
+\newcommand{\ctmmFieldWidth}{8cm}
+\newcommand{\ctmmMargin}{2.5cm}
+
+% Sprachspezifische Texte
+\newcommand{\ctmmTextTrigger}{Trigger}
+\newcommand{\ctmmTextSuccess}{Erfolg}
+% ... weitere Texte nach Bedarf ...
+
+% ============================================================
+% DARK MODE ACTIVATION
+% ============================================================
+% Load dark theme if darkmode option was specified
+
+\if@ctmmDarkMode
+    \RequirePackage{ctmm-dark-theme}
+    \AtBeginDocument{%
+        \ctmmEnableDarkMode%
+        \PackageInfo{ctmm-config}{Dark mode activated - therapeutic color system loaded}%
+    }
+\fi
