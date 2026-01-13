@@ -1,0 +1,200 @@
+\ProvidesPackage{ctmm-form-elements}[2024/01/01 CTMM Form Elements Package]
+
+% Required packages
+\RequirePackage{tikz}
+\RequirePackage{xcolor}
+\RequirePackage{ifthen}
+\RequirePackage{calc}
+\RequirePackage{forloop}
+\RequirePackage{pifont}  % Für Checkbox-Symbole
+
+% Wichtig für \@ifpackageloaded
+\makeatletter
+
+% Interactive Form Detection
+\newcommand{\@ctmmInteractive}{true}
+
+% Check if hyperref is loaded for interactive forms
+\@ifpackageloaded{hyperref}{%
+    % hyperref is already loaded - enable interactive mode
+    \renewcommand{\@ctmmInteractive}{true}%
+}{%
+    % hyperref not loaded - disable interactive mode and give warning
+    \PackageWarning{ctmm-form-elements}{hyperref package not loaded. Interactive forms disabled.}%
+    \renewcommand{\@ctmmInteractive}{false}%
+}
+
+\makeatother
+
+% =====================================================
+% CTMM Core Form Elements
+% =====================================================
+
+% Text Field mit verbessertem Design
+% Usage: \ctmmTextField[width]{default text}{field name}
+\newcommand{\ctmmTextField}[3][4cm]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \TextField[%
+            name=#3,%
+            width=#1,%
+            height=14pt,%
+            bordercolor=ctmmBlue,%
+            backgroundcolor=ctmmBlue!2!white,%
+            borderwidth=1pt,%
+            borderstyle=S,%
+            charsize=10pt,%
+            default={#2}%
+        ]{}%
+    }{%
+        \underline{\hspace{#1}}%
+    }%
+}
+
+% Text area
+% Usage: \ctmmTextArea[width]{lines}{field name}{default text}
+\newcounter{ctmmTextAreaLine}
+\newcommand{\ctmmTextArea}[4][12cm]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \TextField[%
+            name=#3,%
+            width=#1,%
+            height=\the\numexpr #2*15\relax pt,%
+            multiline=true,%
+            bordercolor=ctmmBlue,%
+            backgroundcolor=white,%
+            borderwidth=1pt,%
+            borderstyle=S,%
+            charsize=10pt,%
+            default={#4}%
+        ]{}%
+    }{%
+        \parbox[t]{#1}{%
+            \vspace{0.2cm}%
+            \forloop{ctmmTextAreaLine}{1}{\value{ctmmTextAreaLine} < \numexpr#2+1\relax}{%
+                \underline{\hspace{\linewidth}}\\[1.5ex]%
+            }%
+        }%
+    }%
+}
+
+% Checkbox mit verbessertem Design
+% Usage: \ctmmCheckBox{field name}{label}
+\newcommand{\ctmmCheckBox}[2]{%
+    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+        \CheckBox[%
+            name=#1,%
+            width=12pt,%
+            height=12pt,%
+            bordercolor=ctmmGreen,%
+            backgroundcolor=white,%
+            borderwidth=1pt,%
+            checkboxsymbol={\ding{51}}%
+        ]{} \textcolor{ctmmGreen}{#2}%
+    }{%
+        $\square$ #2%
+    }%
+}
+
+% =====================================================
+% CTMM-Specific Form Elements
+% =====================================================
+
+% Date input
+\newcommand{\ctmmDate}[1]{%
+    \textbf{Datum:} \ctmmTextField[3cm]{}{date#1}%
+}
+
+% Date input field with custom label and placeholder
+\newcommand{\ctmmDateField}[3]{%
+    \textbf{#2:} \ctmmTextField[3cm]{#3}{#1}%
+}
+
+% Time input
+\newcommand{\ctmmTime}[1]{%
+    \textbf{Zeit:} \ctmmTextField[2cm]{}{time#1} Uhr%
+}
+
+% Time input field with custom label
+\newcommand{\ctmmTimeField}[2]{%
+    \textbf{#2:} \ctmmTextField[2cm]{}{#1} Uhr%
+}
+
+% Stress Level (10-100 with text field)
+\newcommand{\ctmmStressLevel}[1]{%
+    \textbf{Stresslevel (10-100):} \ctmmTextField[2cm]{}{stress#1}%
+}
+
+% Yes/No Checkbox pair
+\newcommand{\ctmmYesNo}[1]{%
+    \ctmmCheckBox{#1yes}{Ja} \quad \ctmmCheckBox{#1no}{Nein}%
+}
+
+% Emotion Check-in Scale
+\newcommand{\ctmmEmotionScale}[2]{%
+    \textbf{#1:}\\%
+    \ctmmCheckBox{#2_1}{1-Sehr schlecht} \quad \ctmmCheckBox{#2_5}{5-Neutral} \quad \ctmmCheckBox{#2_10}{10-Sehr gut}%
+}
+
+% Trigger Detection Scale
+\newcommand{\ctmmTriggerScale}[1]{%
+    \textbf{Trigger-Level heute:}\\%
+    \ctmmCheckBox{#1tr_low}{Niedrig} \quad \ctmmCheckBox{#1tr_med}{Mittel} \quad \ctmmCheckBox{#1tr_high}{Hoch}%
+}
+
+% Safe-Word Usage Tracker
+\newcommand{\ctmmSafeWordOptions}[1]{%
+    \textbf{Safe-Word verwendet:}\\%
+    \ctmmCheckBox{#1anker}{[SYM]Anker!"} \quad%
+    \ctmmCheckBox{#1reset}{[SYM]Reset!"} \quad%
+    \ctmmCheckBox{#1eiszeit}{[SYM]Eiszeit!"} \quad%
+    \ctmmCheckBox{#1other}{Anderes:} \ctmmTextField[3cm]{}{#1otherword}%
+}
+
+% Weekly Pattern Table
+\newcommand{\ctmmWeeklyPattern}[1]{%
+    \begin{center}
+    \begin{tabular}{|l|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{Tag} & \textbf{Mo} & \textbf{Di} & \textbf{Mi} & \textbf{Do} & \textbf{Fr} & \textbf{Sa} & \textbf{So} \\
+    \hline
+    \textbf{Stimmung} & \ctmmTextField[1cm]{}{#1mo} & \ctmmTextField[1cm]{}{#1di} & \ctmmTextField[1cm]{}{#1mi} & \ctmmTextField[1cm]{}{#1do} & \ctmmTextField[1cm]{}{#1fr} & \ctmmTextField[1cm]{}{#1sa} & \ctmmTextField[1cm]{}{#1so} \\
+    \hline
+    \end{tabular}
+    \end{center}%
+}
+
+% Complete Daily Tracker
+\newcommand{\ctmmDailyTracker}[1]{%
+    \begin{ctmmGreenBox}[title=Täglicher CTMM-Tracker]
+    \ctmmDate{#1dt} \quad \ctmmTime{#1dt}\\[0.3cm]
+
+    \ctmmEmotionScale{Morgenstimmung}{#1morning}\\[0.3cm]
+    \ctmmEmotionScale{Abendstimmung}{#1evening}\\[0.3cm]
+
+    \ctmmTriggerScale{#1dt}\\[0.3cm]
+
+    \textbf{Strategien angewendet:}\\
+    \ctmmCheckBox{#1breathing}{Atemtechnik} \quad
+    \ctmmCheckBox{#1grounding}{Grounding} \quad
+    \ctmmCheckBox{#1pause}{Pause} \quad
+    \ctmmCheckBox{#1talk}{Gespräch}\\[0.3cm]
+
+    \textbf{Reflexion:}\\
+    \ctmmTextArea[14cm]{3}{#1reflection}{}
+    \end{ctmmGreenBox}%
+}
+
+% Crisis Protocol Quick Form
+\newcommand{\ctmmCrisisForm}[1]{%
+    \begin{ctmmRedBox}[title=\textcolor{white}{Krisen-Protokoll}]
+    \textcolor{white}{\textbf{Zeitpunkt:}} \textcolor{white}{\ctmmDate{#1cr}} \textcolor{white}{\ctmmTime{#1cr}}\\[0.3cm]
+
+    \textcolor{white}{\textbf{Safe-Word verwendet:}}\\
+    \textcolor{white}{\ctmmCheckBox{#1anker}{Anker} \quad \ctmmCheckBox{#1reset}{Reset} \quad \ctmmCheckBox{#1pause}{Pause}}\\[0.3cm]
+
+    \textcolor{white}{\textbf{Maßnahmen:}}\\
+    \textcolor{white}{\ctmmTextArea[14cm]{2}{#1measures}{}}
+    \end{ctmmRedBox}%
+}
+
+% End of package
