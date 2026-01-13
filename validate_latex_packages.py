@@ -12,26 +12,26 @@ from pathlib import Path
 def extract_packages_from_workflow():
     """Extract package names from the GitHub Actions workflow file."""
     workflow_path = Path(".github/workflows/latex-build.yml")
-    
+
     if not workflow_path.exists():
         print(f"[FAIL] Workflow file not found: {workflow_path}")
         return []
-    
+
     with open(workflow_path, 'r') as f:
         content = f.read()
-    
+
     # Find the extra_system_packages section
     pattern = r'extra_system_packages:\s*\|\s*((?:\s*[\w-]+\s*\n)*)'
     match = re.search(pattern, content)
-    
+
     if not match:
         print("[FAIL] Could not find extra_system_packages section in workflow")
         return []
-    
+
     # Extract package names
     packages_section = match.group(1)
     packages = [line.strip() for line in packages_section.strip().split('\n') if line.strip()]
-    
+
     return packages
 
 def check_package_exists(package_name):
@@ -52,27 +52,27 @@ def main():
     """Main validation function."""
     print("[SEARCH] Validating LaTeX package configuration...")
     print("=" * 50)
-    
+
     # Extract packages from workflow
     packages = extract_packages_from_workflow()
-    
+
     if not packages:
         print("[FAIL] No packages found in workflow configuration")
         return 1
-    
+
     print(f"Found {len(packages)} packages to validate:")
-    
+
     all_valid = True
     for package in packages:
         exists = check_package_exists(package)
         status = "[PASS]" if exists else "[FAIL]"
         print(f"{status} {package}")
-        
+
         if not exists:
             all_valid = False
-    
+
     print("=" * 50)
-    
+
     if all_valid:
         print("[PASS] All packages are valid!")
         return 0

@@ -33,7 +33,7 @@ Usage: $0 [OPTION]
 
 Options:
   --build  Run enhanced LaTeX build only
-  --convert  Run document conversion only  
+  --convert  Run document conversion only
   --analyze  Run error analysis only
   --optimize  Run optimization analysis only
   --all  Run all workflows (default)
@@ -62,19 +62,19 @@ make_executable() {
 
 prepare_scripts() {
   log_message "${BLUE}Preparing scripts...${NC}"
-  
+
   # Make all scripts executable
   make_executable "$SCRIPTS_DIR/latex-build.sh"
   make_executable "$SCRIPTS_DIR/document-conversion.sh"
   make_executable "$SCRIPTS_DIR/latex-error-analysis.sh"
   make_executable "$SCRIPTS_DIR/pdf-quality-optimization.sh"
-  
+
   log_message "${GREEN}[OK] Scripts prepared${NC}"
 }
 
 run_latex_build() {
   log_message "${PURPLE}=== Running LaTeX Build Workflow ===${NC}"
-  
+
   if [[ -f "$SCRIPTS_DIR/latex-build.sh" ]]; then
   if ./"$SCRIPTS_DIR/latex-build.sh"; then
   log_message "${GREEN}[OK] LaTeX build completed successfully${NC}"
@@ -91,7 +91,7 @@ run_latex_build() {
 
 run_document_conversion() {
   log_message "${PURPLE}=== Running Document Conversion Workflow ===${NC}"
-  
+
   if [[ -f "$SCRIPTS_DIR/document-conversion.sh" ]]; then
   if ./"$SCRIPTS_DIR/document-conversion.sh"; then
   log_message "${GREEN}[OK] Document conversion completed successfully${NC}"
@@ -108,7 +108,7 @@ run_document_conversion() {
 
 run_error_analysis() {
   log_message "${PURPLE}=== Running LaTeX Error Analysis Workflow ===${NC}"
-  
+
   if [[ -f "$SCRIPTS_DIR/latex-error-analysis.sh" ]]; then
   if ./"$SCRIPTS_DIR/latex-error-analysis.sh"; then
   log_message "${GREEN}[OK] Error analysis completed successfully${NC}"
@@ -125,7 +125,7 @@ run_error_analysis() {
 
 run_optimization() {
   log_message "${PURPLE}=== Running PDF Quality Optimization Workflow ===${NC}"
-  
+
   if [[ -f "$SCRIPTS_DIR/pdf-quality-optimization.sh" ]]; then
   if ./"$SCRIPTS_DIR/pdf-quality-optimization.sh"; then
   log_message "${GREEN}[OK] Optimization analysis completed successfully${NC}"
@@ -142,9 +142,9 @@ run_optimization() {
 
 generate_master_report() {
   local master_report="$REPORTS_DIR/master-workflow-summary.txt"
-  
+
   log_message "${BLUE}Generating master workflow report...${NC}"
-  
+
   {
   echo "CTMM LaTeX Master Workflow Summary"
   echo "================================="
@@ -152,7 +152,7 @@ generate_master_report() {
   echo ""
   echo "Workflow Status:"
   echo "---------------"
-  
+
   # Check if each workflow completed successfully
   if [[ -f "build/build-log.txt" ]]; then
   if grep -q "Build completed successfully" "build/build-log.txt" 2>/dev/null; then
@@ -163,29 +163,29 @@ generate_master_report() {
   else
   echo "- LaTeX Build: NOT RUN"
   fi
-  
+
   if [[ -f "build/conversion-log.txt" ]]; then
   echo "[OK] Document Conversion: COMPLETED"
   else
   echo "- Document Conversion: NOT RUN"
   fi
-  
+
   if [[ -f "build/error-analysis/error-analysis-report.txt" ]]; then
   echo "[OK] Error Analysis: COMPLETED"
   else
   echo "- Error Analysis: NOT RUN"
   fi
-  
+
   if [[ -f "build/optimization/optimization-report.txt" ]]; then
   echo "[OK] Optimization Analysis: COMPLETED"
   else
   echo "- Optimization Analysis: NOT RUN"
   fi
-  
+
   echo ""
   echo "Generated Files:"
   echo "---------------"
-  
+
   # List important output files
   [[ -f "main.pdf" ]] && echo "[OK] main.pdf - Final PDF output"
   [[ -f "build/build-log.txt" ]] && echo "[OK] build/build-log.txt - Build log"
@@ -196,7 +196,7 @@ generate_master_report() {
   [[ -f "build/error-analysis/error-analysis-report.txt" ]] && echo "[OK] build/error-analysis/error-analysis-report.txt - Error analysis"
   [[ -f "build/error-analysis/solution-proposals.txt" ]] && echo "[OK] build/error-analysis/solution-proposals.txt - Solution proposals"
   [[ -f "build/optimization/optimization-report.txt" ]] && echo "[OK] build/optimization/optimization-report.txt - Optimization analysis"
-  
+
   echo ""
   echo "Quick Access:"
   echo "------------"
@@ -205,55 +205,55 @@ generate_master_report() {
   echo "Converted documents: converted/"
   echo "Analysis reports: build/error-analysis/ and build/optimization/"
   echo ""
-  
+
   } > "$master_report"
-  
+
   log_message "${GREEN}[OK] Master report generated: $master_report${NC}"
 }
 
 run_all_workflows() {
   log_message "${GREEN}Starting CTMM Complete Workflow${NC}"
-  
+
   local workflow_errors=0
-  
+
   # Prepare scripts
   prepare_scripts
-  
+
   # Run document conversion first (if there are documents to convert)
   if ! run_document_conversion; then
   log_message "${YELLOW}Document conversion had issues but continuing...${NC}"
   ((workflow_errors++))
   fi
-  
+
   # Run error analysis before build to identify existing issues
   if ! run_error_analysis; then
   log_message "${YELLOW}Error analysis found issues but continuing...${NC}"
   ((workflow_errors++))
   fi
-  
+
   # Run main build
   if ! run_latex_build; then
   log_message "${YELLOW}LaTeX build had issues but continuing...${NC}"
   ((workflow_errors++))
   fi
-  
+
   # Run optimization analysis
   if ! run_optimization; then
   log_message "${YELLOW}Optimization analysis had recommendations but continuing...${NC}"
   ((workflow_errors++))
   fi
-  
+
   # Generate master report
   generate_master_report
-  
+
   if [[ $workflow_errors -eq 0 ]]; then
   log_message "${GREEN}[OK] All workflows completed successfully${NC}"
   else
   log_message "${YELLOW}[WARN] Workflows completed with $workflow_errors issues/recommendations${NC}"
   fi
-  
+
   log_message "${BLUE}Master workflow completed. Check $REPORTS_DIR/master-workflow-summary.txt for details.${NC}"
-  
+
   return 0  # Return 0 so workflow continues
 }
 
@@ -261,7 +261,7 @@ main() {
   # Initialize master log
   echo "CTMM Master Workflow Log - $(date)" > "$REPORTS_DIR/master-workflow.log"
   echo "=================================" >> "$REPORTS_DIR/master-workflow.log"
-  
+
   case "${1:-}" in
   --build)
   prepare_scripts
