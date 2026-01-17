@@ -108,6 +108,48 @@ For working on this LaTeX project, shell integration provides:
 - **Error visibility**: Failed commands are clearly marked in the terminal
 - **Improved workflow**: Better integration between terminal and editor
 
+### Practical Examples
+
+**Building the PDF:**
+```bash
+# Without shell integration: Just text output
+$ make build
+pdflatex main.tex
+...
+
+# With shell integration: Visual indicators show success
+$ make build  ✓ (green checkmark)
+pdflatex main.tex
+...
+```
+
+**Failed Compilation:**
+```bash
+# Failed builds are immediately visible with red markers
+$ pdflatex main.tex  ✗ (red X, exit code 1)
+! LaTeX Error: ...
+```
+
+**Command Navigation:**
+- Use Ctrl+↑ / Ctrl+↓ (Cmd+↑ / Cmd+↓ on Mac) to jump between commands
+- Click on command decorations to scroll to that command
+- Failed commands are highlighted in red, successful in green
+
+**Common CTMM Commands with Integration:**
+```bash
+# Build system check - see success/failure status at a glance
+$ python3 ctmm_build.py  ✓
+
+# Unit tests - quickly identify test failures
+$ make unit-test  ✓
+
+# PDF generation - visual feedback on compilation status  
+$ make build  ✓
+
+# Validation - immediate feedback on issues
+$ make validate-pr  ✓
+```
+
 ## References
 
 - [VS Code Terminal Shell Integration Documentation](https://code.visualstudio.com/docs/terminal/shell-integration)
