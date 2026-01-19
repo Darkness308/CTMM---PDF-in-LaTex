@@ -1,0 +1,116 @@
+\documentclass[a4paper,12pt]{article} % <-- HINZUGEFÜGT
+
+% Pakete
+% \usepackage[utf8]{inputenc} % Nicht mehr nötig mit aktuellem pdfLaTeX
+\usepackage{lmodern} % Schriftartenproblem beheben
+\usepackage{microtype} % Verbesserte Schriftbildqualität und weniger Font-Warnungen
+\usepackage{textcomp} % Zusätzliche Symbole und Font-Kompatibilität
+\usepackage[ngerman]{babel}
+\usepackage{geometry}
+
+% CTMM Pakete
+\usepackage{style/ctmm-config}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{style/ctmm-design}
+\usepackage{style/ctmm-navigation}
+% hyperref MUSS als letztes geladen werden (vor bookmark!)
+\usepackage{hyperref}
+\usepackage{bookmark} % Optional: bessere Lesezeichen
+\usepackage{style/ctmm-form-elements} % Globale Dummy-Formularelemente (needs hyperref)
+
+% Dokumentenkonfiguration
+\geometry{
+  a4paper,
+  margin=2.5cm,
+  top=3cm,
+  bottom=3cm
+}
+
+\hypersetup{
+  colorlinks=false,
+  pdfborder={0 0 0},
+  % pdfborder={0 0 0}, % Optional: kann entfernt werden, falls Fehler
+  pdftitle={CTMM-System - Interaktives Therapie-Workbook},
+  pdfauthor={CTMM-Team},
+  pdfsubject={Therapiematerialien mit ausfüllbaren Formularen},
+  pdfkeywords={CTMM, Therapie, Trigger, Borderline, ADHS, ASS, KPTBS, interaktiv},
+  pdfcreator={LaTeX mit hyperref},
+  pdfproducer={pdfLaTeX},
+  % Formular-spezifische Einstellungen
+  bookmarksopen=true,
+  bookmarksopenlevel=1,
+  % Für bessere Formularkompatibilität
+  pdfencoding=auto,
+  unicode=true
+}
+
+\hbadness=10000
+\vbadness=10000
+\begin{document}
+
+\title{%
+  {\Huge\textcolor{ctmmBlue}{CTMM-System}}\\
+  \vspace{0.5cm}
+  {\Large\textcolor{ctmmOrange}{Catch-Track-Map-Match}}\\
+  \vspace{0.5cm}
+  {\normalsize\textcolor{ctmmGreen}{Therapiematerialien für neurodiverse Paare}}
+}
+\author{CTMM-Team}
+\date{\today}
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section*{\texorpdfstring{\textcolor{ctmmBlue}{\faCompass~CTMM-System Übersicht}}{CTMM-System Übersicht}}
+\addcontentsline{toc}{section}{CTMM-System Übersicht}
+
+\begin{ctmmBlueBox}{Was ist CTMM?}
+\textbf{CTMM} steht für \textbf{Catch-Track-Map-Match} -- ein System zur Bewältigung von Triggern und Beziehungsherausforderungen:
+
+\begin{itemize}
+    \item \textcolor{ctmmBlue}{\textbf{Catch:}} Trigger erkennen
+    \item \textcolor{ctmmGreen}{\textbf{Track:}} Gefühl \& Situation verfolgen
+    \item \textcolor{ctmmOrange}{\textbf{Map:}} Muster verstehen
+    \item \textcolor{ctmmPurple}{\textbf{Match:}} Handlung anpassen
+\end{itemize}
+\end{ctmmBlueBox}
+
+% Module einbinden
+\input{modules/navigation-system}
+\input{modules/depression}
+\input{modules/bindungsleitfaden}
+\input{modules/co-regulation-gemeinsame-staerkung}
+\input{modules/krisenprotokoll-ausfuellen}
+\input{modules/dbt-emotionsregulation}
+\input{modules/triggermanagement}
+\input{modules/notfallkarten}
+\input{modules/safewords}
+\input{modules/interactive}
+\input{modules/interactive-diagrams}
+\input{modules/qrcode}
+\input{modules/therapiekoordination}
+\input{modules/selbstreflexion}
+
+\newpage
+\part*{KAPITEL 5: ARBEITSBLÄTTER}
+\addcontentsline{toc}{part}{KAPITEL 5: ARBEITSBLÄTTER}
+
+\input{modules/arbeitsblatt-checkin}
+\input{modules/arbeitsblatt-trigger}
+\input{modules/arbeitsblatt-depression-monitoring}
+\input{modules/arbeitsblatt-taeglicher-stimmungscheck}
+\input{modules/trigger-forschungstagebuch}
+\input{modules/matching-matrix-trigger-reaktion}
+\input{modules/accessibility-features}
+\input{modules/bibliography-sources}
+\input{modules/form-demo}
+%\input{modules/diagrams-demo-fixed}
+%\input{modules/demo-interactive}
+
+\end{document}
