@@ -4,6 +4,9 @@
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ctmm-config}[2025/11/06 CTMM zentrale Konfiguration]
 
+% Dark mode boolean
+\newif\if@ctmmDarkMode
+\@ctmmDarkModefalse
 
 \DeclareOption{darkmode}{%
     \@ctmmDarkModetrue
