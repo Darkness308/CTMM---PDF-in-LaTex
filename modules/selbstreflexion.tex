@@ -10,7 +10,6 @@
 \end{ctmmPurpleBox}
 
 \subsection*{\faCalendar~Tägliche Mikro-Reflexion (2 Minuten)}
-\textit{Nach dem Abend-Check-In -> \ctmmRef{sec:5.1}{\faEdit~Kap.5.1}}
 \textit{Nach dem Abend-Check-In (siehe \hyperref[sec:checkin]{Arbeitsblatt-Checkin})}
 
 \textbf{Drei einfache Fragen:}\\[0.3cm]
@@ -24,12 +23,7 @@
 \ctmmTextField[10cm]{}{daily_improvement}\\[0.5cm]
 
 \subsection*{\faCalendar~Wöchentliche Mini-Retrospektive}
-\textit{Sonntag beim Depression-Monitor -> \ctmmRef{sec:5.3}{\faEdit~Kap.5.3}}
-
-\begin{ctmmYellowBox}{Wochenreflexion}
-\textbf{Genutzte Tools diese Woche:}\\
-\ctmmCheckBox[week_safewords]{Safe-Words} \quad \ctmmCheckBox[week_skills]{Skills-Box} \quad \ctmmCheckBox[week_rituals]{Rituale}\\[0.3cm]
-\textit{Sonntag beim Depression-Monitor -> \faEdit~Kap.5.3 (siehe Arbeitsblatt-Depression-Monitoring)}
+\textit{Sonntag beim Depression-Monitor (siehe Arbeitsblatt-Depression-Monitoring)}
 
 \begin{ctmmYellowBox}{Wochenreflexion}
 \textbf{Genutzte Tools diese Woche:}\\
@@ -49,7 +43,7 @@
 \textit{Verwende die \faChartBar~Interaktiven Diagramme zur visuellen Analyse deiner Muster}
 
 \subsection*{\faSearch~Trigger-Forschungstagebuch}
-\textit{Tägliche Trigger-Muster erkennen -> \ctmmRef{sec:trigger-forschungstagebuch}{\faEdit~Kap.5.2} (siehe Arbeitsblatt-Trigger)}
+\textit{Tägliche Trigger-Muster erkennen (siehe Arbeitsblatt-Trigger)}
 
 \begin{tcolorbox}[colback=ctmmBlue!5!white,colframe=ctmmBlue,title=\textcolor{white}{\textbf{Tägliches Trigger-Forschungstagebuch}}]
 
@@ -66,14 +60,6 @@
 \begin{tabularx}{\textwidth}{|X|X|X|X|}
 \hline
 \textbf{Metrik} & \textbf{Letzter Monat} & \textbf{Dieser Monat} & \textbf{Trend} \\
-\hline
-Safe-Word Nutzung/Woche & \ctmmTextField[2cm]{}{metric_safeword_last} & \ctmmTextField[2cm]{}{metric_safeword_now} & \ctmmCheckBox[trend_safeword_up]{Up} \ctmmCheckBox[trend_safeword_down]{Down} \\
-\hline
-Krisenzeit (Minuten) & \ctmmTextField[2cm]{}{metric_crisis_last} & \ctmmTextField[2cm]{}{metric_crisis_now} & \ctmmCheckBox[trend_crisis_up]{Up} \ctmmCheckBox[trend_crisis_down]{Down} \\
-\hline
-Schlafqualität (1-10) & \ctmmTextField[2cm]{}{metric_sleep_last} & \ctmmTextField[2cm]{}{metric_sleep_now} & \ctmmCheckBox[trend_sleep_up]{Up} \ctmmCheckBox[trend_sleep_down]{Down} \\
-\hline
-Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & \ctmmTextField[2cm]{}{metric_activities_now} & \ctmmCheckBox[trend_activities_up]{Up} \ctmmCheckBox[trend_activities_down]{Down} \\
 \hline
 Safe-Word Nutzung/Woche & \ctmmTextField[2cm]{}{metric_safeword_last} & \ctmmTextField[2cm]{}{metric_safeword_now} & \ctmmCheckBox{trend_safeword_up}{Up} \ctmmCheckBox{trend_safeword_down}{Down} \\
 \hline
@@ -92,21 +78,18 @@ Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & 
 \label{sec:erfolge}
 
 \begin{ctmmGreenBox}{\faBullseye~Beweise sammeln}
-\textbf{Datum:} \ctmmTextField[3cm]{}{success_date} \quad \textbf{Kategorie:} \ctmmCheckBox[cat_micro]{Mikro} \ctmmCheckBox[cat_breakthrough]{Durchbruch} \ctmmCheckBox[cat_surprise]{Überraschung}\\[0.3cm]
 \textbf{Datum:} \ctmmTextField[3cm]{}{success_date} \quad \textbf{Kategorie:} \ctmmCheckBox{cat_micro}{Mikro} \ctmmCheckBox{cat_breakthrough}{Durchbruch} \ctmmCheckBox{cat_surprise}{Überraschung}\\[0.3cm]
 
 \textbf{Was ist passiert? (Konkrete Details)}\\
 \ctmmTextArea[12cm]{3}{success_description}{}\\[0.3cm]
 
 \textbf{Vorher vs. Nachher:}\\
-\textbf{Früher:} \ctmmTextField[5cm]{}{success_before} \textbf{Heute:} \ctmmTextField[5cm]{}{success_after}\\[0.3cm]
 \textbf{Früher:} \ctmmTextField[5cm]{}{success_before} \textbf{Heute:} \ctmmTextField[5cm]{}{success_today}\\[0.3cm]
 
 \textbf{Gefühl und Bedeutung:}\\
 \ctmmTextArea[12cm]{2}{success_meaning}{}\\[0.3cm]
 
 \textbf{Was war entscheidend für diesen Erfolg?}\\
-\ctmmTextField[10cm]{}{success_key_factor}
 \ctmmTextField[10cm]{}{success_key}
 \end{ctmmGreenBox}
 
@@ -115,7 +98,6 @@ Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & 
 \begin{ctmmOrangeBox}{\faWrench~Unser System entwickelt sich weiter}
 \textbf{Dokument-Feedback markieren:}\\
 \faThumbtack~\textbf{Unklar:} \ctmmTextField[8cm]{}{feedback_unclear}\\
-\faTimes~\textbf{Funktioniert nicht:} \ctmmTextField[8cm]{}{feedback_broken}\\
 \faTimes~\textbf{Funktioniert nicht:} \ctmmTextField[8cm]{}{feedback_notworking}\\
 \faPlus~\textbf{Fehlt:} \ctmmTextField[8cm]{}{feedback_missing}\\
 \faStar~\textbf{Besonders hilfreich:} \ctmmTextField[8cm]{}{feedback_helpful}\\[0.3cm]
@@ -130,5 +112,4 @@ Gemeinsame Aktivitäten/Woche & \ctmmTextField[2cm]{}{metric_activities_last} & 
 \vspace{1cm}
 \begin{center}
 \textit{\textcolor{ctmmGreen}{\faChevronRight~Weiter zu Arbeitsblätter (siehe Arbeitsblatt-Checkin)} | \textcolor{ctmmBlue}{\faHome~Zurück zur Navigation}}
-\end{center}
 \end{center}
