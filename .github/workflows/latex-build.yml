@@ -1,10 +1,11 @@
+---
 name: Enhanced LaTeX Build and Analysis
 
 "on":
   push:
     branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:

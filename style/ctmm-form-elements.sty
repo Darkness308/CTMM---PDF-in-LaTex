@@ -78,20 +78,41 @@
 }
 
 % Checkbox mit verbessertem Design
-% Usage: \ctmmCheckBox{field name}{label}
-\newcommand{\ctmmCheckBox}[2]{%
-    \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
-        \CheckBox[%
-            name=#1,%
-            width=12pt,%
-            height=12pt,%
-            bordercolor=ctmmGreen,%
-            backgroundcolor=white,%
-            borderwidth=1pt,%
-            checkboxsymbol={\ding{51}}%
-        ]{} \textcolor{ctmmGreen}{#2}%
+% Usage: \ctmmCheckBox[field name]{label} (backward compatible - field name is optional)
+%        \ctmmCheckBox{field name}{label} (old style, still supported)
+\newcommand{\ctmmCheckBox}[2][]{%
+    \ifthenelse{\equal{#1}{}}{%
+        % Old style: no optional parameter, second param is both name and label
+        \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+            \CheckBox[%
+                name=#2,%
+                width=14pt,%
+                height=14pt,%
+                bordercolor=ctmmGreen,%
+                backgroundcolor=white,%
+                borderwidth=1.5pt,%
+                borderstyle=S,%
+                checkboxsymbol={\textcolor{ctmmGreen}{\ding{51}}}%
+            ]{\raisebox{0.1ex}{\small\,#2}}%
+        }{%
+            \raisebox{-0.1ex}{\tikz[baseline=-0.1ex]{\draw[color=ctmmGreen, line width=1pt] (0,0) rectangle (0.35,0.35);}} {\small\,#2}%
+        }%
     }{%
-        $\square$ #2%
+        % New style: first parameter is field name, second is label
+        \ifthenelse{\equal{\@ctmmInteractive}{true}}{%
+            \CheckBox[%
+                name=#1,%
+                width=14pt,%
+                height=14pt,%
+                bordercolor=ctmmGreen,%
+                backgroundcolor=white,%
+                borderwidth=1.5pt,%
+                borderstyle=S,%
+                checkboxsymbol={\textcolor{ctmmGreen}{\ding{51}}}%
+            ]{\raisebox{0.1ex}{\small\,#2}}%
+        }{%
+            \raisebox{-0.1ex}{\tikz[baseline=-0.1ex]{\draw[color=ctmmGreen, line width=1pt] (0,0) rectangle (0.35,0.35);}} {\small\,#2}%
+        }%
     }%
 }
 
@@ -126,28 +147,28 @@
 
 % Yes/No Checkbox pair
 \newcommand{\ctmmYesNo}[1]{%
-    \ctmmCheckBox{#1yes}{Ja} \quad \ctmmCheckBox{#1no}{Nein}%
+    \ctmmCheckBox[#1yes]{Ja} \quad \ctmmCheckBox[#1no]{Nein}%
 }
 
 % Emotion Check-in Scale
 \newcommand{\ctmmEmotionScale}[2]{%
     \textbf{#1:}\\%
-    \ctmmCheckBox{#2_1}{1-Sehr schlecht} \quad \ctmmCheckBox{#2_5}{5-Neutral} \quad \ctmmCheckBox{#2_10}{10-Sehr gut}%
+    \ctmmCheckBox[#2_1]{1-Sehr schlecht} \quad \ctmmCheckBox[#2_5]{5-Neutral} \quad \ctmmCheckBox[#2_10]{10-Sehr gut}%
 }
 
 % Trigger Detection Scale
 \newcommand{\ctmmTriggerScale}[1]{%
     \textbf{Trigger-Level heute:}\\%
-    \ctmmCheckBox{#1tr_low}{Niedrig} \quad \ctmmCheckBox{#1tr_med}{Mittel} \quad \ctmmCheckBox{#1tr_high}{Hoch}%
+    \ctmmCheckBox[#1tr_low]{Niedrig} \quad \ctmmCheckBox[#1tr_med]{Mittel} \quad \ctmmCheckBox[#1tr_high]{Hoch}%
 }
 
 % Safe-Word Usage Tracker
 \newcommand{\ctmmSafeWordOptions}[1]{%
     \textbf{Safe-Word verwendet:}\\%
-    \ctmmCheckBox{#1anker}{[SYM]Anker!"} \quad%
-    \ctmmCheckBox{#1reset}{[SYM]Reset!"} \quad%
-    \ctmmCheckBox{#1eiszeit}{[SYM]Eiszeit!"} \quad%
-    \ctmmCheckBox{#1other}{Anderes:} \ctmmTextField[3cm]{}{#1otherword}%
+    \ctmmCheckBox[#1anker]{[SYM]Anker!"} \quad%
+    \ctmmCheckBox[#1reset]{[SYM]Reset!"} \quad%
+    \ctmmCheckBox[#1eiszeit]{[SYM]Eiszeit!"} \quad%
+    \ctmmCheckBox[#1other]{Anderes:} \ctmmTextField[3cm]{}{#1otherword}%
 }
 
 % Weekly Pattern Table
@@ -174,10 +195,10 @@
     \ctmmTriggerScale{#1dt}\\[0.3cm]
 
     \textbf{Strategien angewendet:}\\
-    \ctmmCheckBox{#1breathing}{Atemtechnik} \quad
-    \ctmmCheckBox{#1grounding}{Grounding} \quad
-    \ctmmCheckBox{#1pause}{Pause} \quad
-    \ctmmCheckBox{#1talk}{Gespräch}\\[0.3cm]
+    \ctmmCheckBox[#1breathing]{Atemtechnik} \quad
+    \ctmmCheckBox[#1grounding]{Grounding} \quad
+    \ctmmCheckBox[#1pause]{Pause} \quad
+    \ctmmCheckBox[#1talk]{Gespräch}\\[0.3cm]
 
     \textbf{Reflexion:}\\
     \ctmmTextArea[14cm]{3}{#1reflection}{}
@@ -190,7 +211,7 @@
     \textcolor{white}{\textbf{Zeitpunkt:}} \textcolor{white}{\ctmmDate{#1cr}} \textcolor{white}{\ctmmTime{#1cr}}\\[0.3cm]
 
     \textcolor{white}{\textbf{Safe-Word verwendet:}}\\
-    \textcolor{white}{\ctmmCheckBox{#1anker}{Anker} \quad \ctmmCheckBox{#1reset}{Reset} \quad \ctmmCheckBox{#1pause}{Pause}}\\[0.3cm]
+    \textcolor{white}{\ctmmCheckBox[#1anker]{Anker} \quad \ctmmCheckBox[#1reset]{Reset} \quad \ctmmCheckBox[#1pause]{Pause}}\\[0.3cm]
 
     \textcolor{white}{\textbf{Maßnahmen:}}\\
     \textcolor{white}{\ctmmTextArea[14cm]{2}{#1measures}{}}
