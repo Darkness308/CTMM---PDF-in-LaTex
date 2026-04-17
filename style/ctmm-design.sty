@@ -12,100 +12,112 @@
 
 % tcolorbox für CTMM-Boxen
 \RequirePackage{tcolorbox}
+\RequirePackage{etoolbox}
 
 % Box-Stile definieren
-\newtcolorbox{ctmmBlueBox}[2][]{
-  colback=ctmmBlue!5!white,
-  colframe=ctmmBlue,
-  title=#2,
-  #1
+% Unterstützt beide Syntaxen: \begin{ctmmBlueBox}{Titel} und \begin{ctmmBlueBox}[title=Titel]
+% Arg 1 (O{}): optionale kv-Optionen für tcolorbox
+% Arg 2 (G{}): optionaler Titel als Gruppe {Titel}
+
+\NewDocumentEnvironment{ctmmBlueBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmBlue!5!white, colframe=ctmmBlue, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmBlue!5!white, colframe=ctmmBlue, title={#2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmGreenBox}[2][]{
-  colback=ctmmGreen!5!white,
-  colframe=ctmmGreen,
-  title=#2,
-  #1
+\NewDocumentEnvironment{ctmmGreenBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmGreen!5!white, colframe=ctmmGreen, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmGreen!5!white, colframe=ctmmGreen, title={#2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmOrangeBox}[2][]{
-  colback=ctmmOrange!5!white,
-  colframe=ctmmOrange,
-  title=#2,
-  #1
+\NewDocumentEnvironment{ctmmOrangeBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmOrange!5!white, colframe=ctmmOrange, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmOrange!5!white, colframe=ctmmOrange, title={#2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmRedBox}[2][]{
-  colback=ctmmRed!5!white,
-  colframe=ctmmRed,
-  title=#2,
-  #1
+\NewDocumentEnvironment{ctmmRedBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmRed!5!white, colframe=ctmmRed, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmRed!5!white, colframe=ctmmRed, title={#2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmPurpleBox}[2][]{
-  colback=ctmmPurple!5!white,
-  colframe=ctmmPurple,
-  title=#2,
-  #1
+\NewDocumentEnvironment{ctmmPurpleBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmPurple!5!white, colframe=ctmmPurple, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmPurple!5!white, colframe=ctmmPurple, title={#2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmYellowBox}[2][]{
-  colback=ctmmYellow!10!white,
-  colframe=ctmmYellow,
-  coltext=ctmmGray,
-  coltitle=black,
-  fonttitle=\bfseries,
-  title=#2,
-  #1
+\NewDocumentEnvironment{ctmmYellowBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmYellow!10!white, colframe=ctmmYellow, coltext=ctmmGray, coltitle=black, fonttitle=\bfseries, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmYellow!10!white, colframe=ctmmYellow, coltext=ctmmGray, coltitle=black, fonttitle=\bfseries, title={#2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
 % Kapitel-spezifische Boxen für das Navigationssystem
-\newtcolorbox{ctmmGreenChapterBox}[2][]{
-  colback=ctmmGreen!8!white,
-  colframe=ctmmGreen,
-  coltext=black,
-  coltitle=white,
-  fonttitle=\Large\bfseries,
-  title=[GREEN] #2,
-  enhanced,
-  boxrule=2pt,
-  #1
+\NewDocumentEnvironment{ctmmGreenChapterBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmGreen!8!white, colframe=ctmmGreen, coltext=black, coltitle=white, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmGreen!8!white, colframe=ctmmGreen, coltext=black, coltitle=white, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, title={[GREEN] #2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmRedChapterBox}[2][]{
-  colback=ctmmRed!8!white,
-  colframe=ctmmRed,
-  coltext=black,
-  coltitle=white,
-  fonttitle=\Large\bfseries,
-  title=[RED] #2,
-  enhanced,
-  boxrule=2pt,
-  #1
+\NewDocumentEnvironment{ctmmRedChapterBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmRed!8!white, colframe=ctmmRed, coltext=black, coltitle=white, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmRed!8!white, colframe=ctmmRed, coltext=black, coltitle=white, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, title={[RED] #2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmYellowChapterBox}[2][]{
-  colback=ctmmYellow!8!white,
-  colframe=ctmmYellow,
-  coltext=black,
-  coltitle=black,
-  fonttitle=\Large\bfseries,
-  title=[EMOJI] #2,
-  enhanced,
-  boxrule=2pt,
-  #1
+\NewDocumentEnvironment{ctmmYellowChapterBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmYellow!8!white, colframe=ctmmYellow, coltext=black, coltitle=black, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmYellow!8!white, colframe=ctmmYellow, coltext=black, coltitle=black, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, title={[EMOJI] #2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
-\newtcolorbox{ctmmPurpleChapterBox}[2][]{
-  colback=ctmmPurple!8!white,
-  colframe=ctmmPurple,
-  coltext=black,
-  coltitle=white,
-  fonttitle=\Large\bfseries,
-  title=[NOTE] #2,
-  enhanced,
-  boxrule=2pt,
-  #1
+\NewDocumentEnvironment{ctmmPurpleChapterBox}{O{} G{}}{%
+  \ifblank{#2}{%
+    \begin{tcolorbox}[colback=ctmmPurple!8!white, colframe=ctmmPurple, coltext=black, coltitle=white, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, #1]%
+  }{%
+    \begin{tcolorbox}[colback=ctmmPurple!8!white, colframe=ctmmPurple, coltext=black, coltitle=white, fonttitle=\Large\bfseries, enhanced, boxrule=2pt, title={[NOTE] #2}, #1]%
+  }%
+}{%
+  \end{tcolorbox}%
 }
 
 % Quick Navigation Makro
