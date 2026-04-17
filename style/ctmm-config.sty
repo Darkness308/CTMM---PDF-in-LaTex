@@ -1,9 +1,12 @@
-% xcolor muss vor den Farbdefinitionen geladen werden
-\RequirePackage{xcolor}
 % CTMM zentrale Konfiguration
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{ctmm-config}[2025/11/06 CTMM zentrale Konfiguration]
 
+% xcolor muss vor den Farbdefinitionen geladen werden
+\RequirePackage{xcolor}
+
+\newif\if@ctmmDarkMode
+\@ctmmDarkModefalse
 
 \DeclareOption{darkmode}{%
     \@ctmmDarkModetrue
@@ -39,7 +42,7 @@
 % Load dark theme if darkmode option was specified
 
 \if@ctmmDarkMode
-    \RequirePackage{ctmm-dark-theme}
+    \RequirePackage{style/ctmm-dark-theme}
     \AtBeginDocument{%
         \ctmmEnableDarkMode%
         \PackageInfo{ctmm-config}{Dark mode activated - therapeutic color system loaded}%
