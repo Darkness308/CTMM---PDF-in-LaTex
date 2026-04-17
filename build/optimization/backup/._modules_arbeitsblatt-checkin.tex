@@ -1,0 +1,64 @@
+% Arbeitsblatt 5.1: Täglicher Check-In
+\newpage
+\section*{\textcolor{ctmmGreen}{\faCalendar~5.1 TÄGLICHER CHECK-IN}}
+\label{sec:5.1}
+\addcontentsline{toc}{section}{5.1 Täglicher Check-In}
+
+\begin{ctmmGreenBox}{\faCircle~Jeden Morgen und Abend ausfüllen}
+\textit{Kurze Selbsteinschätzung für bessere Selbstwahrnehmung und Kommunikation}
+\end{ctmmGreenBox}
+
+\vspace{0.5cm}
+
+\subsection*{\faCalendar~Grunddaten}
+\textbf{Datum:} \ctmmTextField[5.5cm]{}{date} \quad \textbf{Zeit:} \ctmmTextField[2.5cm]{}{time}\\[0.2cm]
+\textbf{Check:} \ctmmCheckBox[morning]{Morgen} \ctmmCheckBox[evening]{Abend}
+
+\vspace{0.5cm}
+
+\subsection*{\faUsers~Beide Partner}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|l|X|X|}
+\hline
+\textbf{Bereich} & \textbf{ER} & \textbf{SIE} \\
+\hline
+\textbf{Stimmung (1-10):} & \ctmmTextField[3cm]{}{er_mood} & \ctmmTextField[3cm]{}{sie_mood} \\
+\hline
+\textbf{Schlafstunden:} & \ctmmTextField[3cm]{}{er_sleep} & \ctmmTextField[3cm]{}{sie_sleep} \\
+\hline
+\textbf{Medikamente:} & \ctmmCheckBox[er_meds_yes]{OK} \ctmmCheckBox[er_meds_forgotten]{Vergessen} & \ctmmCheckBox[sie_meds_yes]{OK} \ctmmCheckBox[sie_meds_forgotten]{Vergessen} \\
+\hline
+\end{tabularx}
+\end{center}
+
+\vspace{0.7cm}
+\subsection*{\faClipboard~Tagesplanung}
+\textbf{Schwierige Termine heute:} \\
+\ctmmTextField[12cm]{}{appointments}
+
+\textbf{Support-Person verfügbar:} \\
+\ctmmCheckBox[support_yes]{Ja, Name:} \ctmmTextField[4cm]{}{support_name} \\
+\ctmmCheckBox[support_no]{Nein, Backup:} \ctmmTextField[4cm]{}{support_backup}
+
+\textbf{Safe-Words erklärt:} \\
+\ctmmCheckBox[safewords_explained_guests]{Allen Anwesenden (Gäste/Familie)} \\
+\ctmmCheckBox[safewords_explained_not_needed]{Nicht nötig (nur wir zwei)}
+
+\vspace{0.7cm}
+\subsection*{\faMoon~Abend-Reflexion}
+\textbf{Was war heute gut:} \\
+\ctmmTextField[12cm]{}{evening_good}
+
+\textbf{Was war schwierig:} \\
+\ctmmTextField[12cm]{}{evening_difficult}
+
+\textbf{Safe-Word benutzt:} \ctmmCheckBox[safeword_no]{Nein} \ctmmCheckBox[safeword_yes]{Ja, welches:} \ctmmTextField[4cm]{}{safeword_used}
+
+\textbf{Morgen wichtig:} \\
+\ctmmTextField[12cm]{}{tomorrow_important}
+
+\vspace{1cm}
+\begin{center}
+\textit{\textcolor{ctmmPurple}{\faChevronRight~Weiter zu} \ctmmRef{sec:5.2}{Trigger-Tagebuch} | \textcolor{ctmmGreen}{\faChevronLeft~Zurück zu} \ctmmRef{sec:navigation}{Navigation}}
+\end{center}
