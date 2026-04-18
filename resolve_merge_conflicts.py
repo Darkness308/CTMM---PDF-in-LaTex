@@ -102,7 +102,7 @@ class MergeConflictResolver:
         # Write resolved content
         try:
             filepath.write_text(resolved_content, encoding='utf-8')
-            logger.info(f"✓ Resolved {conflicts_found} conflicts in {filepath}")
+            logger.info(f"[OK] Resolved {conflicts_found} conflicts in {filepath}")
             return True, conflicts_found
         except Exception as e:
             logger.error(f"Error writing {filepath}: {e}")

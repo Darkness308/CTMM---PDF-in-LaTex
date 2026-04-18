@@ -105,7 +105,7 @@ def resolve_file_conflicts(filepath: Path, strategy='keep-head') -> bool:
 
     try:
         filepath.write_text(resolved_content, encoding='utf-8')
-        logger.info(f"✓ Resolved {conflict_count} conflicts in {filepath}")
+        logger.info(f"[OK] Resolved {conflict_count} conflicts in {filepath}")
         return True
     except Exception as e:
         logger.error(f"Error writing {filepath}: {e}")
@@ -146,7 +146,7 @@ def main():
         if resolve_file_conflicts(filepath, strategy):
             resolved += 1
 
-    logger.info(f"✓ Resolved conflicts in {resolved}/{len(conflict_files)} files")
+    logger.info(f"[OK] Resolved conflicts in {resolved}/{len(conflict_files)} files")
     return 0 if resolved == len(conflict_files) else 1
 
 
