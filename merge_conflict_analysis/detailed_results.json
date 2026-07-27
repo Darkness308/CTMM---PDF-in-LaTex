@@ -1,0 +1,128 @@
+{
+  "timestamp": "2025-09-02 14:15:26 UTC",
+  "test_branch": "merge-conflict-analysis-20250902-141515",
+  "summary": {
+    "total_prs": 11,
+    "successful_merges": 1,
+    "failed_merges": 10,
+    "conflict_prs": 0,
+    "fetch_failures": 0
+  },
+  "conflict_analysis": {
+    "common_files": {},
+    "patterns": [],
+    "suggestions": []
+  },
+  "results": [
+    {
+      "pr_number": 1185,
+      "pr_title": "[WIP] identifiziere in diesem repo : l\u00f6se bei allen offenen pull request, die merge k",
+      "head_ref": "copilot/fix-8cd2eb38-9018-432c-ab2e-059c85aff0e5",
+      "merge_success": true,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 653,
+      "pr_title": "Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest",
+      "head_ref": "copilot/fix-652",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 572,
+      "pr_title": "Copilot/fix 314",
+      "head_ref": "copilot/fix-314",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 571,
+      "pr_title": "Copilot/fix 237",
+      "head_ref": "copilot/fix-237",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 569,
+      "pr_title": "Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789",
+      "head_ref": "copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 555,
+      "pr_title": "Copilot/fix 300",
+      "head_ref": "copilot/fix-300",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 489,
+      "pr_title": "Fix CI workflow: resolve LaTeX package naming issue causing build failures",
+      "head_ref": "copilot/fix-488",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 423,
+      "pr_title": "Fix CI workflow: correct LaTeX package names for German support",
+      "head_ref": "copilot/fix-422",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 307,
+      "pr_title": "Fix LaTeX syntax error: Add missing backslash to \\textcolor command",
+      "head_ref": "copilot/fix-306",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 232,
+      "pr_title": "Fix YAML syntax error in LaTeX build workflow",
+      "head_ref": "copilot/fix-231",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    },
+    {
+      "pr_number": 3,
+      "pr_title": "Implement comprehensive LaTeX build and document conversion workflows",
+      "head_ref": "copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467",
+      "merge_success": false,
+      "has_conflicts": false,
+      "conflict_files": [],
+      "error_message": "fatal: refusing to merge unrelated histories\n",
+      "fetch_success": true
+    }
+  ]
+}

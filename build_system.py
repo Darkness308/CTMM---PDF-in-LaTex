@@ -19,7 +19,6 @@ import sys
 import tempfile
 import shutil
 import chardet
-from datetime import datetime
 from pathlib import Path
 from typing import List, Tuple, Dict, Set
 import argparse
@@ -35,14 +34,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-
-
-def filename_to_title(filename):
-    """Convert filename to a readable title."""
-    # Replace underscores and hyphens with spaces, capitalize words
-    title = filename.replace('_', ' ').replace('-', ' ')
-    return ' '.join(word.capitalize() for word in title.split())
-
 
 class CTMMBuildSystem:
     def __init__(self, main_tex_path: str = "main.tex"):
@@ -149,7 +140,7 @@ class CTMMBuildSystem:
 % TODO: Add content for this module
 % Created automatically by CTMM Build System
 
-\\section{{TODO: {filename_to_title(path.stem)}}}
+\\section{{TODO: {path.stem.replace('-', ' ').title()}}}
 \\label{{sec:{path.stem}}}
 
 % TODO: Add module content here

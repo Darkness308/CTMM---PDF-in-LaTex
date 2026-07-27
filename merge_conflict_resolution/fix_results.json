@@ -1,0 +1,111 @@
+{
+  "timestamp": "2025-09-02 14:17:12 UTC",
+  "summary": {
+    "total_prs": 10,
+    "successful_fixes": 0,
+    "new_commits_created": 0,
+    "failed_fixes": 0
+  },
+  "results": [
+    {
+      "pr_number": 653,
+      "pr_title": "Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest",
+      "head_ref": "copilot/fix-652",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-652' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 572,
+      "pr_title": "Copilot/fix 314",
+      "head_ref": "copilot/fix-314",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-314' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 571,
+      "pr_title": "Copilot/fix 237",
+      "head_ref": "copilot/fix-237",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-237' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 569,
+      "pr_title": "Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789",
+      "head_ref": "copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 555,
+      "pr_title": "Copilot/fix 300",
+      "head_ref": "copilot/fix-300",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-300' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 489,
+      "pr_title": "Fix CI workflow: resolve LaTeX package naming issue causing build failures",
+      "head_ref": "copilot/fix-488",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-488' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 423,
+      "pr_title": "Fix CI workflow: correct LaTeX package names for German support",
+      "head_ref": "copilot/fix-422",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-422' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 307,
+      "pr_title": "Fix LaTeX syntax error: Add missing backslash to \\textcolor command",
+      "head_ref": "copilot/fix-306",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-306' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 232,
+      "pr_title": "Fix YAML syntax error in LaTeX build workflow",
+      "head_ref": "copilot/fix-231",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-231' did not match any file(s) known to git\n"
+    },
+    {
+      "pr_number": 3,
+      "pr_title": "Implement comprehensive LaTeX build and document conversion workflows",
+      "head_ref": "copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467",
+      "fix_attempted": false,
+      "fix_successful": false,
+      "new_commit_created": false,
+      "new_sha": "",
+      "error_message": "Could not checkout branch: error: pathspec 'copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467' did not match any file(s) known to git\n"
+    }
+  ]
+}
