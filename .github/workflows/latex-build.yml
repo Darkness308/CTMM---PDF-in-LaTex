@@ -4,8 +4,20 @@ name: Enhanced LaTeX Build and Analysis
   push:
     branches: [main]
   pull_request:
+<<<<<<< HEAD
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
+=======
     branches: [ main ]
   workflow_dispatch:
+>>>>>>> origin/main
 
 jobs:
   build:
@@ -25,6 +37,116 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "📦 Installing Python dependencies..."
+<<<<<<< HEAD
+          pip install chardet
+          echo "✅ Python dependencies installed successfully"
+
+      - name: Verify validation scripts and dependencies
+        timeout-minutes: 3
+        run: |
+          echo "🔍 Verifying validation scripts and dependencies..."
+          echo ""
+          echo "📋 Required Scripts (workflow will fail if missing):"
+          echo "  - ctmm_build.py: $([ -f 'ctmm_build.py' ] && echo '✅ Found' || echo '❌ MISSING')"
+
+          echo ""
+          echo "📋 Optional Scripts (workflow continues if missing):"
+          echo "  - validate_latex_syntax.py: $([ -f 'validate_latex_syntax.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - test_issue_743_validation.py: $([ -f 'test_issue_743_validation.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - test_issue_761_fix.py: $([ -f 'test_issue_761_fix.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - validate_ci_environment.py: $([ -f 'validate_ci_environment.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+          echo "  - ci_failure_prevention.py: $([ -f 'ci_failure_prevention.py' ] && echo '✅ Found' || echo '⚠️  Not found (will skip)')"
+
+          echo ""
+          # Verify required scripts exist
+          if [ ! -f "ctmm_build.py" ]; then
+            echo "❌ ERROR: Required script ctmm_build.py is missing!"
+            exit 1
+          fi
+
+          echo "✅ Validation script verification completed"
+
+      - name: Run LaTeX syntax validation (optional)
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🔍 Starting LaTeX syntax validation (optional)..."
+          if [ -f "validate_latex_syntax.py" ]; then
+            python3 validate_latex_syntax.py
+            echo "✅ LaTeX syntax validation completed successfully"
+          else
+            echo "⚠️ validate_latex_syntax.py not found, skipping (optional script)..."
+          fi
+      - name: Run CTMM Build System Check (required)
+        timeout-minutes: 10
+        run: |
+          echo "🔧 Starting CTMM build system check (required)..."
+          python3 ctmm_build.py
+          echo "✅ CTMM build system check completed successfully"
+      - name: Run comprehensive CI validation (optional)
+        timeout-minutes: 10
+        continue-on-error: true
+        run: |
+          echo "📋 Starting comprehensive CI validation (optional)..."
+          if [ -f "test_issue_743_validation.py" ]; then
+            python3 test_issue_743_validation.py
+            echo "✅ Comprehensive CI validation completed successfully"
+          else
+            echo "⚠️ test_issue_743_validation.py not found, skipping (optional script)..."
+          fi
+      - name: Enhanced pre-build validation (optional)
+        timeout-minutes: 8
+        continue-on-error: true
+        run: |
+          echo "🔍 Running enhanced pre-build validation (optional)..."
+          if [ -f "test_issue_761_fix.py" ]; then
+            python3 test_issue_761_fix.py || echo "⚠️  Warning: Some robustness checks failed but continuing..."
+          else
+            echo "⚠️ test_issue_761_fix.py not found, skipping (optional script)..."
+          fi
+          echo "✅ Enhanced pre-build validation completed"
+
+      - name: Assess system resources and GitHub Actions runner environment
+        timeout-minutes: 3
+        run: |
+          echo "📊 Checking system resources and runner environment..."
+          echo "🔹 Full disk usage:"
+          df -h
+          echo "🔹 Full memory usage:"
+          free -h
+          echo "🔹 Runner metadata:"
+          echo "  Runner OS: $RUNNER_OS"
+          echo "  Runner Architecture: $RUNNER_ARCH"
+          echo "  GitHub Actions Runner: $RUNNER_NAME"
+          echo "🔹 Summary (root filesystem and memory):"
+          df -h / | head -2
+          free -h | head -2
+          echo "🔹 CPU Info (logical cores):"
+          nproc
+          echo "✅ System resources and environment assessment complete"
+      - name: Enhanced CI environment validation (optional)
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🔧 Running enhanced CI environment validation (optional)..."
+          if [ -f "validate_ci_environment.py" ]; then
+            python3 validate_ci_environment.py
+            echo "✅ Enhanced CI environment validation completed"
+          else
+            echo "⚠️ validate_ci_environment.py not found, skipping (optional script)..."
+          fi
+
+      - name: CI failure prevention analysis (optional)
+        timeout-minutes: 5
+        continue-on-error: true
+        run: |
+          echo "🛡️ Running CI failure prevention analysis (optional)..."
+          if [ -f "ci_failure_prevention.py" ]; then
+            python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
+          else
+            echo "⚠️ ci_failure_prevention.py not found, skipping (optional script)..."
+          fi
+=======
           pip install chardet pyyaml
           echo "✅ Python dependencies installed successfully"
 
@@ -92,6 +214,7 @@ jobs:
         run: |
           echo "🛡️ Running CI failure prevention analysis..."
           python3 ci_failure_prevention.py || echo "⚠️ Some prevention checks flagged potential issues but continuing..."
+>>>>>>> origin/main
           echo "✅ CI failure prevention analysis completed"
 
       - name: Set up LaTeX
@@ -99,6 +222,106 @@ jobs:
         uses: dante-ev/latex-action@v0.2.0
         with:
           root_file: main.tex
+<<<<<<< HEAD
+          # Note: shell-escape is intentionally disabled for security; enable only if a specific package requires it.
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
+          extra_system_packages: |
+            texlive-lang-german
+            texlive-fonts-recommended
+            texlive-latex-recommended
+            texlive-fonts-extra
+            texlive-latex-extra
+            texlive-science
+            texlive-pstricks
+            ghostscript
+
+      - name: Verify PDF generation with enhanced analysis
+        timeout-minutes: 5
+        run: |
+          echo "🔍 Enhanced PDF verification and analysis..."
+
+          if [ -f "main.pdf" ]; then
+            echo "✅ PDF successfully generated"
+
+            # Detailed file analysis
+            echo "📊 PDF File Analysis:"
+            ls -la main.pdf
+            file main.pdf
+
+            # Check PDF size (should be substantial for a complete document)
+            PDF_SIZE=$(stat -c%s "main.pdf")
+            echo "📄 PDF Size: $PDF_SIZE bytes"
+
+            if [ "$PDF_SIZE" -lt 10000 ]; then
+              echo "⚠️  Warning: PDF seems unusually small ($PDF_SIZE bytes)"
+            elif [ "$PDF_SIZE" -gt 100000 ]; then
+              echo "✅ PDF has substantial content ($PDF_SIZE bytes)"
+            else
+              echo "✅ PDF size appears normal ($PDF_SIZE bytes)"
+            fi
+
+            # Verify FontAwesome package support
+            echo "🔍 Checking FontAwesome package support..."
+            if grep -q "fontawesome5" main.log 2>/dev/null; then
+              echo "✅ FontAwesome5 package was loaded successfully"
+            else
+              echo "⚠️  FontAwesome5 package loading status unknown"
+            fi
+
+            # Try to extract basic PDF info if available
+            if command -v pdfinfo &> /dev/null; then
+              echo "📋 PDF Information:"
+              pdfinfo main.pdf || echo "Unable to extract PDF info"
+            fi
+
+            echo "✅ Enhanced PDF verification completed successfully"
+          else
+            echo "❌ PDF generation failed"
+            echo "🔍 Comprehensive error analysis..."
+
+            # Check for LaTeX log files
+            echo "📄 Searching for LaTeX log files..."
+            find . -name "*.log" -type f | head -10
+
+            # Display recent log content with better formatting
+            echo ""
+            echo "📋 LaTeX Log Analysis:"
+            echo "====================="
+            find . -name "*.log" -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
+
+            # Check for FontAwesome related errors
+            echo ""
+            echo "🔍 FontAwesome Error Check:"
+            echo "=========================="
+            find . -name "*.log" -exec grep -i "fontawesome\|font.*not.*found" {} \; 2>/dev/null || echo "No FontAwesome-related errors found"
+
+            # Check for aux files and other intermediate files
+            echo ""
+            echo "📁 Intermediate Files Check:"
+            echo "============================="
+            ls -la *.aux *.out *.toc *.fls *.fdb_latexmk 2>/dev/null || echo "No intermediate files found"
+
+            # Check disk space
+            echo ""
+            echo "💾 Disk Space Analysis:"
+            echo "======================"
+            df -h .
+
+            exit 1
+          fi
+
+      - name: Upload PDF artifact
+        timeout-minutes: 5
+        uses: actions/upload-artifact@v4
+        with:
+          name: CTMM_PDF
+          path: main.pdf
+
+      - name: Upload build logs (on failure)
+        if: failure()
+        timeout-minutes: 5
+        continue-on-error: true
+=======
           args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
           # Required LaTeX packages for CTMM therapeutic materials system:
           # - texlive-lang-european: European languages support including German (babel)
@@ -137,15 +360,24 @@ jobs:
           fi
 
       - name: Upload build artifacts
+>>>>>>> origin/main
         uses: actions/upload-artifact@v4
         if: always()
         with:
+<<<<<<< HEAD
+          name: Build_Logs_${{ github.sha }}
+=======
           name: CTMM_build_artifacts
+>>>>>>> origin/main
           path: |
             main.pdf
             build/
             converted/
             *.log
+<<<<<<< HEAD
+            *.aux
+          retention-days: 7
+=======
           retention-days: 30
 
       - name: Upload main PDF
@@ -174,3 +406,4 @@ jobs:
           echo "✅ Over-escaping issue in LaTeX conversion pipeline has been fixed" >> $GITHUB_STEP_SUMMARY
           echo "✅ All converted files now use proper LaTeX syntax" >> $GITHUB_STEP_SUMMARY
           echo "✅ Conversion script updated to prevent future over-escaping" >> $GITHUB_STEP_SUMMARY
+>>>>>>> origin/main

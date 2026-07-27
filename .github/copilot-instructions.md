@@ -236,6 +236,12 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 ### 🎨 CTMM Design System
 
 **Color Scheme:**
+<<<<<<< HEAD
+- `ctmmBlue` - Primary blue for headers and structure
+- `ctmmOrange` - Accent orange for highlights
+- `ctmmGreen` - Green for positive elements
+- `ctmmPurple` - Purple for special sections
+=======
 - `ctmmBlue` (#003087) - Primary blue for headers and structure
 - `ctmmOrange` (#FF6200) - Accent orange for highlights
 - `ctmmGreen` (#4CAF50) - Green for positive elements and form borders
@@ -243,6 +249,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 - `ctmmRed` (#D32F2F) - Red for warnings or important notes
 - `ctmmGray` (#757575) - Gray for secondary text
 - `ctmmYellow` (#FFC107) - Yellow for emphasis
+>>>>>>> origin/main
 
 **Custom Elements:**
 - `\begin{ctmmBlueBox}{Title}` - Styled info boxes in CTMM blue

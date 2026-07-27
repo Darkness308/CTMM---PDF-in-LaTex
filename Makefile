@@ -159,6 +159,17 @@ help:
 	@echo "CTMM LaTeX Build System - Comprehensive Toolset"
 	@echo "==============================================="
 	@echo "Available targets:"
+<<<<<<< HEAD
+	@echo "  all       - Run check and build (default)"
+	@echo "  check     - Check dependencies and run build system"
+	@echo "  build     - Build the PDF"
+	@echo "  analyze   - Run detailed module analysis"
+	@echo "  test      - Quick test of build system"
+	@echo "  unit-test - Run unit tests for Python functions"
+	@echo "  clean     - Remove build artifacts"
+	@echo "  deps      - Install Python dependencies"
+	@echo "  help      - Show this help"
+=======
 	@echo "  all           - Run check and build (default)"
 	@echo "  setup         - Install all dependencies and test build"
 	@echo "  check         - Check dependencies and run build system"
@@ -193,3 +204,4 @@ help:
 	@echo "  make build    - Generate PDF after setup"
 	@echo ""
 	@echo "Troubleshooting: See BUILD_TROUBLESHOOTING.md for detailed help"
+>>>>>>> origin/main
