@@ -65,10 +65,21 @@ jobs:
       - name: Check all \ctmmRef labels exist
         timeout-minutes: 3
         run: |
-          refs=$(grep -o '\ctmmRef{[^}]*}' modules/*.tex | sed 's/.*{//;s/}//')
-          for ref in $refs; do
-            grep -q "\label{\$ref}" modules/*.tex main.tex || (echo "::error ::Label {\$ref} fehlt!" && exit 1)
-          done
+          refs=$(sed 's/%.*$//' modules/*.tex | grep -o '\\ctmmRef{[^}]*}' | sed -E 's/\\ctmmRef\{([^}]*)\}/\1/' | sort -u || true)
+          searchable_content=$(sed 's/%.*$//' main.tex modules/*.tex)
+          missing=0
+
+          while IFS= read -r ref; do
+            [ -z "$ref" ] && continue
+            if ! grep -Fq -- "\\label{$ref}" <<< "$searchable_content"; then
+              echo "::error ::Label {$ref} fehlt!"
+              missing=1
+            fi
+          done <<< "$refs"
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
 
       - name: Build PDF
         uses: dante-ev/latex-action@v0.2.0
