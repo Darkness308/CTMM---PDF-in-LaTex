@@ -76,12 +76,14 @@ jobs:
               line = substr(line, RSTART + RLENGTH)
             }
           }' | sort -u)
-          searchable_content=$(strip_latex_comments main.tex modules/*.tex)
+          searchable_content_file=$(mktemp)
+          trap 'rm -f "$searchable_content_file"' EXIT
+          strip_latex_comments main.tex modules/*.tex > "$searchable_content_file"
           missing=0
 
           while IFS= read -r ref; do
             [ -z "$ref" ] && continue
-            if ! grep -Fq -- "\\label{$ref}" <<< "$searchable_content"; then
+            if ! grep -Fq -- "\\label{$ref}" "$searchable_content_file"; then
               echo "::error ::Label {$ref} fehlt!"
               missing=1
             fi
