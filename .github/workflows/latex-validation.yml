@@ -69,7 +69,13 @@ jobs:
             awk '{line=$0; gsub(/\\%/, "__ESCAPED_PERCENT__", line); sub(/%.*/, "", line); gsub(/__ESCAPED_PERCENT__/, "\\%", line); print line}' "$@"
           }
 
-          refs=$(strip_latex_comments modules/*.tex | grep -o '\\ctmmRef{[^}]*}' | sed -E 's/\\ctmmRef\{([^}]*)\}/\1/' | sort -u || true)
+          refs=$(strip_latex_comments modules/*.tex | awk '{
+            line=$0
+            while (match(line, /\\ctmmRef\{[^}]*\}/)) {
+              print substr(line, RSTART + 9, RLENGTH - 10)
+              line = substr(line, RSTART + RLENGTH)
+            }
+          }' | sort -u)
           searchable_content=$(strip_latex_comments main.tex modules/*.tex)
           missing=0
 
