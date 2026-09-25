@@ -65,8 +65,12 @@ jobs:
       - name: Check all \ctmmRef labels exist
         timeout-minutes: 3
         run: |
-          refs=$(awk '{line=$0; gsub(/\\%/, "__ESCAPED_PERCENT__", line); sub(/%.*/, "", line); gsub(/__ESCAPED_PERCENT__/, "\\%", line); print line}' modules/*.tex | grep -o '\\ctmmRef{[^}]*}' | sed -E 's/\\ctmmRef\{([^}]*)\}/\1/' | sort -u || true)
-          searchable_content=$(awk '{line=$0; gsub(/\\%/, "__ESCAPED_PERCENT__", line); sub(/%.*/, "", line); gsub(/__ESCAPED_PERCENT__/, "\\%", line); print line}' main.tex modules/*.tex)
+          strip_latex_comments() {
+            awk '{line=$0; gsub(/\\%/, "__ESCAPED_PERCENT__", line); sub(/%.*/, "", line); gsub(/__ESCAPED_PERCENT__/, "\\%", line); print line}' "$@"
+          }
+
+          refs=$(strip_latex_comments modules/*.tex | grep -o '\\ctmmRef{[^}]*}' | sed -E 's/\\ctmmRef\{([^}]*)\}/\1/' | sort -u || true)
+          searchable_content=$(strip_latex_comments main.tex modules/*.tex)
           missing=0
 
           while IFS= read -r ref; do
