@@ -8,19 +8,16 @@
 
 Successfully identified and removed all disruptive characters from the CTMM LaTeX repository. The repository is now completely clean and ready for LaTeX compilation.
 
-## Issues Found and Fixed
+## Changes Included in This PR
 
-### File: `modules/safewords.tex`
+This PR adds a character checker and related documentation. It does not modify
+`modules/safewords.tex`; the changes described for that file belong to earlier work.
 
-**5 problematic Unicode characters removed:**
-
-| Line | Character | Unicode | Issue | Fix Applied |
-|------|-----------|---------|-------|-------------|
-| 7 | [U+201E]" " | U+201E | German quotation marks | Replaced with LaTeX `` '' |
-| 20 | [U+201E]Orange" | U+201E | German quotation marks | Replaced with ``Orange'' |
-| 22 | [U+201E]Kristall" | U+201E | German quotation marks | Replaced with ``Kristall'' |
-| 26 | [U+201E]Lagerfeuer" | U+201E | German quotation marks | Replaced with ``Lagerfeuer'' |
-| 43 | [U+201E]Bitte..." | U+201E | German quotation marks | Replaced with ``Bitte...'' |
+| Change | Description |
+|--------|-------------|
+| Character checker | Added `check_character_issues.py` to scan repository text files. |
+| Checker documentation | Added `CHARACTER_CHECKER.md` with usage and character guidance. |
+| Build troubleshooting | Updated the LaTeX workflow dependencies and README troubleshooting information. |
 
 ## Verification Process
 
@@ -110,5 +107,6 @@ The CTMM LaTeX repository now meets all quality standards for professional docum
 
 **Completed by:** Copilot Agent  
 **Verification tool:** `check_character_issues.py`  
-**Files modified:** 1 (`modules/safewords.tex`)  
-**Commits:** 1
+**Changes in this PR:** Character checker and documentation, LaTeX workflow dependencies, and README troubleshooting.
+**Source-file cleanup:** `modules/safewords.tex` was not changed in this PR.
+**Commits:** See the pull request history.
