@@ -75,7 +75,7 @@ Alle Farben erfüllen **mindestens WCAG Level AA**:
 Das Repository ist mit **automatischer Shell-Integration** für VS Code konfiguriert. Dies bietet verbesserte Terminal-Features:
 
 - 🎯 Befehlserkennung und Navigation zwischen Befehlen
-- ✅ Visuelle Erfolgs-/Fehlschlag-Indikatoren für Befehle  
+- ✅ Visuelle Erfolgs-/Fehlschlag-Indikatoren für Befehle
 - 💡 Verbesserte Befehlsvorschläge und Autovervollständigung
 - 📍 Automatische Verzeichniserkennung
 
@@ -323,6 +323,24 @@ Die Tests überprüfen:
   - Kommentar-Filterung in LaTeX-Dateien (neu)
   - Escaped-Prozent-Zeichen Behandlung (neu)
 
+### Zeichenfehler-Prüfung
+
+Das Repository enthält einen automatischen Checker für problematische Zeichen (`check_character_issues.py`):
+
+```bash
+# Prüfung auf problematische Zeichen
+make check-chars
+# oder direkt:
+python3 check_character_issues.py
+```
+
+Der Checker findet:
+- Git-Merge-Conflict-Marker (`<<<<<<<`, `=======`, `>>>>>>>`)
+- Unsichtbare Unicode-Zeichen (non-breaking spaces, zero-width spaces, etc.)
+- Steuerzeichen, die LaTeX-Probleme verursachen können
+
+📖 **Ausführliche Dokumentation:** Siehe [CHARACTER_CHECKER.md](CHARACTER_CHECKER.md)
+
 ### Modulare Test-Strategie
 
 **Für Entwickler:**
@@ -367,9 +385,13 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
   - Module sollten keine Pakete laden oder globale Makros definieren.
   - Nur Inhalte und Befehle verwenden, die in der Präambel bereitgestellt werden.
 - **Fehlermeldungen:**
-  - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen – in die Präambel verschieben!
-  - `Undefined control sequence`: Ein Makro ist nicht definiert – Definition prüfen oder in die Präambel verschieben.
-  - `Command ... already defined`: Ein Makro wurde doppelt definiert – nur eine Definition behalten (am besten zentral).
+  - `Can be used only in preamble`: Ein Paket wurde im Fließtext geladen - in die Präambel verschieben!
+  - `Undefined control sequence`: Ein Makro ist nicht definiert - Definition prüfen oder in die Präambel verschieben.
+  - `Command ... already defined`: Ein Makro wurde doppelt definiert - nur eine Definition behalten (am besten zentral).
+  - `File 'fontawesome5.sty' not found`: LaTeX-Paket fehlt - installiere `texlive-fonts-extra`:
+    ```bash
+    sudo apt-get install -y texlive-fonts-extra
+    ```
 
 ### Vorgehen bei neuen Modulen
 
