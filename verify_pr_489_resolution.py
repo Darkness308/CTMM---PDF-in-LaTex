@@ -27,17 +27,17 @@ def check_file_for_issues(filepath):
 
             # Check for BOM
             if text.startswith('\ufeff'):
-                issues.append('[WARN]  Has BOM (Byte Order Mark) at start')
+                issues.append('[SYM]  Has BOM (Byte Order Mark) at start')
 
             # Check for zero-width characters
             zero_width = re.findall(r'[\u200B-\u200D\uFEFF]', text)
             if zero_width:
-                issues.append(f'[WARN]  Contains {len(zero_width)} zero-width character(s)')
+                issues.append(f'[SYM]  Contains {len(zero_width)} zero-width character(s)')
 
             # Check for control characters (except standard whitespace)
             control_chars = re.findall(r'[\x01-\x08\x0B\x0C\x0E-\x1F]', text)
             if control_chars:
-                issues.append(f'[WARN]  Contains {len(control_chars)} control character(s)')
+                issues.append(f'[SYM]  Contains {len(control_chars)} control character(s)')
 
             # Check for merge conflict markers at line start
             if re.search(r'^<<<<<<< ', text, re.MULTILINE):
@@ -68,13 +68,13 @@ def main():
         'main.tex',
     ]
 
-    print("[SEARCH] Checking key files for problematic characters...")
+    print("[EMOJI] Checking key files for problematic characters...")
     print()
 
     all_clean = True
     for filepath in key_files:
         if not os.path.exists(filepath):
-            print(f"[WARN]  {filepath}: File not found")
+            print(f"[SYM]  {filepath}: File not found")
             continue
 
         issues = check_file_for_issues(filepath)
@@ -83,7 +83,7 @@ def main():
             all_clean = False
             print(f"[FAIL] {filepath}:")
             for issue in issues:
-                print(f"  {issue}")
+                print(f"   {issue}")
         else:
             # Get file stats
             with open(filepath, 'rb') as f:
@@ -93,7 +93,7 @@ def main():
             size = len(content)
 
             print(f"[PASS] {filepath}")
-            print(f"  [SUMMARY] Size: {size:,} bytes, Lines: {lines:,}")
+            print(f"   [EMOJI] Size: {size:,} bytes, Lines: {lines:,}")
 
     print()
     print("=" * 80)
@@ -101,16 +101,16 @@ def main():
     if all_clean:
         print("[PASS] VERIFICATION PASSED: All files are clean and ready for merge!")
         print()
-        print("[TEST] Summary:")
-        print("  * No null bytes found")
-        print("  * No merge conflict markers")
-        print("  * No problematic Unicode characters")
-        print("  * All files have valid UTF-8 encoding")
+        print("[EMOJI] Summary:")
+        print("   * No null bytes found")
+        print("   * No merge conflict markers")
+        print("   * No problematic Unicode characters")
+        print("   * All files have valid UTF-8 encoding")
         print()
-        print("[TARGET] Next Step:")
-        print("  Change PR #489 base branch from 'copilot/fix-99' to 'main'")
-        print("  via GitHub web interface at:")
-        print("  https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489")
+        print("[EMOJI] Next Step:")
+        print("   Change PR #489 base branch from 'copilot/fix-99' to 'main'")
+        print("   via GitHub web interface at:")
+        print("   https://github.com/Darkness308/CTMM---PDF-in-LaTex/pull/489")
         return 0
     else:
         print("[FAIL] VERIFICATION FAILED: Some files have issues")

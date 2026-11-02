@@ -90,7 +90,7 @@ Das ursprüngliche Problem war:
 permissions:
   contents: read
   actions: write
-  
+
 jobs:
   build:
   runs-on: ubuntu-latest

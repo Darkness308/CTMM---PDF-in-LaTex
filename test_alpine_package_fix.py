@@ -69,8 +69,8 @@ def test_latex_build_workflow():
 
         if 'extra_system_packages' in with_config:
             print("[FAIL] FAIL: extra_system_packages found in LaTeX setup step")
-            print("  This will cause Alpine package errors!")
-            print(f"  Found packages: {with_config['extra_system_packages']}")
+            print("   This will cause Alpine package errors!")
+            print(f"   Found packages: {with_config['extra_system_packages']}")
             return False
         else:
             print("[PASS] No extra_system_packages configuration (correct)")
@@ -89,8 +89,8 @@ def test_latex_build_workflow():
         return False
 
     print(f"[PASS] Required fields present: {required_fields}")
-    print(f"  root_file: {with_config['root_file']}")
-    print(f"  args: {with_config['args']}")
+    print(f"   root_file: {with_config['root_file']}")
+    print(f"   args: {with_config['args']}")
 
     # Check timeout
     if 'timeout-minutes' in latex_setup_step:

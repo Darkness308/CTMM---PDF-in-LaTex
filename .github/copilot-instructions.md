@@ -139,7 +139,7 @@ python3 validate_pr.py
 ├── main.tex                    # Main LaTeX document (entry point)
 ├── style/                      # LaTeX style files (.sty)
 │   ├── ctmm-design.sty        # CTMM color scheme and design elements
-│   ├── form-elements.sty      # Interactive form components  
+│   ├── form-elements.sty      # Interactive form components
 │   └── ctmm-diagrams.sty      # Custom diagrams and visual elements
 ├── modules/                    # Individual therapy modules (.tex)
 │   ├── arbeitsblatt-*.tex     # Worksheets (Arbeitsblätter)
@@ -237,7 +237,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 
 **Color Scheme:**
 - `ctmmBlue` (#003087) - Primary blue for headers and structure
-- `ctmmOrange` (#FF6200) - Accent orange for highlights  
+- `ctmmOrange` (#FF6200) - Accent orange for highlights
 - `ctmmGreen` (#4CAF50) - Green for positive elements and form borders
 - `ctmmPurple` (#7B1FA2) - Purple for special sections
 - `ctmmRed` (#D32F2F) - Red for warnings or important notes
@@ -278,7 +278,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 
 **Build Errors:**
 - `Undefined control sequence` → Check if macro is defined in preamble
-- `Command already defined` → Remove duplicate macro definitions  
+- `Command already defined` → Remove duplicate macro definitions
 - Missing file errors → Run `ctmm_build.py` to auto-generate templates
 - `Can be used only in preamble` → Move `\usepackage` to main.tex preamble
 - `Package hyperref Error` → Ensure hyperref is loaded last in package list
@@ -325,7 +325,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 ### Development Environment
 - **Local**: LaTeX distribution (TeX Live, MiKTeX) with required packages
 - **GitHub Codespace**: Pre-configured environment available
-- **VS Code Integration**: 
+- **VS Code Integration**:
   - `.vscode/tasks.json` provides "CTMM: Kompilieren" build task
   - Recommended extension: GitHub Copilot Chat
   - LaTeX Workshop extension for syntax highlighting and PDF preview
@@ -361,7 +361,7 @@ Tests cover filename-to-title conversion (23 test cases), German therapy termino
 # 1. ALWAYS start here - primary build validation
 python3 ctmm_build.py                    # 1.9s, timeout: 5min
 
-# 2. Test changes thoroughly  
+# 2. Test changes thoroughly
 make unit-test                          # 0.2s, timeout: 3min
 
 # 3. Validate before PR

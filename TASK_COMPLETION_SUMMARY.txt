@@ -6,8 +6,8 @@
 TASK: Identify all interfering characters in two files preventing merge
 
 PROBLEM STATEMENT (Original German):
-"In zwei Dateien gibt es noch Konflikte, die einen Merge verhindern. 
-Identifiziere alle störenden Zeichen in jeder Datei, damit der Merge 
+"In zwei Dateien gibt es noch Konflikte, die einen Merge verhindern.
+Identifiziere alle störenden Zeichen in jeder Datei, damit der Merge
 funktioniert."
 
 TASK STATUS: ✓ COMPLETE

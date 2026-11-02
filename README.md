@@ -64,10 +64,22 @@ Alle Farben erfüllen **mindestens WCAG Level AA**:
 
 ## Verwendung
 1. Klone das Repository
-copilot/vscode1754261474068
 2. Führe das Setup-Script aus: `./ctmm-workflow.sh checkup`
 3. Kompiliere das Dokument: `./ctmm-workflow.sh build`
 4. Oder öffne das Projekt in einem GitHub Codespace
+
+## Entwicklungsumgebung
+
+### VS Code Terminal Shell Integration
+
+Das Repository ist mit **automatischer Shell-Integration** für VS Code konfiguriert. Dies bietet verbesserte Terminal-Features:
+
+- 🎯 Befehlserkennung und Navigation zwischen Befehlen
+- ✅ Visuelle Erfolgs-/Fehlschlag-Indikatoren für Befehle  
+- 💡 Verbesserte Befehlsvorschläge und Autovervollständigung
+- 📍 Automatische Verzeichniserkennung
+
+Weitere Informationen in [TERMINAL_SHELL_INTEGRATION.md](TERMINAL_SHELL_INTEGRATION.md)
 
 ## Git-Workflow
 
@@ -203,7 +215,7 @@ Das Projekt verfügt über ein automatisches Build-System (`ctmm_build.py`), das
 python3 ctmm_build.py --enhanced
 make enhanced-build
 
-# Enhanced Incremental Testing  
+# Enhanced Incremental Testing
 make enhanced-testing
 ```
 

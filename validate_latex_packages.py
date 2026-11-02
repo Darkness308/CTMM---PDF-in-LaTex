@@ -45,12 +45,12 @@ def check_package_exists(package_name):
         )
         return bool(result.stdout.strip())
     except FileNotFoundError:
-        print("[WARN]  apt-cache not available, skipping package verification")
+        print("[SYM]  apt-cache not available, skipping package verification")
         return True  # Assume packages exist if we can't check
 
 def main():
     """Main validation function."""
-    print("[SEARCH] Validating LaTeX package configuration...")
+    print("[EMOJI] Validating LaTeX package configuration...")
     print("=" * 50)
 
     # Extract packages from workflow

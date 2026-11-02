@@ -77,7 +77,7 @@ def process_file(filepath):
             return False
 
     except Exception as e:
-        print(f"  [ERROR] Error processing {filepath}: {e}")
+        print(f"  [X] Error processing {filepath}: {e}")
         return False
 
 def main():

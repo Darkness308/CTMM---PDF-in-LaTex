@@ -82,7 +82,7 @@ Content here
 
 ### Required Color Scheme
 - `ctmmBlue` - Primary structural elements
-- `ctmmOrange` - Accent and highlights  
+- `ctmmOrange` - Accent and highlights
 - `ctmmGreen` - Positive elements and forms
 - `ctmmPurple` - Special sections and tools
 - `ctmmRed` - Warnings and critical items

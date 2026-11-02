@@ -1,11 +1,20 @@
+---
 name: Enhanced LaTeX Build and Analysis
 
 "on":
   push:
     branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
 
 jobs:
   build:
@@ -35,6 +44,8 @@ jobs:
             texlive-latex-recommended \
             texlive-latex-extra \
             texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-lang-german \
             texlive-bibtex-extra \
             pandoc \
             poppler-utils
@@ -99,14 +110,8 @@ jobs:
         uses: dante-ev/latex-action@v0.2.0
         with:
           root_file: main.tex
-          args: -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
-          # Required LaTeX packages for CTMM therapeutic materials system:
-          # - texlive-lang-european: European languages support including German (babel)
-          # - texlive-lang-german: German language support (required for ngerman babel)
-          # - texlive-fonts-recommended/extra: Font packages
-          # - texlive-latex-recommended/extra: Core LaTeX packages
-          # - texlive-science: Scientific packages
-          # - texlive-pstricks: Provides pifont package for form element symbols (Issue #739, #743)
+          # Note: shell-escape is intentionally disabled for security; enable only if a specific package requires it.
+          args: "-synctex=1 -interaction=nonstopmode -file-line-error"
           extra_system_packages: |
             texlive-lang-european
             texlive-lang-german
@@ -116,10 +121,23 @@ jobs:
             texlive-fonts-extra
             texlive-science
             texlive-pstricks
-      - name: Verify PDF generation with enhanced analysis
+            ghostscript
+
+      - name: Verify PDF generation
         timeout-minutes: 5
         run: |
-          chmod +x scripts/*.sh || true
+          if [ ! -s "main.pdf" ]; then
+            echo "❌ PDF generation failed"
+            find . -name "*.log" -type f -exec echo "=== {} ===" \; -exec tail -30 {} \; 2>/dev/null
+            exit 1
+          fi
+
+          echo "✅ PDF successfully generated"
+          ls -la main.pdf
+          file main.pdf
+          if command -v pdfinfo >/dev/null 2>&1; then
+            pdfinfo main.pdf
+          fi
 
       - name: Run complete CTMM workflow (if available)
         run: |
@@ -161,14 +179,14 @@ jobs:
         run: |
           echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -f "main.pdf" ]; then
             echo "[PASS] **PDF Generated Successfully**" >> $GITHUB_STEP_SUMMARY
             echo "- Main PDF: \`main.pdf\`" >> $GITHUB_STEP_SUMMARY
           else
             echo "[FAIL] **PDF Generation Failed**" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Fix Status" >> $GITHUB_STEP_SUMMARY
           echo "[PASS] Over-escaping issue in LaTeX conversion pipeline has been fixed" >> $GITHUB_STEP_SUMMARY
