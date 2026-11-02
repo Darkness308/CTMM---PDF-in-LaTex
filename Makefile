@@ -1,6 +1,6 @@
 # CTMM LaTeX Build System Makefile
 
-.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix validate-forms validate-forms-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing test-workflow setup
+.PHONY: build check clean test test-unit validate-pr help unit-test validate validate-fix validate-forms validate-forms-fix ctmm-check ctmm-fix ctmm-validate ctmm-workflow integration-test comprehensive workflow enhanced-build enhanced-testing test-workflow setup check-chars
 
 # Default target
 all: ctmm-check build
@@ -18,6 +18,11 @@ enhanced-testing:
 check:
 	@echo "Running CTMM Build System check..."
 	python3 ctmm_build.py
+
+# Check for problematic characters
+check-chars:
+	@echo "Checking for problematic characters..."
+	python3 check_character_issues.py
 
 # Validate PR content (for contributors)
 validate-pr:
@@ -162,6 +167,7 @@ help:
 	@echo "  all           - Run check and build (default)"
 	@echo "  setup         - Install all dependencies and test build"
 	@echo "  check         - Check dependencies and run build system"
+	@echo "  check-chars   - Check for problematic characters in files"
 	@echo "  validate-pr   - Validate PR content for Copilot review"
 	@echo "  validate      - Validate LaTeX files for escaping issues"
 	@echo "  validate-fix  - Fix LaTeX escaping issues (creates backups)"
