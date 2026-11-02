@@ -1,173 +1,87 @@
 #!/usr/bin/env python3
-"""
-Automatic Merge Conflict Resolver
-Resolves Git merge conflicts by intelligently choosing the appropriate version.
-"""
+"""Resolve merge conflicts by retaining the current branch's content."""
 
 import re
+import subprocess
 import sys
 from pathlib import Path
 from typing import List, Tuple
-import logging
-
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
-logger = logging.getLogger(__name__)
 
 
-class MergeConflictResolver:
-    """Resolves Git merge conflicts in files."""
-
-    def __init__(self):
-        self.conflict_pattern = re.compile(
-            r'<<<<<<< HEAD\n(.*?)\n=======\n(.*?)\n>>>>>>> pr-653',
-            re.DOTALL
-        )
-
-    def resolve_conflict(self, head_content: str, pr_content: str, context: str = "") -> str:
-        """
-        Resolve a single conflict by choosing the appropriate version.
-
-        Strategy:
-        1. If pr_content is empty/whitespace, keep head_content
-        2. If head_content is empty/whitespace, keep pr_content
-        3. If both have content, try to merge intelligently
-        4. Default: keep head_content (current branch)
-        """
-        head_stripped = head_content.strip()
-        pr_stripped = pr_content.strip()
-
-        # If one side is empty, use the other
-        if not head_stripped and pr_stripped:
-            logger.debug("Keeping pr-653 content (HEAD is empty)")
-            return pr_content
-        elif not pr_stripped and head_stripped:
-            logger.debug("Keeping HEAD content (pr-653 is empty)")
-            return head_content
-        elif not head_stripped and not pr_stripped:
-            logger.debug("Both sides empty, removing conflict marker")
-            return ""
-
-        # Check if contents are identical (just whitespace differences)
-        if head_stripped == pr_stripped:
-            logger.debug("Contents identical, keeping HEAD version")
-            return head_content
-
-        # Check if one is a subset/superset of the other
-        if pr_stripped in head_stripped:
-            logger.debug("HEAD contains pr-653 content, keeping HEAD")
-            return head_content
-        elif head_stripped in pr_stripped:
-            logger.debug("pr-653 contains HEAD content, keeping pr-653")
-            return pr_content
-
-        # For different content, keep HEAD (current branch)
-        logger.debug("Content differs, keeping HEAD version")
-        return head_content
-
-    def resolve_file(self, filepath: Path) -> Tuple[bool, int]:
-        """
-        Resolve all conflicts in a file.
-
-        Returns:
-            Tuple of (success, conflicts_resolved)
-        """
-        try:
-            content = filepath.read_text(encoding='utf-8')
-        except Exception as e:
-            logger.error(f"Error reading {filepath}: {e}")
-            return False, 0
-
-        # Check if file has conflicts
-        if '<<<<<<< HEAD' not in content:
-            logger.info(f"No conflicts in {filepath}")
-            return True, 0
-
-        original_content = content
-        conflicts_found = len(re.findall(r'<<<<<<< HEAD', content))
-
-        # Resolve all conflicts
-        def replace_conflict(match):
-            head_content = match.group(1)
-            pr_content = match.group(2)
-            return self.resolve_conflict(head_content, pr_content)
-
-        resolved_content = self.conflict_pattern.sub(replace_conflict, content)
-
-        # Verify all conflicts were resolved
-        remaining_conflicts = len(re.findall(r'<<<<<<< HEAD', resolved_content))
-        if remaining_conflicts > 0:
-            logger.warning(f"Could not resolve all conflicts in {filepath}: {remaining_conflicts} remaining")
-            return False, conflicts_found - remaining_conflicts
-
-        # Write resolved content
-        try:
-            filepath.write_text(resolved_content, encoding='utf-8')
-            logger.info(f"[OK] Resolved {conflicts_found} conflicts in {filepath}")
-            return True, conflicts_found
-        except Exception as e:
-            logger.error(f"Error writing {filepath}: {e}")
-            return False, 0
-
-    def resolve_all(self, directory: Path = None) -> Tuple[int, int]:
-        """
-        Resolve conflicts in all files in the directory.
-
-        Returns:
-            Tuple of (files_resolved, total_conflicts_resolved)
-        """
-        if directory is None:
-            directory = Path.cwd()
-
-        files_resolved = 0
-        conflicts_resolved = 0
-
-        # Find all files with conflicts
-        conflict_files = []
-        for filepath in directory.rglob('*'):
-            if filepath.is_file() and not any(part.startswith('.') for part in filepath.parts[:-1]):
-                # Skip hidden directories but not .github
-                if '.git' in str(filepath) and '.github' not in str(filepath):
-                    continue
-                try:
-                    content = filepath.read_text(encoding='utf-8', errors='ignore')
-                    if '<<<<<<< HEAD' in content:
-                        conflict_files.append(filepath)
-                except:
-                    continue
-
-        logger.info(f"Found {len(conflict_files)} files with conflicts")
-
-        for filepath in conflict_files:
-            success, num_conflicts = self.resolve_file(filepath)
-            if success:
-                files_resolved += 1
-                conflicts_resolved += num_conflicts
-
-        return files_resolved, conflicts_resolved
+CONFLICT_START = re.compile(r"^<{7}(?:\s|$)")
+CONFLICT_SEPARATOR = re.compile(r"^={7}(?:\s|$)")
+CONFLICT_END = re.compile(r"^>{7}(?:\s|$)")
 
 
-def main():
-    """Main entry point."""
-    resolver = MergeConflictResolver()
-
-    # Get directory from command line or use current directory
-    if len(sys.argv) > 1:
-        directory = Path(sys.argv[1])
-    else:
-        directory = Path.cwd()
-
-    logger.info(f"Resolving merge conflicts in {directory}")
-    files_resolved, conflicts_resolved = resolver.resolve_all(directory)
-
-    logger.info("")
-    logger.info("=" * 60)
-    logger.info(f"Summary:")
-    logger.info(f"  Files resolved: {files_resolved}")
-    logger.info(f"  Conflicts resolved: {conflicts_resolved}")
-    logger.info("=" * 60)
-
-    return 0 if files_resolved > 0 else 1
+def find_conflict_files() -> List[Path]:
+    result = subprocess.run(
+        ["git", "diff", "--name-only", "--diff-filter=U"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return [Path(path) for path in result.stdout.splitlines() if path]
 
 
-if __name__ == '__main__':
+def resolve_conflicts_in_file(file_path: Path) -> Tuple[bool, str]:
+    try:
+        lines = file_path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError as error:
+        return False, f"Failed to read file: {error}"
+
+    resolved_lines = []
+    in_conflict = False
+    in_current_section = False
+    conflict_count = 0
+
+    for line in lines:
+        if CONFLICT_START.match(line):
+            in_conflict = True
+            in_current_section = True
+            conflict_count += 1
+        elif CONFLICT_SEPARATOR.match(line) and in_conflict:
+            in_current_section = False
+        elif CONFLICT_END.match(line) and in_conflict:
+            in_conflict = False
+            in_current_section = False
+        elif not in_conflict or in_current_section:
+            resolved_lines.append(line)
+
+    if in_conflict:
+        return False, "Unterminated conflict block"
+    if conflict_count == 0:
+        return True, "No conflicts found"
+
+    try:
+        file_path.write_text("\n".join(resolved_lines) + "\n", encoding="utf-8")
+    except OSError as error:
+        return False, f"Failed to write file: {error}"
+
+    return True, f"Resolved {conflict_count} conflict(s)"
+
+
+def main() -> int:
+    conflict_files = find_conflict_files()
+    if not conflict_files:
+        print("No files with unresolved conflicts found.")
+        return 0
+
+    failed_files = []
+    for file_path in conflict_files:
+        success, message = resolve_conflicts_in_file(file_path)
+        print(f"{file_path}: {message}")
+        if success:
+            subprocess.run(["git", "add", str(file_path)], check=True)
+        else:
+            failed_files.append(file_path)
+
+    if failed_files:
+        print(f"Failed to resolve {len(failed_files)} file(s).")
+        return 1
+
+    print(f"Resolved {len(conflict_files)} file(s).")
+    return 0
+
+
+if __name__ == "__main__":
     sys.exit(main())
