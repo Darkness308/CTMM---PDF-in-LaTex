@@ -35,8 +35,6 @@ PROBLEMATIC_CHARS = {
     '\u201C': 'Left double quotation mark (U+201C) - use `` in LaTeX',
     '\u201D': 'Right double quotation mark (U+201D) - use \'\' in LaTeX',
     '\u201E': 'German opening double quote (U+201E) - use `` in LaTeX',
-    '\u2013': 'En dash (U+2013) - use -- in LaTeX or regular hyphen',
-    '\u2014': 'Em dash (U+2014) - use --- in LaTeX or regular hyphen',
     '\u2026': 'Horizontal ellipsis (U+2026) - use \\ldots in LaTeX',
     '\u00AB': 'Left-pointing double angle quotation (U+00AB) - check context',
     '\u00BB': 'Right-pointing double angle quotation (U+00BB) - check context',
