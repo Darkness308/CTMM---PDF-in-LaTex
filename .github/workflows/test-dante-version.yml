@@ -1,6 +1,7 @@
+---
 name: Test dante-ev/latex-action version availability
 
-on:
+"on":
   workflow_dispatch:
 
 jobs:

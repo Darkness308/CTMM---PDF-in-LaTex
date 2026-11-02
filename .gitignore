@@ -24,6 +24,94 @@ main_basic_test.*
 workflow_healing.log
 workflow_healing.log.*
 
+## Technical Debt Documentation (automatically generated reports):
+# Issue resolution files
+ISSUE_*_RESOLUTION.md
+ISSUE_*_COMPLETE*.md
+ISSUE_*_IMPLEMENTATION*.md
+ISSUE_*_SOLUTION.md
+ISSUE_*_FIX*.md
+ISSUE_*_VALIDATION.md
+
+# PR resolution files
+PR_*_RESOLUTION.md
+PR_*_FINAL*.md
+PR_*_COMPLETION*.md
+PR_*_QUICK*.md
+PR_*_KONFLIKT*.md
+PR_*_ZUSAMMENFASSUNG*.md
+PR_*_MERGE*.md
+PR_ANALYSIS*.md
+
+# Merge conflict documentation
+MERGE_CONFLICT*.md
+MERGE_BLOCKING*.md
+MERGE_KONFLIKT*.md
+MERGIFY*.md
+FINAL_MERGE*.md
+COMPREHENSIVE_PR_MERGE*.md
+
+# Character/escaping issue reports
+*CHARACTERS_REMOVAL*.md
+*CHARACTERS_FIX*.md
+*ZEICHEN_ENTFER*.md
+*ZEICHEN_VOLLSTAENDIG*.md
+DISRUPTIVE_CHARACTERS*.md
+CONFLICTING_CHARACTERS*.md
+STOERENDE_ZEICHEN*.md
+BERICHT_STOERENDE*.md
+ENTFERNUNG_STOERENDE*.md
+DISTURBING_CHARACTERS*.md
+
+# Workflow fix summaries
+WORKFLOW_FIX*.md
+WORKFLOW_FEHLER*.md
+WORKFLOW_HEALING*.md
+WORKFLOW_IMPLEMENTATION*.md
+WORKFLOW_INDENTATION*.md
+WORKFLOW_TROUBLESHOOTING*.md
+WORKFLOW_FIXES*.md
+GITHUB_ACTIONS_YAML_FIX.md
+
+# Build/syntax fix reports
+SYNTAX_*_RESOLUTION.md
+SYNTAX_*_VERIFICATION*.md
+SYNTAX_FIX*.md
+BUILD-TASKS-EVALUATION.md
+BUILD_TROUBLESHOOTING.md
+CONTINUOUS_BUILD*.md
+ENHANCED_BUILD*.md
+OVERESCAPING_FIX*.md
+HYPERREF_LOADING_FIX*.md
+LATEX_ESCAPING_PREVENTION.md
+
+# Generic summaries and reports
+IMPLEMENTATION_SUMMARY*.md
+COMPLETION_SUMMARY*.md
+TASK_COMPLETION*.md
+TASK_*_RESOLUTION.md
+CODE_REVIEW_*.md
+COPILOT_ISSUE*.md
+AUTOMATED_PR*.md
+COMPREHENSIVE_*.md
+OPEN_PR_RESOLUTION*.md
+SPECIFIC_PR_RESOLUTION*.md
+START_HERE_ISSUE*.md
+PROBLEMATIC_*.md
+HYPERLINK-STATUS.md
+PDF-PROBLEM-SOLVED.md
+PYTHON_SYNTAX_ERROR*.md
+
+# Summary files in multiple languages
+ZUSAMMENFASSUNG*.md
+healing_summary_*.md
+workflow_fix_summary.md
+demo_examples_README.md
+
+# Temporary README files for specific issues
+README_DE_ESCAPING.md
+README_PR_*.md
+
 ## Python cache files:
 __pycache__/
 *.py[cod]

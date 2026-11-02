@@ -181,8 +181,11 @@ def test_basic_build(main_tex_path="main.tex"):
         )
 
         # Enhanced PDF validation: check both return code and file existence/size
-        temp_pdf = Path(temp_file_path).with_suffix('.pdf')
-        temp_log = Path(temp_file_path).with_suffix('.log')
+        # pdflatex writes output to the current working directory (not the temp file's dir)
+        temp_stem = Path(temp_file_path).stem
+        temp_pdf = Path(temp_stem + '.pdf')
+        temp_log = Path(temp_stem + '.log')
+        temp_aux = Path(temp_stem + '.aux')
         pdf_exists = temp_pdf.exists()
         pdf_size = temp_pdf.stat().st_size if pdf_exists else 0
 
@@ -200,15 +203,34 @@ def test_basic_build(main_tex_path="main.tex"):
                 logger.error("Test PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("Test PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
+            # Log pdflatex error output for debugging
+            if result.stdout:
+                error_lines = [l for l in result.stdout.splitlines() if '!' in l or 'Error' in l or 'error' in l]
+                if error_lines:
+                    logger.error("LaTeX errors found:")
+                    for line in error_lines[:20]:
+                        logger.error("  %s", line)
+                else:
+                    logger.error("pdflatex output (last 30 lines):")
+                    for line in result.stdout.splitlines()[-30:]:
+                        logger.error("  %s", line)
             if temp_log.exists():
-                logger.error("Check log file for details: %s", temp_log)
+                try:
+                    log_content = temp_log.read_text(encoding='utf-8', errors='replace')
+                    error_lines = [l for l in log_content.splitlines() if l.startswith('!') or 'Error' in l]
+                    if error_lines:
+                        logger.error("LaTeX log errors:")
+                        for line in error_lines[:20]:
+                            logger.error("  %s", line)
+                except Exception:
+                    logger.error("Check log file for details: %s", temp_log)
 
         # Cleanup temporary files
         try:
             Path(temp_file_path).unlink(missing_ok=True)
             temp_pdf.unlink(missing_ok=True)
             temp_log.unlink(missing_ok=True)
-            Path(temp_file_path).with_suffix('.aux').unlink(missing_ok=True)
+            temp_aux.unlink(missing_ok=True)
         except Exception:
             pass
 
@@ -257,7 +279,28 @@ def test_full_build(main_tex_path="main.tex"):
                 logger.error("PDF file was not generated")
             elif pdf_size <= 1024:
                 logger.error("PDF file is too small (%.2f KB) - likely incomplete", pdf_size / 1024)
-            logger.error("Check main.log for detailed error information")
+            # Log pdflatex error output for debugging
+            if result.stdout:
+                error_lines = [l for l in result.stdout.splitlines() if '!' in l or 'Error' in l or 'error' in l]
+                if error_lines:
+                    logger.error("LaTeX errors found:")
+                    for line in error_lines[:20]:
+                        logger.error("  %s", line)
+                else:
+                    logger.error("pdflatex output (last 30 lines):")
+                    for line in result.stdout.splitlines()[-30:]:
+                        logger.error("  %s", line)
+            main_log = Path('main.log')
+            if main_log.exists():
+                try:
+                    log_content = main_log.read_text(encoding='utf-8', errors='replace')
+                    error_lines = [l for l in log_content.splitlines() if l.startswith('!') or 'Error' in l]
+                    if error_lines:
+                        logger.error("LaTeX log errors:")
+                        for line in error_lines[:20]:
+                            logger.error("  %s", line)
+                except Exception:
+                    logger.error("Check main.log for detailed error information")
 
         return success
 
