@@ -1,0 +1,53 @@
+[
+    {
+        "key": "ctrl+shift+p",
+        "command": "workbench.action.showCommands",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "ctrl+alt+v",
+        "command": "latex-workshop.view",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "ctrl+alt+j",
+        "command": "latex-workshop.synctex",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "shift+f5",
+        "command": "workbench.action.tasks.runTask",
+        "args": "CTMM: Build Single Module",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "f5",
+        "command": "workbench.action.tasks.runTask",
+        "args": "CTMM: Build Complete System",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "ctrl+shift+m",
+        "command": "workbench.action.terminal.new",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "ctrl+shift+e",
+        "command": "workbench.action.problems.focus"
+    },
+    {
+        "key": "f6",
+        "command": "workbench.action.tasks.runTask",
+        "args": "CTMM: Clean Build Directory"
+    },
+    {
+        "key": "ctrl+shift+w",
+        "command": "latex-workshop.build",
+        "when": "resourceExtname == .tex"
+    },
+    {
+        "key": "ctrl+alt+b",
+        "command": "workbench.action.tasks.runTask",
+        "args": "CTMM: Create Missing Directories"
+    }
+]

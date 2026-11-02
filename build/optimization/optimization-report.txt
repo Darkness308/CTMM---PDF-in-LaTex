@@ -1,0 +1,174 @@
+CTMM LaTeX Optimization Report
+=============================
+Started: Wed Aug  6 03:30:58 UTC 2025
+
+[0;32mStarting LaTeX Code Optimization Analysis[0m
+[0;34mCreating backup of original files...[0m
+  Backed up: ./main.tex → build/optimization/backup/._main.tex
+  Backed up: ./modules/therapiekoordination.tex → build/optimization/backup/._modules_therapiekoordination.tex
+  Backed up: ./modules/depression.tex → build/optimization/backup/._modules_depression.tex
+  Backed up: ./modules/qrcode.tex → build/optimization/backup/._modules_qrcode.tex
+  Backed up: ./modules/selbstreflexion.tex → build/optimization/backup/._modules_selbstreflexion.tex
+  Backed up: ./modules/arbeitsblatt-depression-monitoring.tex → build/optimization/backup/._modules_arbeitsblatt-depression-monitoring.tex
+  Backed up: ./modules/test.tex → build/optimization/backup/._modules_test.tex
+  Backed up: ./modules/navigation-system.tex → build/optimization/backup/._modules_navigation-system.tex
+  Backed up: ./modules/notfallkarten.tex → build/optimization/backup/._modules_notfallkarten.tex
+  Backed up: ./modules/arbeitsblatt-trigger.tex → build/optimization/backup/._modules_arbeitsblatt-trigger.tex
+  Backed up: ./modules/bindungsleitfaden.tex → build/optimization/backup/._modules_bindungsleitfaden.tex
+  Backed up: ./modules/demo-interactive.tex → build/optimization/backup/._modules_demo-interactive.tex
+  Backed up: ./modules/safewords.tex → build/optimization/backup/._modules_safewords.tex
+  Backed up: ./modules/triggermanagement.tex → build/optimization/backup/._modules_triggermanagement.tex
+  Backed up: ./modules/arbeitsblatt-checkin.tex → build/optimization/backup/._modules_arbeitsblatt-checkin.tex
+  Backed up: ./modules/interactive.tex → build/optimization/backup/._modules_interactive.tex
+  Backed up: ./converted/Täglicher Check Arbeitsblätter.tex → build/optimization/backup/._converted_Täglicher Check Arbeitsblätter.tex
+  Backed up: ./converted/Tool 23 Triggermanagement Teil 2 mit Systemlogik CTMM.tex → build/optimization/backup/._converted_Tool 23 Triggermanagement Teil 2 mit Systemlogik CTMM.tex
+  Backed up: ./converted/Bindungsleitfaden CTMM Übersicht .tex → build/optimization/backup/._converted_Bindungsleitfaden CTMM Übersicht .tex
+  Backed up: ./converted/Tool 26 Co Regulation & Gemeinsame Stärkung CTMM.tex → build/optimization/backup/._converted_Tool 26 Co Regulation & Gemeinsame Stärkung CTMM.tex
+  Backed up: ./converted/Trigger Notfallkarten.tex → build/optimization/backup/._converted_Trigger Notfallkarten.tex
+  Backed up: ./converted/Ctmm Depression Modul.tex → build/optimization/backup/._converted_Ctmm Depression Modul.tex
+  Backed up: ./converted/Bindungsdynamik CTMM Modul.tex → build/optimization/backup/._converted_Bindungsdynamik CTMM Modul.tex
+  Backed up: ./converted/README.tex → build/optimization/backup/._converted_README.tex
+  Backed up: ./converted/Tool 23 Triggermanagement Systemlogik CTMM Seiten 1-3.tex → build/optimization/backup/._converted_Tool 23 Triggermanagement Systemlogik CTMM Seiten 1-3.tex
+  Backed up: ./converted/Tool 22 Safewords Signalsysteme CTMM.tex → build/optimization/backup/._converted_Tool 22 Safewords Signalsysteme CTMM.tex
+  Backed up: ./converted/5.5 Krisenprotokoll Ausfüllen.tex → build/optimization/backup/._converted_5.5 Krisenprotokoll Ausfüllen.tex
+  Backed up: ./converted/Matching Matrix Trigger Reaktion Intervention CTMM.tex → build/optimization/backup/._converted_Matching Matrix Trigger Reaktion Intervention CTMM.tex
+  Backed up: ./converted/Tool 23 Trigger Management.tex → build/optimization/backup/._converted_Tool 23 Trigger Management.tex
+  Backed up: ./converted/Parnterschaftliche Werte & Trigger Kompas.tex → build/optimization/backup/._converted_Parnterschaftliche Werte & Trigger Kompas.tex
+  Backed up: ./converted/Trigger Forschungstagebuch.tex → build/optimization/backup/._converted_Trigger Forschungstagebuch.tex
+  Backed up: ./converted/integrated-content.tex → build/optimization/backup/._converted_integrated-content.tex
+  Backed up: ./converted/2.3 Trigger Management.tex → build/optimization/backup/._converted_2.3 Trigger Management.tex
+  Backed up: ./converted/Matching Matrix Wochenlogik.tex → build/optimization/backup/._converted_Matching Matrix Wochenlogik.tex
+  Backed up: ./converted/HYPERLINK-STATUS.tex → build/optimization/backup/._converted_HYPERLINK-STATUS.tex
+  Backed up: ./converted/# Code Citations.tex → build/optimization/backup/._converted_# Code Citations.tex
+[0;32m✓ Backup completed[0m
+[0;34mAnalyzing package usage...[0m
+
+PACKAGE USAGE ANALYSIS
+=====================
+
+All packages found:
+  - amssymb
+  - babel
+  - fontawesome5
+  - fontenc
+  - geometry
+  - hyperref
+  - inputenc
+  - style/ctmm-design
+  - style/ctmm-diagrams
+  - style/form-elements
+  - tabularx
+  - tcolorbox
+  - xcolor
+
+POTENTIALLY UNUSED PACKAGES:
+  ⚠ amssymb
+  ⚠ babel
+  ⚠ style/ctmm-design
+  ⚠ style/ctmm-diagrams
+  ⚠ style/form-elements
+  ⚠ tcolorbox
+[1;33mFound 6 potentially unused packages[0m
+[0;34mIdentifying duplicate definitions...[0m
+
+DUPLICATE DEFINITION ANALYSIS
+============================
+
+  No duplicate definitions found.
+[0;32m✓ No duplicate definitions found[0m
+[0;34mAnalyzing image inclusion...[0m
+
+IMAGE INCLUSION OPTIMIZATION
+===========================
+
+No image inclusion issues found.
+[0;32m✓ Image inclusion looks good[0m
+[0;34mAnalyzing formatting consistency...[0m
+
+FORMATTING CONSISTENCY ANALYSIS
+==============================
+
+Formatting consistency issues:
+  ⚠ Inconsistent spacing found in 36 files
+  ⚠ Mixed quote styles found (use  and '' for LaTeX)
+[1;33mFound 2 formatting consistency issues[0m
+[0;34mIdentifying inefficient code sections...[0m
+
+CODE EFFICIENCY ANALYSIS
+=======================
+
+Code appears efficient.
+[0;32m✓ Code efficiency looks good[0m
+[0;34mAnalyzing document structure...[0m
+
+DOCUMENT STRUCTURE ANALYSIS
+==========================
+
+Document structure overview:
+- Total .tex files: 36
+- Module files: 15
+
+✓ Good: Using modules directory for organization
+✓ Good: Using style directory for custom styles
+[0;32m✓ Structure analysis completed[0m
+[0;34mCreating optimization summary...[0m
+
+OPTIMIZATION SUMMARY
+===================
+Analysis completed: Wed Aug  6 03:31:01 UTC 2025
+
+Files analyzed:
+  - ./main.tex
+  - ./modules/therapiekoordination.tex
+  - ./modules/depression.tex
+  - ./modules/qrcode.tex
+  - ./modules/selbstreflexion.tex
+  - ./modules/arbeitsblatt-depression-monitoring.tex
+  - ./modules/test.tex
+  - ./modules/navigation-system.tex
+  - ./modules/notfallkarten.tex
+  - ./modules/arbeitsblatt-trigger.tex
+  - ./modules/bindungsleitfaden.tex
+  - ./modules/demo-interactive.tex
+  - ./modules/safewords.tex
+  - ./modules/triggermanagement.tex
+  - ./modules/arbeitsblatt-checkin.tex
+  - ./modules/interactive.tex
+  - ./converted/Täglicher Check Arbeitsblätter.tex
+  - ./converted/Tool 23 Triggermanagement Teil 2 mit Systemlogik CTMM.tex
+  - ./converted/Bindungsleitfaden CTMM Übersicht .tex
+  - ./converted/Tool 26 Co Regulation & Gemeinsame Stärkung CTMM.tex
+  - ./converted/Trigger Notfallkarten.tex
+  - ./converted/Ctmm Depression Modul.tex
+  - ./converted/Bindungsdynamik CTMM Modul.tex
+  - ./converted/README.tex
+  - ./converted/Tool 23 Triggermanagement Systemlogik CTMM Seiten 1-3.tex
+  - ./converted/Tool 22 Safewords Signalsysteme CTMM.tex
+  - ./converted/5.5 Krisenprotokoll Ausfüllen.tex
+  - ./converted/Matching Matrix Trigger Reaktion Intervention CTMM.tex
+  - ./converted/Tool 23 Trigger Management.tex
+  - ./converted/Parnterschaftliche Werte & Trigger Kompas.tex
+  - ./converted/Trigger Forschungstagebuch.tex
+  - ./converted/integrated-content.tex
+  - ./converted/2.3 Trigger Management.tex
+  - ./converted/Matching Matrix Wochenlogik.tex
+  - ./converted/HYPERLINK-STATUS.tex
+  - ./converted/# Code Citations.tex
+
+Backup location: build/optimization/backup
+Report location: build/optimization/optimization-report.txt
+
+RECOMMENDATIONS:
+1. Review unused packages and remove if not needed
+2. Fix any duplicate definitions found
+3. Optimize image inclusion for better performance
+4. Standardize formatting throughout the document
+5. Refactor inefficient code sections
+6. Improve document structure organization
+
+[0;32mOptimization Summary:[0m
+  Report: build/optimization/optimization-report.txt
+  Backup: build/optimization/backup
+  Analysis covers package usage, duplicates, images, formatting, efficiency, and structure
+[0;32m✓ Optimization analysis completed[0m
+Results available in: build/optimization
