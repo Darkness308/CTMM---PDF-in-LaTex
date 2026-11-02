@@ -34,8 +34,6 @@ The following typographic characters (common in copy-pasted text) can cause issu
 | Left double quote | U+201C | Copy-paste artifact | Two backticks |
 | Right double quote | U+201D | Copy-paste artifact | Two apostrophes |
 | German opening double quote | U+201E | German punctuation | Two backticks |
-| En dash | U+2013 | Copy-paste artifact | `--` or `-` |
-| Em dash | U+2014 | Copy-paste artifact | `---` or `-` |
 | Horizontal ellipsis | U+2026 | Copy-paste artifact | `\ldots` |
 | Left angle quote | U+00AB | May need escaping | Check context |
 | Right angle quote | U+00BB | May need escaping | Check context |

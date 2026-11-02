@@ -21,7 +21,7 @@ Ran the existing `check_character_issues.py` tool:
 Performed additional deep scan checking for:
 - Merge conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`)
 - Invisible Unicode characters (non-breaking spaces, zero-width spaces, etc.)
-- Typographic characters (smart quotes, en/em dashes, ellipsis, etc.)
+- Typographic characters (smart quotes, ellipsis, etc.)
 - Control characters (except allowed: tab, newline, carriage return)
 - Soft hyphens and BOMs
 
@@ -84,8 +84,6 @@ The following potentially disruptive characters were systematically checked and 
 | Right single quotation mark | U+2019 | ✅ Not found |
 | Left double quotation mark | U+201C | ✅ Not found |
 | Right double quotation mark | U+201D | ✅ Not found |
-| En dash | U+2013 | ✅ Not found |
-| Em dash | U+2014 | ✅ Not found |
 | Horizontal ellipsis | U+2026 | ✅ Not found |
 | Bullet | U+2022 | ✅ Not found |
 

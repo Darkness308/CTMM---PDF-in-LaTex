@@ -52,7 +52,7 @@ Issues found: 0
 ### Characters Checked For
 - **Merge conflict markers:** `<<<<<<<`, `=======`, `>>>>>>>`
 - **Invisible Unicode:** Non-breaking spaces, zero-width spaces, soft hyphens, BOMs
-- **Typographic characters:** Smart quotes, en/em dashes, ellipsis, bullets
+- **Typographic characters:** Smart quotes, ellipsis, bullets
 - **Control characters:** All ASCII control characters except tab, newline, carriage return
 
 ### Files Scanned

@@ -105,7 +105,7 @@ The character checker now detects **20 types of problematic characters:**
 | Soft hyphen | U+00AD | `\-` |
 | BOM/Zero-width no-break space | U+FEFF | Remove |
 
-### Typographic Characters (12 types)
+### Typographic Characters (10 types)
 | Character | Code | LaTeX Alternative |
 |-----------|------|-------------------|
 | Left single quotation mark | U+2018 | Single backtick |
@@ -114,8 +114,6 @@ The character checker now detects **20 types of problematic characters:**
 | Left double quotation mark | U+201C | Two backticks |
 | Right double quotation mark | U+201D | Two apostrophes |
 | **German opening double quote** | **U+201E** | Two backticks |
-| En dash | U+2013 | `--` or `-` |
-| Em dash | U+2014 | `---` or `-` |
 | Horizontal ellipsis | U+2026 | `\ldots` |
 | Left angle quote | U+00AB | Check context |
 | Right angle quote | U+00BB | Check context |
