@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Issue #1128 CI LaTeX Build Failure Fix Validation
-===============================================
 
 This script validates that all the CI LaTeX build failure fixes mentioned in
 the PR description have been properly implemented:
@@ -130,13 +129,13 @@ def test_latex_package_dependencies():
     fixes_verified = []
 
     required_packages = [
-        'texlive-lang-german',      # German language support
+        'texlive-lang-german',  # German language support
         'texlive-fonts-recommended', # Essential fonts
         'texlive-latex-recommended', # Core LaTeX packages
-        'texlive-fonts-extra',      # FontAwesome5, additional fonts
-        'texlive-latex-extra',      # TikZ, tcolorbox, advanced packages
-        'texlive-science',          # amssymb, mathematical symbols
-        'texlive-pstricks'          # pifont, graphics packages
+        'texlive-fonts-extra',  # FontAwesome5, additional fonts
+        'texlive-latex-extra',  # TikZ, tcolorbox, advanced packages
+        'texlive-science',  # amssymb, mathematical symbols
+        'texlive-pstricks'  # pifont, graphics packages
     ]
 
     workflow_files = [

@@ -37,12 +37,12 @@ def test_alpine_fix():
         if "xu-cheng/latex-action" in content:
             issues_found.append(f"[FAIL] {workflow_file.name}: Still using xu-cheng/latex-action (Alpine issue)")
         else:
-            print(f"   [PASS] No xu-cheng/latex-action found")
+            print(f"  [PASS] No xu-cheng/latex-action found")
 
         # Check for dante-ev action with proper version
         if "dante-ev/latex-action@v2.3.0" in content:
             fixes_verified.append(f"[PASS] {workflow_file.name}: Using dante-ev/latex-action@v2.3.0")
-            print(f"   [PASS] dante-ev/latex-action@v2.3.0 found")
+            print(f"  [PASS] dante-ev/latex-action@v2.3.0 found")
 
             # Check for comprehensive package list
             required_packages = [
@@ -57,9 +57,9 @@ def test_alpine_fix():
 
             for package in required_packages:
                 if package in content:
-                    print(f"   [PASS] Required package {package} found")
+                    print(f"  [PASS] Required package {package} found")
                 else:
-                    print(f"   [WARN]  Package {package} not found in this workflow")
+                    print(f"  [WARN]  Package {package} not found in this workflow")
 
     print("\n" + "=" * 60)
     print("[SUMMARY] ALPINE FIX VALIDATION SUMMARY")
@@ -92,27 +92,27 @@ def test_package_availability():
 
     # This action uses Ubuntu/Debian where these packages are available
     ubuntu_packages = [
-        'texlive-lang-german',      # [PASS] Available in Ubuntu
+        'texlive-lang-german',  # [PASS] Available in Ubuntu
         'texlive-fonts-recommended', # [PASS] Available in Ubuntu
         'texlive-latex-recommended', # [PASS] Available in Ubuntu
-        'texlive-fonts-extra',      # [PASS] Available in Ubuntu
-        'texlive-latex-extra',      # [PASS] Available in Ubuntu
-        'texlive-science',          # [PASS] Available in Ubuntu
-        'texlive-pstricks'          # [PASS] Available in Ubuntu
+        'texlive-fonts-extra',  # [PASS] Available in Ubuntu
+        'texlive-latex-extra',  # [PASS] Available in Ubuntu
+        'texlive-science',  # [PASS] Available in Ubuntu
+        'texlive-pstricks'  # [PASS] Available in Ubuntu
     ]
 
     print("\n[TEST] Package availability in Ubuntu/Debian (used by dante-ev/latex-action):")
     for package in ubuntu_packages:
-        print(f"   [PASS] {package}: Available in Ubuntu repositories")
+        print(f"  [PASS] {package}: Available in Ubuntu repositories")
 
     print("\n[FAIL] Alpine Linux issue (fixed by switching from xu-cheng):")
-    print("   [FAIL] texlive-lang-german: NOT available in Alpine repositories")
-    print("   [FAIL] This caused the original error:")
-    print("      'ERROR: unable to select packages: texlive-lang-german (no such package)'")
+    print("  [FAIL] texlive-lang-german: NOT available in Alpine repositories")
+    print("  [FAIL] This caused the original error:")
+    print("  'ERROR: unable to select packages: texlive-lang-german (no such package)'")
 
     print("\n[PASS] Solution implemented:")
-    print("   [PASS] Switched from xu-cheng/latex-action@v3 (Alpine) to dante-ev/latex-action@v2.3.0 (Ubuntu)")
-    print("   [PASS] All required packages are available in Ubuntu repositories")
+    print("  [PASS] Switched from xu-cheng/latex-action@v3 (Alpine) to dante-ev/latex-action@v2.3.0 (Ubuntu)")
+    print("  [PASS] All required packages are available in Ubuntu repositories")
 
     return True
 

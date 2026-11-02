@@ -16,9 +16,9 @@ class TestMergeConflictMarkers(unittest.TestCase):
 
     # Common merge conflict marker patterns
     CONFLICT_PATTERNS = [
-        r'^<{7}\s',      # <<<<<<< HEAD or <<<<<<< branch-name
-        r'^={7}\s*$',    # =======
-        r'^>{7}\s',      # >>>>>>> branch-name
+        r'^<{7}\s',  # <<<<<<< HEAD or <<<<<<< branch-name
+        r'^={7}\s*$',  # =======
+        r'^>{7}\s',  # >>>>>>> branch-name
         r'^\s*pr-\d+\s*$',  # Branch name like "pr-653" on its own line
     ]
 

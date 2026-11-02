@@ -86,29 +86,29 @@ gh copilot explain "git rebase -i HEAD~3"
 Das `ctmm-workflow.sh`-Script enthält bereits Funktionen für den grundlegenden Git-Workflow. Für komplexere Git-Operationen können Sie GitHub Copilot für Git als Unterstützung verwenden:
 
 1. Erstellen Sie einen Feature-Branch mit unserem Script:
-   ```bash
-   ./ctmm-workflow.sh feature neues-feature
-   ```
+  ```bash
+  ./ctmm-workflow.sh feature neues-feature
+  ```
 
 2. Machen Sie Ihre Änderungen und fügen Sie sie hinzu:
-   ```bash
-   git add .
-   ```
+  ```bash
+  git add .
+  ```
 
 3. Lassen Sie sich eine Commit-Nachricht generieren:
-   ```bash
-   gh copilot suggest -t "commit"
-   ```
+  ```bash
+  gh copilot suggest -t "commit"
+  ```
 
 4. Pushen Sie den Branch:
-   ```bash
-   ./ctmm-workflow.sh push
-   ```
+  ```bash
+  ./ctmm-workflow.sh push
+  ```
 
 5. Lassen Sie sich eine PR-Beschreibung generieren:
-   ```bash
-   gh copilot suggest -t "pr"
-   ```
+  ```bash
+  gh copilot suggest -t "pr"
+  ```
 
 ## Beispiel-Workflow
 

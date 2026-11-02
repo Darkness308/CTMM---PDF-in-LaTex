@@ -6,7 +6,7 @@ This guide provides best practices for maintaining clean, professional LaTeX for
 
 ## Clean CTMM LaTeX Patterns vs Over-Escaped Patterns
 
-### ✅ Proper CTMM Formatting
+### [PASS] Proper CTMM Formatting
 
 #### Color Usage
 ```latex
@@ -43,7 +43,7 @@ Content here
 \end{ctmmBlueBox}
 ```
 
-### ❌ Over-Escaped Patterns to Avoid
+### [FAIL] Over-Escaped Patterns to Avoid
 
 #### Excessive Backslash Escaping
 ```latex
@@ -64,7 +64,7 @@ Content here
 
 % GOOD: Direct FontAwesome and unicode
 \faCompass~
-🧩
+
 ```
 
 #### Table Formatting

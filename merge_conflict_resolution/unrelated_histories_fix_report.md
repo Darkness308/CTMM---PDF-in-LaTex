@@ -5,10 +5,10 @@
 
 ## Summary
 
-🔧 **Fix Results:**
-- ✅ **0** PRs successfully fixed
+[FIX] **Fix Results:**
+- [PASS] **0** PRs successfully fixed
 - 🆕 **0** PRs received new commits with unique SHAs
-- ❌ **0** PRs could not be fixed
+- [FAIL] **0** PRs could not be fixed
 
 ## Resolution Strategy
 
@@ -23,61 +23,61 @@ Based on the repository's `MERGIFY_SHA_CONFLICT_RESOLUTION.md` guidance, this sc
 
 ### PR #653: Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest
 - **Branch:** `copilot/fix-652`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-652' did not match any file(s) known to git
 ...
 
 ### PR #572: Copilot/fix 314
 - **Branch:** `copilot/fix-314`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-314' did not match any file(s) known to git
 ...
 
 ### PR #571: Copilot/fix 237
 - **Branch:** `copilot/fix-237`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-237' did not match any file(s) known to git
 ...
 
 ### PR #569: Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789
 - **Branch:** `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789' did not match any file(s) known to git
 ...
 
 ### PR #555: Copilot/fix 300
 - **Branch:** `copilot/fix-300`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-300' did not match any file(s) known to git
 ...
 
 ### PR #489: Fix CI workflow: resolve LaTeX package naming issue causing build failures
 - **Branch:** `copilot/fix-488`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-488' did not match any file(s) known to git
 ...
 
 ### PR #423: Fix CI workflow: correct LaTeX package names for German support
 - **Branch:** `copilot/fix-422`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-422' did not match any file(s) known to git
 ...
 
 ### PR #307: Fix LaTeX syntax error: Add missing backslash to \textcolor command
 - **Branch:** `copilot/fix-306`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-306' did not match any file(s) known to git
 ...
 
 ### PR #232: Fix YAML syntax error in LaTeX build workflow
 - **Branch:** `copilot/fix-231`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-231' did not match any file(s) known to git
 ...
 
 ### PR #3: Implement comprehensive LaTeX build and document conversion workflows
 - **Branch:** `copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467`
-- **Status:** ❌ FIX FAILED
+- **Status:** [FAIL] FIX FAILED
 - **Error:** Could not checkout branch: error: pathspec 'copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467' did not match any file(s) known to git
 ...
 
@@ -92,9 +92,9 @@ Based on the repository's `MERGIFY_SHA_CONFLICT_RESOLUTION.md` guidance, this sc
 ### For Failed Fixes:
 1. Manual intervention required
 2. Consider alternative approaches:
-   - Create new branch from main with the changes
-   - Use `git merge --allow-unrelated-histories` manually
-   - Consult with repository maintainers
+  - Create new branch from main with the changes
+  - Use `git merge --allow-unrelated-histories` manually
+  - Consult with repository maintainers
 
 ### Follow-up Actions:
 1. **Test the fixes** using the automated PR merge workflow

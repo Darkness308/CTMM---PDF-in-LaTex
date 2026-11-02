@@ -8,9 +8,9 @@ Dieses Repository enthält ein vollständiges LaTeX-System zur Erstellung von CT
 - Trigger-Management
 - Bindungsdynamik
 - Formularelemente für therapeutische Dokumentation
-- **🌙 NEU: Therapeutisch fundiertes Dark Theme** (wissenschaftlich optimiert für neurodivergente Nutzer)
+- ** NEU: Therapeutisch fundiertes Dark Theme** (wissenschaftlich optimiert für neurodivergente Nutzer)
 
-## 🌙 Dark Theme - Therapeutisch fundiertes Farbsystem
+##  Dark Theme - Therapeutisch fundiertes Farbsystem
 
 **NEU in Version 1.0:** Das CTMM-System bietet jetzt ein **wissenschaftlich fundiertes Dark Theme**, speziell optimiert für kognitiv überlastete und neurodivergente Nutzer.
 
@@ -158,10 +158,10 @@ python3 ctmm_build.py
 ```
 
 ### PR-Anforderungen:
-- ✅ Mindestens eine Datei mit Änderungen
-- ✅ Substantielle Inhaltsänderungen (nicht nur Leerzeichen)
-- ✅ Erfolgreicher Build-System-Test
-- ✅ Verwendung der PR-Vorlage
+- [PASS] Mindestens eine Datei mit Änderungen
+- [PASS] Substantielle Inhaltsänderungen (nicht nur Leerzeichen)
+- [PASS] Erfolgreicher Build-System-Test
+- [PASS] Verwendung der PR-Vorlage
 main
 
 ## Struktur
@@ -185,9 +185,9 @@ pip install chardet
 
 **Bei Build-Problemen:** Siehe [BUILD_TROUBLESHOOTING.md](BUILD_TROUBLESHOOTING.md) für detaillierte Lösungen.
 
-## 🎯 CTMM Comprehensive Toolset - "es ist nicht mehr weit"
+## [TARGET] CTMM Comprehensive Toolset - "es ist nicht mehr weit"
 
-**Status**: ✅ **COMPLETE AND OPERATIONAL**
+**Status**: [PASS] **COMPLETE AND OPERATIONAL**
 
 Das Projekt verfügt über ein **umfassendes Toolset** für professionelle Therapiematerial-Entwicklung. Siehe [COMPREHENSIVE_TOOLSET.md](COMPREHENSIVE_TOOLSET.md) für die vollständige Übersicht.
 
@@ -373,12 +373,12 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 - **Makros und Befehle:**
   - Definiere neue Makros (z.B. Checkboxen, Textfelder) zentral in der Präambel oder in einem Style-File, nicht in einzelnen Modulen.
   - Beispiel für Checkboxen:
-    ```tex
-    % In der Präambel:
-    \usepackage{amssymb}
-    \newcommand{\checkbox}{$\square$}
-    \newcommand{\checkedbox}{$\blacksquare$}
-    ```
+  ```tex
+  % In der Präambel:
+  \usepackage{amssymb}
+  \newcommand{\checkbox}{$\square$}
+  \newcommand{\checkedbox}{$\blacksquare$}
+  ```
   - **Wichtig:** Verwende in Modulen und Tabellen ausschließlich die Makros `\checkbox` und `\checkedbox` für Checkboxen. Benutze niemals direkt `\Box` oder `\blacksquare`, da dies zu `Undefined control sequence`-Fehlern führen kann.
   - Falls du einen solchen Fehler siehst, prüfe, ob irgendwo noch `\Box` oder ähnliche Symbole direkt verwendet werden, und ersetze sie durch die Makros.
 - **Module:**
@@ -396,18 +396,18 @@ Das GitHub Actions Workflow (`.github/workflows/latex-build.yml`) wurde korrigie
 ### Vorgehen bei neuen Modulen
 
 1. **Referenz in main.tex hinzufügen:**
-   ```tex
-   \input{modules/mein-neues-modul}
-   ```
+  ```tex
+  \input{modules/mein-neues-modul}
+  ```
 
 2. **Build-System ausführen:**
-   ```bash
-   python3 ctmm_build.py
-   ```
+  ```bash
+  python3 ctmm_build.py
+  ```
 
 3. **Template wird automatisch erstellt:**
-   - `modules/mein-neues-modul.tex` mit Grundstruktur
-   - `modules/TODO_mein-neues-modul.md` mit Aufgabenliste
+  - `modules/mein-neues-modul.tex` mit Grundstruktur
+  - `modules/TODO_mein-neues-modul.md` mit Aufgabenliste
 
 4. **Inhalt ergänzen** und TODO-Datei entfernen wenn fertig
 

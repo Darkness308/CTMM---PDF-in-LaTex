@@ -29,7 +29,7 @@ def validate_workflow_files():
         if filename.endswith('.yml') or filename.endswith('.yaml'):
             filepath = os.path.join(workflow_dir, filename)
 
-            print(f"   [FILE] Checking {filename}...")
+            print(f"  [FILE] Checking {filename}...")
 
             try:
                 with open(filepath, 'r', encoding='utf-8') as f:
@@ -52,7 +52,7 @@ def validate_workflow_files():
                 # Check for YAML syntax issues
                 try:
                     yaml.safe_load(content)
-                    print(f"      [PASS] YAML syntax valid")
+                    print(f"  [PASS] YAML syntax valid")
                 except yaml.YAMLError as e:
                     issues_found.append(f"[FAIL] {filename}: YAML syntax error - {e}")
 

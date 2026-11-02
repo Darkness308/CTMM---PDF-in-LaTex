@@ -121,7 +121,7 @@ def test_validation_scripts_compatibility():
     import_test_passed = True
 
     for script in yaml_importing_scripts[:5]:  # Test first 5 to avoid timeout
-        print(f"   [FILE] {script}: ", end="")
+        print(f"  [FILE] {script}: ", end="")
 
         # Check if the script can import yaml without error
         try:

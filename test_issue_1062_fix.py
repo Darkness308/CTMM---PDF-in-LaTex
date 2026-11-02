@@ -15,11 +15,11 @@ def test_latex_action_versions():
 
     # Valid versions from dante-ev/latex-action repository
     valid_versions = {
-        'v0.2.0',    # Latest semantic version
-        'v0.1.0',    # Older semantic version
-        '2025-A',    # Latest year-based
-        '2024-B',    # Older year-based
-        '2024-A',    # Even older year-based
+        'v0.2.0',  # Latest semantic version
+        'v0.1.0',  # Older semantic version
+        '2025-A',  # Latest year-based
+        '2024-B',  # Older year-based
+        '2024-A',  # Even older year-based
         '2023-A',
         '2021-C',
         '2021-B',
@@ -60,13 +60,13 @@ def test_latex_action_versions():
                         'line_content': line.strip()
                     })
 
-                    print(f"   Line {line_num}: Found dante-ev/latex-action@{version}")
+                    print(f"  Line {line_num}: Found dante-ev/latex-action@{version}")
 
                     if version in valid_versions:
-                        print(f"   [PASS] Version {version} is valid")
+                        print(f"  [PASS] Version {version} is valid")
                     else:
-                        print(f"   [FAIL] Version {version} is INVALID")
-                        print(f"      Valid versions: {', '.join(sorted(valid_versions))}")
+                        print(f"  [FAIL] Version {version} is INVALID")
+                        print(f"  Valid versions: {', '.join(sorted(valid_versions))}")
                         found_issues = True
 
         except Exception as e:

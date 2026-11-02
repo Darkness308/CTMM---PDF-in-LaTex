@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 CTMM Comprehensive Workflow Integration
-=======================================
 
 This script demonstrates the complete "es ist nicht mehr weit" (it's not far anymore)
 comprehensive toolset for the CTMM project. It integrates all the key tools:
@@ -173,8 +172,8 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python3 comprehensive_workflow.py           # Basic workflow
-  python3 comprehensive_workflow.py --full    # Include de-escaping demo
+  python3 comprehensive_workflow.py  # Basic workflow
+  python3 comprehensive_workflow.py --full  # Include de-escaping demo
   python3 comprehensive_workflow.py --cleanup # Run with cleanup
         """
     )

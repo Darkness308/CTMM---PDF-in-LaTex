@@ -196,9 +196,9 @@ class FixStrategies:
                     if packages_to_add:
                         new_packages = existing_packages.rstrip()
                         for pkg in packages_to_add:
-                            new_packages += f"\n            {pkg}"
+                            new_packages += f"\n  {pkg}"
 
-                        new_content = content.replace(match.group(2), new_packages + '\n            ')
+                        new_content = content.replace(match.group(2), new_packages + '\n  ')
 
                         with open(file_path, 'w') as f:
                             f.write(new_content)
@@ -355,9 +355,9 @@ class FixStrategies:
                     if packages_to_add:
                         new_packages = existing_packages.rstrip()
                         for pkg in packages_to_add:
-                            new_packages += f"\n            {pkg}"
+                            new_packages += f"\n  {pkg}"
 
-                        new_content = content.replace(match.group(2), new_packages + '\n            ')
+                        new_content = content.replace(match.group(2), new_packages + '\n  ')
 
                         with open(file_path, 'w') as f:
                             f.write(new_content)
@@ -519,12 +519,12 @@ def main():
     print(f"[PASS] Applied {len(results)} fix strategies:")
     for i, result in enumerate(results, 1):
         status = "[PASS]" if result.success else "[FAIL]"
-        print(f"   {i}. {status} {result.description}")
+        print(f"  {i}. {status} {result.description}")
         if result.files_modified:
-            print(f"      Files: {', '.join(result.files_modified)}")
+            print(f"  Files: {', '.join(result.files_modified)}")
         if result.changes_made:
             for change in result.changes_made:
-                print(f"      - {change}")
+                print(f"  - {change}")
 
     print("\n[PASS] Fix strategies test completed")
 

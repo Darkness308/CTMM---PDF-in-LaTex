@@ -1,8 +1,8 @@
-# 🧩 CTMM Module Generator
+#  CTMM Module Generator
 
 Automatisches Generieren neuer CTMM-Module für Ihr LaTeX-Therapie-Workbook.
 
-## 🚀 Schnellstart
+## [DEPLOY] Schnellstart
 
 ### Option 1: Interaktives Script (empfohlen)
 ```bash
@@ -14,27 +14,27 @@ Automatisches Generieren neuer CTMM-Module für Ihr LaTeX-Therapie-Workbook.
 node module-generator.js <typ> "<name>"
 ```
 
-## 📝 Verfügbare Modul-Typen
+## [NOTE] Verfügbare Modul-Typen
 
 ### 1. **Arbeitsblatt** (`arbeitsblatt`)
-- 🎯 **Zweck**: Strukturierte Selbstreflexion und Dokumentation
-- 🎨 **Farbe**: Grün (`ctmmGreen`)
-- 📋 **Enthält**: Ausfüllfelder, Reflexionsbereich, CTMM-Navigation
+- [TARGET] **Zweck**: Strukturierte Selbstreflexion und Dokumentation
+- [DESIGN] **Farbe**: Grün (`ctmmGreen`)
+- [TEST] **Enthält**: Ausfüllfelder, Reflexionsbereich, CTMM-Navigation
 - **Beispiele**: Täglicher Check-In, Wochenreflexion, Trigger-Tracking
 
 ### 2. **Tool** (`tool`)
-- 🎯 **Zweck**: Praktische Interventions-Tools und Skill-Anleitungen
-- 🎨 **Farbe**: Orange (`ctmmOrange`)
-- 📋 **Enthält**: Schritt-für-Schritt Anleitung, Praxis-Beispiel, Navigation
+- [TARGET] **Zweck**: Praktische Interventions-Tools und Skill-Anleitungen
+- [DESIGN] **Farbe**: Orange (`ctmmOrange`)
+- [TEST] **Enthält**: Schritt-für-Schritt Anleitung, Praxis-Beispiel, Navigation
 - **Beispiele**: Atemtechniken, Grounding-Übungen, Kommunikations-Skills
 
 ### 3. **Notfallkarte** (`notfallkarte`)
-- 🎯 **Zweck**: Schnelle Hilfe in Krisensituationen
-- 🎨 **Farbe**: Rot (`ctmmRed`)
-- 📋 **Enthält**: Sofortmaßnahmen, Safe-Words, Nachsorge-Plan
+- [TARGET] **Zweck**: Schnelle Hilfe in Krisensituationen
+- [DESIGN] **Farbe**: Rot (`ctmmRed`)
+- [TEST] **Enthält**: Sofortmaßnahmen, Safe-Words, Nachsorge-Plan
 - **Beispiele**: Panikattacken, Dissoziation, Triggering
 
-## ✨ Beispiele
+## [NEW] Beispiele
 
 ```bash
 # Arbeitsblatt erstellen
@@ -47,7 +47,7 @@ node module-generator.js tool "5-4-3-2-1 Grounding"
 node module-generator.js notfallkarte "Panikattacken"
 ```
 
-## 🔧 Integration in main.tex
+## [FIX] Integration in main.tex
 
 Nach der Erstellung wird Ihnen die Einbindungszeile angezeigt:
 
@@ -57,38 +57,38 @@ Nach der Erstellung wird Ihnen die Einbindungszeile angezeigt:
 
 Diese Zeile fügen Sie an der gewünschten Stelle in Ihre `main.tex` ein.
 
-## 🎨 Design-Features
+## [DESIGN] Design-Features
 
-- ✅ Nutzt Ihr bestehendes CTMM-Farbschema
-- ✅ Integriert `ctmmBlueBox`, `ctmmGreenBox`, etc.
-- ✅ Folgt Ihrer LaTeX-Struktur
-- ✅ Automatische CTMM-Navigation zwischen Modulen
-- ✅ Konsistente Formatierung und Header
+- [PASS] Nutzt Ihr bestehendes CTMM-Farbschema
+- [PASS] Integriert `ctmmBlueBox`, `ctmmGreenBox`, etc.
+- [PASS] Folgt Ihrer LaTeX-Struktur
+- [PASS] Automatische CTMM-Navigation zwischen Modulen
+- [PASS] Konsistente Formatierung und Header
 
-## 📁 Datei-Organisation
+##  Datei-Organisation
 
 ```
 modules/
-├── arbeitsblatt-*.tex    # Alle Arbeitsblätter
-├── tool-*.tex           # Alle Tools
-└── notfall-*.tex        # Alle Notfallkarten
+├── arbeitsblatt-*.tex  # Alle Arbeitsblätter
+├── tool-*.tex  # Alle Tools
+└── notfall-*.tex  # Alle Notfallkarten
 ```
 
-## 🔄 Workflow
+## [SYNC] Workflow
 
 1. **Erstellen**: `./create-module.sh` oder `node module-generator.js`
 2. **Anpassen**: Öffnen Sie die erstellte `.tex` Datei und passen Sie Inhalte an
 3. **Einbinden**: Fügen Sie `\input{modules/...}` in `main.tex` ein
 4. **Kompilieren**: Nutzen Sie den CTMM-Build-Task oder `pdflatex`
 
-## 💡 Tipps
+## [IDEA] Tipps
 
 - **Deutsche Umlaute** werden automatisch in LaTeX-kompatible Form umgewandelt
 - **Dateinamen** werden automatisch erstellt (Kleinbuchstaben, Bindestriche)
 - **CTMM-Navigation** verlinkt automatisch zu verwandten Modulen
 - **Konsistenz** durch vordefinierte Templates garantiert
 
-## 🛠 Anpassungen
+## [TOOLS] Anpassungen
 
 Sie können die Templates in `module-generator.js` nach Ihren Bedürfnissen anpassen:
 
@@ -98,4 +98,4 @@ Sie können die Templates in `module-generator.js` nach Ihren Bedürfnissen anpa
 
 ---
 
-**🎯 Dieses Tool spart Ihnen Zeit und sorgt für konsistente, professionelle CTMM-Module!**
+**[TARGET] Dieses Tool spart Ihnen Zeit und sorgt für konsistente, professionelle CTMM-Module!**

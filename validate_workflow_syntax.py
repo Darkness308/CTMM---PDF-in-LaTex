@@ -66,8 +66,8 @@ def validate_workflow_syntax():
             # Check if 'on' is interpreted correctly
             if 'on' in parsed and isinstance(parsed['on'], dict):
                 print("[PASS] 'on' correctly interpreted as string key")
-                print(f"   Line {on_lines[0][0]}: {on_lines[0][1]}")
-                print(f"   Triggers: {list(parsed['on'].keys())}")
+                print(f"  Line {on_lines[0][0]}: {on_lines[0][1]}")
+                print(f"  Triggers: {list(parsed['on'].keys())}")
 
                 # Validate trigger structure
                 triggers = parsed['on']
@@ -80,8 +80,8 @@ def validate_workflow_syntax():
 
             elif True in parsed:
                 print("[FAIL] 'on' incorrectly interpreted as boolean True")
-                print(f"   Line {on_lines[0][0]}: {on_lines[0][1]}")
-                print("   This causes GitHub Actions parsing errors")
+                print(f"  Line {on_lines[0][0]}: {on_lines[0][1]}")
+                print("  This causes GitHub Actions parsing errors")
                 all_correct = False
                 results.append((file_path, False, "Incorrect unquoted syntax causing boolean interpretation"))
 
@@ -156,7 +156,7 @@ jobs:
 
         if True in parsed:
             print("[FAIL] PROBLEM: 'on' became boolean True")
-            print(f"   Triggers accessible via parsed[True]: {parsed[True]}")
+            print(f"  Triggers accessible via parsed[True]: {parsed[True]}")
         else:
             print("[PASS] No boolean interpretation issue found")
 
@@ -175,7 +175,7 @@ jobs:
 
         if 'on' in parsed:
             print("[PASS] CORRECT: 'on' is string key")
-            print(f"   Triggers accessible via parsed['on']: {parsed['on']}")
+            print(f"  Triggers accessible via parsed['on']: {parsed['on']}")
         else:
             print("[FAIL] Expected 'on' key not found")
 

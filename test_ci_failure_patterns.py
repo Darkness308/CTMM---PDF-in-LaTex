@@ -54,13 +54,13 @@ def analyze_timeout_patterns() -> Dict[str, any]:
                             timeout_analysis['timeout_ranges'][timeout_range] = 0
                         timeout_analysis['timeout_ranges'][timeout_range] += 1
 
-                        print(f"   [PASS] {step_name}: {timeout_val} minutes")
+                        print(f"  [PASS] {step_name}: {timeout_val} minutes")
 
                         # Check for potential timeout issues
                         if timeout_val > 20:
                             timeout_analysis['issues'].append(f"Long timeout in {step_name}: {timeout_val}min")
                     else:
-                        print(f"   [WARN]  {step_name}: No timeout")
+                        print(f"  [WARN]  {step_name}: No timeout")
                         timeout_analysis['issues'].append(f"Missing timeout in {step_name}")
 
         except Exception as e:
@@ -100,15 +100,15 @@ def analyze_resource_patterns() -> Dict[str, any]:
 
         if 'df -h' in content:
             resource_analysis['disk_checks'] += 1
-            print("   [PASS] Disk space monitoring found")
+            print("  [PASS] Disk space monitoring found")
 
         if 'free -h' in content:
             resource_analysis['memory_checks'] += 1
-            print("   [PASS] Memory monitoring found")
+            print("  [PASS] Memory monitoring found")
 
         if 'nproc' in content or 'cpu' in content.lower():
             resource_analysis['cpu_checks'] += 1
-            print("   [PASS] CPU monitoring found")
+            print("  [PASS] CPU monitoring found")
 
         # Check for resource-intensive operations
         if 'pdflatex' in content and 'resources' not in content:
@@ -141,7 +141,7 @@ def analyze_action_version_patterns() -> Dict[str, any]:
         else:
             print("[FAIL] Action version validation failed")
             if result.stderr:
-                print(f"   Error: {result.stderr[:200]}...")
+                print(f"  Error: {result.stderr[:200]}...")
 
     except subprocess.TimeoutExpired:
         version_analysis = {
@@ -183,13 +183,13 @@ def analyze_concurrency_patterns() -> Dict[str, any]:
 
             if 'concurrency' in workflow_data:
                 concurrency_analysis['workflows_with_concurrency'] += 1
-                print(f"   [PASS] {workflow_file}: Has concurrency control")
+                print(f"  [PASS] {workflow_file}: Has concurrency control")
             else:
-                print(f"   [WARN]  {workflow_file}: No concurrency control")
+                print(f"  [WARN]  {workflow_file}: No concurrency control")
                 concurrency_analysis['potential_conflicts'].append(workflow_file)
 
         except Exception as e:
-            print(f"   [FAIL] Error analyzing {workflow_file}: {e}")
+            print(f"  [FAIL] Error analyzing {workflow_file}: {e}")
 
     coverage = (concurrency_analysis['workflows_with_concurrency'] / concurrency_analysis['total_workflows'] * 100) if concurrency_analysis['total_workflows'] > 0 else 0
     print(f"\n[SUMMARY] Concurrency Coverage: {concurrency_analysis['workflows_with_concurrency']}/{concurrency_analysis['total_workflows']} ({coverage:.1f}%)")
@@ -222,9 +222,9 @@ def run_validation_tests() -> Dict[str, any]:
         validation_results['tests_run'] += 1
         if result.returncode == 0:
             validation_results['tests_passed'] += 1
-            print(f"   [PASS] CTMM build system passed ({duration:.1f}s)")
+            print(f"  [PASS] CTMM build system passed ({duration:.1f}s)")
         else:
-            print(f"   [FAIL] CTMM build system failed ({duration:.1f}s)")
+            print(f"  [FAIL] CTMM build system failed ({duration:.1f}s)")
 
         validation_results['test_details'].append({
             'name': 'CTMM Build System',
@@ -234,10 +234,10 @@ def run_validation_tests() -> Dict[str, any]:
         })
 
     except subprocess.TimeoutExpired:
-        print("   [TIMER]  CTMM build system timed out")
+        print("  [TIMER]  CTMM build system timed out")
         validation_results['tests_run'] += 1
     except Exception as e:
-        print(f"   [FAIL] CTMM build system error: {e}")
+        print(f"  [FAIL] CTMM build system error: {e}")
         validation_results['tests_run'] += 1
 
     # Test 2: Workflow syntax validation
@@ -255,9 +255,9 @@ def run_validation_tests() -> Dict[str, any]:
         validation_results['tests_run'] += 1
         if result.returncode == 0:
             validation_results['tests_passed'] += 1
-            print(f"   [PASS] Workflow syntax validation passed ({duration:.1f}s)")
+            print(f"  [PASS] Workflow syntax validation passed ({duration:.1f}s)")
         else:
-            print(f"   [FAIL] Workflow syntax validation failed ({duration:.1f}s)")
+            print(f"  [FAIL] Workflow syntax validation failed ({duration:.1f}s)")
 
         validation_results['test_details'].append({
             'name': 'Workflow Syntax',
@@ -266,7 +266,7 @@ def run_validation_tests() -> Dict[str, any]:
         })
 
     except Exception as e:
-        print(f"   [FAIL] Workflow syntax validation error: {e}")
+        print(f"  [FAIL] Workflow syntax validation error: {e}")
         validation_results['tests_run'] += 1
 
     return validation_results

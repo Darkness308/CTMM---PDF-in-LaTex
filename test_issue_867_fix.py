@@ -43,11 +43,11 @@ def test_latex_action_version():
     # Check for exact problematic versions, not substrings
     if uses.endswith('@v2'):
         print(f"[FAIL] Using problematic version: @v2")
-        print(f"   This version was reported as non-existent in Issue #867")
+        print(f"  This version was reported as non-existent in Issue #867")
         return False
     if uses.endswith('@v2.0.0'):
         print(f"[FAIL] Using problematic version: @v2.0.0")
-        print(f"   This version was reported as non-existent in Issue #735")
+        print(f"  This version was reported as non-existent in Issue #735")
         return False
 
     # Check for valid version patterns
@@ -56,7 +56,7 @@ def test_latex_action_version():
 
     if not is_valid:
         print(f"[WARN]  Warning: Version pattern not in known-good list: {uses}")
-        print("   Consider using @latest, @v0.2, or other verified versions")
+        print("  Consider using @latest, @v0.2, or other verified versions")
         # Don't fail for this, just warn
 
     # Check that it's not the specific failing version from the issue

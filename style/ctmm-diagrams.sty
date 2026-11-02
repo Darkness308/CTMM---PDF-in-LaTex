@@ -6,24 +6,24 @@
 
 % TikZ libraries
 \usetikzlibrary{
-    shapes.geometric,
-    arrows.meta,
-    positioning,
-    decorations.pathreplacing,
-    fit,
-    backgrounds,
-    shadows,
-    calc
+  shapes.geometric,
+  arrows.meta,
+  positioning,
+  decorations.pathreplacing,
+  fit,
+  backgrounds,
+  shadows,
+  calc
 }
 
 % Load CTMM colors if not already loaded
 \@ifpackageloaded{ctmm-design}{}{%
-    \definecolor{ctmmBlue}{HTML}{003087}
-    \definecolor{ctmmGreen}{HTML}{4CAF50}
-    \definecolor{ctmmOrange}{HTML}{FF6200}
-    \definecolor{ctmmRed}{HTML}{D32F2F}
-    \definecolor{ctmmPurple}{HTML}{7B1FA2}
-    \definecolor{ctmmGray}{HTML}{666666}
+  \definecolor{ctmmBlue}{HTML}{003087}
+  \definecolor{ctmmGreen}{HTML}{4CAF50}
+  \definecolor{ctmmOrange}{HTML}{FF6200}
+  \definecolor{ctmmRed}{HTML}{D32F2F}
+  \definecolor{ctmmPurple}{HTML}{7B1FA2}
+  \definecolor{ctmmGray}{HTML}{666666}
 }
 
 % =====================================================
@@ -31,59 +31,59 @@
 % =====================================================
 
 \tikzset{
-    % Basic node styles
-    ctmmNode/.style={
-        circle,
-        draw,
-        text width=2cm,
-        align=center,
-        font=\footnotesize\bfseries,
-        minimum size=1.5cm,
-        drop shadow
-    },
-    % Color-specific node styles
-    ctmmBlueNode/.style={
-        ctmmNode,
-        fill=ctmmBlue!20,
-        draw=ctmmBlue,
-        text=ctmmBlue
-    },
-    ctmmGreenNode/.style={
-        ctmmNode,
-        fill=ctmmGreen!20,
-        draw=ctmmGreen,
-        text=ctmmGreen
-    },
-    ctmmOrangeNode/.style={
-        ctmmNode,
-        fill=ctmmOrange!20,
-        draw=ctmmOrange,
-        text=ctmmOrange
-    },
-    ctmmRedNode/.style={
-        ctmmNode,
-        fill=ctmmRed!20,
-        draw=ctmmRed,
-        text=ctmmRed
-    },
-    ctmmPurpleNode/.style={
-        ctmmNode,
-        fill=ctmmPurple!20,
-        draw=ctmmPurple,
-        text=ctmmPurple
-    },
-    % Arrow styles
-    ctmmArrow/.style={
-        -Stealth,
-        thick,
-        color=black
-    },
-    ctmmColorArrow/.style 2 args={
-        -Stealth,
-        thick,
-        color=#1,
-        line width=#2
-    }
+  % Basic node styles
+  ctmmNode/.style={
+  circle,
+  draw,
+  text width=2cm,
+  align=center,
+  font=\footnotesize\bfseries,
+  minimum size=1.5cm,
+  drop shadow
+  },
+  % Color-specific node styles
+  ctmmBlueNode/.style={
+  ctmmNode,
+  fill=ctmmBlue!20,
+  draw=ctmmBlue,
+  text=ctmmBlue
+  },
+  ctmmGreenNode/.style={
+  ctmmNode,
+  fill=ctmmGreen!20,
+  draw=ctmmGreen,
+  text=ctmmGreen
+  },
+  ctmmOrangeNode/.style={
+  ctmmNode,
+  fill=ctmmOrange!20,
+  draw=ctmmOrange,
+  text=ctmmOrange
+  },
+  ctmmRedNode/.style={
+  ctmmNode,
+  fill=ctmmRed!20,
+  draw=ctmmRed,
+  text=ctmmRed
+  },
+  ctmmPurpleNode/.style={
+  ctmmNode,
+  fill=ctmmPurple!20,
+  draw=ctmmPurple,
+  text=ctmmPurple
+  },
+  % Arrow styles
+  ctmmArrow/.style={
+  -Stealth,
+  thick,
+  color=black
+  },
+  ctmmColorArrow/.style 2 args={
+  -Stealth,
+  thick,
+  color=#1,
+  line width=#2
+  }
 }
 
 % =====================================================
@@ -93,23 +93,23 @@
 \newcommand{\ctmmTriggerLoop}{%
 \begin{center}
 \begin{tikzpicture}[
-    node distance=3cm and 3cm,
-    every node/.style={font=\small}
+  node distance=3cm and 3cm,
+  every node/.style={font=\small}
 ]
-    % Nodes for the 4-phase cycle
-    \node[ctmmBlueNode] (erkennen) {ERKENNEN\\Trigger\\wahrnehmen};
-    \node[ctmmGreenNode, right=of erkennen] (vorbeugen) {VORBEUGEN\\Skills\\anwenden};
-    \node[ctmmOrangeNode, below=of vorbeugen] (reagieren) {REAGIEREN\\Situation\\bewältigen};
-    \node[ctmmPurpleNode, left=of reagieren] (lernen) {LERNEN\\Muster\\verstehen};
+  % Nodes for the 4-phase cycle
+  \node[ctmmBlueNode] (erkennen) {ERKENNEN\\Trigger\\wahrnehmen};
+  \node[ctmmGreenNode, right=of erkennen] (vorbeugen) {VORBEUGEN\\Skills\\anwenden};
+  \node[ctmmOrangeNode, below=of vorbeugen] (reagieren) {REAGIEREN\\Situation\\bewältigen};
+  \node[ctmmPurpleNode, left=of reagieren] (lernen) {LERNEN\\Muster\\verstehen};
 
-    % Arrows connecting the cycle
-    \draw[ctmmArrow] (erkennen) -- (vorbeugen);
-    \draw[ctmmArrow] (vorbeugen) -- (reagieren);
-    \draw[ctmmArrow] (reagieren) -- (lernen);
-    \draw[ctmmArrow] (lernen) -- (erkennen);
+  % Arrows connecting the cycle
+  \draw[ctmmArrow] (erkennen) -- (vorbeugen);
+  \draw[ctmmArrow] (vorbeugen) -- (reagieren);
+  \draw[ctmmArrow] (reagieren) -- (lernen);
+  \draw[ctmmArrow] (lernen) -- (erkennen);
 
-    % Center label
-    \node[font=\scriptsize, text=gray] at ($(erkennen)!0.5!(reagieren)$) {CTMM\\Zyklus};
+  % Center label
+  \node[font=\scriptsize, text=gray] at ($(erkennen)!0.5!(reagieren)$) {CTMM\\Zyklus};
 \end{tikzpicture}
 \end{center}
 }
@@ -121,30 +121,30 @@
 \newcommand{\ctmmEskalationsStufen}{%
 \begin{center}
 \begin{tikzpicture}[
-    node distance=0.8cm,
-    every node/.style={font=\footnotesize}
+  node distance=0.8cm,
+  every node/.style={font=\footnotesize}
 ]
-    % Vertical escalation levels
-    \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, text width=4cm, align=center] (stufe1)
-        {\textbf{Stufe 1: Prävention}\\Alltag, Skills, Vorbereitung};
-    \node[rectangle, fill=ctmmOrange!20, draw=ctmmOrange, text width=4cm, align=center, below=of stufe1] (stufe2)
-        {\textbf{Stufe 2: Akutphase}\\Trigger erkannt, Safe-Words};
-    \node[rectangle, fill=ctmmRed!20, draw=ctmmRed, text width=4cm, align=center, below=of stufe2] (stufe3)
-        {\textbf{Stufe 3: Eskalation}\\Notfallplan, Rückzug};
-    \node[rectangle, fill=ctmmPurple!20, draw=ctmmPurple, text width=4cm, align=center, below=of stufe3] (stufe4)
-        {\textbf{Stufe 4: Rückkehr}\\Ritual, Reflexion, Lernen};
+  % Vertical escalation levels
+  \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, text width=4cm, align=center] (stufe1)
+  {\textbf{Stufe 1: Prävention}\\Alltag, Skills, Vorbereitung};
+  \node[rectangle, fill=ctmmOrange!20, draw=ctmmOrange, text width=4cm, align=center, below=of stufe1] (stufe2)
+  {\textbf{Stufe 2: Akutphase}\\Trigger erkannt, Safe-Words};
+  \node[rectangle, fill=ctmmRed!20, draw=ctmmRed, text width=4cm, align=center, below=of stufe2] (stufe3)
+  {\textbf{Stufe 3: Eskalation}\\Notfallplan, Rückzug};
+  \node[rectangle, fill=ctmmPurple!20, draw=ctmmPurple, text width=4cm, align=center, below=of stufe3] (stufe4)
+  {\textbf{Stufe 4: Rückkehr}\\Ritual, Reflexion, Lernen};
 
-    % Arrows showing progression and return
-    \draw[ctmmColorArrow={ctmmOrange}{2pt}] ([xshift=0.5cm]stufe1.south) -- ([xshift=0.5cm]stufe2.north);
-    \draw[ctmmColorArrow={ctmmRed}{2pt}] ([xshift=0.5cm]stufe2.south) -- ([xshift=0.5cm]stufe3.north);
-    \draw[ctmmColorArrow={ctmmPurple}{2pt}] ([xshift=0.5cm]stufe3.south) -- ([xshift=0.5cm]stufe4.north);
-    \draw[ctmmColorArrow={ctmmGreen}{2pt}] ([xshift=-0.5cm]stufe4.north) -- ([xshift=-0.5cm]stufe1.south);
+  % Arrows showing progression and return
+  \draw[ctmmColorArrow={ctmmOrange}{2pt}] ([xshift=0.5cm]stufe1.south) -- ([xshift=0.5cm]stufe2.north);
+  \draw[ctmmColorArrow={ctmmRed}{2pt}] ([xshift=0.5cm]stufe2.south) -- ([xshift=0.5cm]stufe3.north);
+  \draw[ctmmColorArrow={ctmmPurple}{2pt}] ([xshift=0.5cm]stufe3.south) -- ([xshift=0.5cm]stufe4.north);
+  \draw[ctmmColorArrow={ctmmGreen}{2pt}] ([xshift=-0.5cm]stufe4.north) -- ([xshift=-0.5cm]stufe1.south);
 
-    % Labels
-    \node[font=\tiny, right] at ([xshift=0.7cm]stufe1.south east) {Trigger};
-    \node[font=\tiny, right] at ([xshift=0.7cm]stufe2.south east) {Überforderung};
-    \node[font=\tiny, right] at ([xshift=0.7cm]stufe3.south east) {Beruhigung};
-    \node[font=\tiny, left] at ([xshift=-0.7cm]stufe2.north west) {Rückkehr};
+  % Labels
+  \node[font=\tiny, right] at ([xshift=0.7cm]stufe1.south east) {Trigger};
+  \node[font=\tiny, right] at ([xshift=0.7cm]stufe2.south east) {Überforderung};
+  \node[font=\tiny, right] at ([xshift=0.7cm]stufe3.south east) {Beruhigung};
+  \node[font=\tiny, left] at ([xshift=-0.7cm]stufe2.north west) {Rückkehr};
 \end{tikzpicture}
 \end{center}
 }
@@ -156,26 +156,26 @@
 \newcommand{\ctmmPartnerDynamics}{%
 \begin{center}
 \begin{tikzpicture}[
-    node distance=4cm,
-    every node/.style={font=\footnotesize}
+  node distance=4cm,
+  every node/.style={font=\footnotesize}
 ]
-    % Partner nodes
-    \node[ellipse, fill=ctmmBlue!20, draw=ctmmBlue, text width=2.5cm, align=center] (er)
-        {\textbf{ER}\\kPTBS, ASS\\ADHS, Post-OP};
-    \node[ellipse, fill=ctmmRed!20, draw=ctmmRed, text width=2.5cm, align=center, right=of er] (sie)
-        {\textbf{SIE}\\Borderline\\ADHS, ASS};
+  % Partner nodes
+  \node[ellipse, fill=ctmmBlue!20, draw=ctmmBlue, text width=2.5cm, align=center] (er)
+  {\textbf{ER}\\kPTBS, ASS\\ADHS, Post-OP};
+  \node[ellipse, fill=ctmmRed!20, draw=ctmmRed, text width=2.5cm, align=center, right=of er] (sie)
+  {\textbf{SIE}\\Borderline\\ADHS, ASS};
 
-    % Interaction arrows
-    \draw[ctmmColorArrow={ctmmOrange}{1.5pt}, bend left=20] (er.north) to node[above, font=\tiny] {Rückzug} (sie.north);
-    \draw[ctmmColorArrow={ctmmRed}{1.5pt}, bend left=20] (sie.south) to node[below, font=\tiny] {Verlustangst} (er.south);
+  % Interaction arrows
+  \draw[ctmmColorArrow={ctmmOrange}{1.5pt}, bend left=20] (er.north) to node[above, font=\tiny] {Rückzug} (sie.north);
+  \draw[ctmmColorArrow={ctmmRed}{1.5pt}, bend left=20] (sie.south) to node[below, font=\tiny] {Verlustangst} (er.south);
 
-    % Center intervention
-    \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, font=\tiny\bfseries] at ($(er)!0.5!(sie)$)
-        {Safe-Words\\Ko-Regulation\\CTMM-Tools};
+  % Center intervention
+  \node[rectangle, fill=ctmmGreen!20, draw=ctmmGreen, font=\tiny\bfseries] at ($(er)!0.5!(sie)$)
+  {Safe-Words\\Ko-Regulation\\CTMM-Tools};
 
-    % Background circle for system
-    \node[circle, draw=ctmmPurple, dashed, fit=(er)(sie), inner sep=1cm] {};
-    \node[above, font=\tiny, text=ctmmPurple] at (current bounding box.north) {Bindungssicherheit};
+  % Background circle for system
+  \node[circle, draw=ctmmPurple, dashed, fit=(er)(sie), inner sep=1cm] {};
+  \node[above, font=\tiny, text=ctmmPurple] at (current bounding box.north) {Bindungssicherheit};
 \end{tikzpicture}
 \end{center}
 }
@@ -187,17 +187,17 @@
 \newcommand{\ctmmSimpleTimeline}{%
 \begin{center}
 \begin{tikzpicture}[
-    node distance=2cm,
-    every node/.style={font=\footnotesize}
+  node distance=2cm,
+  every node/.style={font=\footnotesize}
 ]
-    % Timeline base
-    \draw[thick, ctmmGray] (0,0) -- (10,0);
+  % Timeline base
+  \draw[thick, ctmmGray] (0,0) -- (10,0);
 
-    % Time markers
-    \foreach \x/\label in {0/Start,2.5/Woche 1,5/Woche 2,7.5/Woche 3,10/Monat} {
-        \draw (\x,-0.1) -- (\x,0.1);
-        \node[below] at (\x,-0.1) {\label};
-    }
+  % Time markers
+  \foreach \x/\label in {0/Start,2.5/Woche 1,5/Woche 2,7.5/Woche 3,10/Monat} {
+  \draw (\x,-0.1) -- (\x,0.1);
+  \node[below] at (\x,-0.1) {\label};
+  }
 \end{tikzpicture}
 \end{center}
 }
@@ -209,30 +209,30 @@
 \newcommand{\ctmmSimpleMoodGraph}{%
 \begin{center}
 \begin{tikzpicture}[
-    scale=0.8,
-    every node/.style={font=\tiny}
+  scale=0.8,
+  every node/.style={font=\tiny}
 ]
-    % Axes
-    \draw[->] (0,0) -- (8,0) node[right] {Zeit};
-    \draw[->] (0,0) -- (0,6) node[above] {Stimmung};
+  % Axes
+  \draw[->] (0,0) -- (8,0) node[right] {Zeit};
+  \draw[->] (0,0) -- (0,6) node[above] {Stimmung};
 
-    % Grid
-    \foreach \x in {1,2,...,7} {
-        \draw[gray!30] (\x,0) -- (\x,5);
-    }
-    \foreach \y in {1,2,3,4,5} {
-        \draw[gray!30] (0,\y) -- (7,\y);
-        \node[left] at (0,\y) {\y};
-    }
+  % Grid
+  \foreach \x in {1,2,...,7} {
+  \draw[gray!30] (\x,0) -- (\x,5);
+  }
+  \foreach \y in {1,2,3,4,5} {
+  \draw[gray!30] (0,\y) -- (7,\y);
+  \node[left] at (0,\y) {\y};
+  }
 
-    % Zones
-    \fill[ctmmRed!10] (0,0) rectangle (7,2);
-    \fill[ctmmOrange!10] (0,2) rectangle (7,3.5);
-    \fill[ctmmGreen!10] (0,3.5) rectangle (7,5);
+  % Zones
+  \fill[ctmmRed!10] (0,0) rectangle (7,2);
+  \fill[ctmmOrange!10] (0,2) rectangle (7,3.5);
+  \fill[ctmmGreen!10] (0,3.5) rectangle (7,5);
 
-    \node[right, font=\tiny] at (7.1,1) {Krise};
-    \node[right, font=\tiny] at (7.1,2.75) {Achtung};
-    \node[right, font=\tiny] at (7.1,4.25) {Stabil};
+  \node[right, font=\tiny] at (7.1,1) {Krise};
+  \node[right, font=\tiny] at (7.1,2.75) {Achtung};
+  \node[right, font=\tiny] at (7.1,4.25) {Stabil};
 \end{tikzpicture}
 \end{center}
 }

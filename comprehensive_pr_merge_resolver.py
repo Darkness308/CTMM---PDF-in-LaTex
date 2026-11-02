@@ -166,7 +166,7 @@ class ComprehensivePRMergeResolver:
 
         resolved = []
         for pr in ready_prs:
-            print(f"   * PR #{pr.number}: {pr.title}")
+            print(f"  * PR #{pr.number}: {pr.title}")
             # In real implementation, this would call merge API
             # For now, just track as resolved
             resolved.append(pr.number)
@@ -219,17 +219,17 @@ class ComprehensivePRMergeResolver:
 
         resolved = []
         for pr in auto_resolvable:
-            print(f"\n   Processing PR #{pr.number}: {pr.title}")
-            print(f"   Strategy: {pr.resolution_strategy}")
-            print(f"   Conflicts: {', '.join(pr.conflicts)}")
+            print(f"\n  Processing PR #{pr.number}: {pr.title}")
+            print(f"  Strategy: {pr.resolution_strategy}")
+            print(f"  Conflicts: {', '.join(pr.conflicts)}")
 
             # Implement resolution based on strategy
             success = self._apply_resolution_strategy(pr)
             if success:
                 resolved.append(pr.number)
-                print(f"   [PASS] Auto-resolved")
+                print(f"  [PASS] Auto-resolved")
             else:
-                print(f"   [WARN]  Requires manual intervention")
+                print(f"  [WARN]  Requires manual intervention")
 
         return resolved
 
@@ -250,26 +250,26 @@ class ComprehensivePRMergeResolver:
 
     def _standardize_action_versions(self, pr_number: int) -> bool:
         """Standardize GitHub Action versions across PRs."""
-        print(f"      -> Standardizing action versions for PR #{pr_number}")
+        print(f"  -> Standardizing action versions for PR #{pr_number}")
         # Implementation would update action versions to match main branch
         # For this demo, simulate success for action-related PRs
         return pr_number in [653, 489, 423]  # PRs with action/workflow changes
 
     def _merge_workflow_updates(self, pr_number: int) -> bool:
         """Merge workflow updates by taking the most recent changes."""
-        print(f"      -> Merging workflow updates for PR #{pr_number}")
+        print(f"  -> Merging workflow updates for PR #{pr_number}")
         # Implementation would merge workflow files intelligently
         return pr_number in [232, 307]  # Workflow/syntax fix PRs
 
     def _apply_sequential_merge(self, pr_number: int) -> bool:
         """Apply sequential merge strategy for overlapping changes."""
-        print(f"      -> Applying sequential merge for PR #{pr_number}")
+        print(f"  -> Applying sequential merge for PR #{pr_number}")
         # Implementation would merge PRs in dependency order
         return True  # Most PRs can be sequentially merged
 
     def _apply_rebase_strategy(self, pr_number: int) -> bool:
         """Apply rebase strategy to resolve conflicts."""
-        print(f"      -> Applying rebase strategy for PR #{pr_number}")
+        print(f"  -> Applying rebase strategy for PR #{pr_number}")
         # Implementation would rebase PR branch onto current main
         return True
 
@@ -379,18 +379,18 @@ def main():
 
     print(f"\n[PASS] Analysis complete! Report saved to: {report_file}")
     print("\n[SUMMARY] Summary:")
-    print(f"   * Total PRs: {plan['total_prs']}")
-    print(f"   * Ready to merge: {plan['ready_to_merge']}")
-    print(f"   * Auto-resolved: {len(auto_resolved)}")
-    print(f"   * Manual review needed: {plan['manual_review'] - len(auto_resolved)}")
+    print(f"  * Total PRs: {plan['total_prs']}")
+    print(f"  * Ready to merge: {plan['ready_to_merge']}")
+    print(f"  * Auto-resolved: {len(auto_resolved)}")
+    print(f"  * Manual review needed: {plan['manual_review'] - len(auto_resolved)}")
 
     # Print immediate actions
     if ready_resolved:
         print(f"\n[LAUNCH] Immediate actions:")
-        print(f"   * Merge PR(s): {', '.join(map(str, ready_resolved))}")
+        print(f"  * Merge PR(s): {', '.join(map(str, ready_resolved))}")
 
     if auto_resolved:
-        print(f"   * Auto-resolved PR(s): {', '.join(map(str, auto_resolved))}")
+        print(f"  * Auto-resolved PR(s): {', '.join(map(str, auto_resolved))}")
 
     return plan
 

@@ -95,9 +95,9 @@ def test_repository_context_conflict():
     if resolution_warnings:
         print("[WARN]  CONFLICT DETECTED:")
         for warning in resolution_warnings:
-            print(f"   * {warning}")
-        print(f"   * Issue #1175 requests using v2.3.0")
-        print(f"   * Previous resolutions warn against v2.3.0")
+            print(f"  * {warning}")
+        print(f"  * Issue #1175 requests using v2.3.0")
+        print(f"  * Previous resolutions warn against v2.3.0")
         return False
 
     return True
@@ -124,7 +124,7 @@ def test_validation_scripts_status():
                     print(f"[PASS] {script}: PASSES with current configuration")
                 else:
                     print(f"[FAIL] {script}: FAILS with current configuration")
-                    print(f"   Error: {result.stderr[:200]}...")
+                    print(f"  Error: {result.stderr[:200]}...")
             except Exception as e:
                 print(f"[WARN]  {script}: Could not test ({str(e)})")
         else:

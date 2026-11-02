@@ -136,7 +136,7 @@ def validate_action_versions():
 
         for action_name, version, step_name in actions:
             all_actions.append((workflow_file, action_name, version, step_name))
-            print(f"   [PACKAGE] {action_name}@{version} in '{step_name}'")
+            print(f"  [PACKAGE] {action_name}@{version} in '{step_name}'")
 
     if not all_actions:
         print("[FAIL] No GitHub Actions found in workflows")
@@ -205,7 +205,7 @@ def validate_action_versions():
         print("\n[TEST] RECOMMENDATIONS:")
         for result in validation_results:
             if result['status'] in ['deprecated', 'unknown']:
-                print(f"   * Update {result['action']} in {result['workflow']}")
+                print(f"  * Update {result['action']} in {result['workflow']}")
 
     return overall_status
 

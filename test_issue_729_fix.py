@@ -95,7 +95,7 @@ def test_github_actions_workflow_health():
                                 all_healthy = False
                             else:
                                 print(f"[PASS] LaTeX step configured correctly (no invalid -pdf arg)")
-                                print(f"   Args: {args}")
+                                print(f"  Args: {args}")
 
         except yaml.YAMLError as e:
             print(f"[FAIL] {workflow_file}: YAML parsing error - {e}")

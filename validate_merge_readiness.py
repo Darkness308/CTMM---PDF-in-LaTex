@@ -179,7 +179,7 @@ def main():
     print("[SEARCH] CTMM Merge Readiness Validation")
     print("=" * 70)
     print("Task: Identify conflicts and disturbing characters in files")
-    print("      (German: 'störenden zeichen')")
+    print("  (German: 'störenden zeichen')")
     print("=" * 70)
     print()
 
@@ -232,19 +232,19 @@ def main():
             if result['merge_conflicts']:
                 print("  [FAIL] MERGE CONFLICTS:")
                 for issue in result['merge_conflicts']:
-                    print(f"     * {issue}")
+                    print(f"  * {issue}")
                 print()
 
             if result['problematic_chars']:
                 print("  [WARN]  PROBLEMATIC CHARACTERS:")
                 for issue in result['problematic_chars']:
-                    print(f"     * {issue}")
+                    print(f"  * {issue}")
                 print()
 
             if result['latex_issues']:
                 print("  [WARN]  LATEX ISSUES:")
                 for issue in result['latex_issues']:
-                    print(f"     * {issue}")
+                    print(f"  * {issue}")
                 print()
 
             print()

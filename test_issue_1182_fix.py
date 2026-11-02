@@ -52,7 +52,7 @@ def test_textcolor_syntax_validation():
                         })
                         print(f"[FAIL] {file_path}: Found {len(improper_matches)} syntax errors")
                         for error in improper_matches:
-                            print(f"   ERROR: {error}")
+                            print(f"  ERROR: {error}")
                     else:
                         proper_count = len(proper_matches)
                         if proper_count > 0:

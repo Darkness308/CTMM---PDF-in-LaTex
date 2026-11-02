@@ -264,7 +264,7 @@ class WorkflowHealingSystem:
             status = "[PASS]" if result.success else "[FAIL]"
             self.logger.info(f"Fix {i}: {status} {result.description}")
             if result.files_modified:
-                self.logger.info(f"   Files: {', '.join(result.files_modified)}")
+                self.logger.info(f"  Files: {', '.join(result.files_modified)}")
 
         self.logger.info("=== END DRY RUN ===")
 
@@ -370,7 +370,7 @@ def main():
 
         if session.prs_created > 0:
             print(f"\n[EMOJI] Created {session.prs_created} healing PRs")
-            print("   Please review and merge the PRs to apply the fixes")
+            print("  Please review and merge the PRs to apply the fixes")
 
         return 0
 

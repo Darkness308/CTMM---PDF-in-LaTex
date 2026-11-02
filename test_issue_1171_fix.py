@@ -39,23 +39,23 @@ def test_latex_action_migration():
             xu_cheng_matches = re.findall(r'xu-cheng/latex-action@([^\s\n]+)', content)
             if xu_cheng_matches:
                 xu_cheng_usage += len(xu_cheng_matches)
-                print(f"   [FAIL] Found xu-cheng/latex-action references: {xu_cheng_matches}")
+                print(f"  [FAIL] Found xu-cheng/latex-action references: {xu_cheng_matches}")
                 found_issues = True
             else:
-                print(f"   [PASS] No xu-cheng/latex-action references found")
+                print(f"  [PASS] No xu-cheng/latex-action references found")
 
             # Check for dante-ev/latex-action@v0.2.0 (should be present)
             dante_ev_matches = re.findall(r'dante-ev/latex-action@([^\s\n]+)', content)
             if dante_ev_matches:
                 dante_ev_usage += len(dante_ev_matches)
-                print(f"   [PACKAGE] Found dante-ev/latex-action references: {dante_ev_matches}")
+                print(f"  [PACKAGE] Found dante-ev/latex-action references: {dante_ev_matches}")
 
                 # Validate version is v0.2.0
                 for version in dante_ev_matches:
                     if version == "v0.2.0":
-                        print(f"   [PASS] Version {version} is correct")
+                        print(f"  [PASS] Version {version} is correct")
                     else:
-                        print(f"   [FAIL] Version {version} is incorrect (should be v0.2.0)")
+                        print(f"  [FAIL] Version {version} is incorrect (should be v0.2.0)")
                         found_issues = True
 
         except Exception as e:
@@ -119,14 +119,14 @@ def test_german_language_support():
                     if package in content:
                         found_packages.add(package)
 
-                print(f"   [PACKAGE] Found packages: {sorted(found_packages)}")
+                print(f"  [PACKAGE] Found packages: {sorted(found_packages)}")
 
                 missing_packages = required_packages - found_packages
                 if missing_packages:
-                    print(f"   [FAIL] Missing packages: {sorted(missing_packages)}")
+                    print(f"  [FAIL] Missing packages: {sorted(missing_packages)}")
                     found_issues = True
                 else:
-                    print(f"   [PASS] All required packages present")
+                    print(f"  [PASS] All required packages present")
 
         except Exception as e:
             print(f"[FAIL] Error processing {workflow_file}: {e}")
@@ -162,13 +162,13 @@ def test_workflow_yaml_validity():
         try:
             with open(workflow_file, 'r') as f:
                 yaml.safe_load(f)
-            print(f"   [PASS] Valid YAML syntax")
+            print(f"  [PASS] Valid YAML syntax")
 
         except yaml.YAMLError as e:
-            print(f"   [FAIL] YAML syntax error: {e}")
+            print(f"  [FAIL] YAML syntax error: {e}")
             found_issues = True
         except Exception as e:
-            print(f"   [FAIL] Error reading file: {e}")
+            print(f"  [FAIL] Error reading file: {e}")
             found_issues = True
 
     print(f"\n[SUMMARY] YAML Validation Summary")

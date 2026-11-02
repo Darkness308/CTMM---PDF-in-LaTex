@@ -375,9 +375,9 @@ def main():
 
     # Print results
     print(f"[PASS] Analysis completed:")
-    print(f"   - Total errors: {analysis.total_errors}")
-    print(f"   - Categories: {', '.join(analysis.error_categories)}")
-    print(f"   - Solvable: {analysis.is_solvable}")
+    print(f"  - Total errors: {analysis.total_errors}")
+    print(f"  - Categories: {', '.join(analysis.error_categories)}")
+    print(f"  - Solvable: {analysis.is_solvable}")
 
     print("\n[TEST] Error Summary:")
     print(analyzer.get_error_summary(analysis))
@@ -386,7 +386,7 @@ def main():
     for category in analysis.error_categories:
         values = analyzer.extract_specific_values(analysis, category)
         if values:
-            print(f"   - {category}: {', '.join(values)}")
+            print(f"  - {category}: {', '.join(values)}")
 
     print("\n[PASS] Error analyzer test completed")
 

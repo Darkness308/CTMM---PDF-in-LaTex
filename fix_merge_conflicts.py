@@ -228,15 +228,15 @@ class MergeConflictFixer:
         print(f"\n{'='*60}")
         print("SUMMARY")
         print(f"{'='*60}")
-        print(f"Files scanned:         {self.stats['files_scanned']}")
-        print(f"Files with issues:     {len(self.issues_found)}")
+        print(f"Files scanned:  {self.stats['files_scanned']}")
+        print(f"Files with issues:  {len(self.issues_found)}")
 
         if not self.dry_run:
-            print(f"Files fixed:           {self.stats['files_fixed']}")
-            print(f"Encoding fixes:        {self.stats['encoding_fixes']}")
-            print(f"Whitespace fixes:      {self.stats['whitespace_fixes']}")
-            print(f"BOM removals:          {self.stats['bom_fixes']}")
-            print(f"Line ending fixes:     {self.stats['line_ending_fixes']}")
+            print(f"Files fixed:  {self.stats['files_fixed']}")
+            print(f"Encoding fixes:  {self.stats['encoding_fixes']}")
+            print(f"Whitespace fixes:  {self.stats['whitespace_fixes']}")
+            print(f"BOM removals:  {self.stats['bom_fixes']}")
+            print(f"Line ending fixes:  {self.stats['line_ending_fixes']}")
         else:
             print("\nRun without --dry-run to apply fixes")
 
@@ -244,8 +244,8 @@ class MergeConflictFixer:
 
         if not self.dry_run and self.stats['files_fixed'] > 0:
             print("[PASS] All merge-blocking characters have been fixed!")
-            print("   Files are now UTF-8 encoded with LF line endings.")
-            print("   Trailing whitespace has been removed.")
+            print("  Files are now UTF-8 encoded with LF line endings.")
+            print("  Trailing whitespace has been removed.")
 
 
 def main():

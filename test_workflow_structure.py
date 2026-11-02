@@ -52,13 +52,13 @@ def test_workflow_files():
                     if trigger_type in ['push', 'pull_request']:
                         trigger_config = triggers[trigger_type]
                         if isinstance(trigger_config, dict) and 'branches' in trigger_config:
-                            print(f"   {trigger_type}: {trigger_config['branches']}")
+                            print(f"  {trigger_type}: {trigger_config['branches']}")
                         else:
-                            print(f"   {trigger_type}: {trigger_config}")
+                            print(f"  {trigger_type}: {trigger_config}")
                     elif trigger_type == 'workflow_dispatch':
-                        print(f"   {trigger_type}: manual trigger enabled")
+                        print(f"  {trigger_type}: manual trigger enabled")
                     else:
-                        print(f"   {trigger_type}: {triggers[trigger_type]}")
+                        print(f"  {trigger_type}: {triggers[trigger_type]}")
             else:
                 print(f"[FAIL] Invalid triggers format: {type(triggers)}")
                 continue
@@ -70,9 +70,9 @@ def test_workflow_files():
 
                 for job_name, job_config in jobs.items():
                     if 'runs-on' in job_config:
-                        print(f"   {job_name}: {job_config['runs-on']}")
+                        print(f"  {job_name}: {job_config['runs-on']}")
                     else:
-                        print(f"   {job_name}: missing runs-on")
+                        print(f"  {job_name}: missing runs-on")
             else:
                 print(f"[FAIL] Invalid jobs format: {type(jobs)}")
                 continue

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 CTMM Document Conversion Pipeline Validator
-============================================
 
 Advanced error analysis and code optimization for converted therapy documents.
 Provides actionable recommendations for quality improvement.
@@ -123,9 +122,9 @@ class CTMMConversionValidator:
             # Count interactive elements
             interactive_patterns = [
                 r"\\rule\{.*?\}\{.*?\}",  # Form fields
-                r"\\begin\{tabular\}",    # Tables
-                r"\\textbf\{.*?\}",       # Emphasis
-                r"\\hypertarget\{.*?\}"   # Hyperlinks
+                r"\\begin\{tabular\}",  # Tables
+                r"\\textbf\{.*?\}",  # Emphasis
+                r"\\hypertarget\{.*?\}"  # Hyperlinks
             ]
 
             for pattern in interactive_patterns:

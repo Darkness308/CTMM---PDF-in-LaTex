@@ -6,11 +6,11 @@
 
 ## Executive Summary
 
-🔍 **Merge Conflict Analysis Results:**
-- ✅ **1** PRs can merge cleanly
-- 🔥 **0** PRs have merge conflicts
-- ❌ **0** PRs could not be fetched
-- ⚠️ **10** PRs failed for other reasons
+[SEARCH] **Merge Conflict Analysis Results:**
+- [PASS] **1** PRs can merge cleanly
+- [HOT] **0** PRs have merge conflicts
+- [FAIL] **0** PRs could not be fetched
+- [WARN]️ **10** PRs failed for other reasons
 
 ## Summary Statistics
 
@@ -28,71 +28,71 @@
 
 ### PR #1185: [WIP] identifiziere in diesem repo : löse bei allen offenen pull request, die merge k
 - **Branch:** `copilot/fix-8cd2eb38-9018-432c-ab2e-059c85aff0e5`
-- **Status:** ✅ MERGE SUCCESS (No conflicts)
+- **Status:** [PASS] MERGE SUCCESS (No conflicts)
 
 ### PR #653: Fix GitHub Actions: Pin dante-ev/latex-action to @v1 instead of @latest
 - **Branch:** `copilot/fix-652`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #572: Copilot/fix 314
 - **Branch:** `copilot/fix-314`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #571: Copilot/fix 237
 - **Branch:** `copilot/fix-237`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #569: Copilot/fix 8ae4eff1 3cf9 43fa b99a 6583150d5789
 - **Branch:** `copilot/fix-8ae4eff1-3cf9-43fa-b99a-6583150d5789`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #555: Copilot/fix 300
 - **Branch:** `copilot/fix-300`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #489: Fix CI workflow: resolve LaTeX package naming issue causing build failures
 - **Branch:** `copilot/fix-488`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #423: Fix CI workflow: correct LaTeX package names for German support
 - **Branch:** `copilot/fix-422`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #307: Fix LaTeX syntax error: Add missing backslash to \textcolor command
 - **Branch:** `copilot/fix-306`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #232: Fix YAML syntax error in LaTeX build workflow
 - **Branch:** `copilot/fix-231`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ### PR #3: Implement comprehensive LaTeX build and document conversion workflows
 - **Branch:** `copilot/fix-fa98ffd6-ed8d-467a-826d-fe622b120467`
-- **Status:** ❌ MERGE FAILED
+- **Status:** [FAIL] MERGE FAILED
 - **Error:** fatal: refusing to merge unrelated histories
 
 
 ## Resolution Recommendations
 
-### ✅ PRs Ready for Merge (1 PRs)
+### [PASS] PRs Ready for Merge (1 PRs)
 
 These PRs can be merged without conflicts:
 

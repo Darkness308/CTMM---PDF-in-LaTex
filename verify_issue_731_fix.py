@@ -56,7 +56,7 @@ def main():
             parts = line.split('\t')
             if len(parts) >= 3:
                 added, deleted, filename = parts[0], parts[1], parts[2]
-                print(f"   {filename}: +{added} -{deleted}")
+                print(f"  {filename}: +{added} -{deleted}")
         print("[PASS] PASS: Meaningful changes present for Copilot review")
     else:
         print("[FAIL] FAIL: No meaningful changes found")
@@ -134,7 +134,7 @@ def main():
         commits = output.split('\n')
         print(f"[NOTE] Recent commits: {len(commits)}")
         for commit in commits[:3]:
-            print(f"   {commit}")
+            print(f"  {commit}")
         print("[PASS] PASS: Proper commit history with meaningful changes")
     else:
         print("[FAIL] FAIL: Could not verify commit history")
@@ -152,11 +152,11 @@ def main():
     print("[PASS] Repository functionality improved")
 
     print("\n[TEST] WHAT WAS FIXED:")
-    print("   * Fixed critical IndentationError in validate_pr.py")
-    print("   * Created meaningful, reviewable changes")
-    print("   * Added comprehensive issue resolution documentation")
-    print("   * Maintained all existing validation systems")
-    print("   * Ensured proper diff calculation for Copilot")
+    print("  * Fixed critical IndentationError in validate_pr.py")
+    print("  * Created meaningful, reviewable changes")
+    print("  * Added comprehensive issue resolution documentation")
+    print("  * Maintained all existing validation systems")
+    print("  * Ensured proper diff calculation for Copilot")
 
     print("\n[TARGET] COPILOT REVIEW STATUS: READY FOR REVIEW")
 

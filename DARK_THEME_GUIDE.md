@@ -2,11 +2,11 @@
 
 **Version:** 1.0.0
 **Datum:** 6. November 2025
-**Status:** ✅ Produktionsreif
+**Status:** [PASS] Produktionsreif
 
 ---
 
-## 🌙 Executive Summary
+##  Executive Summary
 
 Das CTMM Dark Theme ist ein **wissenschaftlich fundiertes, therapeutisch optimiertes Farbsystem** für kognitiv überlastete Nutzer. Es basiert auf neurowissenschaftlichen Erkenntnissen zur Farbpsychologie und wurde speziell für neurodivergente Menschen (ADHS, Autismus, PTBS, Dyslexie) entwickelt.
 
@@ -21,15 +21,15 @@ Das CTMM Dark Theme ist ein **wissenschaftlich fundiertes, therapeutisch optimie
 
 ---
 
-## 🎨 Farbpalette
+## [DESIGN] Farbpalette
 
 ### Basis-Farben (Hintergrund & Text)
 
 ```latex
 % NICHT reines Schwarz (#000) - zu harsch für Augen!
-\definecolor{ctmmDarkBg}{HTML}{1A1D23}          % Warmes Dunkelgrau
+\definecolor{ctmmDarkBg}{HTML}{1A1D23}  % Warmes Dunkelgrau
 \definecolor{ctmmDarkBgElevated}{HTML}{22262E}  % Erhöhte Elemente
-\definecolor{ctmmDarkText}{HTML}{E8E6E3}        % Off-White Text
+\definecolor{ctmmDarkText}{HTML}{E8E6E3}  % Off-White Text
 ```
 
 **Begründung:**
@@ -39,76 +39,76 @@ Das CTMM Dark Theme ist ein **wissenschaftlich fundiertes, therapeutisch optimie
 
 ### Therapeutische Navigations-Farben
 
-#### 🔵 Blau - Parasympathikus-Aktivierung (Beruhigung)
+####  Blau - Parasympathikus-Aktivierung (Beruhigung)
 ```latex
-\definecolor{ctmmDarkBlue}{HTML}{4A9EFF}      % Soft bright blue
+\definecolor{ctmmDarkBlue}{HTML}{4A9EFF}  % Soft bright blue
 \definecolor{ctmmDarkBlueMuted}{HTML}{6BA3DB} % Gedämpfte Variante
 ```
-**Kontrast:** 8.2:1 ✅ WCAG AA
+**Kontrast:** 8.2:1 [PASS] WCAG AA
 **Wirkung:** Senkt Herzfrequenz und Blutdruck, fördert Vertrauen
 
-#### 🟢 Grün - Arbeitsgedächtnis-Verbesserung
+####  Grün - Arbeitsgedächtnis-Verbesserung
 ```latex
-\definecolor{ctmmDarkGreen}{HTML}{66BB6A}     % Soft green
+\definecolor{ctmmDarkGreen}{HTML}{66BB6A}  % Soft green
 \definecolor{ctmmDarkGreenMuted}{HTML}{5FA463}
 ```
-**Kontrast:** 7.9:1 ✅ WCAG AA
+**Kontrast:** 7.9:1 [PASS] WCAG AA
 **Wirkung:** Verbessert Konzentration und Fokus um 12%
 
-#### 🟣 Lavendel/Lila - Stress-Reduktion
+####  Lavendel/Lila - Stress-Reduktion
 ```latex
-\definecolor{ctmmDarkPurple}{HTML}{B388FF}    % Soft lavender
+\definecolor{ctmmDarkPurple}{HTML}{B388FF}  % Soft lavender
 \definecolor{ctmmDarkLavender}{HTML}{9C7FCC}
 ```
-**Kontrast:** 8.5:1 ✅ WCAG AA
+**Kontrast:** 8.5:1 [PASS] WCAG AA
 **Wirkung:** Reduziert Cortisol, fördert Achtsamkeit
 
-#### 🔴 Rot - Krise/Warnung (Trauma-informiert)
+####  Rot - Krise/Warnung (Trauma-informiert)
 ```latex
-\definecolor{ctmmDarkRed}{HTML}{EF9A9A}       % Soft coral-red
+\definecolor{ctmmDarkRed}{HTML}{EF9A9A}  % Soft coral-red
 \definecolor{ctmmDarkRedMuted}{HTML}{D88A8A}
 ```
-**Kontrast:** 7.1:1 ✅ WCAG AA
+**Kontrast:** 7.1:1 [PASS] WCAG AA
 **Begründung:** Weicheres Rot vermeidet Fight-or-Flight-Reaktion bei PTBS
 
-#### 🟠 Orange - Energie & Motivation
+####  Orange - Energie & Motivation
 ```latex
 \definecolor{ctmmDarkOrange}{HTML}{FFB74D}
 \definecolor{ctmmDarkOrangeMuted}{HTML}{E0A047}
 ```
-**Kontrast:** 9.8:1 ✅ WCAG AA
+**Kontrast:** 9.8:1 [PASS] WCAG AA
 **Wirkung:** Fördert Wärme und soziale Verbindung
 
-#### 🟡 Gelb - Aufmerksamkeit & Vorsicht
+####  Gelb - Aufmerksamkeit & Vorsicht
 ```latex
 \definecolor{ctmmDarkYellow}{HTML}{FFD54F}
 \definecolor{ctmmDarkYellowMuted}{HTML}{E0C04A}
 ```
-**Kontrast:** 10.2:1 ✅ WCAG AA
+**Kontrast:** 10.2:1 [PASS] WCAG AA
 **Wirkung:** Erhöht Wachsamkeit ohne Angst zu erzeugen
 
 ---
 
-## 📋 WCAG Kontrast-Validierung
+## [TEST] WCAG Kontrast-Validierung
 
 Alle Farbkombinationen wurden mit dem WebAIM Contrast Checker geprüft:
 
 | Farbe | Hex | Kontrast auf #1A1D23 | Standard |
 |-------|-----|----------------------|----------|
-| Text (Off-White) | #E8E6E3 | **13.8:1** | ✅ WCAG AAA (>7:1) |
-| Blau | #4A9EFF | **8.2:1** | ✅ WCAG AA (>4.5:1) |
-| Grün | #66BB6A | **7.9:1** | ✅ WCAG AA |
-| Lila | #B388FF | **8.5:1** | ✅ WCAG AA |
-| Rot | #EF9A9A | **7.1:1** | ✅ WCAG AA |
-| Orange | #FFB74D | **9.8:1** | ✅ WCAG AA |
-| Gelb | #FFD54F | **10.2:1** | ✅ WCAG AA |
-| Grau (sekundär) | #90939A | **5.4:1** | ✅ WCAG AA |
+| Text (Off-White) | #E8E6E3 | **13.8:1** | [PASS] WCAG AAA (>7:1) |
+| Blau | #4A9EFF | **8.2:1** | [PASS] WCAG AA (>4.5:1) |
+| Grün | #66BB6A | **7.9:1** | [PASS] WCAG AA |
+| Lila | #B388FF | **8.5:1** | [PASS] WCAG AA |
+| Rot | #EF9A9A | **7.1:1** | [PASS] WCAG AA |
+| Orange | #FFB74D | **9.8:1** | [PASS] WCAG AA |
+| Gelb | #FFD54F | **10.2:1** | [PASS] WCAG AA |
+| Grau (sekundär) | #90939A | **5.4:1** | [PASS] WCAG AA |
 
 **Alle Farben erfüllen mindestens WCAG 2.1 Level AA!**
 
 ---
 
-## 🚀 Verwendung
+## [DEPLOY] Verwendung
 
 ### Option 1: Automatische Aktivierung via Package-Option
 
@@ -176,11 +176,11 @@ Normaler weißer Hintergrund.
 
 % Temporär Dark Mode aktivieren
 {
-    \ctmmActivateDarkMode
-    \section{Dunkler Abschnitt}
-    Dunkler Hintergrund nur für diese Seiten.
+  \ctmmActivateDarkMode
+  \section{Dunkler Abschnitt}
+  Dunkler Hintergrund nur für diese Seiten.
 
-    \clearpage
+  \clearpage
 }
 
 \section{Wieder heller Abschnitt}
@@ -191,7 +191,7 @@ Zurück zu weißem Hintergrund.
 
 ---
 
-## 🎯 Therapeutische Vorteile (Evidenz-basiert)
+## [TARGET] Therapeutische Vorteile (Evidenz-basiert)
 
 ### 1. Reduzierte Augenbelastung
 - **Warmes Dunkelgrau vs. Schwarz:** 40% weniger Augenermüdung (Nielsen Norman Group, 2023)
@@ -215,23 +215,23 @@ Zurück zu weißem Hintergrund.
 
 ---
 
-## 🧠 Kognitive Last-Optimierung
+##  Kognitive Last-Optimierung
 
 ### Prinzip 1: Progressive Disclosure
 ```latex
 % Subtile Trenner (minimaler visueller Lärm)
-\definecolor{ctmmDarkDivider}{HTML}{2F3339}        % Kaum sichtbar
+\definecolor{ctmmDarkDivider}{HTML}{2F3339}  % Kaum sichtbar
 \definecolor{ctmmDarkDividerStrong}{HTML}{3F434A}  % Für Abschnittstrennungen
 ```
 
 ### Prinzip 2: Konsistente Farbcodes
 Jede Farbe hat eine feste Bedeutung im gesamten System:
 
-- 🔵 **Blau** = Grundlagen, Lernen, Verstehen
-- 🟢 **Grün** = Alltags-Tools, Produktivität
-- 🔴 **Rot** = Notfall, Krise (aber nicht triggering!)
-- 🟡 **Gelb** = Support, Aufmerksamkeit
-- 🟣 **Lila** = Reflexion, Achtsamkeit
+-  **Blau** = Grundlagen, Lernen, Verstehen
+-  **Grün** = Alltags-Tools, Produktivität
+-  **Rot** = Notfall, Krise (aber nicht triggering!)
+-  **Gelb** = Support, Aufmerksamkeit
+-  **Lila** = Reflexion, Achtsamkeit
 
 ### Prinzip 3: Maximal 5 Navigationsoptionen
 Reduziert Entscheidungslast um 34% (Hick's Law, 2019)
@@ -241,7 +241,7 @@ Gleiche Layouts überall → Weniger Denkaufwand
 
 ---
 
-## 🎨 Farbpsychologie-Referenz
+## [DESIGN] Farbpsychologie-Referenz
 
 ### Blau (#4A9EFF) - Parasympathikus
 **Neurologische Wirkung:**
@@ -290,7 +290,7 @@ Gleiche Layouts überall → Weniger Denkaufwand
 
 ---
 
-## 🔧 Technische Details
+## [FIX] Technische Details
 
 ### Box-Styles im Dark Mode
 
@@ -316,11 +316,11 @@ Spezielle Farben für interaktive Elemente:
 
 ```latex
 % Feldstatus mit therapeutischer Farbpsychologie
-\definecolor{ctmmDarkFieldNormal}{HTML}{2A2E36}    % Normal - ruhig
-\definecolor{ctmmDarkFieldHover}{HTML}{323842}     % Hover - subtiles Feedback
-\definecolor{ctmmDarkFieldFocusBg}{HTML}{2F3945}   % Fokus - Konzentrationsmodus
-\definecolor{ctmmDarkFieldError}{HTML}{4A2E2E}     % Fehler - nicht aggressiv rot
-\definecolor{ctmmDarkFieldSuccess}{HTML}{2E4A30}   % Erfolg - positive Verstärkung
+\definecolor{ctmmDarkFieldNormal}{HTML}{2A2E36}  % Normal - ruhig
+\definecolor{ctmmDarkFieldHover}{HTML}{323842}  % Hover - subtiles Feedback
+\definecolor{ctmmDarkFieldFocusBg}{HTML}{2F3945}  % Fokus - Konzentrationsmodus
+\definecolor{ctmmDarkFieldError}{HTML}{4A2E2E}  % Fehler - nicht aggressiv rot
+\definecolor{ctmmDarkFieldSuccess}{HTML}{2E4A30}  % Erfolg - positive Verstärkung
 ```
 
 **Border-Farben für verschiedene Zustände:**
@@ -332,42 +332,42 @@ Spezielle Farben für interaktive Elemente:
 
 ---
 
-## 📊 Kognitive Last-Indikatoren
+## [SUMMARY] Kognitive Last-Indikatoren
 
 Visuelles System zur Selbstbeobachtung der kognitiven Belastung:
 
 ```latex
 % Load-Level-Farben (für Selbst-Monitoring-Tools)
-\definecolor{ctmmDarkLoadLow}{HTML}{66BB6A}      % Grün - Kapazität verfügbar
-\definecolor{ctmmDarkLoadMedium}{HTML}{FFB74D}   % Orange - nähert sich Limit
-\definecolor{ctmmDarkLoadHigh}{HTML}{EF9A9A}     % Rot - brauche Pause/Support
-\definecolor{ctmmDarkLoadCrisis}{HTML}{D88A8A}   % Dunkelrot - sofortige Intervention
+\definecolor{ctmmDarkLoadLow}{HTML}{66BB6A}  % Grün - Kapazität verfügbar
+\definecolor{ctmmDarkLoadMedium}{HTML}{FFB74D}  % Orange - nähert sich Limit
+\definecolor{ctmmDarkLoadHigh}{HTML}{EF9A9A}  % Rot - brauche Pause/Support
+\definecolor{ctmmDarkLoadCrisis}{HTML}{D88A8A}  % Dunkelrot - sofortige Intervention
 ```
 
 **Verwendung in Arbeitsblättern:**
 
 ```latex
 \begin{ctmmDarkGreenBox}{Kognitive Belastung: NIEDRIG}
-✅ Kapazität verfügbar - gute Zeit für komplexe Aufgaben
+[PASS] Kapazität verfügbar - gute Zeit für komplexe Aufgaben
 \end{ctmmDarkGreenBox}
 
 \begin{ctmmDarkOrangeBox}{Kognitive Belastung: MITTEL}
-⚠️ Annähernd am Limit - Pausen einplanen
+[WARN]️ Annähernd am Limit - Pausen einplanen
 \end{ctmmDarkOrangeBox}
 
 \begin{ctmmDarkRedBox}{Kognitive Belastung: HOCH}
-🔴 Pause/Support nötig - nur essentielle Aufgaben
+ Pause/Support nötig - nur essentielle Aufgaben
 \end{ctmmDarkRedBox}
 ```
 
 ---
 
-## ♿ Barrierefreiheit
+##  Barrierefreiheit
 
 ### Screen-Reader-Kompatibilität
-- ✅ Alle Farben haben semantische Namen
-- ✅ Kontraste erfüllen WCAG 2.1 Level AA
-- ✅ Keine reine Farbkodierung (immer + Icon/Text)
+- [PASS] Alle Farben haben semantische Namen
+- [PASS] Kontraste erfüllen WCAG 2.1 Level AA
+- [PASS] Keine reine Farbkodierung (immer + Icon/Text)
 
 ### Tastatur-Navigation
 ```latex
@@ -377,82 +377,82 @@ Visuelles System zur Selbstbeobachtung der kognitiven Belastung:
 ### High-Contrast-Modus (für Sehbeeinträchtigung)
 ```latex
 \definecolor{ctmmDarkTextHighContrast}{HTML}{FFFFFF}  % Reines Weiß für AAA
-\definecolor{ctmmDarkBgHighContrast}{HTML}{000000}    % Reines Schwarz für Maximum
+\definecolor{ctmmDarkBgHighContrast}{HTML}{000000}  % Reines Schwarz für Maximum
 ```
 
 ---
 
-## 🧪 Wissenschaftliche Studien-Referenzen
+## [TEST] Wissenschaftliche Studien-Referenzen
 
 1. **Nielsen Norman Group (2023)**
-   "Dark Mode vs. Light Mode: Which is Better?"
-   Ergebnis: Warmes Dunkelgrau reduziert Augenbelastung um 40%
+  "Dark Mode vs. Light Mode: Which is Better?"
+  Ergebnis: Warmes Dunkelgrau reduziert Augenbelastung um 40%
 
 2. **Harvard Medical School (2022)**
-   "Blue Light and Circadian Rhythm Regulation"
-   Ergebnis: Blaues Licht bei 470nm aktiviert Parasympathikus
+  "Blue Light and Circadian Rhythm Regulation"
+  Ergebnis: Blaues Licht bei 470nm aktiviert Parasympathikus
 
 3. **University of Munich (2021)**
-   "Color Psychology and Working Memory"
-   Ergebnis: Grüne Farben verbessern Arbeitsgedächtnis um 8-15%
+  "Color Psychology and Working Memory"
+  Ergebnis: Grüne Farben verbessern Arbeitsgedächtnis um 8-15%
 
 4. **Journal of Alternative Medicine (2020)**
-   "Lavender Color and Cortisol Reduction"
-   Ergebnis: Lavendel reduziert Cortisol-Spiegel um 23%
+  "Lavender Color and Cortisol Reduction"
+  Ergebnis: Lavendel reduziert Cortisol-Spiegel um 23%
 
 5. **Optometry Today (2022)**
-   "Screen Brightness and Headache Prevalence"
-   Ergebnis: Reduzierte Helligkeit = 28% weniger Kopfschmerzen
+  "Screen Brightness and Headache Prevalence"
+  Ergebnis: Reduzierte Helligkeit = 28% weniger Kopfschmerzen
 
 6. **ADHD Journal (2021)**
-   "Visual Noise Reduction and Task Completion in ADHD"
-   Ergebnis: Reduzierter visueller Lärm = 15% bessere Aufgabenvollendung
+  "Visual Noise Reduction and Task Completion in ADHD"
+  Ergebnis: Reduzierter visueller Lärm = 15% bessere Aufgabenvollendung
 
 ---
 
-## 🎓 Best Practices
+## [EDUCATION] Best Practices
 
-### DO ✅
+### DO [PASS]
 
 1. **Verwende Dark Mode für abendliche Nutzung**
-   - Reduziert Blaulicht-Exposition
-   - Unterstützt natürlichen Schlaf-Rhythmus
+  - Reduziert Blaulicht-Exposition
+  - Unterstützt natürlichen Schlaf-Rhythmus
 
 2. **Aktiviere Dark Mode bei kognitiver Überlastung**
-   - Reduzierte visuelle Komplexität
-   - Weniger sensorische Stimulation
+  - Reduzierte visuelle Komplexität
+  - Weniger sensorische Stimulation
 
 3. **Nutze konsistente Farbcodes**
-   - Blau = Grundlagen
-   - Grün = Alltag
-   - Rot = Notfall
-   - Lila = Reflexion
+  - Blau = Grundlagen
+  - Grün = Alltag
+  - Rot = Notfall
+  - Lila = Reflexion
 
 4. **Kombiniere Farbe IMMER mit Text/Icon**
-   - Niemals reine Farbkodierung
-   - Barrierefreiheit für Farbenblinde
+  - Niemals reine Farbkodierung
+  - Barrierefreiheit für Farbenblinde
 
-### DON'T ❌
+### DON'T [FAIL]
 
 1. **Verwende NICHT reines Schwarz (#000)**
-   - Erhöht kognitive Last um 27%
-   - Nutze stattdessen: #1A1D23
+  - Erhöht kognitive Last um 27%
+  - Nutze stattdessen: #1A1D23
 
 2. **Verwende NICHT helles, aggressives Rot**
-   - Kann Fight-or-Flight bei PTBS auslösen
-   - Nutze stattdessen: #EF9A9A (weiches Korallenrot)
+  - Kann Fight-or-Flight bei PTBS auslösen
+  - Nutze stattdessen: #EF9A9A (weiches Korallenrot)
 
 3. **Übersättige NICHT die Farben**
-   - Kann bei ADHS/Autismus überstimulieren
-   - Gedämpfte Varianten verwenden
+  - Kann bei ADHS/Autismus überstimulieren
+  - Gedämpfte Varianten verwenden
 
 4. **Mische NICHT Light und Dark Mode**
-   - Abrupte Wechsel können triggern
-   - `\clearpage` zwischen Modi-Wechseln
+  - Abrupte Wechsel können triggern
+  - `\clearpage` zwischen Modi-Wechseln
 
 ---
 
-## 🔍 Troubleshooting
+## [SEARCH] Troubleshooting
 
 ### Problem: Farben werden nicht angewendet
 
@@ -460,8 +460,8 @@ Visuelles System zur Selbstbeobachtung der kognitiven Belastung:
 ```latex
 % RICHTIG:
 \usepackage[darkmode]{style/ctmm-config}  % Zuerst
-\usepackage{xcolor}                        % Danach
-\usepackage{style/ctmm-design}            % Zuletzt
+\usepackage{xcolor}  % Danach
+\usepackage{style/ctmm-design}  % Zuletzt
 ```
 
 **Lösung 2:** Manuelle Aktivierung
@@ -476,9 +476,9 @@ Visuelles System zur Selbstbeobachtung der kognitiven Belastung:
 ```latex
 % Dies geschieht automatisch bei \ctmmEnableDarkMode:
 \hypersetup{
-    linkcolor=ctmmDarkBlue,
-    urlcolor=ctmmDarkGreen,
-    citecolor=ctmmDarkPurple
+  linkcolor=ctmmDarkBlue,
+  urlcolor=ctmmDarkGreen,
+  citecolor=ctmmDarkPurple
 }
 ```
 
@@ -497,7 +497,7 @@ Visuelles System zur Selbstbeobachtung der kognitiven Belastung:
 
 ---
 
-## 📈 Performance
+##  Performance
 
 Das Dark Theme hat **keinen negativen Einfluss** auf die Kompilierungszeit:
 
@@ -507,7 +507,7 @@ Das Dark Theme hat **keinen negativen Einfluss** auf die Kompilierungszeit:
 
 ---
 
-## 🚀 Roadmap
+## [DEPLOY] Roadmap
 
 ### Version 1.1 (geplant)
 - [ ] Automatischer Light/Dark-Switch basierend auf Tageszeit
@@ -521,7 +521,7 @@ Das Dark Theme hat **keinen negativen Einfluss** auf die Kompilierungszeit:
 
 ---
 
-## 📞 Support & Feedback
+##  Support & Feedback
 
 Bei Fragen oder Problemen:
 - **GitHub Issues:** https://github.com/Darkness308/CTMM---PDF-in-LaTex/issues
@@ -530,7 +530,7 @@ Bei Fragen oder Problemen:
 
 ---
 
-## 📄 Lizenz
+## [FILE] Lizenz
 
 Dieses Dark Theme ist Teil des CTMM-Systems und steht unter der gleichen Lizenz wie das Hauptprojekt.
 
@@ -539,4 +539,4 @@ Dieses Dark Theme ist Teil des CTMM-Systems und steht unter der gleichen Lizenz 
 **Erstellt von:** CTMM-Team
 **Version:** 1.0.0
 **Letztes Update:** 6. November 2025
-**Status:** ✅ Produktionsreif
+**Status:** [PASS] Produktionsreif

@@ -47,7 +47,7 @@ jobs:
 
         if True in parsed:
             print("[FAIL] PROBLEM CONFIRMED: 'on' becomes boolean True")
-            print("   GitHub Actions would not recognize this as a trigger!")
+            print("  GitHub Actions would not recognize this as a trigger!")
 
         print("\n2. DEMONSTRATING THE CURRENT FIX")
         print("-" * 50)
@@ -74,7 +74,7 @@ jobs:
             if 'on' in parsed and isinstance(parsed['on'], dict):
                 print(f"[PASS] {filename}: Correct string key 'on'")
                 triggers = list(parsed['on'].keys())
-                print(f"   Triggers: {triggers}")
+                print(f"  Triggers: {triggers}")
             elif True in parsed:
                 print(f"[FAIL] {filename}: Incorrect boolean True key")
                 all_correct = False
@@ -91,7 +91,7 @@ jobs:
             print("[PASS] YAML parsing produces string keys as expected by GitHub Actions")
             print("[PASS] Workflow triggers will be recognized correctly")
             print("\n[TEST] ISSUE STATUS: RESOLVED")
-            print("   The YAML boolean interpretation issue has been fixed.")
+            print("  The YAML boolean interpretation issue has been fixed.")
         else:
             print("[WARN]  ATTENTION NEEDED: Some workflow files still have incorrect syntax")
             print("[FAIL] Files with unquoted 'on:' need to be fixed to '\"on\":'")

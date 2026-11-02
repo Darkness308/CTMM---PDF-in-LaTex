@@ -14,12 +14,12 @@ def run_command(cmd, description):
     try:
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         success = result.returncode == 0
-        print(f"   {'[PASS]' if success else '[FAIL]'} {description}: {'PASS' if success else 'FAIL'}")
+        print(f"  {'[PASS]' if success else '[FAIL]'} {description}: {'PASS' if success else 'FAIL'}")
         if not success:
-            print(f"   Error: {result.stderr.strip()}")
+            print(f"  Error: {result.stderr.strip()}")
         return success, result.stdout.strip(), result.stderr.strip()
     except Exception as e:
-        print(f"   [FAIL] {description}: ERROR - {e}")
+        print(f"  [FAIL] {description}: ERROR - {e}")
         return False, "", str(e)
 
 def verify_issue_817_resolution():
@@ -35,16 +35,16 @@ def verify_issue_817_resolution():
     # 1. Check that resolution documentation exists
     print("[FILE] Resolution Documentation Check:")
     if os.path.exists("ISSUE_817_RESOLUTION.md"):
-        print("   [PASS] ISSUE_817_RESOLUTION.md exists")
+        print("  [PASS] ISSUE_817_RESOLUTION.md exists")
         with open("ISSUE_817_RESOLUTION.md", 'r') as f:
             content = f.read()
             if len(content) > 1000:
-                print(f"   [PASS] Documentation is substantial ({len(content)} characters)")
+                print(f"  [PASS] Documentation is substantial ({len(content)} characters)")
             else:
-                print(f"   [FAIL] Documentation is too brief ({len(content)} characters)")
+                print(f"  [FAIL] Documentation is too brief ({len(content)} characters)")
                 all_checks_passed = False
     else:
-        print("   [FAIL] ISSUE_817_RESOLUTION.md not found")
+        print("  [FAIL] ISSUE_817_RESOLUTION.md not found")
         all_checks_passed = False
 
     # 2. Verify meaningful changes for Copilot review
@@ -52,11 +52,11 @@ def verify_issue_817_resolution():
     success, stdout, stderr = run_command("git diff --stat HEAD~1..HEAD", "Checking commit changes")
     if success and stdout.strip():
         lines = stdout.strip().split('\n')
-        print(f"   [PASS] Files changed in latest commit:")
+        print(f"  [PASS] Files changed in latest commit:")
         for line in lines:
-            print(f"      {line}")
+            print(f"  {line}")
     else:
-        print("   [FAIL] No changes detected in latest commit")
+        print("  [FAIL] No changes detected in latest commit")
         all_checks_passed = False
 
     # 3. Check line statistics
@@ -76,39 +76,39 @@ def verify_issue_817_resolution():
                 except ValueError:
                     continue
 
-        print(f"   [PASS] Lines added: {total_added}")
-        print(f"   [PASS] Lines deleted: {total_deleted}")
+        print(f"  [PASS] Lines added: {total_added}")
+        print(f"  [PASS] Lines deleted: {total_deleted}")
 
         if total_added > 100:
-            print("   [PASS] Substantial content added for Copilot review")
+            print("  [PASS] Substantial content added for Copilot review")
         else:
-            print("   [WARN]  Limited content for review")
+            print("  [WARN]  Limited content for review")
 
     # 4. Test validation system (ignoring uncommitted verification script)
     print("\n[SEARCH] Validation System Test:")
     success, stdout, stderr = run_command("python3 validate_pr.py --skip-build", "Running PR validation")
     if success:
-        print("   [PASS] PR validation passes")
+        print("  [PASS] PR validation passes")
         if "Meaningful changes detected" in stdout:
-            print("   [PASS] Validation detects meaningful changes")
+            print("  [PASS] Validation detects meaningful changes")
         else:
-            print("   [FAIL] Validation doesn't recognize changes")
+            print("  [FAIL] Validation doesn't recognize changes")
             all_checks_passed = False
     else:
         # Check if failure is only due to uncommitted files (expected during verification)
         if "Meaningful changes detected" in stdout:
-            print("   [PASS] PR validation detects meaningful changes (uncommitted verification script is expected)")
+            print("  [PASS] PR validation detects meaningful changes (uncommitted verification script is expected)")
         else:
-            print("   [FAIL] PR validation failed for other reasons")
+            print("  [FAIL] PR validation failed for other reasons")
             all_checks_passed = False
 
     # 5. Check CTMM build system
     print("\n[TOOL]  CTMM Build System:")
     success, stdout, stderr = run_command("python3 ctmm_build.py", "Running CTMM build")
     if success and ("PASS" in stdout or "[OK]" in stdout):
-        print("   [PASS] CTMM build system passes")
+        print("  [PASS] CTMM build system passes")
     else:
-        print("   [FAIL] CTMM build system issues")
+        print("  [FAIL] CTMM build system issues")
         all_checks_passed = False
 
     # Summary

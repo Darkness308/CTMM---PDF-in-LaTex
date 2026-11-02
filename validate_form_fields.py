@@ -190,14 +190,14 @@ class FormFieldValidator:
         else:
             print(f"[FAIL] Found {len(self.issues)} issues:")
             for issue in self.issues:
-                print(f"   {issue}")
+                print(f"  {issue}")
 
         print("\n[BOOKS] Form Field Standards:")
-        print(r"   * Use \ctmmCheckBox[field_name]{label} (optional first parameter)")
-        print("   * Field names: alphanumeric + underscores only")
-        print("   * No double backslashes before underscores")
-        print("   * All commands must have proper closing braces")
-        print("   * Avoid auto-generated _mm suffixes")
+        print(r"  * Use \ctmmCheckBox[field_name]{label} (optional first parameter)")
+        print("  * Field names: alphanumeric + underscores only")
+        print("  * No double backslashes before underscores")
+        print("  * All commands must have proper closing braces")
+        print("  * Avoid auto-generated _mm suffixes")
 
     def fix_common_issues(self) -> bool:
         """Automatically fix common form field issues."""
@@ -213,7 +213,7 @@ class FormFieldValidator:
         if fixed_files:
             print(f"[PASS] Fixed issues in {len(fixed_files)} files:")
             for filename in fixed_files:
-                print(f"   * {filename}")
+                print(f"  * {filename}")
             return True
         else:
             print("[INFO]  No automatic fixes were needed")

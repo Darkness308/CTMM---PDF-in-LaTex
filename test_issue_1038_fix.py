@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Issue #1038 Validation: CI Build YAML Syntax Fix
-=================================================
 
 This script validates the fixes implemented for issue #1038, which addresses
 the CI Insights report showing a broken "Build LaTeX PDF" workflow due to
@@ -64,7 +63,7 @@ def test_yaml_syntax_cleanliness():
     if long_lines:
         print(f"[FAIL] Lines exceeding 80 characters:")
         for line_num, length in long_lines:
-            print(f"   Line {line_num}: {length} characters")
+            print(f"  Line {line_num}: {length} characters")
         return False
     else:
         print("[PASS] All lines within 80 character limit")

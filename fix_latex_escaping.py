@@ -333,10 +333,10 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  %(prog)s converted/                    # Fix files in-place
-  %(prog)s converted/ fixed/            # Create fixed copies
-  %(prog)s --validate converted/        # Validate fixed files
-  %(prog)s --verbose converted/         # Show detailed output
+  %(prog)s converted/  # Fix files in-place
+  %(prog)s converted/ fixed/  # Create fixed copies
+  %(prog)s --validate converted/  # Validate fixed files
+  %(prog)s --verbose converted/  # Show detailed output
         """
     )
 

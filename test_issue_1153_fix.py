@@ -46,7 +46,7 @@ def test_ctmm_ref_label_consistency():
 
         print(f"[TEST] Found {len(refs)} unique ctmmRef references:")
         for ref in refs:
-            print(f"   * {ref}")
+            print(f"  * {ref}")
 
         # Check that each reference has a corresponding label
         missing_labels = []
@@ -70,7 +70,7 @@ def test_ctmm_ref_label_consistency():
         if missing_labels:
             print(f"\n[FAIL] MISSING LABELS ({len(missing_labels)}):")
             for label in missing_labels:
-                print(f"   * {label}")
+                print(f"  * {label}")
             return False
         else:
             print(f"\n[PASS] ALL LABELS FOUND: All {len(refs)} ctmmRef references have corresponding labels")

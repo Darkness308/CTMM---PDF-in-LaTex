@@ -18,10 +18,10 @@ The central command-line interface that integrates all CTMM tools into a cohesiv
 
 **Commands:**
 ```bash
-python3 ctmm_unified_tool.py build           # Build system validation
+python3 ctmm_unified_tool.py build  # Build system validation
 python3 ctmm_unified_tool.py de-escape -c converted/  # Fix over-escaped files
-python3 ctmm_unified_tool.py validate        # Complete project validation
-python3 ctmm_unified_tool.py workflow -c converted/   # Complete integration workflow
+python3 ctmm_unified_tool.py validate  # Complete project validation
+python3 ctmm_unified_tool.py workflow -c converted/  # Complete integration workflow
 ```
 
 ### 2. **Enhanced Build System** - `ctmm_build.py`
@@ -137,9 +137,9 @@ Tools work seamlessly together:
 ### Environment Variables
 
 ```bash
-export CTMM_MAIN_TEX="main.tex"        # Main document file
-export CTMM_BUILD_TIMEOUT="300"        # Build timeout in seconds
-export CTMM_LOG_LEVEL="INFO"           # Logging level
+export CTMM_MAIN_TEX="main.tex"  # Main document file
+export CTMM_BUILD_TIMEOUT="300"  # Build timeout in seconds
+export CTMM_LOG_LEVEL="INFO"  # Logging level
 ```
 
 ### Command Options
@@ -188,17 +188,17 @@ on: [push, pull_request]
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: Setup Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.x'
-    - name: Run CTMM Integration Tests
-      run: python3 test_integration.py
-    - name: Validate CTMM Project
-      run: python3 ctmm_unified_tool.py validate
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v3
+  - name: Setup Python
+  uses: actions/setup-python@v3
+  with:
+  python-version: '3.x'
+  - name: Run CTMM Integration Tests
+  run: python3 test_integration.py
+  - name: Validate CTMM Project
+  run: python3 ctmm_unified_tool.py validate
 ```
 
 ## Performance and Reliability

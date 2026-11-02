@@ -124,7 +124,7 @@ class TestPDFValidation(unittest.TestCase):
         # Test with pdflatex available
         mock_subprocess.side_effect = [
             mock_result,  # pdflatex --version check
-            mock_result   # actual compilation
+            mock_result  # actual compilation
         ]
 
         # Create a temporary test file
@@ -163,8 +163,8 @@ class TestPDFValidation(unittest.TestCase):
         test_cases = [
             (1023, False),  # Just under threshold
             (1024, False),  # Exactly at threshold (should fail with <= check)
-            (1025, True),   # Just over threshold
-            (2048, True),   # Well over threshold
+            (1025, True),  # Just over threshold
+            (2048, True),  # Well over threshold
         ]
 
         for size, expected_success in test_cases:
@@ -276,7 +276,7 @@ class TestPDFValidation(unittest.TestCase):
             enhanced_success = mock_result.returncode == 0 and pdf_exists and pdf_size > 1024
 
             # Enhanced validation should catch the issue
-            self.assertTrue(basic_success)      # Basic validation passes
+            self.assertTrue(basic_success)  # Basic validation passes
             self.assertFalse(enhanced_success)  # Enhanced validation fails
 
             # This demonstrates why the enhanced validation is necessary
@@ -322,7 +322,7 @@ class TestBuildSystemIntegration(unittest.TestCase):
         # Mock a failed PDF validation scenario
         build_data = {
             "build_testing": {
-                "basic_passed": False,   # PDF validation failed
+                "basic_passed": False,  # PDF validation failed
                 "full_passed": False
             },
             "latex_validation": {

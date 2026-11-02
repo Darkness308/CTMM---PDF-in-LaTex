@@ -303,7 +303,7 @@ def main():
             print(f"  Files with issues:")
             for file_path, result in results.items():
                 if not result['valid']:
-                    print(f"    - {file_path}: {list(result['issues'].keys())}")
+                    print(f"  - {file_path}: {list(result['issues'].keys())}")
 
         return 0 if valid_files == total_files else 1
 

@@ -469,21 +469,21 @@ def run_comprehensive_tests():
         total_tests += class_total
         passed_tests += class_passed
 
-        print(f"   Tests run: {class_total}")
-        print(f"   Passed: {class_passed}")
+        print(f"  Tests run: {class_total}")
+        print(f"  Passed: {class_passed}")
 
         if result.failures:
-            print(f"   Failures: {len(result.failures)}")
+            print(f"  Failures: {len(result.failures)}")
             for test, traceback in result.failures:
                 failed_tests.append(f"{test_class.__name__}.{test._testMethodName}: FAILURE")
 
         if result.errors:
-            print(f"   Errors: {len(result.errors)}")
+            print(f"  Errors: {len(result.errors)}")
             for test, traceback in result.errors:
                 failed_tests.append(f"{test_class.__name__}.{test._testMethodName}: ERROR")
 
         status = "[PASS] PASSED" if class_passed == class_total else "[FAIL] FAILED"
-        print(f"   Status: {status}")
+        print(f"  Status: {status}")
 
     # Summary
     print(f"\n{'=' * 60}")
@@ -497,7 +497,7 @@ def run_comprehensive_tests():
     if failed_tests:
         print(f"\n[FAIL] Failed Tests:")
         for test in failed_tests:
-            print(f"   - {test}")
+            print(f"  - {test}")
 
     overall_status = "[PASS] ALL TESTS PASSED" if passed_tests == total_tests else "[FAIL] SOME TESTS FAILED"
     print(f"\n{overall_status}")
